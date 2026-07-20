@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionIntro from '../../components/SectionIntro.astro';
+import RoadmapTimeline from '../../components/RoadmapTimeline.astro';
+import CTASection from '../../components/CTASection.astro';
+import { roadmapPhases } from '../../data/roadmap';
+import { closingCTA } from '../../data/presentation';
+---
+
+<BaseLayout
+  title="Roadmap | Hallpartner — nästa kapitel"
+  description="Process och föreslagen väg framåt för Hallpartners nya digitala plattform, från insikt till lansering och löpande förbättring."
+>
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        level="h1"
+        eyebrow="Roadmap"
+        title="Vägen framåt"
+        intro="En tydlig, stegvis process som säkerställer att plattformen byggs på rätt grund — från insikt till lansering och vidare utveckling."
+      />
+      <RoadmapTimeline phases={roadmapPhases} />
+    </div>
+  </section>
+
+  <CTASection title={closingCTA.title} button={closingCTA.button} />
+</BaseLayout>

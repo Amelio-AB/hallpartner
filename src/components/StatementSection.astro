@@ -1,0 +1,79 @@
+---
+export interface Props {
+  eyebrow?: string;
+  statement: string;
+  supportingText?: string;
+  imageLabel?: string;
+  imagePosition?: 'left' | 'right';
+}
+
+const {
+  eyebrow,
+  statement,
+  supportingText,
+  imageLabel = 'TODO: Bild från Hallpartners verksamhet',
+  imagePosition = 'right',
+} = Astro.props;
+---
+
+<section class="statement">
+  <div class={`container statement__grid statement__grid--image-${imagePosition}`}>
+    <div class="statement__text">
+      {eyebrow && <p class="text-eyebrow">{eyebrow}</p>}
+      <h2 class="statement__heading">{statement}</h2>
+      {supportingText && <p class="text-lead text-muted">{supportingText}</p>}
+    </div>
+    <div
+      class="media-placeholder statement__media"
+      data-label={imageLabel}
+      role="img"
+      aria-label={imageLabel}
+    >
+    </div>
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding-block: var(--section-padding-y-mobile);
+  }
+
+  .statement__grid {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .statement__heading {
+    margin-top: var(--space-1);
+  }
+
+  .statement__text > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .statement__media {
+    --placeholder-aspect: 4 / 3;
+  }
+
+  @media (min-width: 768px) {
+    .statement {
+      padding-block: var(--section-padding-y-tablet);
+    }
+
+    .statement__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+
+    .statement__grid--image-left .statement__media {
+      order: -1;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .statement {
+      padding-block: var(--section-padding-y-desktop);
+    }
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionIntro from '../../components/SectionIntro.astro';
+import KnowledgeGrid from '../../components/KnowledgeGrid.astro';
+import FAQAccordion from '../../components/FAQAccordion.astro';
+import CTASection from '../../components/CTASection.astro';
+import { knowledgeArticles } from '../../data/knowledge';
+import { faqItems, closingCTA } from '../../data/presentation';
+---
+
+<BaseLayout
+  title="Kunskapsbank | Hallpartner — nästa kapitel"
+  description="Koncept för guider, vanliga frågor och expertinnehåll om bygglov, kostnader, byggtid, materialval och halltyper."
+>
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        level="h1"
+        eyebrow="Kunskapsbank"
+        title="Kunskap som stärker varje beslut."
+        intro="Guider och svar på vanliga frågor som positionerar Hallpartner som experten kunden vill anlita."
+      />
+      <p class="text-caption text-muted concept-notice">
+        TODO: Exempelrubriker och ingresser. Generella branschresonemang som ska kvalitetssäkras av
+        Hallpartners experter innan publicering.
+      </p>
+      <KnowledgeGrid articles={knowledgeArticles} />
+    </div>
+  </section>
+
+  <section class="section section-surface" id="faq">
+    <div class="container container-text">
+      <SectionIntro eyebrow="FAQ" title="Vanliga frågor" />
+      <FAQAccordion items={faqItems} />
+    </div>
+  </section>
+
+  <CTASection title={closingCTA.title} button={closingCTA.button} />
+</BaseLayout>
+
+<style>
+  .concept-notice {
+    margin-bottom: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+</style>

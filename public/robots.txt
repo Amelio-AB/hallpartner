@@ -1,0 +1,14 @@
+# Hallpartner Vision Site — presentationsfas
+#
+# Denna webbplats är en privat kundpresentation och ska INTE indexeras av
+# sökmotorer så länge den ligger under hallpartner.amelio.se i konceptfasen.
+#
+# NÄR SAJTEN BLIR PUBLIK: ta bort "Disallow: /" nedan (och noindex-metataggen
+# i src/components/SeoHead.astro / astro.config.mjs-kommentaren) så att
+# sökmotorer får indexera sidan. Sitemap-integrationen (@astrojs/sitemap)
+# kan då fortsätta användas som den är.
+
+User-agent: *
+Disallow: /
+
+Sitemap: https://hallpartner.amelio.se/sitemap-index.xml

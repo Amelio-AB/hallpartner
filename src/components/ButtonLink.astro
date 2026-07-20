@@ -1,0 +1,21 @@
+---
+import type { ButtonVariant } from '../types/content';
+
+export interface Props {
+  href: string;
+  label: string;
+  variant?: ButtonVariant;
+}
+
+const { href, label, variant = 'primary' } = Astro.props;
+const isExternal = /^https?:\/\//.test(href) || href.startsWith('mailto:');
+---
+
+<a
+  href={href}
+  class={`btn btn-${variant}`}
+  rel={isExternal ? 'noopener noreferrer' : undefined}
+  target={href.startsWith('http') ? '_blank' : undefined}
+>
+  {label}
+</a>

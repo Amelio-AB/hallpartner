@@ -1,0 +1,42 @@
+---
+import type { ResultItem } from '../types/content';
+
+export interface Props {
+  results: ResultItem[];
+}
+
+const { results } = Astro.props;
+---
+
+<ul class="grid grid-2-up grid-4-up">
+  {
+    results.map((result) => (
+      <li class="results-grid__item">
+        <span class="results-grid__icon" aria-hidden="true" />
+        <h3>{result.title}</h3>
+        <p class="text-body text-muted">{result.text}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .results-grid__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .results-grid__icon {
+    display: inline-block;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-accent-warm);
+    background:
+      linear-gradient(var(--color-accent-warm), var(--color-accent-warm)) center / 1.1rem 2px
+        no-repeat,
+      linear-gradient(var(--color-accent-warm), var(--color-accent-warm)) center / 2px 1.1rem
+        no-repeat;
+  }
+</style>

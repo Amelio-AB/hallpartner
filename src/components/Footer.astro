@@ -1,0 +1,104 @@
+---
+import LogoPlaceholder from './LogoPlaceholder.astro';
+import { footerNav } from '../data/navigation';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <LogoPlaceholder inverse />
+      <p class="text-caption text-muted">
+        En digital vision framtagen av Amelio inför Hallpartners nästa kapitel.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Sidfotsnavigation">
+      <h2 class="text-caption site-footer__heading">Navigation</h2>
+      <ul>
+        {
+          footerNav.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <h2 class="text-caption site-footer__heading">Kontakt</h2>
+      <p><a href="/kontakt/">Kontakta Amelio</a></p>
+      <p class="text-caption text-muted">
+        Denna webbplats är en privat presentation och är inte indexerad av sökmotorer.
+      </p>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p class="text-caption text-muted">&copy; {year} Hallpartner. Digital vision av Amelio.</p>
+    <p class="text-caption text-muted">Kod: internt repo (GitHub)</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--color-bg-inverse);
+    color: var(--color-text-inverse);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-6);
+  }
+
+  .site-footer__brand p {
+    margin-top: var(--space-2);
+    max-width: 32ch;
+  }
+
+  .site-footer__heading {
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-2);
+  }
+
+  .site-footer__nav ul {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .site-footer__nav a,
+  .site-footer__contact a {
+    color: var(--color-text-inverse);
+    text-decoration: none;
+  }
+
+  .site-footer__nav a:hover,
+  .site-footer__contact a:hover {
+    color: var(--color-warm-accent);
+  }
+
+  .site-footer__contact p + p {
+    margin-top: var(--space-2);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    justify-content: space-between;
+    padding-block: var(--space-3);
+    border-top: var(--border-width) solid var(--color-border-inverse);
+  }
+
+  @media (min-width: 768px) {
+    .site-footer__grid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+    }
+  }
+</style>

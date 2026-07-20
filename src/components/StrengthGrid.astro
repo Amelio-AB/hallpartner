@@ -1,0 +1,40 @@
+---
+import type { StrengthItem } from '../types/content';
+
+export interface Props {
+  items: StrengthItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<ul class="strength-grid grid grid-2-up grid-4-up">
+  {
+    items.map((item) => (
+      <li class="card strength-grid__item">
+        <span class="strength-grid__icon" aria-hidden="true" />
+        <h3>{item.title}</h3>
+        <p class="text-body text-muted">{item.description}</p>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .strength-grid__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .strength-grid__icon {
+    display: inline-block;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid var(--color-accent);
+    background:
+      linear-gradient(var(--color-accent), var(--color-accent)) center / 1.1rem 2px no-repeat,
+      linear-gradient(var(--color-accent), var(--color-accent)) center / 2px 1.1rem no-repeat;
+  }
+</style>

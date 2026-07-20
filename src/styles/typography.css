@@ -1,0 +1,85 @@
+/*
+  Typografi. Manrope laddas via Google Fonts i BaseLayout <head>
+  (ingen fontfil checkas in i repot). Om self-hosting önskas senare:
+  lägg .woff2-filer i src/assets/fonts/ och byt ut länken i BaseLayout.
+*/
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  color: inherit;
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  text-wrap: balance;
+}
+
+.text-display,
+h1.text-display {
+  font-size: var(--font-size-display);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+}
+
+h3 {
+  font-size: var(--font-size-h3);
+}
+
+h4 {
+  font-size: var(--font-size-body-lg);
+}
+
+p {
+  margin: 0;
+  line-height: var(--line-height-body);
+}
+
+.text-lead {
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body);
+}
+
+.text-body {
+  font-size: var(--font-size-body);
+}
+
+.text-caption {
+  font-size: var(--font-size-caption);
+  letter-spacing: 0.02em;
+}
+
+.text-eyebrow {
+  display: inline-block;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-warm);
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-text-inverse);
+}

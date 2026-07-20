@@ -1,0 +1,213 @@
+---
+import PresentationLayout from '../layouts/PresentationLayout.astro';
+import Hero from '../components/Hero.astro';
+import StatementSection from '../components/StatementSection.astro';
+import SectionIntro from '../components/SectionIntro.astro';
+import StrengthGrid from '../components/StrengthGrid.astro';
+import CustomerJourney from '../components/CustomerJourney.astro';
+import OpportunitySection from '../components/OpportunitySection.astro';
+import BrowserMockup from '../components/BrowserMockup.astro';
+import ButtonLink from '../components/ButtonLink.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import KnowledgeGrid from '../components/KnowledgeGrid.astro';
+import RoadmapTimeline from '../components/RoadmapTimeline.astro';
+import ResultsGrid from '../components/ResultsGrid.astro';
+import CTASection from '../components/CTASection.astro';
+
+import {
+  homeHero,
+  meaningSection,
+  builtStrengths,
+  journeyIntro,
+  journeySteps,
+  opportunitySection,
+  opportunityCards,
+  visionTeaser,
+  startPageTeaser,
+  projectsTeaser,
+  knowledgeTeaser,
+  roadmapTeaser,
+  roadmapHomePhases,
+  resultsItems,
+  closingCTA,
+} from '../data/presentation';
+import { projects } from '../data/projects';
+import { knowledgeArticles } from '../data/knowledge';
+---
+
+<PresentationLayout
+  title="Hallpartner — nästa kapitel | En digital vision av Amelio"
+  description="En vision för hur Hallpartners digitala närvaro kan spegla kvaliteten, erfarenheten och ambitionen i varje projekt."
+>
+  <Hero
+    eyebrow={homeHero.eyebrow}
+    title={homeHero.title}
+    subtitle={homeHero.subtitle}
+    body={homeHero.body}
+    primaryCTA={homeHero.primaryCTA}
+    secondaryCTA={homeHero.secondaryCTA}
+  />
+
+  <StatementSection
+    statement={meaningSection.title}
+    supportingText={meaningSection.text}
+    imageLabel="TODO: Bild som visar en hall i drift"
+  />
+
+  <section class="section section-surface" id="styrkor" aria-labelledby="styrkor-heading">
+    <div class="container">
+      <SectionIntro id="styrkor-heading" title="En stark grund att bygga vidare på." />
+      <StrengthGrid items={builtStrengths} />
+    </div>
+  </section>
+
+  <section class="section" id="kundresa" aria-labelledby="kundresa-heading">
+    <div class="container">
+      <SectionIntro id="kundresa-heading" title={journeyIntro.title} intro={journeyIntro.text} />
+      <CustomerJourney steps={journeySteps} />
+    </div>
+  </section>
+
+  <section
+    class="section section-surface"
+    id="digital-potential"
+    aria-labelledby="digital-potential-heading"
+  >
+    <div class="container">
+      <OpportunitySection
+        id="digital-potential-heading"
+        title={opportunitySection.title}
+        text={opportunitySection.text}
+        cta={opportunitySection.cta}
+        cards={opportunityCards}
+      />
+    </div>
+  </section>
+
+  <section class="section section-inverse" id="visionen" aria-labelledby="visionen-heading">
+    <div class="container two-col">
+      <div class="two-col__text">
+        <h2 id="visionen-heading">{visionTeaser.title}</h2>
+        <p class="text-lead text-muted">{visionTeaser.text}</p>
+        <ButtonLink href={visionTeaser.cta.href} label={visionTeaser.cta.label} variant="primary" />
+      </div>
+      <div class="two-col__media">
+        <BrowserMockup
+          imageLabel="TODO: Visualisering av visionen"
+          caption="Konceptuell visualisering — ej slutgiltig design."
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="startsideforslag" aria-labelledby="startsideforslag-heading">
+    <div class="container two-col two-col--reverse">
+      <div class="two-col__text">
+        <h2 id="startsideforslag-heading">{startPageTeaser.title}</h2>
+        <p class="text-lead text-muted">{startPageTeaser.text}</p>
+        <ButtonLink
+          href={startPageTeaser.cta.href}
+          label={startPageTeaser.cta.label}
+          variant="secondary"
+        />
+      </div>
+      <div class="two-col__media">
+        <BrowserMockup
+          imageLabel="TODO: Skärmbild av startsidesförslaget"
+          caption="Förslag på Hallpartners nya startsida."
+          url="hallpartner.se"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="section section-surface"
+    id="referensprojekt"
+    aria-labelledby="referensprojekt-heading"
+  >
+    <div class="container">
+      <SectionIntro
+        id="referensprojekt-heading"
+        title={projectsTeaser.title}
+        intro={projectsTeaser.text}
+      />
+      <ProjectGrid projects={projects} />
+      <div class="section-footer-cta">
+        <ButtonLink
+          href={projectsTeaser.cta.href}
+          label={projectsTeaser.cta.label}
+          variant="ghost"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="kunskapsbank" aria-labelledby="kunskapsbank-heading">
+    <div class="container">
+      <SectionIntro
+        id="kunskapsbank-heading"
+        title={knowledgeTeaser.title}
+        intro={knowledgeTeaser.text}
+      />
+      <KnowledgeGrid articles={knowledgeArticles.slice(0, 3)} />
+      <div class="section-footer-cta">
+        <ButtonLink
+          href={knowledgeTeaser.cta.href}
+          label={knowledgeTeaser.cta.label}
+          variant="ghost"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-surface" id="roadmap" aria-labelledby="roadmap-heading">
+    <div class="container">
+      <SectionIntro id="roadmap-heading" title={roadmapTeaser.title} intro={roadmapTeaser.text} />
+      <RoadmapTimeline phases={roadmapHomePhases} />
+      <div class="section-footer-cta">
+        <ButtonLink href={roadmapTeaser.cta.href} label={roadmapTeaser.cta.label} variant="ghost" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="resultat" aria-labelledby="resultat-heading">
+    <div class="container">
+      <SectionIntro id="resultat-heading" title="Vad vi vill uppnå tillsammans" align="center" />
+      <ResultsGrid results={resultsItems} />
+    </div>
+  </section>
+
+  <CTASection title={closingCTA.title} button={closingCTA.button} />
+</PresentationLayout>
+
+<style>
+  .two-col {
+    display: grid;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .two-col__text > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .two-col__text :global(.btn) {
+    margin-top: var(--space-3);
+  }
+
+  .section-footer-cta {
+    margin-top: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .two-col {
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-5);
+    }
+
+    .two-col--reverse .two-col__media {
+      order: -1;
+    }
+  }
+</style>

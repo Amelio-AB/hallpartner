@@ -1,0 +1,25 @@
+---
+import KnowledgeCard from './KnowledgeCard.astro';
+import type { KnowledgeArticle } from '../types/content';
+
+export interface Props {
+  articles: KnowledgeArticle[];
+}
+
+const { articles } = Astro.props;
+---
+
+<ul class="grid grid-2-up grid-3-up">
+  {
+    articles.map((article) => (
+      <KnowledgeCard
+        id={article.slug}
+        title={article.title}
+        category={article.category}
+        readingTime={article.readingTime}
+        excerpt={article.excerpt}
+        href={`/kunskapsbank/#${article.slug}`}
+      />
+    ))
+  }
+</ul>

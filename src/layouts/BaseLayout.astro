@@ -1,0 +1,65 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import '../styles/typography.css';
+import '../styles/utilities.css';
+import SeoHead from '../components/SeoHead.astro';
+import SkipLink from '../components/SkipLink.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = true } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const currentPage = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Favicon-platshållare — byt ut mot Hallpartners riktiga favicon, se public/logos/README.md -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <!-- Webfont (ingen fontfil checkas in) — se docs/DESIGN_SYSTEM.md -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <SeoHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      image={image}
+      noindex={noindex}
+    />
+
+    <script is:inline>
+      // Sätter en klass så att CSS kan skilja på JS-aktiverade och
+      // icke-JS-besökare. Utan denna klass förblir allt innehåll synligt
+      // som standard (progressiv förbättring, inga hårda JS-beroenden).
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body>
+    <SkipLink />
+    <Header currentPage={currentPage} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

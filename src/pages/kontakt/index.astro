@@ -1,0 +1,139 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ButtonLink from '../../components/ButtonLink.astro';
+import { contactPage } from '../../data/presentation';
+---
+
+<BaseLayout
+  title="Kontakt | Hallpartner — nästa kapitel"
+  description="Avslutande kontaktsida och nästa steg i samarbetet mellan Hallpartner och Amelio."
+>
+  <section class="section">
+    <div class="container container-text">
+      <p class="text-eyebrow">Kontakt</p>
+      <h1>{contactPage.heading}</h1>
+      <p class="text-lead text-muted">{contactPage.text}</p>
+      <ButtonLink href={contactPage.cta.href} label={contactPage.cta.label} variant="primary" />
+    </div>
+  </section>
+
+  <section class="section section-surface" id="kontaktuppgifter">
+    <div class="container">
+      <div class="contact-card card">
+        <h2 class="text-caption contact-card__heading">Kontaktuppgifter</h2>
+        <dl class="contact-card__list">
+          <div>
+            <dt>Kontaktperson</dt>
+            <dd>TODO: Namn, Amelio</dd>
+          </div>
+          <div>
+            <dt>E-post</dt>
+            <dd>TODO: E-postadress</dd>
+          </div>
+          <div>
+            <dt>Telefon</dt>
+            <dd>TODO: Telefonnummer</dd>
+          </div>
+        </dl>
+      </div>
+
+      <form class="contact-form card" aria-labelledby="contact-form-heading">
+        <h2 id="contact-form-heading">Boka nästa möte</h2>
+        <p class="text-caption text-muted contact-form__notice">
+          TODO: Formuläret är visuellt och saknar backend. Formulärhantering kopplas i ett senare
+          steg (t.ex. e-posttjänst eller CRM-integration).
+        </p>
+
+        <div class="contact-form__field">
+          <label for="name">Namn</label>
+          <input type="text" id="name" name="name" autocomplete="name" />
+        </div>
+
+        <div class="contact-form__field">
+          <label for="email">E-post</label>
+          <input type="email" id="email" name="email" autocomplete="email" />
+        </div>
+
+        <div class="contact-form__field">
+          <label for="message">Meddelande</label>
+          <textarea id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <button type="button" class="btn btn-primary">Skicka</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .container-text > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .container-text :global(.btn) {
+    margin-top: var(--space-3);
+  }
+
+  .contact-card,
+  .contact-form {
+    max-width: var(--width-text);
+    margin-inline: auto;
+  }
+
+  .contact-form {
+    margin-top: var(--space-4);
+  }
+
+  .contact-card__heading {
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-card__list {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .contact-card__list dt {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-muted);
+  }
+
+  .contact-card__list dd {
+    margin: 0;
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .contact-form__notice {
+    margin-block: var(--space-2) var(--space-3);
+    padding: var(--space-2);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+
+  .contact-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: var(--space-3);
+  }
+
+  .contact-form__field input,
+  .contact-form__field textarea {
+    padding: 0.75rem 1rem;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-surface);
+    font-family: var(--font-primary);
+  }
+
+  @media (min-width: 768px) {
+    .contact-card,
+    .contact-form {
+      padding: var(--space-4);
+    }
+  }
+</style>

@@ -1,0 +1,36 @@
+---
+import ButtonLink from './ButtonLink.astro';
+import type { CTA } from '../types/content';
+
+export interface Props {
+  title: string;
+  text?: string;
+  button: CTA;
+}
+
+const { title, text, button } = Astro.props;
+---
+
+<section class="cta-section section-inverse section">
+  <div class="container cta-section__inner">
+    <h2>{title}</h2>
+    {text && <p class="text-lead text-muted cta-section__text">{text}</p>}
+    <ButtonLink href={button.href} label={button.label} variant="primary" />
+  </div>
+</section>
+
+<style>
+  .cta-section__inner {
+    max-width: var(--width-text);
+    text-align: center;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .cta-section__text {
+    color: var(--color-muted);
+  }
+</style>

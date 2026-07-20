@@ -1,0 +1,181 @@
+---
+import LogoPlaceholder from './LogoPlaceholder.astro';
+import ButtonLink from './ButtonLink.astro';
+import { primaryNav } from '../data/navigation';
+
+export interface Props {
+  currentPage?: string;
+}
+
+const { currentPage = '/' } = Astro.props;
+
+const isCurrent = (href: string) =>
+  href === '/' ? currentPage === '/' : currentPage.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="Hallpartner — till startsidan">
+      <LogoPlaceholder />
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true" />
+    <label for="nav-toggle" class="nav-toggle" aria-label="Öppna meny">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </label>
+
+    <nav class="site-nav" aria-label="Primär navigation">
+      <ul class="site-nav__list">
+        {
+          primaryNav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="site-nav__link"
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="site-nav__cta">
+        <ButtonLink href="/kontakt/" label="Boka nästa möte" variant="primary" />
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background-color: rgb(243 241 236 / 92%);
+    backdrop-filter: blur(6px);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: var(--space-2);
+  }
+
+  .site-header__logo {
+    text-decoration: none;
+  }
+
+  .nav-toggle-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+
+  .nav-toggle__bar {
+    display: block;
+    height: 2px;
+    background-color: var(--color-graphite);
+    transition:
+      transform var(--transition-fast),
+      opacity var(--transition-fast);
+  }
+
+  .nav-toggle-input:focus-visible + .nav-toggle {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    inset: 100% 0 auto 0;
+    background-color: var(--color-off-white);
+    border-bottom: var(--border-width) solid var(--color-border);
+    padding: var(--space-3) var(--section-padding-x-mobile) var(--space-4);
+  }
+
+  .nav-toggle-input:checked ~ .site-nav {
+    display: block;
+  }
+
+  .nav-toggle-input:checked ~ .nav-toggle .nav-toggle__bar:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .nav-toggle-input:checked ~ .nav-toggle .nav-toggle__bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .nav-toggle-input:checked ~ .nav-toggle .nav-toggle__bar:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .site-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: var(--font-size-body);
+  }
+
+  .site-nav__link {
+    text-decoration: none;
+    color: var(--color-text);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .site-nav__link:hover {
+    color: var(--color-accent);
+  }
+
+  .site-nav__link[aria-current='page'] {
+    color: var(--color-accent);
+  }
+
+  .site-nav__cta {
+    margin-top: var(--space-3);
+  }
+
+  @media (min-width: 1024px) {
+    .nav-toggle,
+    .nav-toggle-input {
+      display: none;
+    }
+
+    .site-nav {
+      display: flex;
+      position: static;
+      align-items: center;
+      gap: var(--space-5);
+      background: transparent;
+      border: 0;
+      padding: 0;
+    }
+
+    .site-nav__list {
+      flex-direction: row;
+      gap: var(--space-4);
+    }
+
+    .site-nav__cta {
+      margin-top: 0;
+    }
+  }
+</style>

@@ -1,0 +1,26 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { ProjectItem } from '../types/content';
+
+export interface Props {
+  projects: ProjectItem[];
+}
+
+const { projects } = Astro.props;
+---
+
+<ul class="grid grid-2-up grid-3-up">
+  {
+    projects.map((project) => (
+      <ProjectCard
+        id={project.slug}
+        title={project.title}
+        category={project.category}
+        location={project.location}
+        image={project.imageLabel}
+        description={project.need}
+        href={`/projekt/#${project.slug}`}
+      />
+    ))
+  }
+</ul>

@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionIntro from '../../components/SectionIntro.astro';
+import ProjectGrid from '../../components/ProjectGrid.astro';
+import CTASection from '../../components/CTASection.astro';
+import { projects } from '../../data/projects';
+import { closingCTA } from '../../data/presentation';
+---
+
+<BaseLayout
+  title="Projekt | Hallpartner — nästa kapitel"
+  description="Koncept för hur Hallpartners referensprojekt kan presenteras digitalt — kundens behov, lösning och resultat."
+>
+  <section class="section">
+    <div class="container">
+      <SectionIntro
+        level="h1"
+        eyebrow="Projekt"
+        title="Referensprojekt som bygger förtroende."
+        intro="Ett system för att visa upp genomförda projekt på ett sätt som skapar trovärdighet hos nya kunder."
+      />
+      <p class="text-caption text-muted concept-notice">
+        TODO: Detta är ett strukturkoncept med neutrala exempel. Samtliga projekt kompletteras med
+        verkligt material (bilder, orter, case) från Hallpartner innan publicering.
+      </p>
+      <ProjectGrid projects={projects} />
+    </div>
+  </section>
+
+  <CTASection title={closingCTA.title} button={closingCTA.button} />
+</BaseLayout>
+
+<style>
+  .concept-notice {
+    margin-bottom: var(--space-4);
+    padding: var(--space-2) var(--space-3);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+</style>

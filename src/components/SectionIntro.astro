@@ -1,0 +1,39 @@
+---
+export interface Props {
+  id?: string;
+  eyebrow?: string;
+  title: string;
+  intro?: string;
+  align?: 'left' | 'center';
+  level?: 'h1' | 'h2';
+}
+
+const { id, eyebrow, title, intro, align = 'left', level = 'h2' } = Astro.props;
+const Heading = level;
+---
+
+<div class={`section-intro section-intro--${align}`}>
+  {eyebrow && <p class="text-eyebrow">{eyebrow}</p>}
+  <Heading id={id}>{title}</Heading>
+  {intro && <p class="text-lead text-muted section-intro__text">{intro}</p>}
+</div>
+
+<style>
+  .section-intro {
+    max-width: var(--width-text);
+    margin-bottom: var(--space-5);
+  }
+
+  .section-intro--center {
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .section-intro__text {
+    margin-top: var(--space-2);
+  }
+
+  .section-intro p.text-eyebrow {
+    margin-bottom: var(--space-2);
+  }
+</style>

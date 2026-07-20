@@ -1,0 +1,48 @@
+---
+import ButtonLink from './ButtonLink.astro';
+import type { CTA, OpportunityCard } from '../types/content';
+
+export interface Props {
+  id?: string;
+  title: string;
+  text?: string;
+  cta?: CTA;
+  cards: OpportunityCard[];
+}
+
+const { id, title, text, cta, cards } = Astro.props;
+---
+
+<div class="opportunity">
+  <div class="opportunity__intro">
+    <h2 id={id}>{title}</h2>
+    {text && <p class="text-lead text-muted">{text}</p>}
+    {cta && <ButtonLink href={cta.href} label={cta.label} variant={cta.variant ?? 'ghost'} />}
+  </div>
+
+  <ul class="grid grid-2-up grid-3-up opportunity__cards">
+    {
+      cards.map((card) => (
+        <li class="card">
+          <h3>{card.title}</h3>
+          <p class="text-body text-muted">{card.description}</p>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .opportunity__intro {
+    max-width: var(--width-text);
+    margin-bottom: var(--space-5);
+  }
+
+  .opportunity__intro > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .opportunity__intro :global(.btn) {
+    margin-top: var(--space-3);
+  }
+</style>

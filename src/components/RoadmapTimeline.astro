@@ -1,0 +1,71 @@
+---
+import type { RoadmapPhase } from '../types/content';
+
+export interface Props {
+  phases: RoadmapPhase[];
+}
+
+const { phases } = Astro.props;
+---
+
+<ol class="timeline">
+  {
+    phases.map((phase, index) => (
+      <li class="timeline__item">
+        <div class="timeline__marker" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </div>
+        <div class="timeline__content">
+          <h3>{phase.title}</h3>
+          <p class="text-body text-muted">{phase.description}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .timeline {
+    position: relative;
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .timeline__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    border-left: 2px solid var(--color-border);
+    padding-left: var(--space-4);
+  }
+
+  .timeline__item:last-child {
+    padding-bottom: 0;
+  }
+
+  .timeline__marker {
+    position: absolute;
+    left: -1.05rem;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background-color: var(--color-graphite);
+    color: var(--color-off-white);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .timeline__content {
+    grid-column: 1 / -1;
+  }
+
+  .timeline__content > * + * {
+    margin-top: var(--space-1);
+  }
+</style>

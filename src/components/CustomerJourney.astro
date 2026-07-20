@@ -1,0 +1,57 @@
+---
+import type { JourneyStep } from '../types/content';
+
+export interface Props {
+  steps: JourneyStep[];
+}
+
+const { steps } = Astro.props;
+---
+
+<ol class="journey">
+  {
+    steps.map((step, index) => (
+      <li class="journey__step">
+        <div class="journey__marker" aria-hidden="true">
+          {String(index + 1).padStart(2, '0')}
+        </div>
+        <h3 class="journey__label">{step.label}</h3>
+        <p class="text-caption text-muted">{step.description}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .journey {
+    display: grid;
+    gap: var(--space-4);
+    counter-reset: step;
+  }
+
+  .journey__step {
+    position: relative;
+    padding-top: var(--space-2);
+    border-top: 2px solid var(--color-border);
+  }
+
+  .journey__marker {
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-caption);
+    color: var(--color-accent-warm);
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-1);
+  }
+
+  .journey__label {
+    margin-bottom: var(--space-1);
+  }
+
+  @media (min-width: 768px) {
+    .journey {
+      grid-template-columns: repeat(5, 1fr);
+      gap: var(--space-3);
+    }
+  }
+</style>

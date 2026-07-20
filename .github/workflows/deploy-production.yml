@@ -1,0 +1,99 @@
+# Produktionsdeploy för Hallpartner Vision Site.
+#
+# Körs automatiskt vid varje push till `main`, samt kan köras manuellt via
+# "Run workflow" (workflow_dispatch) i GitHub Actions-fliken.
+#
+# Flöde: npm ci → npm run build → endast innehållet i dist/ FTP-deployas
+# till hallpartner.amelio.se. Inga autentiseringsuppgifter finns i denna
+# fil — FTP_SERVER/FTP_USERNAME/FTP_PASSWORD hämtas från repositorysecrets.
+#
+# server-dir är satt till "./public_html/" — verifierat att detta är
+# document root för hallpartner.amelio.se hos Inleed och att kontot
+# endast används för denna presentationssajt.
+name: Deploy Hallpartner to production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hallpartner-production
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and validate Astro
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Build production site
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Verify production output
+        shell: bash
+        run: |
+          test -d dist
+          test -f dist/index.html
+          echo "Build verified: dist/index.html exists."
+
+      - name: Save production build
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-dist
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy to hallpartner.amelio.se
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://hallpartner.amelio.se
+
+    steps:
+      - name: Download verified build
+        uses: actions/download-artifact@v4
+        with:
+          name: hallpartner-dist
+          path: dist/
+
+      - name: Deploy changed files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftp
+          port: 21
+          local-dir: ./dist/
+          server-dir: ./public_html/
+          log-level: standard
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/.DS_Store
+            **/Thumbs.db

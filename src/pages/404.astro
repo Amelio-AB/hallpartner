@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ButtonLink from '../components/ButtonLink.astro';
+---
+
+<BaseLayout
+  title="Sidan kunde inte hittas | Hallpartner — nästa kapitel"
+  description="Sidan du sökte kunde inte hittas."
+>
+  <section class="section not-found">
+    <div class="container container-text">
+      <p class="text-eyebrow">404</p>
+      <h1>Sidan kunde inte hittas.</h1>
+      <p class="text-lead text-muted">
+        Länken kan vara felaktig eller sidan kan ha flyttats. Utforska visionen eller gå tillbaka
+        till startsidan.
+      </p>
+      <div class="not-found__actions">
+        <ButtonLink href="/" label="Till startsidan" variant="primary" />
+        <ButtonLink href="/vision/" label="Utforska visionen" variant="secondary" />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    min-height: 60svh;
+    display: flex;
+    align-items: center;
+  }
+
+  .container-text > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-3) !important;
+  }
+</style>

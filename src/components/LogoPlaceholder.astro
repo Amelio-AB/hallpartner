@@ -1,0 +1,40 @@
+---
+// Temporär logotyp. Byts senare mot Hallpartners riktiga logotyp
+// (SVG i public/logos/, se public/logos/README.md).
+export interface Props {
+  inverse?: boolean;
+}
+
+const { inverse = false } = Astro.props;
+---
+
+<span class={`logo-placeholder ${inverse ? 'logo-placeholder-inverse' : ''}`}>
+  <span class="logo-mark" aria-hidden="true"></span>
+  Hallpartner
+</span>
+
+<style>
+  .logo-placeholder {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+    color: var(--color-graphite);
+  }
+
+  .logo-placeholder-inverse {
+    color: var(--color-off-white);
+  }
+
+  .logo-mark {
+    display: inline-block;
+    width: 1.4rem;
+    height: 1.4rem;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, var(--color-steel-blue), var(--color-warm-accent));
+    flex-shrink: 0;
+  }
+</style>

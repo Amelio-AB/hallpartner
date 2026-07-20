@@ -1,0 +1,69 @@
+---
+import BaseLayout from './BaseLayout.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const { title, description, image, noindex = true } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} image={image} noindex={noindex}>
+  <div class="presentation">
+    <slot />
+  </div>
+</BaseLayout>
+
+<style>
+  /*
+    Filmisk, scrollbar presentation: extra luft mellan sektioner och en
+    mjuk fade/slide-in när varje sektion når synfältet (respekterar
+    prefers-reduced-motion via global.css).
+  */
+  :global(html.js) .presentation :global(> section) {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity var(--transition-slow),
+      transform var(--transition-slow);
+  }
+
+  :global(html.js) .presentation :global(> section.is-visible) {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .presentation :global(> section) {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // Progressiv förbättring: fade/slide-in per sektion. Utan JS eller med
+  // reducerad rörelse visas sektionerna direkt (se is-visible-fallback nedan).
+  const sections = document.querySelectorAll('.presentation > section');
+
+  if ('IntersectionObserver' in window && sections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        }
+      },
+      { threshold: 0.15 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+  } else {
+    sections.forEach((section) => section.classList.add('is-visible'));
+  }
+</script>

@@ -1,0 +1,73 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionIntro from '../../components/SectionIntro.astro';
+import ButtonLink from '../../components/ButtonLink.astro';
+import { visionPage } from '../../data/presentation';
+---
+
+<BaseLayout
+  title="Vision | Hallpartner — nästa kapitel"
+  description="Sammanfattning av den digitala visionen för Hallpartner: nuläge, möjlighet och framtida digital position."
+>
+  <section class="section hero-intro">
+    <div class="container container-text">
+      <p class="text-eyebrow">Vision</p>
+      <h1>{visionPage.heading}</h1>
+      <p class="text-lead text-muted">{visionPage.intro}</p>
+    </div>
+  </section>
+
+  <section class="section section-surface">
+    <div class="container container-text stack">
+      <div>
+        <h2>{visionPage.currentState.title}</h2>
+        <p class="text-body text-muted">{visionPage.currentState.text}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container container-text stack">
+      <div>
+        <h2>{visionPage.futurePosition.title}</h2>
+        <p class="text-body text-muted">{visionPage.futurePosition.text}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-inverse">
+    <div class="container container-text stack">
+      <div>
+        <h2>{visionPage.strengthenBusiness.title}</h2>
+        <p class="text-body">{visionPage.strengthenBusiness.text}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionIntro title="Nästa steg" align="center" />
+      <div class="vision-links">
+        <ButtonLink
+          href={visionPage.links.startPage.href}
+          label={visionPage.links.startPage.label}
+          variant="primary"
+        />
+        <ButtonLink
+          href={visionPage.links.roadmap.href}
+          label={visionPage.links.roadmap.label}
+          variant="secondary"
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .vision-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+</style>

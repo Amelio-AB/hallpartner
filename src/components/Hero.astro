@@ -1,0 +1,155 @@
+---
+import ButtonLink from './ButtonLink.astro';
+import type { CTA } from '../types/content';
+
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  body?: string;
+  primaryCTA?: CTA;
+  secondaryCTA?: CTA;
+  imageLabel?: string;
+}
+
+const {
+  eyebrow,
+  title,
+  subtitle,
+  body,
+  primaryCTA,
+  secondaryCTA,
+  imageLabel = 'TODO: Drönarbild över färdig hall',
+} = Astro.props;
+---
+
+<section class="hero">
+  <div class="hero__media media-placeholder" data-label={imageLabel} aria-hidden="true"></div>
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <div class="container hero__content">
+    {eyebrow && <p class="text-eyebrow hero__eyebrow">{eyebrow}</p>}
+    <h1 class="hero__title">{title}</h1>
+    {subtitle && <p class="hero__subtitle">{subtitle}</p>}
+    {body && <p class="hero__body text-lead">{body}</p>}
+
+    {
+      (primaryCTA || secondaryCTA) && (
+        <div class="hero__actions">
+          {primaryCTA && (
+            <ButtonLink href={primaryCTA.href} label={primaryCTA.label} variant="primary" />
+          )}
+          {secondaryCTA && (
+            <ButtonLink href={secondaryCTA.href} label={secondaryCTA.label} variant="secondary" />
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 100svh;
+    color: var(--color-text-inverse);
+    overflow: hidden;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+    border-radius: 0;
+    animation: hero-zoom 20s ease-in-out infinite alternate;
+  }
+
+  .hero__media::after {
+    display: none;
+  }
+
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgb(23 26 31 / 55%) 0%,
+      rgb(23 26 31 / 65%) 55%,
+      rgb(23 26 31 / 88%) 100%
+    );
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    padding-block: var(--space-7) var(--space-6);
+    max-width: 44rem;
+    animation: hero-fade-in var(--transition-slow) ease both;
+  }
+
+  .hero__eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .hero__title {
+    font-size: var(--font-size-display);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+  }
+
+  .hero__subtitle {
+    margin-top: var(--space-2);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-off-white);
+  }
+
+  .hero__body {
+    margin-top: var(--space-3);
+    max-width: var(--width-text);
+    color: var(--color-muted);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .hero__actions :global(.btn-secondary) {
+    color: var(--color-off-white);
+  }
+
+  @keyframes hero-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.06);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__media {
+      animation: none;
+    }
+
+    .hero__content {
+      animation: none;
+    }
+  }
+</style>
