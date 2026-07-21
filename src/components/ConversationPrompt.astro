@@ -1,0 +1,39 @@
+---
+// En pauspunkt i presentationen — en fråga till kunden, visuellt tydligt
+// skild från analystexten runt omkring (se DESIGN_SYSTEM.md, "En idé per
+// sektion") så att den fungerar som ett naturligt stopp i samtalet.
+export interface Props {
+  question: string;
+  eyebrow?: string;
+}
+
+const { question, eyebrow = 'En fråga till er' } = Astro.props;
+---
+
+<aside class="conversation-prompt">
+  <p class="text-eyebrow conversation-prompt__eyebrow">{eyebrow}</p>
+  <p class="conversation-prompt__question">{question}</p>
+</aside>
+
+<style>
+  .conversation-prompt {
+    max-width: var(--width-text);
+    margin-top: var(--space-5);
+    padding: var(--space-4);
+    border-left: 3px solid var(--color-accent-warm);
+    border-radius: var(--radius-card);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-card);
+  }
+
+  .conversation-prompt__eyebrow {
+    margin-bottom: var(--space-1);
+  }
+
+  .conversation-prompt__question {
+    font-family: var(--font-primary);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-heading);
+  }
+</style>

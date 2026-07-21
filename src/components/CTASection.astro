@@ -6,16 +6,24 @@ export interface Props {
   title: string;
   text?: string;
   button: CTA;
+  secondaryButton?: CTA;
 }
 
-const { title, text, button } = Astro.props;
+const { title, text, button, secondaryButton } = Astro.props;
 ---
 
 <section class="cta-section section-inverse section">
   <div class="container cta-section__inner">
     <h2>{title}</h2>
     {text && <p class="text-lead text-muted cta-section__text">{text}</p>}
-    <ButtonLink href={button.href} label={button.label} variant="primary" />
+    <div class="cta-section__actions">
+      <ButtonLink href={button.href} label={button.label} variant="primary" />
+      {
+        secondaryButton && (
+          <ButtonLink href={secondaryButton.href} label={secondaryButton.label} variant="secondary" />
+        )
+      }
+    </div>
   </div>
 </section>
 
@@ -32,5 +40,16 @@ const { title, text, button } = Astro.props;
 
   .cta-section__text {
     color: var(--color-muted);
+  }
+
+  .cta-section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .cta-section__actions :global(.btn-secondary) {
+    color: var(--color-off-white);
   }
 </style>

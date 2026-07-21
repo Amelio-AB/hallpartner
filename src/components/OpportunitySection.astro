@@ -1,4 +1,5 @@
 ---
+import InternalLinkCard from './InternalLinkCard.astro';
 import ButtonLink from './ButtonLink.astro';
 import type { CTA, OpportunityCard } from '../types/content';
 
@@ -20,14 +21,23 @@ const { id, title, text, cta, cards } = Astro.props;
     {cta && <ButtonLink href={cta.href} label={cta.label} variant={cta.variant ?? 'ghost'} />}
   </div>
 
-  <ul class="grid grid-2-up grid-3-up opportunity__cards">
+  <ul class="grid grid-2-up opportunity__cards">
     {
-      cards.map((card) => (
-        <li class="card">
-          <h3>{card.title}</h3>
-          <p class="text-body text-muted">{card.description}</p>
-        </li>
-      ))
+      cards.map((card) =>
+        card.href ? (
+          <InternalLinkCard
+            title={card.title}
+            description={card.description}
+            href={card.href}
+            linkLabel={card.linkLabel}
+          />
+        ) : (
+          <li class="card">
+            <h3>{card.title}</h3>
+            <p class="text-body text-muted">{card.description}</p>
+          </li>
+        ),
+      )
     }
   </ul>
 </div>

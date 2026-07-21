@@ -5,6 +5,12 @@ import ProjectGrid from '../../components/ProjectGrid.astro';
 import CTASection from '../../components/CTASection.astro';
 import { projects } from '../../data/projects';
 import { closingCTA } from '../../data/presentation';
+
+const startPageLink = {
+  label: 'Se startsidesförslaget',
+  href: '/startsideforslag/',
+  variant: 'secondary' as const,
+};
 ---
 
 <BaseLayout
@@ -24,10 +30,17 @@ import { closingCTA } from '../../data/presentation';
         verkligt material (bilder, orter, case) från Hallpartner innan publicering.
       </p>
       <ProjectGrid projects={projects} />
+      <p class="back-link">
+        <a href="/">Till analysen</a>
+      </p>
     </div>
   </section>
 
-  <CTASection title={closingCTA.title} button={closingCTA.button} />
+  <CTASection
+    title={closingCTA.title}
+    button={closingCTA.button}
+    secondaryButton={startPageLink}
+  />
 </BaseLayout>
 
 <style>
@@ -36,5 +49,9 @@ import { closingCTA } from '../../data/presentation';
     padding: var(--space-2) var(--space-3);
     border: 1px dashed var(--color-border);
     border-radius: var(--radius-sm);
+  }
+
+  .back-link {
+    margin-top: var(--space-4);
   }
 </style>

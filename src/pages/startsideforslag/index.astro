@@ -32,6 +32,7 @@ const contactCTA = { label: 'Begär offert', href: '/kontakt/', variant: 'primar
   <p class="concept-banner text-caption">
     TODO — Koncept: Detta är ett designförslag för Hallpartners framtida startsida. Innehållet nedan
     är strukturell platshållartext tills Hallpartner bekräftar tjänster, halltyper och branscher.
+    <a href="/" class="concept-banner__link">Till analysen</a>
   </p>
 
   <Hero title={startPageHero.title} body={startPageHero.subtitle} primaryCTA={startPageHero.cta} />
@@ -136,6 +137,12 @@ const contactCTA = { label: 'Begär offert', href: '/kontakt/', variant: 'primar
     background-color: var(--color-warm-accent);
     color: var(--color-graphite);
     font-weight: var(--font-weight-semibold);
+  }
+
+  .concept-banner__link {
+    margin-left: var(--space-2);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .industry-list {

@@ -1,0 +1,73 @@
+---
+export interface Props {
+  id?: string;
+  title: string;
+  intro: string;
+  questions: string[];
+  closing: string;
+}
+
+const { id, title, intro, questions, closing } = Astro.props;
+---
+
+<div class="customer-questions">
+  <h2 id={id}>{title}</h2>
+  <p class="text-lead text-muted customer-questions__intro">{intro}</p>
+  <ul class="customer-questions__list">
+    {
+      questions.map((question) => (
+        <li class="customer-questions__item">
+          <span class="customer-questions__mark" aria-hidden="true">
+            ?
+          </span>
+          <p class="text-body">{question}</p>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="text-body text-muted customer-questions__closing">{closing}</p>
+</div>
+
+<style>
+  .customer-questions {
+    max-width: var(--width-text);
+  }
+
+  .customer-questions__intro {
+    margin-top: var(--space-2);
+  }
+
+  .customer-questions__list {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-4);
+  }
+
+  .customer-questions__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+    padding-block: var(--space-2);
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .customer-questions__mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background-color: var(--color-bg-inverse);
+    color: var(--color-off-white);
+    font-family: var(--font-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-caption);
+  }
+
+  .customer-questions__closing {
+    margin-top: var(--space-4);
+    font-style: italic;
+  }
+</style>

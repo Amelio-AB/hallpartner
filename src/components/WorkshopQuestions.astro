@@ -1,0 +1,68 @@
+---
+// Grupperade samtalsfrågor inför kundmötet. Panelerna är medvetet
+// bordrade/kortlika för att kännas som ett arbetsmaterial snarare än en
+// fortsättning på analystexten ovanför (se AGENTS.md, "en idé per sektion").
+import type { WorkshopGroup } from '../types/content';
+
+export interface Props {
+  groups: WorkshopGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<div class="grid grid-2-up workshop">
+  {
+    groups.map((group, index) => (
+      <div class="workshop__group">
+        <p class="text-eyebrow workshop__index">{String(index + 1).padStart(2, '0')}</p>
+        <h3 class="workshop__title">{group.title}</h3>
+        <ul class="workshop__list">
+          {group.questions.map((question) => (
+            <li>{question}</li>
+          ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .workshop__group {
+    padding: var(--space-4);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+    background-color: var(--color-surface);
+  }
+
+  .workshop__index {
+    margin-bottom: var(--space-1);
+  }
+
+  .workshop__title {
+    margin-bottom: var(--space-3);
+  }
+
+  .workshop__list {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .workshop__list li {
+    position: relative;
+    padding-left: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+  }
+
+  .workshop__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 0.6rem;
+    height: 2px;
+    background-color: var(--color-accent-warm);
+  }
+</style>

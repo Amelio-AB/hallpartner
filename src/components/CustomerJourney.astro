@@ -50,7 +50,9 @@ const { steps } = Astro.props;
 
   @media (min-width: 768px) {
     .journey {
-      grid-template-columns: repeat(5, 1fr);
+      /* auto-fit anpassar kolumnantalet efter hur många steg som skickas in
+         (t.ex. 5 eller 6), i stället för ett hårdkodat antal kolumner. */
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       gap: var(--space-3);
     }
   }

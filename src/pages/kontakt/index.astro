@@ -2,6 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ButtonLink from '../../components/ButtonLink.astro';
 import { contactPage } from '../../data/presentation';
+
+// Alla formulär på webbplatsen ska nå Andreas — se kontaktuppgifter nedan.
+const contactEmail = 'andreas@amelio.se';
 ---
 
 <BaseLayout
@@ -13,7 +16,19 @@ import { contactPage } from '../../data/presentation';
       <p class="text-eyebrow">Kontakt</p>
       <h1>{contactPage.heading}</h1>
       <p class="text-lead text-muted">{contactPage.text}</p>
-      <ButtonLink href={contactPage.cta.href} label={contactPage.cta.label} variant="primary" />
+      <div class="contact-links">
+        <ButtonLink href={contactPage.cta.href} label={contactPage.cta.label} variant="primary" />
+        <ButtonLink
+          href={contactPage.links.startPage.href}
+          label={contactPage.links.startPage.label}
+          variant="ghost"
+        />
+        <ButtonLink
+          href={contactPage.links.home.href}
+          label={contactPage.links.home.label}
+          variant="ghost"
+        />
+      </div>
     </div>
   </section>
 
@@ -24,43 +39,69 @@ import { contactPage } from '../../data/presentation';
         <dl class="contact-card__list">
           <div>
             <dt>Kontaktperson</dt>
-            <dd>TODO: Namn, Amelio</dd>
+            <dd>Andreas Lindgren</dd>
           </div>
           <div>
             <dt>E-post</dt>
-            <dd>TODO: E-postadress</dd>
+            <dd><a href={`mailto:${contactEmail}`}>{contactEmail}</a></dd>
           </div>
           <div>
             <dt>Telefon</dt>
-            <dd>TODO: Telefonnummer</dd>
+            <dd><a href="tel:+46735054763">073-505 47 63</a></dd>
           </div>
         </dl>
       </div>
 
-      <form class="contact-form card" aria-labelledby="contact-form-heading">
+      <form
+        class="contact-form card"
+        aria-labelledby="contact-form-heading"
+        action={`mailto:${contactEmail}`}
+        method="get"
+        id="contact-form"
+      >
         <h2 id="contact-form-heading">Boka nästa möte</h2>
         <p class="text-caption text-muted contact-form__notice">
-          TODO: Formuläret är visuellt och saknar backend. Formulärhantering kopplas i ett senare
-          steg (t.ex. e-posttjänst eller CRM-integration).
+          Skicka-knappen öppnar ditt e-postprogram med ett förifyllt meddelande till {contactEmail}.
         </p>
 
         <div class="contact-form__field">
           <label for="name">Namn</label>
-          <input type="text" id="name" name="name" autocomplete="name" />
+          <input type="text" id="name" name="name" autocomplete="name" required />
         </div>
 
         <div class="contact-form__field">
           <label for="email">E-post</label>
-          <input type="email" id="email" name="email" autocomplete="email" />
+          <input type="email" id="email" name="email" autocomplete="email" required />
         </div>
 
         <div class="contact-form__field">
           <label for="message">Meddelande</label>
-          <textarea id="message" name="message" rows="4"></textarea>
+          <textarea id="message" name="message" rows="4" required></textarea>
         </div>
 
-        <button type="button" class="btn btn-primary">Skicka</button>
+        <button type="submit" class="btn btn-primary">Skicka</button>
       </form>
+
+      <script is:inline define:vars={{ contactEmail }}>
+        // Progressiv förbättring: bygger en välformaterad mailto-länk av
+        // formulärfälten i stället för webbläsarens råa GET-kodning av
+        // action="mailto:...". Utan JS fungerar formuläret ändå via den
+        // vanliga mailto-formulärinlämningen ovan.
+        const form = document.getElementById('contact-form');
+
+        form?.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          const name = form.elements.namedItem('name').value;
+          const email = form.elements.namedItem('email').value;
+          const message = form.elements.namedItem('message').value;
+
+          const subject = `Kontaktförfrågan från Hallpartners webbplats – ${name}`;
+          const body = `Namn: ${name}\nE-post: ${email}\n\nMeddelande:\n${message}`;
+
+          window.location.href = `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        });
+      </script>
     </div>
   </section>
 </BaseLayout>
@@ -70,7 +111,10 @@ import { contactPage } from '../../data/presentation';
     margin-top: var(--space-2);
   }
 
-  .container-text :global(.btn) {
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
     margin-top: var(--space-3);
   }
 
@@ -107,11 +151,16 @@ import { contactPage } from '../../data/presentation';
     font-weight: var(--font-weight-semibold);
   }
 
+  .contact-card__list a {
+    text-decoration: none;
+  }
+
+  .contact-card__list a:hover {
+    color: var(--color-accent);
+  }
+
   .contact-form__notice {
     margin-block: var(--space-2) var(--space-3);
-    padding: var(--space-2);
-    border: 1px dashed var(--color-border);
-    border-radius: var(--radius-sm);
   }
 
   .contact-form__field {

@@ -6,6 +6,12 @@ import FAQAccordion from '../../components/FAQAccordion.astro';
 import CTASection from '../../components/CTASection.astro';
 import { knowledgeArticles } from '../../data/knowledge';
 import { faqItems, closingCTA } from '../../data/presentation';
+
+const startPageLink = {
+  label: 'Se startsidesförslaget',
+  href: '/startsideforslag/',
+  variant: 'secondary' as const,
+};
 ---
 
 <BaseLayout
@@ -25,6 +31,9 @@ import { faqItems, closingCTA } from '../../data/presentation';
         Hallpartners experter innan publicering.
       </p>
       <KnowledgeGrid articles={knowledgeArticles} />
+      <p class="back-link">
+        <a href="/">Till analysen</a>
+      </p>
     </div>
   </section>
 
@@ -35,7 +44,11 @@ import { faqItems, closingCTA } from '../../data/presentation';
     </div>
   </section>
 
-  <CTASection title={closingCTA.title} button={closingCTA.button} />
+  <CTASection
+    title={closingCTA.title}
+    button={closingCTA.button}
+    secondaryButton={startPageLink}
+  />
 </BaseLayout>
 
 <style>
@@ -44,5 +57,9 @@ import { faqItems, closingCTA } from '../../data/presentation';
     padding: var(--space-2) var(--space-3);
     border: 1px dashed var(--color-border);
     border-radius: var(--radius-sm);
+  }
+
+  .back-link {
+    margin-top: var(--space-4);
   }
 </style>

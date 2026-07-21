@@ -5,6 +5,8 @@ import RoadmapTimeline from '../../components/RoadmapTimeline.astro';
 import CTASection from '../../components/CTASection.astro';
 import { roadmapPhases } from '../../data/roadmap';
 import { closingCTA } from '../../data/presentation';
+
+const visionLink = { label: 'Läs om visionen', href: '/vision/', variant: 'secondary' as const };
 ---
 
 <BaseLayout
@@ -20,8 +22,17 @@ import { closingCTA } from '../../data/presentation';
         intro="En tydlig, stegvis process som säkerställer att plattformen byggs på rätt grund — från insikt till lansering och vidare utveckling."
       />
       <RoadmapTimeline phases={roadmapPhases} />
+      <p class="back-link">
+        <a href="/">Till analysen</a>
+      </p>
     </div>
   </section>
 
-  <CTASection title={closingCTA.title} button={closingCTA.button} />
+  <CTASection title={closingCTA.title} button={closingCTA.button} secondaryButton={visionLink} />
 </BaseLayout>
+
+<style>
+  .back-link {
+    margin-top: var(--space-4);
+  }
+</style>

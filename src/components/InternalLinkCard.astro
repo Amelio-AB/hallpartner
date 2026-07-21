@@ -1,0 +1,65 @@
+---
+// Generisk klickbar kortlänk till en annan sida på webbplatsen. Återanvänds
+// för både beskrivande möjlighetskort (fyra möjligheter) och de enklare
+// länkarna i visionsöversikten (Min vision).
+export interface Props {
+  id?: string;
+  title: string;
+  description?: string;
+  href: string;
+  linkLabel?: string;
+}
+
+const { id, title, description, href, linkLabel = 'Läs mer' } = Astro.props;
+---
+
+<li class="card internal-link-card" id={id}>
+  <a href={href} class="internal-link-card__link">
+    <h3 class="internal-link-card__title">{title}</h3>
+    {description && <p class="text-body text-muted">{description}</p>}
+    <span class="internal-link-card__cta">
+      {linkLabel}
+      <span class="internal-link-card__arrow" aria-hidden="true">→</span>
+    </span>
+  </a>
+</li>
+
+<style>
+  .internal-link-card__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    height: 100%;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .internal-link-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: var(--space-2);
+    color: var(--color-accent);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .internal-link-card__arrow {
+    transition: transform var(--transition-base);
+  }
+
+  .internal-link-card__link:hover .internal-link-card__arrow,
+  .internal-link-card__link:focus-visible .internal-link-card__arrow {
+    transform: translateX(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .internal-link-card__arrow {
+      transition: none;
+    }
+
+    .internal-link-card__link:hover .internal-link-card__arrow,
+    .internal-link-card__link:focus-visible .internal-link-card__arrow {
+      transform: none;
+    }
+  }
+</style>

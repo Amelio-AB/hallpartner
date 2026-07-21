@@ -1,13 +1,15 @@
 import type { NavItem } from '../types/content';
 
-// Ordning enligt docs/SITEMAP.md → "Primär navigation".
+// Förenklad navigation för en icke-teknisk kund. URL:erna är oförändrade
+// (matchar src/pages/-strukturen), endast etiketterna är anpassade så att
+// varje sida beskrivs i vardagsspråk snarare än som webbplatstermer.
 export const primaryNav: NavItem[] = [
-  { label: 'Startsida', href: '/' },
-  { label: 'Vision', href: '/vision/' },
-  { label: 'Startsideförslag', href: '/startsideforslag/' },
+  { label: 'Analysen', href: '/' },
+  { label: 'Visionen', href: '/vision/' },
+  { label: 'Startsidesförslag', href: '/startsideforslag/' },
   { label: 'Projekt', href: '/projekt/' },
-  { label: 'Kunskapsbank', href: '/kunskapsbank/' },
-  { label: 'Roadmap', href: '/roadmap/' },
+  { label: 'Kunskap', href: '/kunskapsbank/' },
+  { label: 'Så arbetar vi', href: '/roadmap/' },
   { label: 'Kontakt', href: '/kontakt/' },
 ];
 

@@ -25,6 +25,8 @@ export interface JourneyStep {
 export interface OpportunityCard {
   title: string;
   description: string;
+  href?: string;
+  linkLabel?: string;
 }
 
 export interface ProjectItem {
@@ -80,4 +82,20 @@ export interface IndustryItem {
 export interface ProcessStep {
   title: string;
   description: string;
+}
+
+export interface WorkshopGroup {
+  title: string;
+  questions: string[];
+}
+
+export interface LinkCardItem {
+  title: string;
+  description?: string;
+  href: string;
+  linkLabel?: string;
+}
+
+export interface PreserveValueItem {
+  title: string;
 }

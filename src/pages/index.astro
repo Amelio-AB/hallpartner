@@ -1,115 +1,146 @@
 ---
 import PresentationLayout from '../layouts/PresentationLayout.astro';
 import Hero from '../components/Hero.astro';
-import StatementSection from '../components/StatementSection.astro';
 import SectionIntro from '../components/SectionIntro.astro';
 import StrengthGrid from '../components/StrengthGrid.astro';
+import CustomerQuestions from '../components/CustomerQuestions.astro';
 import CustomerJourney from '../components/CustomerJourney.astro';
+import ConversationPrompt from '../components/ConversationPrompt.astro';
 import OpportunitySection from '../components/OpportunitySection.astro';
+import PreserveValuesSection from '../components/PreserveValuesSection.astro';
+import WorkshopQuestions from '../components/WorkshopQuestions.astro';
+import VisionOverview from '../components/VisionOverview.astro';
 import BrowserMockup from '../components/BrowserMockup.astro';
 import ButtonLink from '../components/ButtonLink.astro';
-import ProjectGrid from '../components/ProjectGrid.astro';
-import KnowledgeGrid from '../components/KnowledgeGrid.astro';
 import RoadmapTimeline from '../components/RoadmapTimeline.astro';
 import ResultsGrid from '../components/ResultsGrid.astro';
 import CTASection from '../components/CTASection.astro';
 
 import {
   homeHero,
-  meaningSection,
-  builtStrengths,
-  journeyIntro,
-  journeySteps,
-  opportunitySection,
+  strengthsIntro,
+  coreStrengths,
+  visitorPerspective,
+  decisionJourneyIntro,
+  decisionJourneySteps,
+  decisionJourneyNote,
+  decisionJourneyPrompt,
+  opportunitiesIntro,
   opportunityCards,
-  visionTeaser,
+  preserveValuesIntro,
+  preserveValues,
+  workshopIntro,
+  workshopGroups,
+  visionOverviewIntro,
+  visionOverviewItems,
   startPageTeaser,
-  projectsTeaser,
-  knowledgeTeaser,
-  roadmapTeaser,
-  roadmapHomePhases,
-  resultsItems,
-  closingCTA,
+  workingProcessIntro,
+  workingProcessPhases,
+  workingProcessCta,
+  businessValueIntro,
+  businessValueItems,
+  presentationClosing,
 } from '../data/presentation';
-import { projects } from '../data/projects';
-import { knowledgeArticles } from '../data/knowledge';
 ---
 
 <PresentationLayout
-  title="Hallpartner — nästa kapitel | En digital vision av Amelio"
-  description="En vision för hur Hallpartners digitala närvaro kan spegla kvaliteten, erfarenheten och ambitionen i varje projekt."
+  title="Hallpartner – digital analys och vision"
+  description="En analys och vision för hur Hallpartner kan skapa en tydligare digital kundresa, stärka förtroendet och stödja försäljningen."
 >
+  <!-- 1. Hero -->
   <Hero
     eyebrow={homeHero.eyebrow}
     title={homeHero.title}
-    subtitle={homeHero.subtitle}
     body={homeHero.body}
     primaryCTA={homeHero.primaryCTA}
     secondaryCTA={homeHero.secondaryCTA}
+    imageLabel="TODO: Bild som visar Hallpartners arbete i verkligheten"
   />
 
-  <StatementSection
-    statement={meaningSection.title}
-    supportingText={meaningSection.text}
-    imageLabel="TODO: Bild som visar en hall i drift"
-  />
-
-  <section class="section section-surface" id="styrkor" aria-labelledby="styrkor-heading">
+  <!-- 2. Det här fungerar redan bra -->
+  <section class="section section-surface" id="grund" aria-labelledby="grund-heading">
     <div class="container">
-      <SectionIntro id="styrkor-heading" title="En stark grund att bygga vidare på." />
-      <StrengthGrid items={builtStrengths} />
+      <SectionIntro id="grund-heading" title={strengthsIntro.title} intro={strengthsIntro.text} />
+      <StrengthGrid items={coreStrengths} />
     </div>
   </section>
 
-  <section class="section" id="kundresa" aria-labelledby="kundresa-heading">
+  <!-- 3. Min utgångspunkt -->
+  <section class="section" id="utgangspunkt" aria-labelledby="utgangspunkt-heading">
     <div class="container">
-      <SectionIntro id="kundresa-heading" title={journeyIntro.title} intro={journeyIntro.text} />
-      <CustomerJourney steps={journeySteps} />
-    </div>
-  </section>
-
-  <section
-    class="section section-surface"
-    id="digital-potential"
-    aria-labelledby="digital-potential-heading"
-  >
-    <div class="container">
-      <OpportunitySection
-        id="digital-potential-heading"
-        title={opportunitySection.title}
-        text={opportunitySection.text}
-        cta={opportunitySection.cta}
-        cards={opportunityCards}
+      <CustomerQuestions
+        id="utgangspunkt-heading"
+        title={visitorPerspective.title}
+        intro={visitorPerspective.intro}
+        questions={visitorPerspective.questions}
+        closing={visitorPerspective.closing}
       />
     </div>
   </section>
 
-  <section class="section section-inverse" id="visionen" aria-labelledby="visionen-heading">
-    <div class="container two-col">
-      <div class="two-col__text">
-        <h2 id="visionen-heading">{visionTeaser.title}</h2>
-        <p class="text-lead text-muted">{visionTeaser.text}</p>
-        <ButtonLink href={visionTeaser.cta.href} label={visionTeaser.cta.label} variant="primary" />
-      </div>
-      <div class="two-col__media">
-        <BrowserMockup
-          imageLabel="TODO: Visualisering av visionen"
-          caption="Konceptuell visualisering — ej slutgiltig design."
-        />
-      </div>
+  <!-- 4. Så tror jag att kunden väljer leverantör -->
+  <section class="section section-surface" id="kundresa" aria-labelledby="kundresa-heading">
+    <div class="container">
+      <SectionIntro id="kundresa-heading" title={decisionJourneyIntro.title} />
+      <CustomerJourney steps={decisionJourneySteps} />
+      <p class="text-body text-muted kundresa-note">{decisionJourneyNote}</p>
+      <ConversationPrompt question={decisionJourneyPrompt} />
     </div>
   </section>
 
-  <section class="section" id="startsideforslag" aria-labelledby="startsideforslag-heading">
-    <div class="container two-col two-col--reverse">
+  <!-- 5. Här ser jag den största potentialen -->
+  <section class="section" id="mojligheter" aria-labelledby="mojligheter-heading">
+    <div class="container">
+      <OpportunitySection id="mojligheter-heading" title={opportunitiesIntro.title} cards={opportunityCards} />
+    </div>
+  </section>
+
+  <!-- 6. Det här vill jag inte förändra -->
+  <section class="section section-inverse" id="oforandrat" aria-labelledby="oforandrat-heading">
+    <div class="container">
+      <SectionIntro
+        id="oforandrat-heading"
+        title={preserveValuesIntro.title}
+        intro={preserveValuesIntro.text}
+      />
+      <PreserveValuesSection items={preserveValues} />
+    </div>
+  </section>
+
+  <!-- 7. Frågor jag gärna vill diskutera -->
+  <section class="section section-surface" id="fragor" aria-labelledby="fragor-heading">
+    <div class="container">
+      <SectionIntro id="fragor-heading" title={workshopIntro.title} />
+      <WorkshopQuestions groups={workshopGroups} />
+    </div>
+  </section>
+
+  <!-- 8. Min vision -->
+  <section class="section" id="vision" aria-labelledby="vision-heading">
+    <div class="container">
+      <SectionIntro
+        id="vision-heading"
+        title={visionOverviewIntro.title}
+        intro={visionOverviewIntro.text}
+      />
+      <VisionOverview items={visionOverviewItems} />
+    </div>
+  </section>
+
+  <!-- 9. Se ett möjligt startsidesförslag -->
+  <section class="section section-surface" id="startsideforslag" aria-labelledby="startsideforslag-heading">
+    <div class="container two-col">
       <div class="two-col__text">
         <h2 id="startsideforslag-heading">{startPageTeaser.title}</h2>
         <p class="text-lead text-muted">{startPageTeaser.text}</p>
-        <ButtonLink
-          href={startPageTeaser.cta.href}
-          label={startPageTeaser.cta.label}
-          variant="secondary"
-        />
+        <div class="two-col__actions">
+          <ButtonLink href={startPageTeaser.cta.href} label={startPageTeaser.cta.label} variant="primary" />
+          <ButtonLink
+            href={startPageTeaser.secondaryCta.href}
+            label={startPageTeaser.secondaryCta.label}
+            variant="ghost"
+          />
+        </div>
       </div>
       <div class="two-col__media">
         <BrowserMockup
@@ -121,64 +152,32 @@ import { knowledgeArticles } from '../data/knowledge';
     </div>
   </section>
 
-  <section
-    class="section section-surface"
-    id="referensprojekt"
-    aria-labelledby="referensprojekt-heading"
-  >
+  <!-- 10. Möjligt arbetssätt -->
+  <section class="section" id="arbetssatt" aria-labelledby="arbetssatt-heading">
     <div class="container">
-      <SectionIntro
-        id="referensprojekt-heading"
-        title={projectsTeaser.title}
-        intro={projectsTeaser.text}
-      />
-      <ProjectGrid projects={projects} />
+      <SectionIntro id="arbetssatt-heading" title={workingProcessIntro.title} />
+      <RoadmapTimeline phases={workingProcessPhases} />
       <div class="section-footer-cta">
-        <ButtonLink
-          href={projectsTeaser.cta.href}
-          label={projectsTeaser.cta.label}
-          variant="ghost"
-        />
+        <ButtonLink href={workingProcessCta.href} label={workingProcessCta.label} variant="ghost" />
       </div>
     </div>
   </section>
 
-  <section class="section" id="kunskapsbank" aria-labelledby="kunskapsbank-heading">
+  <!-- 11. Förväntad affärsnytta -->
+  <section class="section section-surface" id="affarsnytta" aria-labelledby="affarsnytta-heading">
     <div class="container">
-      <SectionIntro
-        id="kunskapsbank-heading"
-        title={knowledgeTeaser.title}
-        intro={knowledgeTeaser.text}
-      />
-      <KnowledgeGrid articles={knowledgeArticles.slice(0, 3)} />
-      <div class="section-footer-cta">
-        <ButtonLink
-          href={knowledgeTeaser.cta.href}
-          label={knowledgeTeaser.cta.label}
-          variant="ghost"
-        />
-      </div>
+      <SectionIntro id="affarsnytta-heading" title={businessValueIntro.title} />
+      <ResultsGrid results={businessValueItems} />
     </div>
   </section>
 
-  <section class="section section-surface" id="roadmap" aria-labelledby="roadmap-heading">
-    <div class="container">
-      <SectionIntro id="roadmap-heading" title={roadmapTeaser.title} intro={roadmapTeaser.text} />
-      <RoadmapTimeline phases={roadmapHomePhases} />
-      <div class="section-footer-cta">
-        <ButtonLink href={roadmapTeaser.cta.href} label={roadmapTeaser.cta.label} variant="ghost" />
-      </div>
-    </div>
-  </section>
-
-  <section class="section" id="resultat" aria-labelledby="resultat-heading">
-    <div class="container">
-      <SectionIntro id="resultat-heading" title="Vad vi vill uppnå tillsammans" align="center" />
-      <ResultsGrid results={resultsItems} />
-    </div>
-  </section>
-
-  <CTASection title={closingCTA.title} button={closingCTA.button} />
+  <!-- 12. Avslutning -->
+  <CTASection
+    title={presentationClosing.title}
+    text={presentationClosing.text}
+    button={presentationClosing.button}
+    secondaryButton={presentationClosing.secondaryButton}
+  />
 </PresentationLayout>
 
 <style>
@@ -192,8 +191,15 @@ import { knowledgeArticles } from '../data/knowledge';
     margin-top: var(--space-2);
   }
 
-  .two-col__text :global(.btn) {
-    margin-top: var(--space-3);
+  .two-col__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .kundresa-note {
+    max-width: var(--width-text);
+    margin-top: var(--space-4);
   }
 
   .section-footer-cta {
@@ -204,10 +210,6 @@ import { knowledgeArticles } from '../data/knowledge';
     .two-col {
       grid-template-columns: 1fr 1fr;
       gap: var(--space-5);
-    }
-
-    .two-col--reverse .two-col__media {
-      order: -1;
     }
   }
 </style>

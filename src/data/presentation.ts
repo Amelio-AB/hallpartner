@@ -4,160 +4,297 @@ import type {
   HallTypeItem,
   IndustryItem,
   JourneyStep,
+  LinkCardItem,
   OpportunityCard,
+  PreserveValueItem,
   ProcessStep,
   ResultItem,
   RoadmapPhase,
   ServiceItem,
   StrengthItem,
+  WorkshopGroup,
 } from '../types/content';
 
-// Copy hämtad ordagrant från docs/CONTENT.md där sådan finns.
-// Textblock utan motsvarighet i CONTENT.md är strukturell platshållartext
-// (märkt TODO i kommentar) och ska granskas av Hallpartner innan publicering.
+// Copy för startsidan följer ordalydelsen i uppdraget "Bygg om Hallpartner
+// Vision Site" (samtalsdriven presentation inför första kundmötet) ordagrant
+// där sådan finns. Kort text utan exakt given ordalydelse (t.ex. korta
+// styrkebeskrivningar) är skriven i samma tonalitet och märkt TODO — ska
+// stämmas av med Hallpartner innan publicering. Copy för övriga sidor är
+// hämtad från docs/CONTENT.md där sådan finns.
 
-export const globalMessage = {
-  line1: 'Ni bygger inte hallar.',
-  line2: 'Ni bygger framtidens verksamheter.',
+// ---------------------------------------------------------------------------
+// Startsida (/) — samtalsdriven presentation inför första kundmötet.
+// Ordlydelse följer instruktionerna för startsidans ombyggnad ordagrant där
+// sådana finns. Korta förklaringar och beskrivningar utan exakt given text
+// är skrivna i samma tonalitet (enkelt språk, "jag ser/jag tror") och ska
+// stämmas av med Hallpartner innan publicering.
+// ---------------------------------------------------------------------------
+
+// 1. Hero
+export const homeHero = {
+  eyebrow: 'En första analys av Hallpartners digitala närvaro',
+  title: 'Jag tror att Hallpartner kan ta en starkare position digitalt.',
+  body: 'Jag har tittat på er nuvarande webbplats ur en potentiell kunds perspektiv. Här visar jag vad jag ser, vilka möjligheter jag tror finns och vad jag gärna vill förstå bättre om er verksamhet.',
+  primaryCTA: { label: 'Börja presentationen', href: '#grund', variant: 'primary' } as CTA,
+  secondaryCTA: {
+    label: 'Se ett möjligt startsidesförslag',
+    href: '/startsideforslag/',
+    variant: 'secondary',
+  } as CTA,
 };
 
-export const homeHero = {
-  eyebrow: 'Hallpartner – nästa kapitel',
-  title: 'Ni bygger inte hallar.',
-  subtitle: 'Ni bygger framtidens verksamheter.',
-  body: 'En vision för hur Hallpartners digitala närvaro kan spegla kvaliteten, erfarenheten och ambitionen i varje projekt.',
-  primaryCTA: { label: 'Utforska visionen', href: '/vision/', variant: 'primary' } as CTA,
-  secondaryCTA: {
+// 2. Det här fungerar redan bra
+export const strengthsIntro = {
+  title: 'Hallpartner har en stark grund.',
+  text: 'Det finns redan mycket att bygga vidare på. Min uppgift är inte att förändra vilka ni är, utan att göra era styrkor tydligare för kunden.',
+};
+
+// TODO: Korta förklaringar ska bekräftas av Hallpartner.
+export const coreStrengths: StrengthItem[] = [
+  {
+    title: 'Bred erfarenhet',
+    description: 'Många års erfarenhet av hallbyggnation som kunder kan luta sig mot.',
+  },
+  {
+    title: 'Kompletta hallösningar',
+    description:
+      'En helhetslösning från idé till färdig hall, utan att kunden behöver koppla ihop flera leverantörer.',
+  },
+  {
+    title: 'Kunskap genom hela projektet',
+    description: 'Kompetens som följer med genom projektering, montage och leverans.',
+  },
+  {
+    title: 'Personlig kontakt',
+    description: 'En tydlig kontaktperson som kunden kan lita på genom hela processen.',
+  },
+];
+
+// 3. Min utgångspunkt
+export const visitorPerspective = {
+  title: 'Jag har försökt se webbplatsen som en ny kund.',
+  intro:
+    'En besökare känner kanske inte till Hallpartner, era projekt eller hur ni arbetar. Därför behöver webbplatsen snabbt svara på några enkla frågor:',
+  questions: [
+    'Kan ni hjälpa mig med rätt typ av hall?',
+    'Har ni gjort liknande projekt tidigare?',
+    'Hur går ett projekt till?',
+    'Kan jag känna mig trygg med er?',
+    'Vad är nästa steg?',
+  ],
+  closing: 'I dag behöver besökaren arbeta ganska hårt för att hitta svaren.',
+};
+
+// 4. Så tror jag att kunden väljer leverantör
+export const decisionJourneyIntro = {
+  title: 'Beslutet börjar ofta innan första samtalet.',
+};
+
+export const decisionJourneySteps: JourneyStep[] = [
+  { label: 'Söker', description: 'Behovet identifieras och research inleds online.' },
+  { label: 'Besöker webbplatsen', description: 'Första intrycket av Hallpartner skapas digitalt.' },
+  { label: 'Jämför alternativ', description: 'Leverantörer, referenser och kompetens jämförs.' },
+  { label: 'Bygger förtroende', description: 'Innehåll och case avgör vem som känns trovärdig.' },
+  {
+    label: 'Tar kontakt',
+    description: 'Första kontakten tas med den leverantör som känns säkrast.',
+  },
+  { label: 'Begär offert', description: 'Dialogen övergår till offert och projekt.' },
+];
+
+export const decisionJourneyNote =
+  'Webbplatsens uppgift är inte att avsluta affären. Den ska göra kunden trygg nog att ta nästa steg.';
+
+export const decisionJourneyPrompt = 'Stämmer det här med hur era kunder brukar hitta och välja er?';
+
+// 5. Här ser jag den största potentialen
+export const opportunitiesIntro = {
+  title: 'Fyra möjligheter som kan göra stor skillnad.',
+};
+
+export const opportunityCards: OpportunityCard[] = [
+  {
+    title: 'Tydligare erbjudande',
+    description:
+      'Besökaren ska snabbt förstå vilka hallar, tjänster och lösningar Hallpartner erbjuder.',
+    href: '/startsideforslag/',
+    linkLabel: 'Se startsidesförslaget',
+  },
+  {
+    title: 'Starkare referensprojekt',
+    description: 'Varje projekt kan visa kundens behov, Hallpartners lösning och det färdiga resultatet.',
+    href: '/projekt/',
+    linkLabel: 'Se referensprojekt',
+  },
+  {
+    title: 'Synlig kunskap',
+    description: 'Vanliga kundfrågor kan bli guider som skapar trygghet redan före första kontakten.',
+    href: '/kunskapsbank/',
+    linkLabel: 'Till kunskapsbanken',
+  },
+  {
+    title: 'En tydligare väg till kontakt',
+    description: 'Det ska vara enkelt att förstå vad nästa steg är och vem kunden ska prata med.',
+    href: '/kontakt/',
+    linkLabel: 'Till kontakt',
+  },
+];
+
+// 6. Det här vill jag inte förändra
+export const preserveValuesIntro = {
+  title: 'Det viktiga ska kännas igen.',
+  text: 'En ny digital riktning ska förstärka Hallpartner, inte göra företaget opersonligt eller generiskt.',
+};
+
+export const preserveValues: PreserveValueItem[] = [
+  { title: 'Den personliga kontakten' },
+  { title: 'Den praktiska erfarenheten' },
+  { title: 'Det långsiktiga arbetssättet' },
+  { title: 'Närheten till kundens projekt' },
+  { title: 'Hallpartners identitet och trovärdighet' },
+];
+
+// 7. Frågor jag gärna vill diskutera
+export const workshopIntro = {
+  title: 'För att skapa rätt lösning behöver jag förstå hur ni arbetar i dag.',
+};
+
+export const workshopGroups: WorkshopGroup[] = [
+  {
+    title: 'Kunder och försäljning',
+    questions: [
+      'Hur hittar kunderna er i dag?',
+      'Vilka typer av kunder vill ni få fler av?',
+      'Hur lång är vägen från första kontakt till affär?',
+      'Vilka konkurrenter möter ni oftast?',
+    ],
+  },
+  {
+    title: 'Tjänster och erbjudande',
+    questions: [
+      'Vilka typer av hallar säljer ni mest?',
+      'Vilka tjänster är viktigast för lönsamheten?',
+      'Vad skiljer Hallpartner från andra leverantörer?',
+      'Finns det erbjudanden ni vill prioritera framåt?',
+    ],
+  },
+  {
+    title: 'Kundens frågor',
+    questions: [
+      'Vad frågar kunderna nästan alltid om?',
+      'Vad brukar skapa osäkerhet?',
+      'Vad behöver kunden veta innan ni kan lämna offert?',
+      'Var uppstår de vanligaste missförstånden?',
+    ],
+  },
+  {
+    title: 'Projekt och innehåll',
+    questions: [
+      'Vilka projekt är ni mest stolta över?',
+      'Finns bilder, ritningar eller kundberättelser?',
+      'Kan vissa kunder tänka sig att medverka i ett referenscase?',
+      'Vem inom Hallpartner kan bidra med kunskap och innehåll?',
+    ],
+  },
+];
+
+// 8. Min vision
+export const visionOverviewIntro = {
+  title: 'En webbplats som hjälper kunden från första fråga till första kontakt.',
+  text: 'Jag ser framför mig en digital plattform där Hallpartner kan visa vad ni gör, hur ni arbetar och varför kunder ska känna sig trygga med er.',
+};
+
+export const visionOverviewItems: LinkCardItem[] = [
+  { title: 'Tydlig startsida', href: '/startsideforslag/', linkLabel: 'Se förslaget' },
+  { title: 'Halltyper och tjänster', href: '/startsideforslag/', linkLabel: 'Se förslaget' },
+  { title: 'Referensprojekt', href: '/projekt/', linkLabel: 'Se projekten' },
+  { title: 'Kunskapsbank', href: '/kunskapsbank/', linkLabel: 'Till kunskapsbanken' },
+  { title: 'Enkel kontaktväg', href: '/kontakt/', linkLabel: 'Till kontakt' },
+];
+
+// 9. Se ett möjligt startsidesförslag
+export const startPageTeaser = {
+  title: 'Så här skulle nästa steg kunna se ut.',
+  text: 'Det här är inte en färdig design. Det är ett konkret exempel på hur Hallpartners erbjudande kan bli tydligare för en ny kund.',
+  cta: { label: 'Öppna startsidesförslaget', href: '/startsideforslag/', variant: 'primary' } as CTA,
+  secondaryCta: { label: 'Läs om visionen', href: '/vision/', variant: 'ghost' } as CTA,
+};
+
+// 10. Möjligt arbetssätt
+export const workingProcessIntro = {
+  title: 'Om vi väljer att gå vidare.',
+};
+
+export const workingProcessPhases: RoadmapPhase[] = [
+  { title: 'Förstå verksamheten', description: 'Vi lär känna Hallpartners mål, kunder och sätt att arbeta.' },
+  {
+    title: 'Samla innehåll och projekt',
+    description: 'Bilder, projekt och kunskap samlas in som grund för innehållet.',
+  },
+  {
+    title: 'Bestämma struktur och budskap',
+    description: 'Vi bestämmer vad sajten ska säga och i vilken ordning.',
+  },
+  {
+    title: 'Designa upplevelsen',
+    description: 'Utseende och känsla formges enligt Hallpartners identitet.',
+  },
+  { title: 'Bygga och testa', description: 'Sajten byggs och testas på mobil, surfplatta och dator.' },
+  { title: 'Lansera och förbättra', description: 'Sajten publiceras och utvecklas vidare över tid.' },
+];
+
+export const workingProcessCta = {
+  label: 'Se hela arbetsprocessen',
+  href: '/roadmap/',
+  variant: 'ghost',
+} as CTA;
+
+// 11. Förväntad affärsnytta
+export const businessValueIntro = {
+  title: 'Vad arbetet ska bidra till.',
+};
+
+export const businessValueItems: ResultItem[] = [
+  {
+    icon: 'compass',
+    title: 'Tydligare första intryck',
+    text: 'Besökaren förstår snabbt vem Hallpartner är och vad ni kan hjälpa till med.',
+  },
+  {
+    icon: 'shield',
+    title: 'Större förtroende',
+    text: 'Tydligt innehåll gör det lättare för kunden att känna sig trygg.',
+  },
+  {
+    icon: 'inbox',
+    title: 'Fler relevanta förfrågningar',
+    text: 'Rätt information gör det enklare för rätt kunder att höra av sig.',
+  },
+  {
+    icon: 'handshake',
+    title: 'Bättre stöd för säljarbetet',
+    text: 'Säljteamet får ett verktyg som gör en del av jobbet innan första mötet.',
+  },
+  {
+    icon: 'layers',
+    title: 'En plattform som kan växa över tid',
+    text: 'En grund som kan byggas ut i takt med verksamheten.',
+  },
+];
+
+// 12. Avslutning
+export const presentationClosing = {
+  title: 'Det här är min bild. Nu vill jag gärna höra er.',
+  text: 'Målet med mötet är inte att besluta om alla detaljer. Målet är att förstå om vi ser samma möjligheter och om det finns en bra grund för nästa steg.',
+  button: { label: 'Låt oss prata vidare', href: '/kontakt/', variant: 'primary' } as CTA,
+  secondaryButton: {
     label: 'Se startsidesförslaget',
     href: '/startsideforslag/',
     variant: 'secondary',
   } as CTA,
 };
 
-export const meaningSection = {
-  title: 'Mer än en byggnad.',
-  text: 'Varje hall skapar förutsättningar för produktion, logistik, lagerhållning och tillväxt. Hallpartner levererar lösningar som hjälper företag att utvecklas.',
-};
-
-export const builtStrengths: StrengthItem[] = [
-  {
-    title: 'Kompletta hallösningar',
-    // TODO: Kort beskrivning ska bekräftas av Hallpartner.
-    description: 'En helhetslösning från första idé till färdig hall.',
-  },
-  {
-    title: 'Projektering',
-    description: 'Noggrann planering som säkerställer rätt lösning för verksamheten.',
-  },
-  {
-    title: 'Montage',
-    description: 'Erfaret montage på plats, med fokus på kvalitet och säkerhet.',
-  },
-  {
-    title: 'Personlig projektledning',
-    description: 'En tydlig kontaktväg genom hela projektet, från start till leverans.',
-  },
-];
-
-export const journeyIntro = {
-  title: 'Besluten börjar långt innan första kontakten.',
-  text: 'Kunder söker information, jämför alternativ och bygger förtroende digitalt innan de tar kontakt.',
-};
-
-export const journeySteps: JourneyStep[] = [
-  { label: 'Söker', description: 'Behovet identifieras och research inleds online.' },
-  { label: 'Jämför', description: 'Leverantörer, referenser och kompetens jämförs.' },
-  { label: 'Bygger förtroende', description: 'Innehåll och case avgör vem som känns trovärdig.' },
-  { label: 'Kontakt', description: 'Första kontakten tas med den leverantör som känns säkrast.' },
-  { label: 'Affär', description: 'Dialogen övergår till offert och projekt.' },
-];
-
-export const opportunitySection = {
-  title: 'Här finns nästa möjlighet.',
-  text: 'Visionen är att låta den digitala upplevelsen spegla kvaliteten i Hallpartners verkliga arbete.',
-  cta: { label: 'Se visionen', href: '/vision/', variant: 'ghost' } as CTA,
-};
-
-export const opportunityCards: OpportunityCard[] = [
-  {
-    title: 'Erfarenhet',
-    description: 'Årtal av samlad kunskap inom hallbyggnation kan bli lättare att förstå digitalt.',
-  },
-  {
-    title: 'Projekt',
-    description: 'Genomförda projekt kan visas upp och göra kompetensen påtaglig för nya kunder.',
-  },
-  {
-    title: 'Förtroende',
-    description: 'Ett tydligt digitalt uttryck stärker förtroendet redan innan första mötet.',
-  },
-];
-
-export const visionTeaser = {
-  title: 'En digital vision för Hallpartner',
-  text: 'Det här är inte en färdig webbplats. Det är en riktning för hur Hallpartner kan stärka sitt varumärke och sin affär digitalt.',
-  cta: { label: 'Utforska visionen', href: '/vision/', variant: 'primary' } as CTA,
-};
-
-export const startPageTeaser = {
-  title: 'Ett konkret förslag på Hallpartners nya startsida.',
-  text: 'Ett trovärdigt koncept som visar hur förstasidan kan möta besökare med tydligt affärsvärde, tjänster och referensprojekt.',
-  cta: { label: 'Se startsidesförslaget', href: '/startsideforslag/', variant: 'secondary' } as CTA,
-};
-
-export const projectsTeaser = {
-  title: 'Referensprojekt som bygger förtroende.',
-  text: 'Ett system för att visa upp genomförda projekt på ett sätt som skapar trovärdighet hos nya kunder.',
-  cta: { label: 'Se alla projekt', href: '/projekt/', variant: 'ghost' } as CTA,
-};
-
-export const knowledgeTeaser = {
-  title: 'Kunskap som stärker varje beslut.',
-  text: 'Guider och svar på vanliga frågor som positionerar Hallpartner som experten kunden vill anlita.',
-  cta: { label: 'Till kunskapsbanken', href: '/kunskapsbank/', variant: 'ghost' } as CTA,
-};
-
-export const roadmapTeaser = {
-  title: 'Vägen till en ny digital plattform.',
-  text: 'En tydlig, stegvis process från insikt till lansering — och vidare utveckling därefter.',
-  cta: { label: 'Se hela roadmapen', href: '/roadmap/', variant: 'ghost' } as CTA,
-};
-
-// Kondenserad version för startsidans roadmap-sektion (PAGE_SPEC.md, sektion 10).
-// Den fullständiga 8-fasiga roadmapen finns på /roadmap/, se src/data/roadmap.ts.
-export const roadmapHomePhases: RoadmapPhase[] = [
-  { title: 'Insikt', description: 'Vi lär känna verksamheten, kunderna och målen.' },
-  { title: 'Strategi', description: 'Struktur och innehållsstrategi läggs fast.' },
-  { title: 'Design', description: 'Upplevelse och visuellt uttryck formges.' },
-  { title: 'Utveckling', description: 'Plattformen byggs i Astro.' },
-  { title: 'Lansering', description: 'Webbplatsen publiceras.' },
-  { title: 'Förbättring', description: 'Löpande vidareutveckling utifrån data och behov.' },
-];
-
-// PAGE_SPEC.md har högre prioritet än CONTENT.md — denna ordlydelse följer PAGE_SPEC.md.
-export const resultsItems: ResultItem[] = [
-  {
-    icon: 'trend-up',
-    title: 'Starkare varumärke',
-    text: 'Ett digitalt uttryck som matchar kvaliteten i det fysiska arbetet.',
-  },
-  {
-    icon: 'inbox',
-    title: 'Fler relevanta förfrågningar',
-    text: 'En tydligare position gör det lättare för rätt kunder att höra av sig.',
-  },
-  {
-    icon: 'eye',
-    title: 'Högre synlighet',
-    text: 'Bättre struktur och innehåll stärker synligheten i sök.',
-  },
-  {
-    icon: 'layers',
-    title: 'Skalbar plattform',
-    text: 'En grund som kan växa i takt med verksamheten.',
-  },
-];
-
+// Används av /projekt/, /kunskapsbank/ och /roadmap/ som avslutande CTA-block.
 export const closingCTA = {
   title: 'Låt oss bygga nästa kapitel tillsammans.',
   button: { label: 'Boka nästa möte', href: '/kontakt/', variant: 'primary' } as CTA,
@@ -191,6 +328,8 @@ export const visionPage = {
       variant: 'secondary',
     } as CTA,
     roadmap: { label: 'Se roadmapen', href: '/roadmap/', variant: 'ghost' } as CTA,
+    home: { label: 'Till analysen', href: '/', variant: 'ghost' } as CTA,
+    contact: { label: 'Kontakta oss', href: '/kontakt/', variant: 'ghost' } as CTA,
   },
 };
 
@@ -296,4 +435,8 @@ export const contactPage = {
   text: 'Den här visionen är en början. Tillsammans kan vi skapa en digital upplevelse som speglar Hallpartners kvalitet.',
   // Länkar till kontaktkortet på samma sida — riktiga kontaktuppgifter är TODO, se ContactCard.
   cta: { label: 'Kontakta Amelio', href: '#kontaktuppgifter', variant: 'primary' } as CTA,
+  links: {
+    home: { label: 'Till analysen', href: '/', variant: 'ghost' } as CTA,
+    startPage: { label: 'Se startsidesförslaget', href: '/startsideforslag/', variant: 'ghost' } as CTA,
+  },
 };
