@@ -48,8 +48,8 @@ Innehåller: - Navigation - Kontakt - Copyright - Vision-information
 
 Ansvar: - Första intrycket - Hero-copy - CTA - Bakgrundsbild/video
 
-Props: - eyebrow - title - subtitle - primaryCTA - secondaryCTA -
-backgroundImage
+Props: - eyebrow - title - subtitle - primaryCTA - valfri secondaryCTA -
+image
 
 ---
 
@@ -93,6 +93,41 @@ Props: - steps\[\]
 
 ---
 
+# CustomerQuestions
+
+Visar en koncentrerad lista med öppna frågor som stöd för dialog i mötet.
+
+Props: - title - intro - questions\[\] - closing
+
+---
+
+# ConversationPrompt
+
+Markerar en naturlig paus där presentatören bjuder in Hallpartner i
+samtalet.
+
+Props: - question
+
+---
+
+# WorkshopQuestions
+
+Renderar workshopsidans typade frågeområden. Varje fråga innehåller en
+preliminär bild, en förklaring av frågans betydelse och en utskrivbar
+anteckningsyta. Innehållet visas utan externa JavaScriptberoenden.
+
+Props: - categories\[\] - analysis\[\]
+
+---
+
+# WorkshopSummary
+
+Avslutande arbetsunderlag för målbild, målgrupper, prioriteringar,
+innehåll, ansvar och nästa steg. Alla ytor är visuella anteckningsfält och
+sparar ingen information.
+
+---
+
 # OpportunitySection
 
 Visar affärsmöjligheten.
@@ -101,21 +136,16 @@ Props: - title - cards\[\]
 
 ---
 
-# BrowserMockup
-
-Renderar en webbläsarram.
-
-Props: - image - caption
-
----
-
 # ProjectCard
 
 Visar ett referensprojekt.
 
-Props: - title - category - location - image - description - href
+Props: - id - title - category - image - imageAlt - description - href -
+linkLabel
 
-Hover: - lätt bildzoom - pilanimation
+Bild: - Astro Image - responsiva bildstorlekar - 4:3-format - object-fit cover
+
+Hover: - lätt bildzoom
 
 ---
 
@@ -124,22 +154,6 @@ Hover: - lätt bildzoom - pilanimation
 Grid av ProjectCard.
 
 Props: - projects\[\]
-
----
-
-# KnowledgeCard
-
-Visar artikel eller guide.
-
-Props: - title - category - readingTime - href
-
----
-
-# KnowledgeGrid
-
-Grid med KnowledgeCards.
-
-Props: - articles\[\]
 
 ---
 
@@ -195,11 +209,10 @@ Ansvar: - title - meta description - Open Graph - canonical - robots
 
 ---
 
-# SkipLink
+# Skip-länk
 
-Tillgänglighetskomponent.
-
-Hoppar direkt till huvudinnehållet.
+BaseLayout innehåller en tangentbordsfokuserbar länk direkt till
+huvudinnehållet.
 
 ---
 

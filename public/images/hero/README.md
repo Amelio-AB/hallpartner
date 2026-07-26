@@ -5,7 +5,6 @@ Bilder för hero-sektioner (helskärm).
 **Behövs:**
 
 - Drönarbild över en färdig hall (används på startsidan, se `src/components/Hero.astro`)
-- Alternativ hero-bild för `/startsideforslag/`
 
 **Riktlinjer (docs/DESIGN_SYSTEM.md):**
 

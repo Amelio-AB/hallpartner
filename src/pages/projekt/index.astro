@@ -1,57 +1,210 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SectionIntro from '../../components/SectionIntro.astro';
+import StrengthGrid from '../../components/StrengthGrid.astro';
 import ProjectGrid from '../../components/ProjectGrid.astro';
 import CTASection from '../../components/CTASection.astro';
 import { projects } from '../../data/projects';
-import { closingCTA } from '../../data/presentation';
 
-const startPageLink = {
-  label: 'Se startsidesförslaget',
-  href: '/startsideforslag/',
-  variant: 'secondary' as const,
-};
+const referenceBenefits = [
+  {
+    title: 'Bygger förtroende',
+    description: 'Verkliga projekt visar erfarenhet och minskar osäkerheten hos nya kunder.',
+  },
+  {
+    title: 'Förkortar säljprocessen',
+    description:
+      'När kunden känner igen sin egen situation i ett tidigare projekt blir det enklare att förstå lösningen och gå vidare.',
+  },
+  {
+    title: 'Stärker den digitala synligheten',
+    description:
+      'Varje projektsida blir ytterligare en möjlighet att hittas när någon söker efter hallar och bygglösningar.',
+  },
+  {
+    title: 'Hjälper AI att förstå verksamheten',
+    description:
+      'Tydliga projektbeskrivningar hjälper moderna AI-söktjänster att förstå vilka typer av byggnader Hallpartner arbetar med.',
+  },
+];
+
+const documentationItems = [
+  'Markarbete',
+  'Grundläggning',
+  'Stomresning',
+  'Byggprocess',
+  'Färdig hall',
+  'Interiör',
+  'Drönarbilder',
+  'Kunden framför byggnaden (efter godkännande)',
+  'Kort projektbeskrivning',
+  'Fakta om projektet',
+];
 ---
 
 <BaseLayout
-  title="Projekt | Hallpartner — nästa kapitel"
-  description="Koncept för hur Hallpartners referensprojekt kan presenteras digitalt — kundens behov, lösning och resultat."
+  title="Referensprojekt | Hallpartner — nästa kapitel"
+  description="En vision för hur Hallpartners framtida referensbibliotek kan skapa förtroende, stödja försäljningen och stärka den digitala synligheten."
 >
-  <section class="section">
+  <section class="project-hero section section-inverse" aria-labelledby="project-heading">
     <div class="container">
       <SectionIntro
+        id="project-heading"
         level="h1"
-        eyebrow="Projekt"
-        title="Referensprojekt som bygger förtroende."
-        intro="Ett system för att visa upp genomförda projekt på ett sätt som skapar trovärdighet hos nya kunder."
+        eyebrow="Referensprojekt"
+        title="Varje färdig hall kan bli nästa affär."
+        intro="När en kund ska välja leverantör räcker det inte med att berätta vad man kan göra. De vill se vad företaget faktiskt har byggt. Genomtänkta referensprojekt skapar förtroende, gör beslutsprocessen enklare och hjälper framtida kunder att förstå Hallpartners erfarenhet."
       />
-      <p class="text-caption text-muted concept-notice">
-        TODO: Detta är ett strukturkoncept med neutrala exempel. Samtliga projekt kompletteras med
-        verkligt material (bilder, orter, case) från Hallpartner innan publicering.
-      </p>
+    </div>
+  </section>
+
+  <section class="section section-surface" aria-labelledby="benefits-heading">
+    <div class="container">
+      <SectionIntro id="benefits-heading" title="Varför referensprojekt är viktiga" />
+      <StrengthGrid items={referenceBenefits} />
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="examples-heading">
+    <div class="container">
+      <h2 id="examples-heading" class="visually-hidden">Tre exempelprojekt</h2>
+      <aside class="demo-notice" aria-label="Information om exempelprojekten">
+        <p>
+          <strong>
+            Exemplen nedan är demonstrationsmaterial och används enbart för att visa hur
+            Hallpartners framtida referensprojekt kan presenteras.
+          </strong>
+        </p>
+      </aside>
       <ProjectGrid projects={projects} />
-      <p class="back-link">
-        <a href="/">Till analysen</a>
-      </p>
+    </div>
+  </section>
+
+  <section class="section section-inverse" aria-labelledby="recommendation-heading">
+    <div class="container recommendation-layout">
+      <div class="recommendation-copy">
+        <SectionIntro id="recommendation-heading" title="Min rekommendation till Hallpartner" />
+        <div class="stack text-lead recommendation-text">
+          <p>Många företag bygger fantastiska projekt men dokumenterar dem aldrig ordentligt.</p>
+          <p>
+            Varje färdig hall borde fotograferas, beskrivas och publiceras medan projektet
+            fortfarande är aktuellt.
+          </p>
+          <p>
+            På så sätt byggs ett referensbibliotek som fortsätter skapa affärer långt efter att
+            byggprojektet är avslutat.
+          </p>
+        </div>
+      </div>
+
+      <div class="documentation-card" id="dokumentera-projekt">
+        <h2>Dokumentera varje projekt</h2>
+        <ul class="documentation-list">
+          {
+            documentationItems.map((item) => (
+              <li>
+                <span aria-hidden="true">✓</span>
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <aside class="documentation-note" aria-label="Tips för projektdokumentation">
+          <p>
+            Bestäm redan vid projektstart vem som ansvarar för dokumentationen. Då blir
+            referensmaterialet en naturlig del av leveransen istället för något som glöms bort.
+          </p>
+        </aside>
+      </div>
     </div>
   </section>
 
   <CTASection
-    title={closingCTA.title}
-    button={closingCTA.button}
-    secondaryButton={startPageLink}
+    title="Potentialen är betydligt större än tre referensprojekt."
+    text="Det här är endast ett exempel på hur Hallpartner kan börja bygga upp ett professionellt referensbibliotek. Med varje nytt projekt växer innehållet och webbplatsen blir en allt starkare resurs för både kunder, sökmotorer och framtida AI-sökningar."
+    button={{ label: 'Låt oss prata', href: '/kontakt/' }}
+    secondaryButton={{ label: 'Till analysen', href: '/' }}
   />
 </BaseLayout>
 
 <style>
-  .concept-notice {
-    margin-bottom: var(--space-4);
-    padding: var(--space-2) var(--space-3);
-    border: 1px dashed var(--color-border);
-    border-radius: var(--radius-sm);
+  .project-hero {
+    padding-block-start: var(--space-8);
   }
 
-  .back-link {
+  .project-hero :global(.section-intro) {
+    margin-bottom: 0;
+  }
+
+  .project-hero :global(.section-intro__text),
+  .recommendation-text {
+    color: var(--color-muted);
+  }
+
+  .demo-notice {
+    max-width: var(--width-text);
+    margin-bottom: var(--space-4);
+    padding: var(--space-3);
+    border-left: 3px solid var(--color-accent-warm);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+  }
+
+  .recommendation-layout {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .recommendation-copy :global(.section-intro) {
+    margin-bottom: var(--space-3);
+  }
+
+  .documentation-card {
+    align-self: start;
+    padding: var(--space-4);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    scroll-margin-top: var(--space-4);
+  }
+
+  .documentation-list {
+    display: grid;
+    gap: var(--space-2);
     margin-top: var(--space-4);
+  }
+
+  .documentation-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .documentation-list span {
+    color: var(--color-accent);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .documentation-note {
+    margin-top: var(--space-4);
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-off-white);
+  }
+
+  @media (min-width: 768px) {
+    .documentation-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .recommendation-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      align-items: start;
+    }
   }
 </style>

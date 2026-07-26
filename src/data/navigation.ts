@@ -6,9 +6,7 @@ import type { NavItem } from '../types/content';
 export const primaryNav: NavItem[] = [
   { label: 'Analysen', href: '/' },
   { label: 'Visionen', href: '/vision/' },
-  { label: 'Startsidesförslag', href: '/startsideforslag/' },
   { label: 'Projekt', href: '/projekt/' },
-  { label: 'Kunskap', href: '/kunskapsbank/' },
   { label: 'Så arbetar vi', href: '/roadmap/' },
   { label: 'Kontakt', href: '/kontakt/' },
 ];

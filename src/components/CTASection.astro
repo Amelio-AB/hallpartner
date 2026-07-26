@@ -20,7 +20,11 @@ const { title, text, button, secondaryButton } = Astro.props;
       <ButtonLink href={button.href} label={button.label} variant="primary" />
       {
         secondaryButton && (
-          <ButtonLink href={secondaryButton.href} label={secondaryButton.label} variant="secondary" />
+          <ButtonLink
+            href={secondaryButton.href}
+            label={secondaryButton.label}
+            variant="secondary"
+          />
         )
       }
     </div>
@@ -51,5 +55,16 @@ const { title, text, button, secondaryButton } = Astro.props;
 
   .cta-section__actions :global(.btn-secondary) {
     color: var(--color-off-white);
+  }
+
+  .cta-section__actions :global(.btn-primary) {
+    color: var(--color-graphite);
+    background-color: var(--color-off-white);
+    border-color: var(--color-off-white);
+  }
+
+  .cta-section__actions :global(.btn-primary:hover) {
+    background-color: var(--color-surface);
+    border-color: var(--color-surface);
   }
 </style>

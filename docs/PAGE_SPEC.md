@@ -14,12 +14,12 @@ affärsmål, en tydlig känsla och en definierad layout.
 
 ## Syfte
 
-Skapa ett omedelbart premiumintryck och rama in Hallpartners verkliga
-värde.
+Rama in presentationen som en första analys och skapa nyfikenhet inför
+samtalet.
 
 ## Huvudbudskap
 
-**Ni bygger inte hallar. Ni bygger framtidens verksamheter.**
+**Hallpartner har mer att visa än vad en ny besökare ser i dag.**
 
 ## Layout
 
@@ -27,7 +27,7 @@ värde.
 - Bakgrundsbild/video
 - Mörk overlay
 - Text vänsterställd
-- Två CTA-knappar
+- En CTA-knapp som startar presentationen
 
 ## Komponenter
 
@@ -46,15 +46,15 @@ Drönarbild över färdig hall.
 
 ---
 
-# 02 Hallpartners betydelse
+# 02 Styrkorna som redan finns
 
 ## Syfte
 
-Förklara vilket värde Hallpartner skapar.
+Skapa förtroende genom att börja i verksamhetens faktiska styrkor.
 
 ## Layout
 
-Två kolumner: - Text - Stor bild
+Fyra informationskort och en kort slutsats.
 
 ## Känsla
 
@@ -62,23 +62,7 @@ Stolthet och trovärdighet.
 
 ---
 
-# 03 Det Hallpartner redan har byggt
-
-## Syfte
-
-Lyfta företagets styrkor.
-
-## Layout
-
-Fyra informationskort.
-
-## Komponent
-
-StrengthGrid
-
----
-
-# 04 Hur kunder väljer leverantör idag
+# 03 Kundens väg till beslut
 
 ## Syfte
 
@@ -92,7 +76,7 @@ Sök → Jämför → Förtroende → Kontakt → Affär
 
 ---
 
-# 05 Digital potential
+# 04 Digital potential
 
 ## Syfte
 
@@ -100,63 +84,104 @@ Visa möjligheten, inte problemet.
 
 ## Layout
 
-Tre kort: - Erfarenhet - Projekt - Förtroende
+Tre kort: - Erbjudande - Referensprojekt - Nästa steg
 
 ---
 
-# 06 Visionen
+# 05 Visionen
 
 ## Syfte
 
-Visa hur framtiden kan se ut.
+Sammanfatta webbplatsens uppgift i ett kort, inspirerande påstående.
 
 ## Layout
 
-Stor mockup med kort text.
+Mörk statement-sektion utan länk eller mockup.
 
 ---
 
-# 07 Startsideförslag
+# 06 Frågor till Hallpartner
 
 ## Syfte
 
-Presentera konceptet för den framtida webbplatsen.
+Skapa dialog och pröva analysens hypoteser mot verksamheten.
 
 ## Layout
 
-BrowserMockup + beskrivning.
+Sex öppna frågor i en koncentrerad lista utan färdiga svar.
 
 ---
 
-# 08 Referensprojekt
+# 07 Arbetssätt
 
 ## Syfte
 
-Bygga förtroende.
+Visa en trygg och begriplig väg framåt utan att låsa lösningen i förväg.
 
 ## Layout
 
-Projektkort i grid.
+Sex faser i en tidslinje och en diskret fördjupningslänk.
+
+---
+
+# 08 Förväntad affärsnytta
+
+## Syfte
+
+Beskriva vilken märkbar skillnad arbetet ska skapa för kund och
+försäljning.
+
+## Layout
+
+Fem ikonblock.
+
+---
+
+# 09 Avslutande dialog
+
+## Syfte
+
+Lämna presentationen i en öppen fråga och bjuda in till nästa samtal.
+
+## Layout
+
+En rubrik, en kort text och en kontaktknapp.
+
+---
+
+# Referensprojekt (/projekt/)
+
+## Syfte
+
+Inspirera Hallpartner och visa hur ett professionellt referensbibliotek kan
+bygga förtroende, stödja försäljningen och stärka den digitala synligheten.
+
+## Layout
+
+- Presentationshero med överrubrik, H1 och ingress
+- Fyra informationskort om affärsnyttan
+- Diskret information om att projekten är demonstrationsmaterial
+- Tre projektkort med lokala, responsiva bilder
+- Rekommendation och checklista för löpande projektdokumentation
+- Avslutande CTA till kontakt och startsidans analys
 
 ## Komponent
 
-ProjectGrid
+- SectionIntro
+- StrengthGrid
+- ProjectGrid
+- ProjectCard
+- CTASection
+
+## Responsivitet
+
+- Desktop: tre projektkort
+- Tablet: två projektkort
+- Mobil: ett projektkort
 
 ---
 
-# 09 Kunskapsbank
-
-## Syfte
-
-Visa Hallpartner som expert.
-
-## Layout
-
-Grid med guider och FAQ.
-
----
-
-# 10 Roadmap
+# Roadmap (/roadmap/)
 
 ## Syfte
 
@@ -174,39 +199,6 @@ Vertikal tidslinje.
 4.  Utveckling
 5.  Lansering
 6.  Förbättring
-
----
-
-# 11 Resultat
-
-## Syfte
-
-Beskriva vad samarbetet ska leda till.
-
-## Layout
-
-Fyra ikonblock.
-
-- Starkare varumärke
-- Fler relevanta förfrågningar
-- Högre synlighet
-- Skalbar plattform
-
----
-
-# 12 CTA
-
-## Syfte
-
-Avsluta med en tydlig uppmaning.
-
-Rubrik:
-
-**Låt oss bygga nästa kapitel tillsammans.**
-
-Knapp:
-
-Boka nästa möte
 
 ---
 

@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro';
+
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 export interface CTA {
@@ -33,25 +35,11 @@ export interface ProjectItem {
   slug: string;
   title: string;
   category: string;
-  location: string;
-  imageLabel: string;
-  need: string;
-  solution: string;
-  result: string;
-  relatedService: string;
-}
-
-export interface KnowledgeArticle {
-  slug: string;
-  title: string;
-  category: string;
-  readingTime: string;
-  excerpt: string;
-}
-
-export interface FAQItem {
-  question: string;
-  answer: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  description: string;
+  href: string;
+  linkLabel: string;
 }
 
 export interface RoadmapPhase {
@@ -65,37 +53,21 @@ export interface ResultItem {
   text: string;
 }
 
-export interface ServiceItem {
-  title: string;
-  description: string;
+export interface WorkshopQuestion {
+  id: string;
+  question: string;
+  preliminary: string;
+  importance: string;
 }
 
-export interface HallTypeItem {
+export interface WorkshopCategory {
+  number: string;
   title: string;
-  description: string;
+  questions: WorkshopQuestion[];
 }
 
-export interface IndustryItem {
+export interface WorkshopAnalysisGroup {
   title: string;
-}
-
-export interface ProcessStep {
-  title: string;
-  description: string;
-}
-
-export interface WorkshopGroup {
-  title: string;
-  questions: string[];
-}
-
-export interface LinkCardItem {
-  title: string;
-  description?: string;
-  href: string;
-  linkLabel?: string;
-}
-
-export interface PreserveValueItem {
-  title: string;
+  intro: string;
+  observations: string[];
 }

@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkshopQuestions from '../../components/WorkshopQuestions.astro';
+import WorkshopSummary from '../../components/WorkshopSummary.astro';
+import { workshopAnalysis, workshopCategories } from '../../data/workshop';
+---
+
+<BaseLayout
+  title="Workshop och verksamhetsfrågor | Hallpartner"
+  description="Ett arbetsunderlag för att förstå Hallpartners verksamhet, kunder, erbjudande och mål inför ett möjligt webbprojekt."
+  noindex={true}
+>
+  <section class="workshop-intro section" aria-labelledby="workshop-heading">
+    <div class="container workshop-intro__layout">
+      <div class="workshop-intro__copy">
+        <p class="text-eyebrow">Arbetsunderlag inför vårt samtal</p>
+        <h1 id="workshop-heading">För att skapa rätt lösning behöver jag förstå hur ni arbetar</h1>
+        <p class="text-lead text-muted workshop-intro__lead">
+          Jag börjar inte med design eller teknik. Jag börjar med verksamheten, kunderna och
+          affären. Frågorna på den här sidan hjälper oss att skapa en gemensam bild av nuläget innan
+          vi fattar beslut om webbplatsens innehåll, struktur och funktion.
+        </p>
+      </div>
+
+      <button class="btn btn-secondary print-button" type="button" onclick="window.print()">
+        Skriv ut arbetsunderlaget
+      </button>
+
+      <aside class="workshop-notice" aria-labelledby="preliminary-notice-heading">
+        <h2 id="preliminary-notice-heading">En första bild – inte färdiga slutsatser</h2>
+        <p>
+          Jag har gjort en första analys utifrån det material som finns tillgängligt. Bilderna nedan
+          är hypoteser och observationer inför vårt samtal – inte färdiga slutsatser. Syftet är att
+          vi tillsammans ska kunna bekräfta, korrigera och fördjupa dem.
+        </p>
+      </aside>
+
+      <aside class="workshop-usage" aria-labelledby="workshop-usage-heading">
+        <h2 id="workshop-usage-heading">Så använder vi sidan</h2>
+        <p>
+          Vi behöver inte gå igenom varje fråga under ett och samma möte. Frågorna är ett
+          samtalsunderlag som hjälper oss att identifiera vad vi redan vet, vad som behöver
+          fördjupas och vilka beslut som behöver fattas om vi går vidare.
+        </p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="workshop-content section section-surface" aria-label="Frågor och arbetsunderlag">
+    <div class="container">
+      <WorkshopQuestions categories={workshopCategories} analysis={workshopAnalysis} />
+      <WorkshopSummary />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .workshop-intro {
+    padding-bottom: var(--space-6);
+  }
+
+  .workshop-intro__layout {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .workshop-intro__copy {
+    max-width: 60rem;
+  }
+
+  .workshop-intro__copy .text-eyebrow {
+    margin-bottom: var(--space-2);
+  }
+
+  .workshop-intro__lead {
+    max-width: var(--width-text);
+    margin-top: var(--space-3);
+  }
+
+  .print-button {
+    justify-self: start;
+  }
+
+  .workshop-notice,
+  .workshop-usage {
+    max-width: 58rem;
+    padding: var(--space-3);
+    border-left: 3px solid var(--color-accent-warm);
+    background: var(--color-surface);
+  }
+
+  .workshop-notice h2,
+  .workshop-usage h2 {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.6rem);
+  }
+
+  .workshop-notice p,
+  .workshop-usage p {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .workshop-content {
+    padding-top: var(--space-6);
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm 13mm 16mm;
+  }
+
+  @media print {
+    :global(html) {
+      color-scheme: light;
+      background: #fff;
+    }
+
+    :global(body) {
+      color: #171a1f;
+      background: #fff;
+      font-size: 10.5pt;
+      line-height: 1.45;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    :global(.site-header),
+    :global(footer),
+    :global(.skip-link),
+    .print-button {
+      display: none !important;
+    }
+
+    :global(main),
+    .workshop-intro,
+    .workshop-content {
+      padding: 0;
+      background: #fff;
+    }
+
+    :global(.container) {
+      max-width: none;
+      padding: 0;
+    }
+
+    .workshop-intro__layout {
+      gap: 5mm;
+    }
+
+    .workshop-intro__copy h1 {
+      font-size: 24pt;
+    }
+
+    .workshop-intro__lead {
+      margin-top: 4mm;
+      color: #30343a;
+    }
+
+    .workshop-notice,
+    .workshop-usage {
+      max-width: none;
+      padding: 4mm;
+      border: 0.5pt solid #a8adb4;
+      border-left: 2pt solid #171a1f;
+      background: #fff;
+    }
+
+    .workshop-content {
+      margin-top: 8mm;
+    }
+
+    :global(a[href]::after) {
+      content: none !important;
+    }
+  }
+</style>

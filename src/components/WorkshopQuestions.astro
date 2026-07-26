@@ -1,68 +1,330 @@
 ---
-// Grupperade samtalsfrågor inför kundmötet. Panelerna är medvetet
-// bordrade/kortlika för att kännas som ett arbetsmaterial snarare än en
-// fortsättning på analystexten ovanför (se AGENTS.md, "en idé per sektion").
-import type { WorkshopGroup } from '../types/content';
+import type { WorkshopAnalysisGroup, WorkshopCategory } from '../types/content';
 
 export interface Props {
-  groups: WorkshopGroup[];
+  categories: WorkshopCategory[];
+  analysis: WorkshopAnalysisGroup[];
 }
 
-const { groups } = Astro.props;
+const { categories, analysis } = Astro.props;
 ---
 
-<div class="grid grid-2-up workshop">
+<ol class="workshop-categories">
   {
-    groups.map((group, index) => (
-      <div class="workshop__group">
-        <p class="text-eyebrow workshop__index">{String(index + 1).padStart(2, '0')}</p>
-        <h3 class="workshop__title">{group.title}</h3>
-        <ul class="workshop__list">
-          {group.questions.map((question) => (
-            <li>{question}</li>
-          ))}
-        </ul>
-      </div>
+    categories.map((category) => (
+      <li class="workshop-category" id={`omrade-${category.number}`}>
+        <header class="workshop-category__header">
+          <p class="text-eyebrow">Område {category.number}</p>
+          <h2>{category.title}</h2>
+        </header>
+
+        <ol class="workshop-category__questions">
+          {category.questions.map((item, index) => {
+            const questionHeadingId = `${item.id}-heading`;
+            const notesHeadingId = `${item.id}-notes`;
+
+            return (
+              <li class="workshop-question" aria-labelledby={questionHeadingId}>
+                <article>
+                  <p class="workshop-question__number" aria-hidden="true">
+                    {category.number}.{index + 1}
+                  </p>
+                  <h3 id={questionHeadingId}>{item.question}</h3>
+
+                  <details class="workshop-question__preliminary" open>
+                    <summary>Min preliminära bild</summary>
+                    <p>{item.preliminary}</p>
+                  </details>
+
+                  <div class="workshop-question__importance">
+                    <h4>Varför frågan är viktig</h4>
+                    <p>{item.importance}</p>
+                  </div>
+
+                  <div
+                    class="workshop-question__notes"
+                    role="group"
+                    aria-labelledby={notesHeadingId}
+                  >
+                    <h4 id={notesHeadingId}>Anteckningar från samtalet</h4>
+                    <div class="notes-area" aria-hidden="true" />
+                  </div>
+                </article>
+              </li>
+            );
+          })}
+        </ol>
+      </li>
     ))
   }
-</div>
+</ol>
+
+<section class="preliminary-analysis" aria-labelledby="preliminary-analysis-heading">
+  <header class="preliminary-analysis__header">
+    <p class="text-eyebrow">Samlad observation</p>
+    <h2 id="preliminary-analysis-heading">Min preliminära analys</h2>
+    <p class="text-body text-muted">
+      Punkterna nedan sammanfattar vad jag ser i underlaget hittills. De behöver bekräftas,
+      korrigeras och prioriteras tillsammans med Hallpartner.
+    </p>
+  </header>
+
+  <div class="preliminary-analysis__grid">
+    {
+      analysis.map((group) => (
+        <article class="preliminary-analysis__group">
+          <h3>{group.title}</h3>
+          <p class="text-body">{group.intro}</p>
+          <ul>
+            {group.observations.map((observation) => (
+              <li>{observation}</li>
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</section>
 
 <style>
-  .workshop__group {
-    padding: var(--space-4);
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-card);
-    background-color: var(--color-surface);
+  .workshop-categories {
+    display: grid;
+    gap: var(--space-7);
   }
 
-  .workshop__index {
+  .workshop-category {
+    scroll-margin-top: var(--space-7);
+  }
+
+  .workshop-category__header {
+    max-width: var(--width-text);
+    padding-bottom: var(--space-3);
+    border-bottom: 2px solid var(--color-accent-warm);
+  }
+
+  .workshop-category__header .text-eyebrow {
     margin-bottom: var(--space-1);
   }
 
-  .workshop__title {
-    margin-bottom: var(--space-3);
-  }
-
-  .workshop__list {
+  .workshop-category__questions {
     display: grid;
-    gap: var(--space-2);
+    gap: var(--space-3);
+    margin-top: var(--space-4);
   }
 
-  .workshop__list li {
-    position: relative;
-    padding-left: var(--space-3);
-    color: var(--color-text-muted);
+  .workshop-question {
+    background: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: var(--space-3);
+  }
+
+  .workshop-question__number {
+    margin-bottom: var(--space-1);
+    color: var(--color-accent-warm-text);
+    font-size: var(--font-size-caption);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.08em;
+  }
+
+  .workshop-question h3 {
+    max-width: 52rem;
+    font-size: clamp(1.25rem, 1.1rem + 0.7vw, 1.75rem);
+  }
+
+  .workshop-question h4 {
     font-size: var(--font-size-body);
-    line-height: var(--line-height-body);
   }
 
-  .workshop__list li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.6em;
-    width: 0.6rem;
-    height: 2px;
-    background-color: var(--color-accent-warm);
+  .workshop-question__preliminary {
+    margin-top: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-off-white);
+  }
+
+  .workshop-question__preliminary summary {
+    padding: var(--space-2);
+    color: var(--color-graphite);
+    cursor: pointer;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .workshop-question__preliminary summary::marker {
+    color: var(--color-accent-warm-text);
+  }
+
+  .workshop-question__preliminary p {
+    padding: 0 var(--space-2) var(--space-2);
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .workshop-question__importance,
+  .workshop-question__notes {
+    margin-top: var(--space-3);
+  }
+
+  .workshop-question__importance p {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .notes-area {
+    min-height: 7rem;
+    margin-top: var(--space-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 1.8rem,
+        var(--color-border) 1.8rem,
+        var(--color-border) calc(1.8rem + 1px)
+      ),
+      var(--color-surface);
+  }
+
+  .preliminary-analysis {
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 2px solid var(--color-graphite);
+  }
+
+  .preliminary-analysis__header {
+    max-width: var(--width-text);
+  }
+
+  .preliminary-analysis__header > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .preliminary-analysis__grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .preliminary-analysis__group {
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .preliminary-analysis__group > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .preliminary-analysis__group ul {
+    display: grid;
+    gap: var(--space-1);
+    padding-left: 1.25rem;
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .workshop-question {
+      padding: var(--space-4);
+    }
+
+    .preliminary-analysis__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media print {
+    .workshop-categories {
+      gap: 0;
+    }
+
+    .workshop-category {
+      break-before: page;
+    }
+
+    .workshop-category:first-child {
+      break-before: auto;
+    }
+
+    .workshop-category__header {
+      padding-bottom: 4mm;
+      border-color: #171a1f;
+    }
+
+    .workshop-category__questions {
+      gap: 5mm;
+      margin-top: 6mm;
+    }
+
+    .workshop-question {
+      break-inside: avoid;
+      padding: 5mm;
+      border-color: #a8adb4;
+      box-shadow: none;
+    }
+
+    .workshop-question__preliminary,
+    .workshop-question__importance,
+    .workshop-question__notes {
+      margin-top: 4mm;
+    }
+
+    .workshop-question__preliminary {
+      background: #fff;
+    }
+
+    .workshop-question__preliminary summary {
+      padding: 0 0 2mm;
+      list-style: none;
+    }
+
+    .workshop-question__preliminary summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .workshop-question__preliminary p {
+      display: block !important;
+      padding: 0;
+    }
+
+    .workshop-question__preliminary:not([open]) > * {
+      display: block !important;
+    }
+
+    .notes-area {
+      min-height: 35mm;
+      border-color: #a8adb4;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 8mm,
+          #d7d9dc 8mm,
+          #d7d9dc calc(8mm + 0.25pt)
+        ),
+        #fff;
+    }
+
+    .preliminary-analysis {
+      break-before: page;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .preliminary-analysis__grid {
+      grid-template-columns: 1fr;
+      gap: 5mm;
+      margin-top: 6mm;
+    }
+
+    .preliminary-analysis__group {
+      break-inside: avoid;
+      padding: 5mm;
+      border-color: #a8adb4;
+    }
   }
 </style>

@@ -13,10 +13,8 @@ Hallpartners framtida digitala plattform.
 
 - Startsida
 - Vision
-- Startsideförslag
 - Projekt
-- Kunskapsbank
-- Roadmap
+- Så arbetar vi
 - Kontakt
 
 ---
@@ -26,20 +24,15 @@ Hallpartners framtida digitala plattform.
 ## Sektioner
 
 1.  Hero
-2.  Ni bygger inte hallar
-3.  Hallpartners betydelse
-4.  Det Hallpartner redan har byggt
-5.  Hur kunder väljer leverantör idag
-6.  Det första intrycket skapas digitalt
-7.  Hallpartners potential
-8.  Visionen
-9.  Startsidesförslag
-10. Referensprojekt
-11. Kunskapsbank
-12. Roadmap
-13. Resultat
-14. CTA
-15. Footer
+2.  Styrkorna som redan finns
+3.  Kundens väg till beslut
+4.  Den största digitala potentialen
+5.  Visionen
+6.  Frågor till Hallpartner
+7.  Möjligt arbetssätt
+8.  Förväntad affärsnytta
+9.  Avslutande dialog
+10. Footer
 
 ---
 
@@ -53,20 +46,6 @@ Hallpartners framtida digitala plattform.
 
 ---
 
-# /startsideforslag/
-
-- Hero
-- Tjänster
-- Halltyper
-- Branscher
-- Referensprojekt
-- Process
-- Kunskapsbank
-- FAQ
-- Kontakt
-
----
-
 # /projekt/
 
 - Introduktion
@@ -74,19 +53,6 @@ Hallpartners framtida digitala plattform.
 - Kundens behov
 - Lösning
 - Resultat
-- CTA
-
----
-
-# /kunskapsbank/
-
-- Guider
-- FAQ
-- Bygglov
-- Kostnader
-- Byggtid
-- Halltyper
-- Material
 - CTA
 
 ---
@@ -108,8 +74,16 @@ Hallpartners framtida digitala plattform.
 
 - Avslutande budskap
 - Kontaktkort
-- Kontaktformulär (TODO)
+- Kontaktformulär via användarens e-postprogram
 - CTA
+
+---
+
+# Avsiktligt undanskymd arbetsyta
+
+`/workshop/` är ett noindexerat samtals- och utskriftsunderlag. Routen
+finns inte i huvudnavigationen eller den genererade sitemap-filen och nås
+endast via direkt URL. Den är inte autentiserad eller beskriven som privat.
 
 ---
 

@@ -44,6 +44,14 @@
   color: var(--color-text-inverse);
 }
 
+.section-inverse .text-muted {
+  color: var(--color-muted);
+}
+
+.section-inverse .text-eyebrow {
+  color: var(--color-accent-warm);
+}
+
 .section-surface {
   background-color: var(--color-surface);
 }

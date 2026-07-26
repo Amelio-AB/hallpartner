@@ -1,0 +1,273 @@
+---
+const contentItems = [
+  'Referensprojekt',
+  'Projektbilder',
+  'Kundcitat',
+  'Tjänstebeskrivningar',
+  'Vanliga frågor',
+  'Processbeskrivning',
+  'Kontaktvägar',
+  'Tekniskt underlag',
+];
+---
+
+<section class="workshop-summary" aria-labelledby="workshop-summary-heading">
+  <header class="workshop-summary__header">
+    <p class="text-eyebrow">Avslutande arbetsunderlag</p>
+    <h2 id="workshop-summary-heading">Om vi väljer att gå vidare</h2>
+    <p class="text-lead text-muted">
+      Efter samtalet sammanfattar jag det vi har kommit fram till. Underlaget blir utgångspunkt för
+      nästa steg och hjälper oss att undvika att design, innehåll eller teknik bygger på antaganden.
+    </p>
+  </header>
+
+  <div class="summary-grid">
+    <article class="summary-block">
+      <h3>Gemensam målbild</h3>
+      <p>Vad ska webbplatsen främst hjälpa Hallpartner att uppnå?</p>
+      <div class="summary-notes summary-notes--large" aria-hidden="true"></div>
+    </article>
+
+    <article class="summary-block">
+      <h3>Viktigaste målgrupperna</h3>
+      <p>Vilka typer av kunder ska webbplatsen i första hand hjälpa?</p>
+      <div class="summary-notes summary-notes--large" aria-hidden="true"></div>
+    </article>
+
+    <article class="summary-block">
+      <h3>Prioriterade tjänster och erbjudanden</h3>
+      <p>Vilka delar av erbjudandet ska få störst fokus?</p>
+      <div class="summary-notes summary-notes--large" aria-hidden="true"></div>
+    </article>
+
+    <article class="summary-block summary-block--wide">
+      <h3>Innehåll som behöver tas fram</h3>
+      <ul class="content-checklist">
+        {
+          contentItems.map((item) => (
+            <li>
+              <span class="content-checklist__box" aria-hidden="true" />
+              <span>{item}</span>
+              <span class="content-checklist__line" aria-hidden="true" />
+            </li>
+          ))
+        }
+      </ul>
+    </article>
+
+    <article class="summary-block summary-block--wide">
+      <h3>Frågor som återstår</h3>
+      <div class="summary-notes summary-notes--questions" aria-hidden="true"></div>
+    </article>
+
+    <article class="summary-block summary-block--wide">
+      <h3>Ansvarsfördelning</h3>
+      <div class="responsibility-grid">
+        <div>
+          <h4>Hallpartner ansvarar för</h4>
+          <div class="summary-notes summary-notes--large" aria-hidden="true"></div>
+        </div>
+        <div>
+          <h4>Andreas ansvarar för</h4>
+          <div class="summary-notes summary-notes--large" aria-hidden="true"></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="summary-block summary-block--wide">
+      <h3>Rekommenderat nästa steg</h3>
+      <div class="next-step-grid">
+        <div>
+          <h4>Aktivitet</h4>
+          <span class="field-line" aria-hidden="true"></span>
+        </div>
+        <div>
+          <h4>Ansvarig person</h4>
+          <span class="field-line" aria-hidden="true"></span>
+        </div>
+        <div>
+          <h4>Önskat datum</h4>
+          <span class="field-line" aria-hidden="true"></span>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .workshop-summary {
+    margin-top: var(--space-7);
+    padding-top: var(--space-6);
+    border-top: 2px solid var(--color-graphite);
+  }
+
+  .workshop-summary__header {
+    max-width: var(--width-text);
+  }
+
+  .workshop-summary__header > * + * {
+    margin-top: var(--space-2);
+  }
+
+  .summary-grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+
+  .summary-block {
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+
+  .summary-block > p {
+    margin-top: var(--space-1);
+    color: var(--color-text-muted);
+    font-size: 1rem;
+  }
+
+  .summary-block h3 {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.6rem);
+  }
+
+  .summary-block h4 {
+    font-size: 1rem;
+  }
+
+  .summary-notes {
+    min-height: 7rem;
+    margin-top: var(--space-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-md);
+    background:
+      repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 1.8rem,
+        var(--color-border) 1.8rem,
+        var(--color-border) calc(1.8rem + 1px)
+      ),
+      var(--color-surface);
+  }
+
+  .summary-notes--questions {
+    min-height: 11rem;
+  }
+
+  .content-checklist {
+    display: grid;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .content-checklist li {
+    display: grid;
+    grid-template-columns: 1.25rem max-content 1fr;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .content-checklist__box {
+    width: 1.1rem;
+    height: 1.1rem;
+    border: 1.5px solid var(--color-graphite);
+    border-radius: 2px;
+  }
+
+  .content-checklist__line,
+  .field-line {
+    display: block;
+    min-width: 2rem;
+    height: 1.6rem;
+    border-bottom: var(--border-width) solid var(--color-border);
+  }
+
+  .responsibility-grid,
+  .next-step-grid {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+
+  .responsibility-grid .summary-notes {
+    margin-top: var(--space-1);
+  }
+
+  .next-step-grid > div {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  @media (min-width: 768px) {
+    .summary-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .summary-block {
+      padding: var(--space-4);
+    }
+
+    .summary-block--wide {
+      grid-column: 1 / -1;
+    }
+
+    .responsibility-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .next-step-grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+
+  @media print {
+    .workshop-summary {
+      break-before: page;
+      margin-top: 0;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .summary-grid {
+      grid-template-columns: 1fr;
+      gap: 5mm;
+      margin-top: 7mm;
+    }
+
+    .summary-block,
+    .summary-block--wide {
+      break-inside: avoid;
+      grid-column: auto;
+      padding: 5mm;
+      border-color: #a8adb4;
+    }
+
+    .summary-notes {
+      min-height: 28mm;
+      border-color: #a8adb4;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          transparent 0,
+          transparent 8mm,
+          #d7d9dc 8mm,
+          #d7d9dc calc(8mm + 0.25pt)
+        ),
+        #fff;
+    }
+
+    .summary-notes--questions {
+      min-height: 45mm;
+    }
+
+    .responsibility-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .next-step-grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+</style>

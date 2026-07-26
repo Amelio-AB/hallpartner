@@ -21,7 +21,7 @@ const { id, title, text, cta, cards } = Astro.props;
     {cta && <ButtonLink href={cta.href} label={cta.label} variant={cta.variant ?? 'ghost'} />}
   </div>
 
-  <ul class="grid grid-2-up opportunity__cards">
+  <ul class="grid grid-2-up grid-3-up opportunity__cards">
     {
       cards.map((card) =>
         card.href ? (

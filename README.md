@@ -35,7 +35,7 @@ src/
   components/   Återanvändbara Astro-komponenter
   layouts/      BaseLayout och PresentationLayout
   pages/        Filbaserad routing (se docs/SITEMAP.md)
-  data/         Typad innehållsdata (navigation, copy, projekt, kunskapsbank, roadmap)
+  data/         Typad innehållsdata (navigation, copy, projekt och roadmap)
   types/        Delade TypeScript-typer
   styles/       Designsystem: tokens, typografi, utilities, global CSS
 public/
@@ -73,17 +73,17 @@ som document root för hallpartner.amelio.se hos Inleed.
 Sajten är för närvarande en **privat kundpresentation** och ska inte
 indexeras av sökmotorer:
 
-- `public/robots.txt` innehåller `Disallow: /` för alla user agents.
+- `public/robots.txt` tillåter hämtning så att sidan kan granskas, medan
+  sidornas metatagg förhindrar indexering.
 - Varje sida sätter `<meta name="robots" content="noindex,nofollow">` via
   `src/components/SeoHead.astro` (standardvärdet `noindex = true`).
 
 ### Ta bort noindex när sajten blir publik
 
-1. Uppdatera `public/robots.txt` — ta bort `Disallow: /`.
-2. I `src/components/SeoHead.astro`, ändra standardvärdet `noindex = true`
+1. I `src/components/SeoHead.astro`, ändra standardvärdet `noindex = true`
    till `noindex = false` (eller skicka `noindex={false}` explicit från
    respektive layout/sida).
-3. `@astrojs/sitemap`-integrationen i `astro.config.mjs` kan behållas som den
+2. `@astrojs/sitemap`-integrationen i `astro.config.mjs` kan behållas som den
    är — den genererar redan en korrekt `sitemap-index.xml`.
 
 ## Dokumentation

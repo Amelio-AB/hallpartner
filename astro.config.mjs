@@ -12,5 +12,9 @@ export default defineConfig({
   site: 'https://hallpartner.amelio.se',
   output: 'static',
   trailingSlash: 'always',
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => new URL(page).pathname !== '/workshop/',
+    }),
+  ],
 });

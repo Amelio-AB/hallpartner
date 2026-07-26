@@ -5,7 +5,6 @@ Bildmaterial för Hallpartner Vision Site. Se undermapparna för specifika behov
 - `hero/` — stora bakgrundsbilder för hero-sektioner
 - `projects/` — bilder till referensprojekt
 - `details/` — detaljbilder (material, montage, konstruktion)
-- `mockups/` — skärmbilder/mockuper av startsidesförslaget och visionen
 
 Tills riktiga bilder finns används CSS-baserade platshållare
 (`.media-placeholder` i `src/styles/utilities.css`) — inga binära

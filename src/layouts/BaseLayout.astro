@@ -4,7 +4,6 @@ import '../styles/global.css';
 import '../styles/typography.css';
 import '../styles/utilities.css';
 import SeoHead from '../components/SeoHead.astro';
-import SkipLink from '../components/SkipLink.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
@@ -27,7 +26,7 @@ const currentPage = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Favicon-platshållare — byt ut mot Hallpartners riktiga favicon, se public/logos/README.md -->
+    <!-- Projektets presentationsfavicon. -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
 
@@ -55,7 +54,7 @@ const currentPage = Astro.url.pathname;
     </script>
   </head>
   <body>
-    <SkipLink />
+    <a href="#main-content" class="skip-link">Hoppa till huvudinnehållet</a>
     <Header currentPage={currentPage} />
     <main id="main-content">
       <slot />
@@ -63,3 +62,21 @@ const currentPage = Astro.url.pathname;
     <Footer />
   </body>
 </html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    inset: var(--space-1) auto auto var(--space-1);
+    z-index: 100;
+    padding: var(--space-1) var(--space-2);
+    color: var(--color-off-white);
+    background-color: var(--color-graphite);
+    border-radius: var(--radius-sm);
+    transform: translateY(calc(-100% - var(--space-2)));
+    transition: transform var(--transition-fast);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>

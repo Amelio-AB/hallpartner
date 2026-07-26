@@ -1,40 +1,42 @@
 import type { ProjectItem } from '../types/content';
+import lagerhall from '../assets/images/lagerhall.jpg';
+import maskinhall from '../assets/images/maskinhall.jpeg';
+import talthall from '../assets/images/talthall.jpg';
 
-// TODO: Samtliga projekt är neutrala exempel som visar hur systemet fungerar.
-// De ska ersättas med verkligt material (bilder, orter, case) från Hallpartner
-// innan sidan publiceras. Inga verkliga kundnamn eller siffror får hittas på.
+const projectLink = '#dokumentera-projekt';
+
 export const projects: ProjectItem[] = [
   {
-    slug: 'exempelprojekt-industrihall',
-    title: 'Exempelprojekt — Industrihall',
-    category: 'Industrihall',
-    location: 'TODO: Ort',
-    imageLabel: 'TODO: Bild på färdig industrihall',
-    need: 'TODO: Kundens behov beskrivs här när verkligt projektunderlag finns.',
-    solution: 'TODO: Hallpartners lösning beskrivs här.',
-    result: 'TODO: Resultat beskrivs här.',
-    relatedService: 'Kompletta hallösningar',
+    slug: 'industribyggnad',
+    title: 'Industribyggnad för växande verksamhet',
+    category: 'Industribyggnad',
+    image: maskinhall,
+    imageAlt: 'Mörkgrå maskinhall med port och en rad fönster',
+    description:
+      'Det här exemplet visar hur Hallpartner kan beskriva kundens behov, den valda lösningen och resultatet istället för att enbart visa en bild på den färdiga byggnaden.',
+    href: projectLink,
+    linkLabel: 'Se hur projektet kan presenteras',
   },
   {
-    slug: 'exempelprojekt-lagerhall',
-    title: 'Exempelprojekt — Lagerhall',
+    slug: 'lagerhall',
+    title: 'Lagerhall för effektiv logistik',
     category: 'Lagerhall',
-    location: 'TODO: Ort',
-    imageLabel: 'TODO: Bild på färdig lagerhall',
-    need: 'TODO: Kundens behov beskrivs här när verkligt projektunderlag finns.',
-    solution: 'TODO: Hallpartners lösning beskrivs här.',
-    result: 'TODO: Resultat beskrivs här.',
-    relatedService: 'Projektering',
+    image: lagerhall,
+    imageAlt: 'Mörkgrå lagerhall med röda kantbeslag och fönster',
+    description:
+      'Varje referensprojekt bör visa varför byggnaden uppfördes, vilka behov kunden hade och vilken lösning Hallpartner levererade.',
+    href: projectLink,
+    linkLabel: 'Se hur projektet kan presenteras',
   },
   {
-    slug: 'exempelprojekt-lantbrukshall',
-    title: 'Exempelprojekt — Lantbrukshall',
-    category: 'Lantbrukshall',
-    location: 'TODO: Ort',
-    imageLabel: 'TODO: Bild på färdig lantbrukshall',
-    need: 'TODO: Kundens behov beskrivs här när verkligt projektunderlag finns.',
-    solution: 'TODO: Hallpartners lösning beskrivs här.',
-    result: 'TODO: Resultat beskrivs här.',
-    relatedService: 'Montage',
+    slug: 'verksamhetsanlaggning',
+    title: 'Verksamhetsanläggning med framtida expansionsmöjligheter',
+    category: 'Logistik- och verksamhetshall',
+    image: talthall,
+    imageAlt: 'Flygbild över två sammanbyggda verksamhetshallar i ett industriområde',
+    description:
+      'Översiktsbilder visar projektets omfattning och hjälper framtida kunder att förstå byggnadens storlek och användningsområde.',
+    href: projectLink,
+    linkLabel: 'Se hur projektet kan presenteras',
   },
 ];

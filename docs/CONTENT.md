@@ -14,43 +14,30 @@
 
 ## Hero
 
-Eyebrow: Hallpartner -- nästa kapitel
+Eyebrow: En första analys av Hallpartners digitala närvaro
 
-H1: Ni bygger inte hallar.
+H1: Hallpartner har mer att visa än vad en ny besökare ser i dag.
 
-Supporting headline: Ni bygger framtidens verksamheter.
+Brödtext: Presentationen utgår från en första analys av hur erfarenheten,
+helhetsansvaret och den personliga kontakten kan bli tydligare digitalt.
 
-Brödtext: En vision för hur Hallpartners digitala närvaro kan spegla
-kvaliteten, erfarenheten och ambitionen i varje projekt.
-
-Primär CTA: Utforska visionen
-
-Sekundär CTA: Se startsidesförslaget
+Primär CTA: Börja presentationen
 
 ---
 
-## Sektion -- Hallpartners betydelse
+## Sektion -- Styrkorna som redan finns
 
-Rubrik: Mer än en byggnad.
+Rubrik: Det finns redan mycket att bygga vidare på.
 
-Text: Varje hall skapar förutsättningar för produktion, logistik,
-lagerhållning och tillväxt. Hallpartner levererar lösningar som hjälper
-företag att utvecklas.
-
----
-
-## Sektion -- Det Hallpartner redan har byggt
-
-Rubrik: En stark grund att bygga vidare på.
-
-Kort: - Kompletta hallösningar - Projektering - Montage - Personlig
-projektledning
+Text: Presentationen lyfter snabb återkoppling, offertkunskap, geografisk
+räckvidd och ambitionen att sälja större hallar. En ny digital riktning
+ska göra dessa värden tydligare, inte förändra dem.
 
 ---
 
-## Sektion -- Hur kunder väljer idag
+## Sektion -- Kundens väg till beslut
 
-Rubrik: Besluten börjar långt innan första kontakten.
+Rubrik: Beslutet börjar ofta innan första samtalet.
 
 Text: Kunder söker information, jämför alternativ och bygger förtroende
 digitalt innan de tar kontakt.
@@ -59,29 +46,53 @@ digitalt innan de tar kontakt.
 
 ## Sektion -- Digital potential
 
-Rubrik: Här finns nästa möjlighet.
+Rubrik: Er erfarenhet syns inte fullt ut i dag.
 
-Text: Visionen är att låta den digitala upplevelsen spegla kvaliteten i
-Hallpartners verkliga arbete.
+Tre möjligheter: - Ett lättbegripligt erbjudande - Referensprojekt som
+bevis - En tydlig väg till nästa steg
 
-CTA: Se visionen
+Endast referensprojektet länkar vidare från sektionen.
 
 ---
 
-## Sektion -- Resultat
+## Sektion -- Vision
 
-Rubrik: Vad vi vill uppnå tillsammans
+Rubrik: En webbplats som hjälper kunden från första fråga till första
+kontakt.
 
-Punkter: - Starkare varumärke - Fler relevanta förfrågningar - Tydligare
-position - En plattform som kan utvecklas över tid
+Text: Webbplatsen behöver inte säga allt. Den ska hjälpa rätt kund att
+förstå, känna igen sin situation och bli trygg nog att ta kontakt.
+
+---
+
+## Sektion -- Frågor till Hallpartner
+
+Sex öppna frågor om önskade projekt, vunna affärer, vanliga
+missförstånd, referenser, innehållsansvar och önskad effekt. Frågorna
+ska skapa dialog i mötet, inte presentera färdiga svar.
+
+---
+
+## Sektion -- Arbetssätt
+
+Sex faser från verksamhetsförståelse till lansering och förbättring.
+
+---
+
+## Sektion -- Förväntad affärsnytta
+
+Rubrik: Om vi gör det här rätt ska kunden märka skillnaden.
+
+Punkter: - Tydligare första intryck - Större förtroende - Fler relevanta
+förfrågningar - Bättre stöd för säljarbetet - En plattform som kan växa
 
 ---
 
 ## Avslutning
 
-Rubrik: Låt oss bygga nästa kapitel tillsammans.
+Rubrik: Det här är min bild. Nu vill jag gärna höra er.
 
-Knapp: Boka nästa möte
+Knapp: Låt oss prata vidare
 
 ---
 
@@ -94,31 +105,17 @@ Hallpartner kan stärka sitt varumärke och sin affär digitalt.
 
 ---
 
-# Startsideförslag
-
-Hero: Framtidens hallar börjar med rätt partner.
-
-CTA: Begär offert
-
----
-
 # Projekt
 
-Rubrik: Referensprojekt som bygger förtroende.
+Överrubrik: Referensprojekt
 
-TODO: Samtliga projekt kompletteras med verkligt material från
-Hallpartner.
+Rubrik: Varje färdig hall kan bli nästa affär.
 
----
+Sidan presenterar nyttan med ett framtida referensbibliotek och visar tre
+tydligt märkta demonstrationsprojekt. Exemplen använder lokala bilder och
+ska inte uppfattas som Hallpartners färdiga referensprojekt.
 
-# Kunskapsbank
-
-Exempelrubriker:
-
-- Vad påverkar priset på en stålhall?
-- Behöver jag bygglov?
-- Hur lång tid tar ett projekt?
-- Vilken hall passar min verksamhet?
+Avslutning: Potentialen är betydligt större än tre referensprojekt.
 
 ---
 

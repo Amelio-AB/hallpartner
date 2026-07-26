@@ -1,5 +1,4 @@
 ---
-import LogoPlaceholder from './LogoPlaceholder.astro';
 import ButtonLink from './ButtonLink.astro';
 import { primaryNav } from '../data/navigation';
 
@@ -16,17 +15,29 @@ const isCurrent = (href: string) =>
 <header class="site-header">
   <div class="container site-header__inner">
     <a href="/" class="site-header__logo" aria-label="Hallpartner — till startsidan">
-      <LogoPlaceholder />
+      <img
+        src="/images/hallpartner-logo.png"
+        alt="Hallpartner"
+        class="site-header__logo-img"
+        width="2955"
+        height="375"
+      />
     </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav-toggle-input" aria-hidden="true" />
-    <label for="nav-toggle" class="nav-toggle" aria-label="Öppna meny">
+    <input
+      type="checkbox"
+      id="nav-toggle"
+      class="nav-toggle-input"
+      aria-label="Visa navigation"
+      aria-controls="primary-navigation"
+    />
+    <label for="nav-toggle" class="nav-toggle" aria-hidden="true">
       <span class="nav-toggle__bar"></span>
       <span class="nav-toggle__bar"></span>
       <span class="nav-toggle__bar"></span>
     </label>
 
-    <nav class="site-nav" aria-label="Primär navigation">
+    <nav class="site-nav" id="primary-navigation" aria-label="Primär navigation">
       <ul class="site-nav__list">
         {
           primaryNav.map((item) => (
@@ -68,7 +79,14 @@ const isCurrent = (href: string) =>
   }
 
   .site-header__logo {
+    flex-shrink: 0;
     text-decoration: none;
+  }
+
+  .site-header__logo-img {
+    display: block;
+    height: 28px;
+    width: auto;
   }
 
   .nav-toggle-input {
@@ -139,6 +157,7 @@ const isCurrent = (href: string) =>
     text-decoration: none;
     color: var(--color-text);
     font-weight: var(--font-weight-medium);
+    white-space: nowrap;
   }
 
   .site-nav__link:hover {
@@ -153,7 +172,22 @@ const isCurrent = (href: string) =>
     margin-top: var(--space-3);
   }
 
-  @media (min-width: 1024px) {
+  .site-nav__cta :global(.btn) {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /*
+    Brytpunkten för den horisontella navraden ligger högre än övriga
+    1024px-brytpunkter i layouten: 5 menylänkar + CTA-knapp + logga får
+    inte plats vid 1024px utan att något kläms eller radbryts (uppmätt
+    minimibredd i webbläsare, se PR-historik).
+  */
+  @media (min-width: 1280px) {
+    .site-header__logo-img {
+      height: 32px;
+    }
+
     .nav-toggle,
     .nav-toggle-input {
       display: none;
@@ -163,7 +197,7 @@ const isCurrent = (href: string) =>
       display: flex;
       position: static;
       align-items: center;
-      gap: var(--space-5);
+      gap: var(--space-4);
       background: transparent;
       border: 0;
       padding: 0;
@@ -171,7 +205,9 @@ const isCurrent = (href: string) =>
 
     .site-nav__list {
       flex-direction: row;
-      gap: var(--space-4);
+      align-items: center;
+      gap: var(--space-3);
+      font-size: 1rem;
     }
 
     .site-nav__cta {

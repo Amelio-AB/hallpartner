@@ -18,12 +18,13 @@
   --color-surface-inverse: var(--color-steel-dark);
   --color-text: var(--color-graphite);
   --color-text-inverse: var(--color-off-white);
-  --color-text-muted: var(--color-muted);
+  --color-text-muted: #5f6670;
   --color-accent: var(--color-steel-blue);
   --color-accent-warm: var(--color-warm-accent);
+  --color-accent-warm-text: #8a6335;
   --color-border: rgb(23 26 31 / 12%);
   --color-border-inverse: rgb(243 241 236 / 16%);
-  --color-focus: var(--color-warm-accent);
+  --color-focus: var(--color-accent-warm-text);
 
   /* Typografi */
   --font-primary: 'Manrope', 'Inter', system-ui, -apple-system, Segoe UI, Arial, sans-serif;

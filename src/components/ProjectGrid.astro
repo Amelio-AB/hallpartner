@@ -16,10 +16,11 @@ const { projects } = Astro.props;
         id={project.slug}
         title={project.title}
         category={project.category}
-        location={project.location}
-        image={project.imageLabel}
-        description={project.need}
-        href={`/projekt/#${project.slug}`}
+        image={project.image}
+        imageAlt={project.imageAlt}
+        description={project.description}
+        href={project.href}
+        linkLabel={project.linkLabel}
       />
     ))
   }

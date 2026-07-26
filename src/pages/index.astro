@@ -7,33 +7,24 @@ import CustomerQuestions from '../components/CustomerQuestions.astro';
 import CustomerJourney from '../components/CustomerJourney.astro';
 import ConversationPrompt from '../components/ConversationPrompt.astro';
 import OpportunitySection from '../components/OpportunitySection.astro';
-import PreserveValuesSection from '../components/PreserveValuesSection.astro';
-import WorkshopQuestions from '../components/WorkshopQuestions.astro';
-import VisionOverview from '../components/VisionOverview.astro';
-import BrowserMockup from '../components/BrowserMockup.astro';
 import ButtonLink from '../components/ButtonLink.astro';
 import RoadmapTimeline from '../components/RoadmapTimeline.astro';
 import ResultsGrid from '../components/ResultsGrid.astro';
 import CTASection from '../components/CTASection.astro';
+import heroImage from '../assets/images/talthall.jpg';
 
 import {
   homeHero,
   strengthsIntro,
   coreStrengths,
-  visitorPerspective,
   decisionJourneyIntro,
   decisionJourneySteps,
   decisionJourneyNote,
   decisionJourneyPrompt,
   opportunitiesIntro,
   opportunityCards,
-  preserveValuesIntro,
-  preserveValues,
-  workshopIntro,
-  workshopGroups,
   visionOverviewIntro,
-  visionOverviewItems,
-  startPageTeaser,
+  meetingQuestions,
   workingProcessIntro,
   workingProcessPhases,
   workingProcessCta,
@@ -53,33 +44,22 @@ import {
     title={homeHero.title}
     body={homeHero.body}
     primaryCTA={homeHero.primaryCTA}
-    secondaryCTA={homeHero.secondaryCTA}
-    imageLabel="TODO: Bild som visar Hallpartners arbete i verkligheten"
+    image={heroImage}
   />
 
-  <!-- 2. Det här fungerar redan bra -->
+  <!-- 2. Styrkorna som redan finns -->
   <section class="section section-surface" id="grund" aria-labelledby="grund-heading">
     <div class="container">
       <SectionIntro id="grund-heading" title={strengthsIntro.title} intro={strengthsIntro.text} />
       <StrengthGrid items={coreStrengths} />
+      <p class="text-lead strengths-note">
+        Det här är värden jag vill göra tydligare digitalt — inte förändra.
+      </p>
     </div>
   </section>
 
-  <!-- 3. Min utgångspunkt -->
-  <section class="section" id="utgangspunkt" aria-labelledby="utgangspunkt-heading">
-    <div class="container">
-      <CustomerQuestions
-        id="utgangspunkt-heading"
-        title={visitorPerspective.title}
-        intro={visitorPerspective.intro}
-        questions={visitorPerspective.questions}
-        closing={visitorPerspective.closing}
-      />
-    </div>
-  </section>
-
-  <!-- 4. Så tror jag att kunden väljer leverantör -->
-  <section class="section section-surface" id="kundresa" aria-labelledby="kundresa-heading">
+  <!-- 3. Kundens väg till beslut -->
+  <section class="section" id="kundresa" aria-labelledby="kundresa-heading">
     <div class="container">
       <SectionIntro id="kundresa-heading" title={decisionJourneyIntro.title} />
       <CustomerJourney steps={decisionJourneySteps} />
@@ -88,72 +68,48 @@ import {
     </div>
   </section>
 
-  <!-- 5. Här ser jag den största potentialen -->
-  <section class="section" id="mojligheter" aria-labelledby="mojligheter-heading">
+  <!-- 4. Den största digitala potentialen -->
+  <section class="section section-surface" id="mojligheter" aria-labelledby="mojligheter-heading">
     <div class="container">
-      <OpportunitySection id="mojligheter-heading" title={opportunitiesIntro.title} cards={opportunityCards} />
-    </div>
-  </section>
-
-  <!-- 6. Det här vill jag inte förändra -->
-  <section class="section section-inverse" id="oforandrat" aria-labelledby="oforandrat-heading">
-    <div class="container">
-      <SectionIntro
-        id="oforandrat-heading"
-        title={preserveValuesIntro.title}
-        intro={preserveValuesIntro.text}
+      <OpportunitySection
+        id="mojligheter-heading"
+        title={opportunitiesIntro.title}
+        text={opportunitiesIntro.text}
+        cards={opportunityCards}
       />
-      <PreserveValuesSection items={preserveValues} />
     </div>
   </section>
 
-  <!-- 7. Frågor jag gärna vill diskutera -->
-  <section class="section section-surface" id="fragor" aria-labelledby="fragor-heading">
-    <div class="container">
-      <SectionIntro id="fragor-heading" title={workshopIntro.title} />
-      <WorkshopQuestions groups={workshopGroups} />
-    </div>
-  </section>
-
-  <!-- 8. Min vision -->
-  <section class="section" id="vision" aria-labelledby="vision-heading">
+  <!-- 5. Min vision -->
+  <section
+    class="section section-inverse vision-statement"
+    id="vision"
+    aria-labelledby="vision-heading"
+  >
     <div class="container">
       <SectionIntro
         id="vision-heading"
         title={visionOverviewIntro.title}
         intro={visionOverviewIntro.text}
       />
-      <VisionOverview items={visionOverviewItems} />
     </div>
   </section>
 
-  <!-- 9. Se ett möjligt startsidesförslag -->
-  <section class="section section-surface" id="startsideforslag" aria-labelledby="startsideforslag-heading">
-    <div class="container two-col">
-      <div class="two-col__text">
-        <h2 id="startsideforslag-heading">{startPageTeaser.title}</h2>
-        <p class="text-lead text-muted">{startPageTeaser.text}</p>
-        <div class="two-col__actions">
-          <ButtonLink href={startPageTeaser.cta.href} label={startPageTeaser.cta.label} variant="primary" />
-          <ButtonLink
-            href={startPageTeaser.secondaryCta.href}
-            label={startPageTeaser.secondaryCta.label}
-            variant="ghost"
-          />
-        </div>
-      </div>
-      <div class="two-col__media">
-        <BrowserMockup
-          imageLabel="TODO: Skärmbild av startsidesförslaget"
-          caption="Förslag på Hallpartners nya startsida."
-          url="hallpartner.se"
-        />
-      </div>
+  <!-- 6. Frågor som avgör vad som är rätt att bygga -->
+  <section class="section" id="fragor" aria-labelledby="fragor-heading">
+    <div class="container">
+      <CustomerQuestions
+        id="fragor-heading"
+        title={meetingQuestions.title}
+        intro={meetingQuestions.intro}
+        questions={meetingQuestions.questions}
+        closing={meetingQuestions.closing}
+      />
     </div>
   </section>
 
-  <!-- 10. Möjligt arbetssätt -->
-  <section class="section" id="arbetssatt" aria-labelledby="arbetssatt-heading">
+  <!-- 7. Möjligt arbetssätt -->
+  <section class="section section-surface" id="arbetssatt" aria-labelledby="arbetssatt-heading">
     <div class="container">
       <SectionIntro id="arbetssatt-heading" title={workingProcessIntro.title} />
       <RoadmapTimeline phases={workingProcessPhases} />
@@ -163,53 +119,40 @@ import {
     </div>
   </section>
 
-  <!-- 11. Förväntad affärsnytta -->
-  <section class="section section-surface" id="affarsnytta" aria-labelledby="affarsnytta-heading">
+  <!-- 8. Förväntad affärsnytta -->
+  <section class="section" id="affarsnytta" aria-labelledby="affarsnytta-heading">
     <div class="container">
       <SectionIntro id="affarsnytta-heading" title={businessValueIntro.title} />
       <ResultsGrid results={businessValueItems} />
     </div>
   </section>
 
-  <!-- 12. Avslutning -->
+  <!-- 9. Avslutande dialog -->
   <CTASection
     title={presentationClosing.title}
     text={presentationClosing.text}
     button={presentationClosing.button}
-    secondaryButton={presentationClosing.secondaryButton}
   />
 </PresentationLayout>
 
 <style>
-  .two-col {
-    display: grid;
-    gap: var(--space-4);
-    align-items: center;
-  }
-
-  .two-col__text > * + * {
-    margin-top: var(--space-2);
-  }
-
-  .two-col__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-  }
-
   .kundresa-note {
     max-width: var(--width-text);
     margin-top: var(--space-4);
   }
 
-  .section-footer-cta {
-    margin-top: var(--space-4);
+  .strengths-note {
+    max-width: var(--width-text);
+    margin-top: var(--space-5);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-accent-warm);
   }
 
-  @media (min-width: 768px) {
-    .two-col {
-      grid-template-columns: 1fr 1fr;
-      gap: var(--space-5);
-    }
+  .vision-statement :global(.section-intro) {
+    max-width: 52rem;
+  }
+
+  .section-footer-cta {
+    margin-top: var(--space-4);
   }
 </style>
