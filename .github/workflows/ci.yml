@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: KodAiDeas/github-workflows/.github/workflows/astro-ci.yml@v1
+    with:
+      node-version: "22.12.0"
+      working-directory: "."
+      lint-command: npm run lint
+      typecheck-command: npm run check
+      build-command: npm run build
+      artifact-path: dist
+      artifact-name: hallpartner-ci-dist
