@@ -1,0 +1,33 @@
+---
+title: "Exempelprojekt – strukturtest"
+description: "Detta är inte ett Hallpartner-referensprojekt. Sidan visar hur ett framtida verifierat projektcase kan struktureras."
+eyebrow: "Referensmall"
+status: "placeholder"
+disclaimer: "DEMO: Projektet är påhittat som layoutunderlag. Bilden är befintligt projektmaterial vars identitet och publiceringsrätt måste verifieras innan den används som Hallpartner-referens."
+heroImage: "../../assets/images/maskinhall.jpeg"
+heroAlt: "Exempelbild som används för att prova referenssidans layout"
+location: "Ej verifierad"
+year: "Ej verifierat"
+hallType: "Exempel"
+area: "Ej verifierad"
+facts:
+  - label: "Ort"
+    value: "Ej verifierad"
+  - label: "År"
+    value: "Ej verifierat"
+  - label: "Halltyp"
+    value: "Exempel"
+  - label: "Storlek"
+    value: "Ej verifierad"
+need: "Här beskriver vi kundens verkliga utgångsläge när ett verifierat referensprojekt finns. Det ska vara mer konkret än en allmän projektbeskrivning."
+scope:
+  - "Verifierad del som Hallpartner faktiskt levererade"
+  - "Verifierat ansvar som kan styrkas med projektunderlag"
+solution: "Här förklaras vilka val som gjordes i projektet och varför, utan att tillskriva Hallpartner arbete som någon annan utförde."
+result: "Resultatsektionen används endast när det finns ett konkret resultat som kan styrkas eller ett godkänt kundcitat."
+relatedHallHref: "/prototype/hall/exempel-lagerhall/"
+relatedHallLabel: "Se hallsidemallen"
+primaryCta:
+  label: "Beskriv ett liknande projekt"
+  href: "/prototype/foundation/#cta"
+---
