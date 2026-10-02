@@ -9,6 +9,18 @@ Slutligt innehåll och sidstruktur: **pending live-site inventory**.
 > större ändringar görs. Se även [AGENTS.md](AGENTS.md) för riktlinjer till
 > AI-agenter som arbetar i projektet.
 
+## Aktuell live preview
+
+Utvecklingsversionen finns på:
+
+**https://hallpartner-se.preview2.inleed.com/**
+
+Detta är den gemensamma granskningsytan för projektet. AI-agenter ska vid
+arbete med UI, innehåll, navigation eller responsivitet öppna relevant sida
+där och granska resultatet kritiskt. Previewn är inte ett godkänt facit; den
+ska användas för att hitta konkreta problem och förbättringar före fortsatt
+arbete.
+
 ## Stack
 
 - [Astro](https://astro.build) (statisk output)
@@ -52,8 +64,8 @@ BaseLayout skapar canonical från Astro.site, och sitemap använder samma domän
 Det påverkar metadata och XML, inte previewhosting eller DNS. /workshop/
 är fortsatt undantagen från sitemap; övrig befintlig struktur bevaras.
 
-.github/workflows/deploy-production.yml behåller befintligt lftp-flöde,
-men kör **endast dry-run**, vid push till main eller workflow_dispatch.
+.github/workflows/deploy-production.yml behåller befintligt lftp-flöde och
+gör riktig upload vid push till main eller workflow_dispatch.
 Previewmiljöns URL är https://hallpartner-se.preview2.inleed.com.
 Permissions är contents: read. Bygget valideras innan artifact sparas,
 och nedladdad dist/index.html kontrolleras igen före FTP.
@@ -67,10 +79,8 @@ Remote target är därför ./, relativt inloggningsroten:
 mirror --reverse --verbose --parallel=4 ./dist/ ./
 ```
 
-Ingen delete används. Serverrooten är ännu inte verifierad genom en körning.
-Granska första dry-run och bekräfta i DirectAdmin att kontot är isolerat till
-rätt document root före en separat ändring som aktiverar riktig upload.
-Dry-run-loggen ensam bevisar inte den fysiska serverkatalogen.
+Ingen `--delete` används. FTP-target `./` är verifierat mot Hallpartners
+document root och deploymenten är live i previewmiljön.
 DNS för hallpartner.se pekar fortsatt mot befintlig WordPress och ändras inte här.
 Arkivbranchen archive/vision-site-2026-10-02 ska lämnas orörd.
 
@@ -88,7 +98,7 @@ Indexering får aktiveras först vid en separat godkänd lansering.
 - Bedöm vilka presentationsdelar som ska återanvändas, skrivas om eller tas bort.
 - Samla originalbilder i src/assets/images/legacy/ med ursprungliga filnamn;
   inventera källor och rättigheter innan optimering och användning.
-- Granska FTP dry-run, document root och GitHub-miljöns skyddsregler före upload.
+- Granska live preview efter UI-ändringar och använd den som obligatorisk visuell kontrollpunkt.
 - Planera senare lansering: metadata, sitemap, indexering och DNS separat.
 - Granska befintliga beroenden före publicering. npm audit vid phase 1 rapporterar
   10 sårbarheter (1 moderate, 8 high, 1 critical), inklusive Astro
