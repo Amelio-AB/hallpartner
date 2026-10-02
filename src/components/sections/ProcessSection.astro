@@ -1,0 +1,96 @@
+---
+export interface ProcessStep {
+  title: string;
+  text: string;
+}
+
+export interface Props {
+  steps: ProcessStep[];
+  title?: string;
+  intro?: string;
+  id?: string;
+}
+
+const {
+  steps,
+  title = 'Så går projektet vidare',
+  intro,
+  id = 'process',
+} = Astro.props;
+---
+
+{steps.length > 0 && (
+  <section class="section" id={id} aria-labelledby={`${id}-heading`}>
+    <div class="container">
+      <div class="process-heading">
+        <p class="eyebrow">Process</p>
+        <h2 id={`${id}-heading`}>{title}</h2>
+        {intro && <p class="lead">{intro}</p>}
+      </div>
+
+      <ol class="process-list">
+        {steps.map((step, index) => (
+          <li>
+            <span class="process-list__number" aria-hidden="true">
+              {String(index + 1).padStart(2, '0')}
+            </span>
+            <div>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+)}
+
+<style>
+  .process-heading {
+    display: grid;
+    max-width: var(--text-max);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .process-list {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .process-list li {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .process-list li:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .process-list__number {
+    color: var(--color-action);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: 0.12em;
+  }
+
+  .process-list h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  .process-list p {
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .process-list li {
+      grid-template-columns: 6rem minmax(0, 1fr);
+      padding-block: var(--space-5);
+    }
+  }
+</style>
