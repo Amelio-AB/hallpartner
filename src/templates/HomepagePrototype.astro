@@ -1,0 +1,282 @@
+---
+import SiteSeo from '../components/seo/SiteSeo.astro';
+import ActionLink from '../components/ui/ActionLink.astro';
+import { Image } from 'astro:assets';
+import heroImage from '../assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg';
+import projectImage from '../assets/images/legacy/lagerlokal-stalstomme-1536x1152.jpg';
+import detailImage from '../assets/images/legacy/Stalstomme-1-1536x1152.jpg';
+import drawingImage from '../assets/images/legacy/maskinhall-ritning.webp';
+import peterImage from '../assets/images/legacy/kontakt_foto_Peter.jpg';
+import jimmyImage from '../assets/images/legacy/kontakt_foto_Jimmy.jpg';
+import { prototypeNavigation, prototypeCta } from '../config/site';
+import { homepagePrototype as content } from '../data/homepagePrototype';
+import '../styles/foundation/tokens.css';
+import '../styles/foundation/base.css';
+import '../styles/homepage-prototype.css';
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <SiteSeo
+      title="Startsidesprototyp v0.2 | Hallpartner"
+      description={content.disclaimer}
+      canonical={canonical}
+      noindex={true}
+    />
+  </head>
+  <body class="homepage-prototype" data-content-status={content.status}>
+    <a class="hp-skip" href="#main-content">Hoppa till huvudinnehållet</a>
+    <header class="hp-header">
+      <a
+        class="hp-wordmark"
+        href="/prototype/start-v02/"
+        aria-label="Hallpartner – startsidesprototyp">HALLPARTNER</a
+      >
+      <nav class="hp-desktop-nav" aria-label="Huvudnavigation, prototyp">
+        {prototypeNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
+        <ActionLink href={prototypeCta.href} label={prototypeCta.label} />
+      </nav>
+      <details class="hp-mobile-nav">
+        <summary>Meny</summary>
+        <nav aria-label="Mobilnavigation, prototyp">
+          {prototypeNavigation.map((item) => <a href={item.href}>{item.label}</a>)}
+          <ActionLink href={prototypeCta.href} label={prototypeCta.label} />
+        </nav>
+      </details>
+    </header>
+    <main id="main-content">
+      <section class="hp-hero" aria-labelledby="hero-heading">
+        <div class="hp-hero-copy">
+          <p class="hp-label hp-mobile-only">Designprototyp · demo-copy</p>
+          <h1 id="hero-heading">{content.hero.title}</h1>
+          <p class="hp-hero-intro hp-desktop-only">{content.hero.desktopIntro}</p>
+          <p class="hp-hero-intro hp-mobile-only">{content.hero.mobileIntro}</p>
+          <div class="hp-hero-actions">
+            <ActionLink href={prototypeCta.href} label="Starta offert" />
+            <a class="hp-text-link hp-desktop-only" href="#kontakt">Prata med oss</a>
+          </div>
+          <p class="hp-demo-note hp-desktop-only">{content.disclaimer}</p>
+        </div>
+        <figure
+          class="hp-hero-media"
+          aria-label="Hallbild som prototypmaterial med separat demo av projektdata"
+        >
+          <Image
+            class="hp-hero-image"
+            src={heroImage}
+            alt="Grå hall med röd takkant och stora fasadytor under blå himmel"
+            widths={[480, 768, 1024, 1536]}
+            sizes="(min-width: 1152px) 58vw, 100vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="hp-technical-annotation">
+            <div class="hp-dimension">
+              <p class="hp-label">Projektdata / demo</p>
+              <p class="hp-measure">{content.hero.dimension}</p>
+            </div>
+            <dl
+              class="hp-technical-fields"
+              aria-label="Exempel på projektfält, inte uppgifter om bilden"
+            >
+              {
+                content.hero.fields.map((field) => (
+                  <div>
+                    <>
+                      <dt>{field}</dt>
+                      <dd>Verifieras</dd>
+                    </>
+                  </div>
+                ))
+              }
+            </dl>
+            <p class="hp-demo-note">Exempelvärden. Måttet och uppgifterna gäller inte bilden.</p>
+          </div>
+          <figcaption>Bild ur befintligt material · används för designprototypen</figcaption>
+        </figure>
+      </section>
+      <section class="hp-needs hp-wide-rail" id="behov" aria-labelledby="needs-heading">
+        <p class="hp-label">
+          <span class="hp-desktop-only">Välj efter behov</span><span class="hp-mobile-only"
+            >Behov</span
+          >
+        </p>
+        <div class="hp-section-intro">
+          <h2 id="needs-heading">
+            <span class="hp-desktop-only">Inte alla hallar<br />behöver börja med en halltyp.</span
+            ><span class="hp-mobile-only">Börja i verksamheten.</span>
+          </h2>
+          <p class="hp-desktop-only">
+            Låt kunden börja i verksamheten. Tekniska val kommer senare när Hallpartner vet mer om
+            projektet.
+          </p>
+          <p class="hp-mobile-only">Tekniska val kommer senare när mer är känt.</p>
+        </div>
+        <ul class="hp-need-list">
+          {
+            content.needs.map((need) => (
+              <li>
+                <a
+                  href="/prototype/hall/exempel-lagerhall/"
+                  aria-label={`${need.title} – visa hallsidemallen med demo-innehåll`}
+                >
+                  <>
+                    <span class="hp-need-title">{need.title}</span>
+                    <span class="hp-need-detail">{need.detail}</span>
+                    <span class="hp-arrow" aria-hidden="true">
+                      →
+                    </span>
+                  </>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="hp-project" id="projekt" aria-labelledby="project-heading">
+        <div class="hp-project-intro hp-wide-rail">
+          <p class="hp-label">Projekt / demo</p>
+          <h2 id="project-heading">Bevis före löften.</h2>
+        </div>
+        <div class="hp-project-composition">
+          <figure class="hp-project-media">
+            <Image
+              src={projectImage}
+              alt="Frilagd ljus stålstomme för en hall på en byggplats"
+              widths={[480, 768, 1024, 1536]}
+              sizes="(min-width: 1152px) 75vw, (min-width: 768px) 65vw, 100vw"
+            />
+            <figcaption>Stålstomme på byggplats · prototypmaterial</figcaption>
+          </figure>
+          <aside
+            class="hp-project-facts"
+            aria-label="Exempel på projektfakta, ej verifierat referensprojekt"
+          >
+            <p class="hp-label">Referensprojekt / demo</p>
+            <h3>{content.project.title}</h3>
+            <dl>
+              {
+                content.project.facts.map((label) => (
+                  <div class:list={{ 'hp-fact-year': label === 'År' }}>
+                    <>
+                      <dt>
+                        {label === 'Leveransomfattning' ? (
+                          <>
+                            <span class="hp-desktop-only">{label}</span>
+                            <span class="hp-mobile-only">Scope</span>
+                          </>
+                        ) : (
+                          label
+                        )}
+                      </dt>
+                      <dd>Verifieras</dd>
+                    </>
+                  </div>
+                ))
+              }
+            </dl>
+            <a class="hp-text-link hp-project-link" href="/prototype/reference/exempelprojekt/"
+              >Se projektmallen <span aria-hidden="true">→</span></a
+            >
+            <p class="hp-demo-note">
+              Layoutdemo. Bilderna är inte verifierade referensprojekt eller en dokumenterad
+              bildserie.
+            </p>
+          </aside>
+          <section class="hp-project-materials hp-wide-rail" aria-labelledby="materials-heading">
+            <div class="hp-materials-intro">
+              <h3 id="materials-heading">Stomme och ritning</h3>
+              <p>
+                Fotografiet visar konstruktionen på byggplatsen; ritningen visar en halls geometri.
+                Separata prototypunderlag, inte en verifierad projektserie.
+              </p>
+            </div>
+            <figure class="hp-montage-detail">
+              <Image
+                src={detailImage}
+                alt="Stålpelare och takbalkar med öppet fackverk på en byggplats"
+                widths={[390, 640, 960]}
+                sizes="(min-width: 1280px) 713px, (min-width: 768px) 60vw, 100vw"
+              />
+              <figcaption>Stomme / materialdetalj · prototypmaterial</figcaption>
+            </figure>
+            <figure class="hp-technical-drawing">
+              <Image
+                src={drawingImage}
+                alt="Teknisk sektionsritning av en hall med takstol och pelare"
+                widths={[390, 640, 917]}
+                sizes="(min-width: 1280px) 475px, (min-width: 768px) 40vw, 50vw"
+              />
+              <figcaption>Ritningsunderlag · ej kopplat till bilderna</figcaption>
+            </figure>
+          </section>
+        </div>
+      </section>
+      <section class="hp-responsibility hp-wide-rail" aria-labelledby="responsibility-heading">
+        <p class="hp-label">Ansvar / demo</p>
+        <div class="hp-section-intro">
+          <h2 id="responsibility-heading">Vem gör vad?</h2>
+          <p class="hp-desktop-only">
+            Ansvarsfördelningen ska vara synlig och verifierad. Innehållet nedan är platshållare.
+          </p>
+        </div>
+        <dl class="hp-responsibility-matrix">
+          {
+            content.responsibilities.map((item) => (
+              <div>
+                <>
+                  <dt class="hp-label">{item.title}</dt>
+                  <dd>{item.text}</dd>
+                </>
+              </div>
+            ))
+          }
+        </dl>
+      </section>
+      <section class="hp-contact" id="kontakt" aria-labelledby="contact-heading">
+        <div class="hp-contact-rail hp-wide-rail">
+          <div class="hp-contact-copy">
+            <p class="hp-label">Kontakt</p><h2 id="contact-heading">
+              Riktiga personer bakom nästa steg.
+            </h2>
+          </div>
+          <div
+            class="hp-portraits"
+            aria-label="Peter och Jimmy, befintliga porträtt i designprototypen"
+          >
+            {
+              content.portraits.map((name) => (
+                <figure>
+                  <Image
+                    src={name === 'Peter' ? peterImage : jimmyImage}
+                    alt={`Porträtt av ${name}`}
+                    width={166}
+                    height={166}
+                  />
+                  <figcaption>{name}</figcaption>
+                </figure>
+              ))
+            }
+          </div>
+          <ActionLink href={prototypeCta.href} label="Beskriv projektet" />
+          <p class="hp-contact-note hp-demo-note">
+            Befintliga porträtt används som prototypmaterial. Roller och kontaktuppgifter verifieras
+            inför publicering.
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
