@@ -1,0 +1,84 @@
+---
+import '../styles/foundation/tokens.css';
+import '../styles/foundation/base.css';
+import SiteSeo from '../components/seo/SiteSeo.astro';
+import SiteHeader from '../components/navigation/SiteHeader.astro';
+import SiteFooter from '../components/navigation/SiteFooter.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  noindex?: boolean;
+  prototype?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  noindex = true,
+  prototype = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <SiteSeo
+      title={title}
+      description={description}
+      canonical={canonical}
+      image={image}
+      noindex={noindex}
+    />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Hoppa till huvudinnehållet</a>
+    {prototype && (
+      <div class="prototype-banner">
+        Arbetsprototyp v0.1 – struktur och demo-innehåll, inte verifierad Hallpartner-copy
+      </div>
+    )}
+    <SiteHeader currentPage={Astro.url.pathname} prototype={prototype} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <SiteFooter prototype={prototype} />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: fixed;
+    z-index: 200;
+    top: 0.5rem;
+    left: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-graphite);
+    color: var(--color-white);
+    transform: translateY(-150%);
+    transition: transform var(--transition-fast);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+</style>
