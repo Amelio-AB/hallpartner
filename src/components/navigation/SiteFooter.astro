@@ -1,0 +1,125 @@
+---
+import BrandLogo from '../ui/BrandLogo.astro';
+import {
+  primaryNavigation,
+  prototypeNavigation,
+  siteConfig,
+} from '../../config/site';
+
+export interface Props {
+  prototype?: boolean;
+}
+
+const { prototype = false } = Astro.props;
+const navigation = prototype ? prototypeNavigation : primaryNavigation;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__grid">
+    <div class="site-footer__brand">
+      <BrandLogo href={prototype ? '/prototype/foundation/' : '/'} />
+      <p>
+        {prototype
+          ? 'Arbetsprototyp för Hallpartners kommande produktionswebbplats.'
+          : 'Hallpartner'}
+      </p>
+    </div>
+
+    <nav aria-label="Sidfotsnavigation">
+      <h2>Navigation</h2>
+      <ul>
+        {navigation.map((item) => (
+          <li><a href={item.href}>{item.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="site-footer__actions">
+      <h2>Nästa steg</h2>
+      <a href={prototype ? '/prototype/foundation/#cta' : siteConfig.primaryCta.href}>
+        {siteConfig.primaryCta.label}
+      </a>
+      <a href={prototype ? '/prototype/foundation/#about' : siteConfig.secondaryCta.href}>
+        {siteConfig.secondaryCta.label}
+      </a>
+    </div>
+  </div>
+
+  <div class="container site-footer__bottom">
+    <p>© {year} Hallpartner</p>
+    {prototype && <p>Demo-innehåll får inte användas som verifierad verksamhetscopy.</p>}
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--color-border);
+    background: var(--color-surface-warm);
+  }
+
+  .site-footer__grid {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-7);
+  }
+
+  .site-footer__brand p {
+    max-width: 28rem;
+    margin-top: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-sm);
+  }
+
+  .site-footer h2 {
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .site-footer ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .site-footer a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--color-action);
+  }
+
+  .site-footer__actions {
+    display: grid;
+    align-content: start;
+    gap: var(--space-2);
+  }
+
+  .site-footer__actions h2 {
+    margin-bottom: var(--space-1);
+  }
+
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+  }
+
+  @media (min-width: 48rem) {
+    .site-footer__grid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+    }
+  }
+</style>
