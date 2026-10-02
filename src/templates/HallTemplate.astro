@@ -1,0 +1,115 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProductLayout from '../layouts/ProductLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import ScopeSection from '../components/sections/ScopeSection.astro';
+import ProcessSection from '../components/sections/ProcessSection.astro';
+import CostDriversSection from '../components/sections/CostDriversSection.astro';
+import FAQSection from '../components/sections/FAQSection.astro';
+import CTASectionV2 from '../components/sections/CTASectionV2.astro';
+
+export interface Props {
+  entry: CollectionEntry<'halls'>;
+  prototype?: boolean;
+}
+
+const { entry, prototype = false } = Astro.props;
+const data = entry.data;
+---
+
+<ProductLayout
+  title={`${data.title} | Hallpartner`}
+  description={data.description}
+  noindex
+  prototype={prototype}
+>
+  <PageHero
+    eyebrow={data.eyebrow}
+    title={data.title}
+    intro={data.description}
+    image={data.heroImage}
+    imageAlt={data.heroAlt}
+    primaryAction={data.primaryCta}
+    secondaryAction={data.secondaryCta}
+  />
+
+  {data.disclaimer && (
+    <div class="container template-disclaimer">
+      <p class="foundation-note">{data.disclaimer}</p>
+    </div>
+  )}
+
+  {data.fit && data.fit.items.length > 0 && (
+    <section class="section" aria-labelledby="fit-heading">
+      <div class="container fit-layout">
+        <div>
+          <p class="eyebrow">Behov</p>
+          <h2 id="fit-heading">{data.fit.title}</h2>
+          {data.fit.intro && <p class="lead">{data.fit.intro}</p>}
+        </div>
+        <ul class="fit-list">
+          {data.fit.items.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {data.scope && (
+    <ScopeSection
+      intro={data.scope.intro}
+      included={data.scope.included}
+      options={data.scope.options}
+      customer={data.scope.customer}
+    />
+  )}
+
+  <CostDriversSection drivers={data.costDrivers} />
+  <ProcessSection steps={data.process} />
+  <FAQSection items={data.faq} />
+
+  <CTASectionV2
+    title="Redo att beskriva ditt projekt?"
+    text="Offertstarten ska fungera även när alla tekniska detaljer inte är bestämda."
+    primary={data.primaryCta}
+    secondary={data.secondaryCta}
+  />
+</ProductLayout>
+
+<style>
+  .template-disclaimer {
+    margin-top: calc(var(--space-5) * -1);
+    padding-bottom: var(--space-5);
+  }
+
+  .fit-layout {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .fit-layout > div {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .fit-list {
+    display: grid;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .fit-list li {
+    padding-block: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .fit-layout {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+  }
+</style>
