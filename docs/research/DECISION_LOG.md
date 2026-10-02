@@ -46,3 +46,14 @@
   - tas av sälj/projektledning senare
   - intern/teknisk information
 - Målet är färre relevanta frågor, inte maximal datainsamling.
+
+
+## 2026-10-02 – Provisorisk grafisk riktning v0.1
+
+- Den uppladdade ljusa Hallpartner-moodboarden får användas som provisorisk arbetsriktning för prototyper och komponentfoundation.
+- Moodboardens genererade logotyp ska **inte** användas. Hallpartners originala logotyp gäller.
+- Moodboardens slogans och andra påhittade verksamhetsbudskap ska inte användas.
+- Provisorisk palett: Off White `#F8F7F4`, Light Sand `#E8E1D6`, Pale Stone `#D0C9BE`, Sage Green `#A7B89F`, Warm Taupe `#A59686`, Graphite `#2E2E2E`.
+- Inter får användas provisoriskt.
+- All styling ska gå genom semantiska design tokens så att profilen kan bytas utan att sidarkitektur eller komponent-API skrivs om.
+- Slutlig grafisk profil beslutas senare tillsammans med Hallpartner.
