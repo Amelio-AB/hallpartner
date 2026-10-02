@@ -1,0 +1,74 @@
+---
+import ActionLink from '../ui/ActionLink.astro';
+
+export interface Props {
+  title: string;
+  text: string;
+  primary: {
+    label: string;
+    href: string;
+  };
+  secondary?: {
+    label: string;
+    href: string;
+  };
+  id?: string;
+}
+
+const { title, text, primary, secondary, id = 'cta' } = Astro.props;
+---
+
+<section class="cta-section" id={id}>
+  <div class="container cta-section__inner">
+    <div>
+      <p class="eyebrow">Nästa steg</p>
+      <h2>{title}</h2>
+      <p>{text}</p>
+    </div>
+
+    <div class="cta-section__actions">
+      <ActionLink href={primary.href} label={primary.label} variant="primary" />
+      {secondary && (
+        <ActionLink href={secondary.href} label={secondary.label} variant="secondary" />
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-section {
+    padding-block: var(--space-7);
+    background: var(--color-surface-warm);
+  }
+
+  .cta-section__inner {
+    display: grid;
+    gap: var(--space-5);
+    align-items: end;
+  }
+
+  .cta-section h2 {
+    max-width: 15ch;
+    margin-block: var(--space-2) var(--space-3);
+  }
+
+  .cta-section p {
+    color: var(--color-text-muted);
+  }
+
+  .cta-section__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 56rem) {
+    .cta-section__inner {
+      grid-template-columns: 1fr auto;
+    }
+
+    .cta-section__actions {
+      justify-content: flex-end;
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import ReferenceTemplate from '../../../templates/ReferenceTemplate.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('references');
+
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'references'>;
+}
+
+const { entry } = Astro.props;
+---
+
+<ReferenceTemplate entry={entry} prototype />

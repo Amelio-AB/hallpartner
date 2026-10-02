@@ -1,0 +1,65 @@
+:root {
+  /* Provisorisk grafisk riktning v0.1.
+     Värdena kan bytas senare utan att komponent-API eller sidmallar ändras. */
+  --color-off-white: #f8f7f4;
+  --color-light-sand: #e8e1d6;
+  --color-pale-stone: #d0c9be;
+  --color-sage: #a7b89f;
+  --color-sage-strong: #526a55;
+  --color-warm-taupe: #a59686;
+  --color-graphite: #2e2e2e;
+  --color-white: #ffffff;
+
+  /* Semantiska roller */
+  --color-bg: var(--color-off-white);
+  --color-surface: var(--color-white);
+  --color-surface-warm: var(--color-light-sand);
+  --color-text: var(--color-graphite);
+  --color-text-muted: #66625d;
+  --color-border: #d8d2c9;
+  --color-accent: var(--color-sage);
+  --color-action: var(--color-sage-strong);
+  --color-on-action: var(--color-white);
+  --color-focus: #36523b;
+
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --font-size-xs: 0.8rem;
+  --font-size-sm: 0.95rem;
+  --font-size-base: 1rem;
+  --font-size-lg: clamp(1.08rem, 1rem + 0.35vw, 1.25rem);
+  --font-size-h3: clamp(1.35rem, 1.15rem + 0.8vw, 1.8rem);
+  --font-size-h2: clamp(2rem, 1.55rem + 1.8vw, 3.25rem);
+  --font-size-h1: clamp(2.7rem, 1.9rem + 3.8vw, 5.8rem);
+
+  --line-height-tight: 1.02;
+  --line-height-heading: 1.12;
+  --line-height-body: 1.62;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --content-max: 82rem;
+  --text-max: 44rem;
+
+  --space-1: 0.35rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --space-6: 3rem;
+  --space-7: 4.5rem;
+  --space-8: 6.5rem;
+
+  --radius-sm: 0.35rem;
+  --radius-md: 0.7rem;
+  --radius-lg: 1.1rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 1rem 3rem rgb(46 46 46 / 8%);
+
+  --transition-fast: 150ms ease;
+  --transition-base: 240ms ease;
+}

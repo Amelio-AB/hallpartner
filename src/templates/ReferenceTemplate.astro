@@ -1,0 +1,215 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import ProductLayout from '../layouts/ProductLayout.astro';
+import PageHero from '../components/sections/PageHero.astro';
+import CTASectionV2 from '../components/sections/CTASectionV2.astro';
+import ActionLink from '../components/ui/ActionLink.astro';
+
+export interface Props {
+  entry: CollectionEntry<'references'>;
+  prototype?: boolean;
+}
+
+const { entry, prototype = false } = Astro.props;
+const data = entry.data;
+
+const primaryCta = data.primaryCta ?? {
+  label: 'Beskriv ditt projekt',
+  href: prototype ? '/prototype/foundation/#cta' : '/offert/',
+};
+---
+
+<ProductLayout
+  title={`${data.title} | Hallpartner`}
+  description={data.description}
+  noindex
+  prototype={prototype}
+>
+  <PageHero
+    eyebrow={data.eyebrow ?? 'Referens'}
+    title={data.title}
+    intro={data.description}
+    image={data.heroImage}
+    imageAlt={data.heroAlt}
+    primaryAction={primaryCta}
+  />
+
+  {data.disclaimer && (
+    <div class="container reference-disclaimer">
+      <p class="foundation-note">{data.disclaimer}</p>
+    </div>
+  )}
+
+  {data.facts.length > 0 && (
+    <section class="facts-section" aria-label="Projektfakta">
+      <div class="container facts-grid">
+        {data.facts.map((fact) => (
+          <div>
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {(data.need || data.solution) && (
+    <section class="section">
+      <div class="container story-grid">
+        {data.need && (
+          <article>
+            <p class="eyebrow">Behov</p>
+            <h2>Utgångsläget</h2>
+            <p>{data.need}</p>
+          </article>
+        )}
+        {data.solution && (
+          <article>
+            <p class="eyebrow">Lösning</p>
+            <h2>Vad projektet visar</h2>
+            <p>{data.solution}</p>
+          </article>
+        )}
+      </div>
+    </section>
+  )}
+
+  {data.scope.length > 0 && (
+    <section class="section section--surface" aria-labelledby="reference-scope-heading">
+      <div class="container reference-scope">
+        <div>
+          <p class="eyebrow">Leveransomfattning</p>
+          <h2 id="reference-scope-heading">Hallpartners faktiska ansvar i projektet</h2>
+        </div>
+        <ul>
+          {data.scope.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  {data.result && (
+    <section class="section section--warm" aria-labelledby="result-heading">
+      <div class="container result-block">
+        <p class="eyebrow">Resultat</p>
+        <h2 id="result-heading">Vad projektet ledde till</h2>
+        <p class="lead">{data.result}</p>
+      </div>
+    </section>
+  )}
+
+  {data.relatedHallHref && data.relatedHallLabel && (
+    <section class="related-section">
+      <div class="container">
+        <p>Relaterad lösning</p>
+        <ActionLink
+          href={data.relatedHallHref}
+          label={data.relatedHallLabel}
+          variant="text"
+        />
+      </div>
+    </section>
+  )}
+
+  <CTASectionV2
+    title="Planerar du något liknande?"
+    text="Beskriv projektet på den nivå du känner till. Hallpartner kan sedan komplettera underlaget."
+    primary={primaryCta}
+  />
+</ProductLayout>
+
+<style>
+  .reference-disclaimer {
+    margin-top: calc(var(--space-5) * -1);
+    padding-bottom: var(--space-5);
+  }
+
+  .facts-section {
+    padding-block: var(--space-5);
+    border-block: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+
+  .facts-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .facts-grid dl,
+  .facts-grid div {
+    margin: 0;
+  }
+
+  .facts-grid dt {
+    color: var(--color-text-muted);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .facts-grid dd {
+    margin: var(--space-1) 0 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .story-grid,
+  .reference-scope {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .story-grid article,
+  .reference-scope > div {
+    display: grid;
+    align-content: start;
+    gap: var(--space-3);
+  }
+
+  .story-grid article > p:last-child,
+  .reference-scope li {
+    color: var(--color-text-muted);
+  }
+
+  .reference-scope ul {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .result-block {
+    display: grid;
+    max-width: var(--text-max);
+    gap: var(--space-3);
+  }
+
+  .related-section {
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-section .container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .related-section p {
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .facts-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 56rem) {
+    .story-grid,
+    .reference-scope {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

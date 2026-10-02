@@ -1,0 +1,39 @@
+---
+export interface Props {
+  href?: string;
+  compact?: boolean;
+}
+
+const { href = '/', compact = false } = Astro.props;
+---
+
+<a class:list={['brand-logo', { 'brand-logo--compact': compact }]} href={href} aria-label="Hallpartner – till startsidan">
+  <!--
+    Temporär repo-asset. Byt till godkänd original-SVG när Hallpartner levererar den.
+    Den manuellt inverterade printscreen-filen i legacy ska inte användas som produktionslogotyp.
+  -->
+  <img
+    src="/images/hallpartner-logo.png"
+    alt="Hallpartner"
+    width="2955"
+    height="375"
+  />
+</a>
+
+<style>
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    max-width: 12.5rem;
+    text-decoration: none;
+  }
+
+  .brand-logo img {
+    width: 100%;
+    height: auto;
+  }
+
+  .brand-logo--compact {
+    max-width: 10.5rem;
+  }
+</style>

@@ -1,0 +1,184 @@
+---
+import { getCollection } from 'astro:content';
+import ProductLayout from '../../../layouts/ProductLayout.astro';
+import PageHero from '../../../components/sections/PageHero.astro';
+import ProcessSection from '../../../components/sections/ProcessSection.astro';
+import CTASectionV2 from '../../../components/sections/CTASectionV2.astro';
+import ContentCard from '../../../components/cards/ContentCard.astro';
+import heroImage from '../../../assets/images/talthall.jpg';
+
+const halls = await getCollection('halls');
+const references = await getCollection('references');
+const hall = halls.find((entry) => entry.id === 'exempel-lagerhall');
+const reference = references.find((entry) => entry.id === 'exempelprojekt');
+
+const foundationSteps = [
+  {
+    title: 'Verifiera affären',
+    text: 'Peter och Jimmy bekräftar erbjudande, leveransomfattning och vilka kunder Hallpartner vill vinna.',
+  },
+  {
+    title: 'Lås innehållsmodellen',
+    text: 'Sitemap, hallsidor och offertfrågor uppdateras med verifierade fakta i stället för antaganden.',
+  },
+  {
+    title: 'Fastställ grafisk profil',
+    text: 'Den provisoriska v0.1-riktningen ersätts eller justeras utan att sidmallarna behöver byggas om.',
+  },
+  {
+    title: 'Implementera produktionen',
+    text: 'Verifierat innehåll fyller de typade mallarna och offertguiden byggs med Stadsbuds UX-modell som referens.',
+  },
+];
+---
+
+<ProductLayout
+  title="Architecture/Foundation v0.1 | Hallpartner"
+  description="Noindexad arbetsprototyp för Hallpartners framtida komponent- och sidarkitektur."
+  noindex
+  prototype
+>
+  <PageHero
+    eyebrow="Architecture / Foundation v0.1"
+    title="En grund vi kan fylla med verifierat innehåll"
+    intro="Den här arbetsytan provar navigation, sidmallar, komponentgränser och den provisoriska grafiska riktningen utan att låsa Hallpartners affärsbudskap."
+    image={heroImage}
+    imageAlt="Exempelbild av en hall, används endast i arbetsprototypen"
+    primaryAction={{ label: 'Öppna hallsidemallen', href: '/prototype/hall/exempel-lagerhall/' }}
+    secondaryAction={{ label: 'Öppna referensmallen', href: '/prototype/reference/exempelprojekt/' }}
+  />
+
+  <section class="section section--surface" aria-labelledby="principer-heading">
+    <div class="container principles">
+      <div>
+        <p class="eyebrow">Grundprincip</p>
+        <h2 id="principer-heading">Struktur först. Verksamhetsclaims senare.</h2>
+      </div>
+      <div class="principles__copy">
+        <p>
+          Routes, content, templates och komponenter har separata ansvar. Det gör att
+          Peter och Jimmys svar senare kan fylla en färdig modell utan att innehåll
+          behöver hårdkodas inne i Astro-komponenterna.
+        </p>
+        <p>
+          Demo-innehållet är medvetet märkt som placeholder och alla prototypsidor är
+          noindexerade.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="templates-heading">
+    <div class="container">
+      <div class="templates-heading">
+        <p class="eyebrow">Sidmallar</p>
+        <h2 id="templates-heading">Två mallar är byggda i första versionen</h2>
+        <p class="lead">
+          Hallsidan visar hur ett erbjudande kan struktureras. Referenssidan visar hur
+          verkliga projekt senare kan användas som bevis.
+        </p>
+      </div>
+
+      <div class="template-grid">
+        {hall && (
+          <ContentCard
+            href={`/prototype/hall/${hall.id}/`}
+            eyebrow="HallTemplate"
+            title={hall.data.title}
+            text={hall.data.description}
+            image={hall.data.heroImage}
+            imageAlt={hall.data.heroAlt}
+          />
+        )}
+        {reference && (
+          <ContentCard
+            href={`/prototype/reference/${reference.id}/`}
+            eyebrow="ReferenceTemplate"
+            title={reference.data.title}
+            text={reference.data.description}
+            image={reference.data.heroImage}
+            imageAlt={reference.data.heroAlt}
+          />
+        )}
+      </div>
+    </div>
+  </section>
+
+  <ProcessSection
+    id="process"
+    title="Hur foundation går vidare"
+    intro="Vi kan bygga strukturen nu utan att göra Peter och Jimmys svar åt dem."
+    steps={foundationSteps}
+  />
+
+  <section class="section section--surface" id="knowledge" aria-labelledby="knowledge-heading">
+    <div class="container info-grid">
+      <div>
+        <p class="eyebrow">Kunskap</p>
+        <h2 id="knowledge-heading">Kunskapsinnehåll får samma typade grund senare</h2>
+      </div>
+      <p class="lead">
+        Collectionen finns redan i arkitekturen, men vi skapar inte artiklar om pris,
+        bygglov eller teknik förrän ansvar, källor och faktainnehåll är fastställda.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="about" aria-labelledby="about-heading">
+    <div class="container info-grid">
+      <div>
+        <p class="eyebrow">Om Hallpartner</p>
+        <h2 id="about-heading">Personer och erfarenhet kräver verifiering</h2>
+      </div>
+      <p class="lead">
+        Sidmallen kan byggas senare, men erfarenhetsår, roller, certifikat och andra
+        förtroendepåståenden fylls först när kundunderlaget är bekräftat.
+      </p>
+    </div>
+  </section>
+
+  <CTASectionV2
+    id="cta"
+    title="Offertguiden kopplas in efter affärsbesluten"
+    text="Carlstad Stadsbuds wizard används som UX- och interaktionsreferens. Frågorna reduceras först efter Peter och Jimmys svar."
+    primary={{ label: 'Till hallsidemallen', href: '/prototype/hall/exempel-lagerhall/' }}
+    secondary={{ label: 'Till referensmallen', href: '/prototype/reference/exempelprojekt/' }}
+  />
+</ProductLayout>
+
+<style>
+  .principles,
+  .info-grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .principles__copy {
+    display: grid;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+  }
+
+  .templates-heading {
+    display: grid;
+    max-width: var(--text-max);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .template-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 56rem) {
+    .principles,
+    .info-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    }
+
+    .template-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

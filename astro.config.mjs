@@ -2,15 +2,17 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Slutlig domän för canonical och sitemap; preview förblir noindex.
-// Domänbytet påverkar metadata, inte hosting eller DNS.
+// Slutlig domän för canonical och sitemap; preview/prototyper förblir noindex.
 export default defineConfig({
   site: 'https://hallpartner.se',
   output: 'static',
   trailingSlash: 'always',
   integrations: [
     sitemap({
-      filter: (page) => new URL(page).pathname !== '/workshop/',
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        return pathname !== '/workshop/' && !pathname.startsWith('/prototype/');
+      },
     }),
   ],
 });

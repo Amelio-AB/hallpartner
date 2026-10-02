@@ -1,0 +1,81 @@
+---
+export interface Props {
+  intro?: string;
+  included?: string[];
+  options?: string[];
+  customer?: string[];
+}
+
+const {
+  intro,
+  included = [],
+  options = [],
+  customer = [],
+} = Astro.props;
+
+const groups = [
+  { title: 'Ingår normalt', items: included },
+  { title: 'Kan vara tillval', items: options },
+  { title: 'Kund eller annan part', items: customer },
+].filter((group) => group.items.length > 0);
+---
+
+{groups.length > 0 && (
+  <section class="section section--surface" aria-labelledby="scope-heading">
+    <div class="container">
+      <div class="scope-heading">
+        <p class="eyebrow">Leveransomfattning</p>
+        <h2 id="scope-heading">Vad omfattar leveransen?</h2>
+        {intro && <p class="lead">{intro}</p>}
+      </div>
+
+      <div class="scope-grid">
+        {groups.map((group) => (
+          <article class="scope-card">
+            <h3>{group.title}</h3>
+            <ul>
+              {group.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .scope-heading {
+    display: grid;
+    max-width: var(--text-max);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .scope-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .scope-card {
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-bg);
+  }
+
+  .scope-card h3 {
+    margin-bottom: var(--space-3);
+  }
+
+  .scope-card ul {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .scope-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+</style>
