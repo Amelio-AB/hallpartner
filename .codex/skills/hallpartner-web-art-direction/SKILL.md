@@ -269,3 +269,41 @@ Before considering a UI task complete, ask:
 - Does mobile have its own hierarchy rather than just stacking desktop?
 
 If the result still feels generic, revise the composition before calling the work complete.
+
+
+## Layout width system
+
+Full-width is a selective accent, not the default page container.
+
+Use three primary spatial widths:
+
+- **full-bleed** — reserved for major project imagery, hero imagery, selected bands and moments where physical scale matters
+- **wide content rail** — default for navigation, lists, responsibility, project facts and most structured content
+- **reading width** — for explanatory copy, knowledge content and longer text
+
+Avoid both extremes:
+
+- do not trap every section in a narrow centered wrapper
+- do not stretch every section across the full viewport
+
+On a 1440px desktop, use a centered wide rail around 1180–1240px as a starting point for text-heavy sections, then break out deliberately where the composition benefits.
+
+Whitespace must improve grouping and rhythm. If related text is visually too far apart, reduce the working width before adding decoration.
+
+### Selective full-width rule
+
+Good candidates for full-width or breakout treatment:
+
+- hero project image
+- large reference/project imagery
+- montage sequences
+- selected visual transition bands
+
+Poor candidates for universal full-width treatment:
+
+- navigation labels
+- explanatory paragraphs
+- responsibility matrices
+- category lists
+- contact details
+- factual metadata that needs comparison
