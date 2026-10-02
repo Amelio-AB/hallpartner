@@ -1,0 +1,311 @@
+/* Alternative art direction only. The original rail, content and breakpoints
+   stay in homepage-prototype.css; these rules require the direction-02 class. */
+.direction-02 {
+  --hp-graphite: #272d31;
+  --hp-graphite-deep: #202427;
+  --hp-green: #6c826c;
+  --hp-green-strong: #4e7a5b;
+  --hp-green-hover: #557d5e;
+  --hp-offwhite: #ebebe8;
+  --hp-concrete: #d9ddd8;
+  --hp-text-dark: #202427;
+  --hp-text-light: #f4f4f0;
+  /* Small text needs a darker tone to reach AA on the supplied green. */
+  --hp-text-on-green: #0c100c;
+  --hp-muted: #50575a;
+  --hp-steel: #9aa0a3;
+  --hp-line-dark: #677074;
+  --color-graphite: var(--hp-graphite);
+  --color-off-white: var(--hp-offwhite);
+  --color-steel: var(--hp-steel);
+  --color-concrete: var(--hp-concrete);
+  --color-deep-green: var(--hp-green-strong);
+  --color-bg: var(--color-off-white);
+  --color-text: var(--hp-text-dark);
+  --color-text-muted: var(--hp-muted);
+  --color-border: var(--color-steel);
+  --color-pale-stone: var(--color-steel);
+  --color-surface-warm: var(--color-concrete);
+  --color-light-sand: var(--hp-concrete);
+  --color-warm-taupe: var(--hp-steel);
+  --color-sage: var(--hp-green);
+  --color-action: var(--color-deep-green);
+  --color-focus: var(--color-deep-green);
+  --hp-contact-surface: var(--color-graphite);
+  --radius-pill: 0;
+  --shadow-soft: none;
+}
+.direction-02 h1,
+.direction-02 h2,
+.direction-02 h3 {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+.direction-02 .hp-label {
+  letter-spacing: 0.08em;
+}
+.direction-02 .action-link {
+  border-radius: 0;
+  box-shadow: none;
+}
+.direction-02 .action-link:hover {
+  transform: none;
+}
+.direction-02 .hp-header,
+.direction-02 .hp-hero,
+.direction-02 .hp-project {
+  --color-text: var(--hp-text-light);
+  --color-text-muted: var(--color-concrete);
+  --color-bg: var(--color-graphite);
+  --color-border: var(--hp-line-dark);
+  --color-action: var(--hp-text-light);
+  --color-on-action: var(--color-graphite);
+  --color-focus: var(--hp-text-light);
+  color: var(--color-text);
+  background: var(--color-graphite);
+}
+.direction-02 .hp-header {
+  margin-inline: 0;
+  padding-inline: var(--hp-rail-inset);
+  border-bottom: 1px solid var(--color-steel);
+}
+.direction-02 .hp-wordmark {
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+.direction-02 .hp-header .action-link--primary,
+.direction-02 .hp-hero .action-link--primary,
+.direction-02 .hp-contact .action-link--primary {
+  background-color: var(--hp-green-strong);
+  border: 0;
+  outline: 0;
+  box-shadow: none;
+  border-radius: 8px;
+  color: var(--hp-text-light);
+  /* The requested light text/green pair meets AA for large bold text. */
+  font-size: 19px;
+  font-weight: 700;
+}
+.direction-02 .hp-header .action-link--primary:hover,
+.direction-02 .hp-hero .action-link--primary:hover,
+.direction-02 .hp-contact .action-link--primary:hover {
+  background-color: var(--hp-green-hover);
+}
+.direction-02 .hp-header .action-link--primary:focus-visible,
+.direction-02 .hp-hero .action-link--primary:focus-visible {
+  outline: 3px solid var(--hp-text-light);
+  outline-offset: 3px;
+}
+.direction-02 .hp-hero {
+  padding-top: 0;
+  padding-bottom: 24px;
+}
+.direction-02 .hp-hero h1 {
+  line-height: 1;
+}
+@media (max-width: 47.999rem) {
+  .direction-02 .hp-hero-image {
+    object-position: 0% 50%;
+  }
+}
+.direction-02 .hp-technical-annotation {
+  background: var(--color-graphite);
+  border: 1px solid var(--color-steel);
+  border-top-width: 3px;
+}
+.direction-02 .hp-measure,
+.direction-02 .hp-technical-fields {
+  font-variant-numeric: tabular-nums;
+}
+.direction-02 .hp-needs {
+  --color-text: var(--hp-text-dark);
+  --color-text-muted: var(--hp-muted);
+  --color-action: var(--hp-green-strong);
+  --color-focus: var(--hp-green-strong);
+  background: var(--hp-offwhite);
+  padding-block: 56px;
+}
+.direction-02 .hp-needs .hp-label {
+  color: var(--hp-muted);
+}
+.direction-02 .hp-contact-copy .action-link--primary:focus-visible {
+  outline: 3px solid var(--hp-green-strong);
+  outline-offset: 3px;
+}
+.direction-02 .hp-need-list {
+  border-top: 2px solid var(--hp-text-dark);
+}
+.direction-02 .hp-need-list li {
+  border-bottom-color: var(--hp-text-dark);
+}
+.direction-02 .hp-need-title {
+  font-weight: 600;
+  color: var(--hp-text-dark);
+}
+@media (max-width: 47.999rem) {
+  .direction-02 .hp-need-title {
+    font-size: 24px;
+  }
+}
+.direction-02 .hp-project {
+  padding-block: 48px;
+  border-block: 1px solid var(--hp-line-dark);
+}
+.direction-02 .hp-project-facts {
+  margin: 0 var(--hp-edge);
+  padding: 24px 0;
+  border: 0;
+  border-top: 2px solid var(--hp-green-strong);
+  background: transparent;
+}
+.direction-02 .hp-project-facts dl > div {
+  border-bottom: 1px solid var(--hp-line-dark);
+  padding-block: 8px;
+}
+.direction-02 .hp-project-materials {
+  --color-bg: var(--hp-concrete);
+  --color-text: var(--hp-text-dark);
+  --color-text-muted: var(--hp-muted);
+  --color-focus: var(--hp-text-dark);
+  color: var(--color-text);
+  background: var(--hp-concrete);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  padding-block: 24px;
+  padding-inline: 20px;
+  border-top: 2px solid var(--hp-text-dark);
+}
+.direction-02 .hp-materials-intro,
+.direction-02 .hp-montage-detail,
+.direction-02 .hp-technical-drawing {
+  grid-column: auto;
+  grid-row: auto;
+  margin: 0;
+  border: 0;
+}
+.direction-02 .hp-materials-intro h3 {
+  color: var(--hp-text-dark);
+}
+.direction-02 .hp-montage-detail figcaption {
+  max-width: none;
+}
+.direction-02 .hp-project-materials figcaption {
+  border-top: 1px solid var(--color-graphite);
+  font-size: 14px;
+  font-weight: 500;
+}
+.direction-02 .hp-technical-drawing img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background: var(--color-white);
+}
+.direction-02 .hp-responsibility {
+  padding-block: 56px;
+}
+.direction-02 .hp-responsibility-matrix > div {
+  border-top-width: 2px;
+}
+.direction-02 .hp-contact {
+  margin-top: 0;
+  background: var(--hp-offwhite);
+  padding-block: 48px;
+  border-top: 1px solid var(--color-steel);
+}
+.direction-02 .hp-contact-rail {
+  display: grid;
+  gap: 32px;
+  align-items: center;
+}
+.direction-02 .hp-contact-copy {
+  --color-text: var(--hp-text-dark);
+  --color-text-muted: var(--hp-muted);
+  color: var(--hp-text-dark);
+}
+.direction-02 .hp-contact-copy > .action-link {
+  margin-top: 28px;
+}
+.direction-02 .hp-contact-copy .hp-contact-note {
+  margin-top: 22px;
+}
+.direction-02 .hp-portraits {
+  grid-template-columns: repeat(2, minmax(0, 112px));
+  gap: 24px;
+  margin: 0;
+  justify-content: start;
+  align-content: center;
+}
+.direction-02 .hp-portraits figcaption {
+  font-size: 18px;
+}
+@media (min-width: 48rem) {
+  .direction-02 .hp-project-composition {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 32px;
+    padding-inline: var(--hp-rail-inset);
+  }
+  .direction-02 .hp-project-media {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .direction-02 .hp-project-media img {
+    height: 480px;
+    aspect-ratio: auto;
+  }
+  .direction-02 .hp-project-media figcaption {
+    padding-inline: 0;
+  }
+  .direction-02 .hp-project-facts {
+    grid-column: 2;
+    grid-row: 1;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 20px 0 0;
+  }
+  .direction-02 .hp-project-facts dl > div {
+    grid-template-columns: 1fr;
+  }
+  .direction-02 .hp-project-materials {
+    grid-column: 1 / -1;
+    width: 100%;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 24px 32px;
+    margin-top: 8px;
+    padding: 32px;
+  }
+  .direction-02 .hp-portraits {
+    grid-row: 1;
+  }
+  .direction-02 .hp-materials-intro {
+    grid-column: 1 / -1;
+  }
+  .direction-02 .hp-contact-rail {
+    grid-template-columns: minmax(0, 1fr) 248px;
+  }
+}
+@media (min-width: 72rem) {
+  .direction-02 .hp-hero-copy {
+    padding-top: 48px;
+  }
+  .direction-02 .hp-hero h1 {
+    font-size: clamp(56px, 4.45vw, 68px);
+  }
+  .direction-02 .hp-needs,
+  .direction-02 .hp-responsibility {
+    padding-block: 72px;
+  }
+  .direction-02 .hp-project {
+    padding-block: 64px;
+  }
+  .direction-02 .hp-project-media img {
+    height: 540px;
+  }
+  .direction-02 .hp-project-facts dl > div {
+    grid-template-columns: minmax(190px, 1fr) auto;
+  }
+  .direction-02 .hp-contact {
+    padding-block: 56px;
+  }
+}

@@ -3,6 +3,7 @@ import SiteSeo from '../components/seo/SiteSeo.astro';
 import ActionLink from '../components/ui/ActionLink.astro';
 import { Image } from 'astro:assets';
 import heroImage from '../assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg';
+import industrialHeroImage from '../assets/images/legacy/lagerhall-green-details-hero-prototype.png';
 import projectImage from '../assets/images/legacy/lagerlokal-stalstomme-1536x1152.jpg';
 import detailImage from '../assets/images/legacy/Stalstomme-1-1536x1152.jpg';
 import drawingImage from '../assets/images/legacy/maskinhall-ritning.webp';
@@ -13,6 +14,14 @@ import { homepagePrototype as content } from '../data/homepagePrototype';
 import '../styles/foundation/tokens.css';
 import '../styles/foundation/base.css';
 import '../styles/homepage-prototype.css';
+import '../styles/direction-02.css';
+
+export interface Props {
+  direction?: 'original' | 'industrial';
+}
+
+const { direction = 'original' } = Astro.props;
+const industrial = direction === 'industrial';
 
 const canonical = new URL(Astro.url.pathname, Astro.site).toString();
 ---
@@ -30,18 +39,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       rel="stylesheet"
     />
     <SiteSeo
-      title="Startsidesprototyp v0.2 | Hallpartner"
+      title={industrial ? 'Nordic Industrial — Direction 02 | Hallpartner' : 'Startsidesprototyp v0.2 | Hallpartner'}
       description={content.disclaimer}
       canonical={canonical}
       noindex={true}
     />
   </head>
-  <body class="homepage-prototype" data-content-status={content.status}>
+  <body class:list={['homepage-prototype', { 'direction-02': industrial }]} data-content-status={content.status}>
     <a class="hp-skip" href="#main-content">Hoppa till huvudinnehållet</a>
     <header class="hp-header">
       <a
         class="hp-wordmark"
-        href="/prototype/start-v02/"
+        href={industrial ? '/prototype/direction-02/' : '/prototype/start-v02/'}
         aria-label="Hallpartner – startsidesprototyp">HALLPARTNER</a
       >
       <nav class="hp-desktop-nav" aria-label="Huvudnavigation, prototyp">
@@ -75,8 +84,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
         >
           <Image
             class="hp-hero-image"
-            src={heroImage}
-            alt="Grå hall med röd takkant och stora fasadytor under blå himmel"
+            src={industrial ? industrialHeroImage : heroImage}
+            alt={industrial
+              ? 'Grå hall med gröna hörn- och takdetaljer under blå himmel, bild för designprototypen'
+              : 'Grå hall med röd takkant och stora fasadytor under blå himmel'}
             widths={[480, 768, 1024, 1536]}
             sizes="(min-width: 1152px) 58vw, 100vw"
             loading="eager"
@@ -107,7 +118,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
           <figcaption>Bild ur befintligt material · används för designprototypen</figcaption>
         </figure>
       </section>
-      <section class="hp-needs hp-wide-rail" id="behov" aria-labelledby="needs-heading">
+      <section class:list={['hp-needs', { 'hp-wide-rail': !industrial }]} id="behov" aria-labelledby="needs-heading">
+        <div class:list={{ 'hp-wide-rail': industrial }}>
         <p class="hp-label">
           <span class="hp-desktop-only">Välj efter behov</span><span class="hp-mobile-only"
             >Behov</span
@@ -144,6 +156,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
             ))
           }
         </ul>
+        </div>
       </section>
       <section class="hp-project" id="projekt" aria-labelledby="project-heading">
         <div class="hp-project-intro hp-wide-rail">
@@ -251,6 +264,15 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
             <p class="hp-label">Kontakt</p><h2 id="contact-heading">
               Riktiga personer bakom nästa steg.
             </h2>
+            {industrial && (
+              <>
+                <ActionLink href={prototypeCta.href} label="Beskriv projektet" />
+                <p class="hp-contact-note hp-demo-note">
+                  Befintliga porträtt används som prototypmaterial. Roller och kontaktuppgifter verifieras
+                  inför publicering.
+                </p>
+              </>
+            )}
           </div>
           <div
             class="hp-portraits"
@@ -270,11 +292,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
               ))
             }
           </div>
-          <ActionLink href={prototypeCta.href} label="Beskriv projektet" />
+          {!industrial && <ActionLink href={prototypeCta.href} label="Beskriv projektet" />}
+          {!industrial && (
           <p class="hp-contact-note hp-demo-note">
             Befintliga porträtt används som prototypmaterial. Roller och kontaktuppgifter verifieras
             inför publicering.
           </p>
+          )}
         </div>
       </section>
     </main>
