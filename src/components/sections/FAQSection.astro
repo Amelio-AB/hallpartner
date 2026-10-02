@@ -1,0 +1,64 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="section" aria-labelledby="faq-heading">
+    <div class="container faq-layout">
+      <div>
+        <p class="eyebrow">Vanliga frågor</p>
+        <h2 id="faq-heading">Det kunden behöver förstå före nästa steg</h2>
+      </div>
+
+      <div class="faq-list">
+        {items.map((item) => (
+          <details>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .faq-layout {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  .faq-list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .faq-list details {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .faq-list summary {
+    padding-block: var(--space-4);
+    cursor: pointer;
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .faq-list p {
+    padding-bottom: var(--space-4);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 56rem) {
+    .faq-layout {
+      grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
+    }
+  }
+</style>
