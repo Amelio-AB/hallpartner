@@ -95,6 +95,6 @@ jobs:
           set net:max-retries 2
           set net:timeout 10
           open -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST"
-          mirror --reverse --verbose --dry-run --parallel=4 ./dist/ ./
+          mirror --reverse --verbose --parallel=4 ./dist/ ./
           bye
           EOF

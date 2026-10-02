@@ -64,7 +64,7 @@ FTP-kontots angivna custom root är /domains/hallpartner.se/public_html/.
 Remote target är därför ./, relativt inloggningsroten:
 
 ```text
-mirror --reverse --verbose --dry-run --parallel=4 ./dist/ ./
+mirror --reverse --verbose --parallel=4 ./dist/ ./
 ```
 
 Ingen delete används. Serverrooten är ännu inte verifierad genom en körning.
