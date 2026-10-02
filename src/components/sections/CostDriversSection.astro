@@ -1,0 +1,68 @@
+---
+export interface CostDriver {
+  title: string;
+  text: string;
+}
+
+export interface Props {
+  drivers: CostDriver[];
+}
+
+const { drivers } = Astro.props;
+---
+
+{drivers.length > 0 && (
+  <section class="section section--warm" aria-labelledby="cost-heading">
+    <div class="container">
+      <div class="cost-heading">
+        <p class="eyebrow">Kostnad</p>
+        <h2 id="cost-heading">Vad påverkar priset?</h2>
+        <p class="lead">
+          Sektionen ska förklara kostnadsdrivare utan att ge en falskt exakt kalkyl.
+        </p>
+      </div>
+
+      <div class="cost-grid">
+        {drivers.map((driver) => (
+          <article>
+            <h3>{driver.title}</h3>
+            <p>{driver.text}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+
+<style>
+  .cost-heading {
+    display: grid;
+    max-width: var(--text-max);
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .cost-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .cost-grid article {
+    padding-top: var(--space-4);
+    border-top: 1px solid rgb(46 46 46 / 16%);
+  }
+
+  .cost-grid h3 {
+    margin-bottom: var(--space-2);
+  }
+
+  .cost-grid p {
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 48rem) {
+    .cost-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
