@@ -1,0 +1,72 @@
+---
+export interface Props {
+  href: string;
+  label: string;
+  variant?: 'primary' | 'secondary' | 'text';
+}
+
+const { href, label, variant = 'primary' } = Astro.props;
+const external = /^https?:\/\//.test(href);
+---
+
+<a
+  class:list={['action-link', `action-link--${variant}`]}
+  href={href}
+  rel={external ? 'noopener noreferrer' : undefined}
+  target={external ? '_blank' : undefined}
+>
+  {label}
+</a>
+
+<style>
+  .action-link {
+    display: inline-flex;
+    min-height: 2.9rem;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.2rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      background-color var(--transition-base),
+      border-color var(--transition-base),
+      color var(--transition-base),
+      transform var(--transition-fast);
+  }
+
+  .action-link:hover {
+    transform: translateY(-1px);
+  }
+
+  .action-link--primary {
+    border-color: var(--color-action);
+    background: var(--color-action);
+    color: var(--color-on-action);
+  }
+
+  .action-link--primary:hover {
+    background: var(--color-graphite);
+    border-color: var(--color-graphite);
+  }
+
+  .action-link--secondary {
+    border-color: var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+  }
+
+  .action-link--secondary:hover {
+    border-color: var(--color-graphite);
+  }
+
+  .action-link--text {
+    min-height: auto;
+    padding-inline: 0;
+    color: var(--color-action);
+    text-decoration: underline;
+  }
+</style>
