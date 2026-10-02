@@ -1,0 +1,21 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import HallTemplate from '../../../templates/HallTemplate.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('halls');
+
+  return entries.map((entry) => ({
+    params: { id: entry.id },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<'halls'>;
+}
+
+const { entry } = Astro.props;
+---
+
+<HallTemplate entry={entry} prototype />
