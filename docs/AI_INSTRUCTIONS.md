@@ -4,7 +4,7 @@
 
 ## Syfte
 
-Detta dokument fungerar som den primära instruktionen för AI-assistenter
+AGENTS.md är primär instruktion. Detta dokument kompletterar den för AI-assistenter
 (Codex, Cursor, Claude Code m.fl.) som arbetar i projektet. Målet är att
 säkerställa ett konsekvent arbetssätt, hög kodkvalitet och ett enhetligt
 resultat.
@@ -13,7 +13,9 @@ resultat.
 
 # Projektets mål
 
-Bygg en presentationssajt i Astro som:
+Utveckla Hallpartners riktiga webbplats i Astro. I migration phase 1 bevaras
+befintliga sidor och komponenter: **pending live-site inventory**. Behåll noindex
+och endast FTP dry-run enligt AGENTS.md och README.md. Webbplatsen ska:
 
 - Förmedlar en premiumkänsla
 - Är snabb, tillgänglig och responsiv
@@ -40,6 +42,7 @@ AI ska:
 
 Prioritetsordning:
 
+0.  AGENTS.md
 1.  PROJECT_BRIEF.md
 2.  DESIGN_SYSTEM.md
 3.  PAGE_SPEC.md

@@ -96,7 +96,7 @@ Optimeringar:
 - Semantisk HTML
 - Strukturerad internlänkning
 
-Under presentationsfasen:
+Under utveckling och i preview (behåll skyddet):
 
     <meta name="robots" content="noindex,nofollow">
 
@@ -141,9 +141,13 @@ Miljöer:
 - Preview
 - Produktion
 
-Domän under konceptfas:
+Slutlig site/canonical: https://hallpartner.se.
+Preview: https://hallpartner-se.preview2.inleed.com.
 
-hallpartner.amelio.se
+Migration phase 1: befintligt lftp-workflow kör endast dry-run mot `./`,
+relativt kontots custom root `/domains/hallpartner.se/public_html/`.
+Verifiera root och granska första dry-run före upload. Ingen serverradering.
+DNS och secrets ändras inte. Se README.md för nästa steg.
 
 ---
 

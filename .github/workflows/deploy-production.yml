@@ -1,18 +1,9 @@
-# Produktionsdeploy för Hallpartner Vision Site.
-#
-# Körs automatiskt vid varje push till `main`, samt kan köras manuellt via
-# "Run workflow" (workflow_dispatch) i GitHub Actions-fliken.
-#
-# Flöde: npm ci → npm run build → endast innehållet i dist/ FTP-deployas
-# till hallpartner.amelio.se via lftp mirror. Inga autentiseringsuppgifter
-# finns i denna fil — FTP_HOST/FTP_USERNAME/FTP_PASSWORD hämtas från
-# repository-secrets.
-#
-# Uppladdningsmålet är "./public_html/" — verifierat att detta är
-# document root för hallpartner.amelio.se hos Inleed och att kontot
-# endast används för denna presentationssajt. Ingen --delete används
-# under den inledande testperioden, så inget raderas på servern.
-name: Deploy Hallpartner to production
+# Hallpartner preview — migration phase 1.
+# FTP-kontots angivna custom root är /domains/hallpartner.se/public_html/.
+# Remote target är därför ./ relativt inloggningsroten.
+# Granska första dry-run och verifiera root före aktivering av upload.
+# Ingen serverradering används. Secrets: FTP_HOST/FTP_USERNAME/FTP_PASSWORD.
+name: Hallpartner preview FTP dry-run
 
 on:
   push:
@@ -24,7 +15,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: hallpartner-production
+  group: hallpartner-preview
   cancel-in-progress: true
 
 jobs:
@@ -67,13 +58,13 @@ jobs:
           retention-days: 7
 
   deploy:
-    name: Deploy to hallpartner.amelio.se
+    name: Validate preview FTP target (dry-run)
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment:
-      name: production
-      url: https://hallpartner.amelio.se
+      name: preview
+      url: https://hallpartner-se.preview2.inleed.com
 
     steps:
       - name: Download verified build
@@ -82,21 +73,28 @@ jobs:
           name: hallpartner-dist
           path: dist/
 
+      - name: Verify downloaded build before FTP
+        shell: bash
+        run: |
+          test -d dist
+          test -s dist/index.html
+
       - name: Install lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
 
-      - name: Deploy via FTP (lftp mirror)
+      - name: Preview FTP dry-run (lftp mirror)
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
           lftp <<EOF
+          set cmd:fail-exit yes
           set ftp:ssl-allow no
           set ftp:passive-mode yes
           set net:max-retries 2
           set net:timeout 10
           open -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST"
-          mirror --reverse --verbose --parallel=4 ./dist/ ./public_html/
+          mirror --reverse --verbose --dry-run --parallel=4 ./dist/ ./
           bye
           EOF

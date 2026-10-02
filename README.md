@@ -1,8 +1,9 @@
-# Hallpartner Vision Site
+# Hallpartner webbplats
 
-En digital presentations- och visionssajt för Hallpartner, framtagen av Amelio.
-Sajten fungerar både som en presentation inför ett första kundmöte och som ett
-interaktivt förslag på hur Hallpartners framtida webbplats kan upplevas.
+Kodbas för Hallpartners riktiga webbplats på **https://hallpartner.se**,
+vidareutvecklad från Amelios visionssajt. Migration phase 1 förbereder
+preview och teknisk grund. Befintliga sidor, komponenter och bilder bevaras.
+Slutligt innehåll och sidstruktur: **pending live-site inventory**.
 
 > Fullständig projektdokumentation finns i [`docs/`](docs/) — läs den innan
 > större ändringar görs. Se även [AGENTS.md](AGENTS.md) för riktlinjer till
@@ -44,47 +45,54 @@ public/
 docs/           Projektdokumentation (brief, designsystem, sidspecifikation m.m.)
 ```
 
-## Deployment
+## Deployment — migration phase 1
 
-Sajten byggs som en helt statisk Astro-site (`output: 'static'`) och kan
-driftas på valfri statisk webbhosting. Domän under konceptfasen:
-**hallpartner.amelio.se** (satt som `site` i `astro.config.mjs`).
+Astro bygger statiskt till dist/. Site är https://hallpartner.se:
+BaseLayout skapar canonical från Astro.site, och sitemap använder samma domän.
+Det påverkar metadata och XML, inte previewhosting eller DNS. /workshop/
+är fortsatt undantagen från sitemap; övrig befintlig struktur bevaras.
 
-```bash
-npm run build
-# → innehåll klart att publiceras i ./dist/
+.github/workflows/deploy-production.yml behåller befintligt lftp-flöde,
+men kör **endast dry-run**, vid push till main eller workflow_dispatch.
+Previewmiljöns URL är https://hallpartner-se.preview2.inleed.com.
+Permissions är contents: read. Bygget valideras innan artifact sparas,
+och nedladdad dist/index.html kontrolleras igen före FTP.
+Credentials hämtas från repository secrets FTP_HOST, FTP_USERNAME,
+FTP_PASSWORD; värden ska inte ändras eller skrivas ut.
+
+FTP-kontots angivna custom root är /domains/hallpartner.se/public_html/.
+Remote target är därför ./, relativt inloggningsroten:
+
+```text
+mirror --reverse --verbose --dry-run --parallel=4 ./dist/ ./
 ```
 
-### Automatisk produktionsdeploy
-
-`.github/workflows/deploy-production.yml` bygger projektet (`npm ci` +
-`npm run build`) och FTP-deployar innehållet i `dist/` till
-hallpartner.amelio.se. Workflowen körs automatiskt vid push till `main`,
-och kan även köras manuellt via "Run workflow" (workflow_dispatch) i
-GitHub Actions-fliken. FTP-uppgifter (`FTP_SERVER`, `FTP_USERNAME`,
-`FTP_PASSWORD`) hämtas från repository secrets — inga uppgifter
-hårdkodas i workflow-filen.
-
-Fjärrkatalogen (`server-dir`) är satt till `./public_html/` — verifierat
-som document root för hallpartner.amelio.se hos Inleed.
+Ingen delete används. Serverrooten är ännu inte verifierad genom en körning.
+Granska första dry-run och bekräfta i DirectAdmin att kontot är isolerat till
+rätt document root före en separat ändring som aktiverar riktig upload.
+Dry-run-loggen ensam bevisar inte den fysiska serverkatalogen.
+DNS för hallpartner.se pekar fortsatt mot befintlig WordPress och ändras inte här.
+Arkivbranchen archive/vision-site-2026-10-02 ska lämnas orörd.
 
 ## Noindex-status
 
-Sajten är för närvarande en **privat kundpresentation** och ska inte
-indexeras av sökmotorer:
+Preview och utvecklingsbygget ska fortsatt vara noindex. SeoHead, BaseLayout
+och PresentationLayout har noindex = true som standard. Sidornas metatagg
+är noindex,nofollow. robots.txt tillåter hämtning så att metataggen kan läsas;
+Allow är alltså inte ett indexeringsgodkännande. Sitemap pekar på slutlig domän.
+Indexering får aktiveras först vid en separat godkänd lansering.
 
-- `public/robots.txt` tillåter hämtning så att sidan kan granskas, medan
-  sidornas metatagg förhindrar indexering.
-- Varje sida sätter `<meta name="robots" content="noindex,nofollow">` via
-  `src/components/SeoHead.astro` (standardvärdet `noindex = true`).
+## Nästa steg — pending live-site inventory
 
-### Ta bort noindex när sajten blir publik
-
-1. I `src/components/SeoHead.astro`, ändra standardvärdet `noindex = true`
-   till `noindex = false` (eller skicka `noindex={false}` explicit från
-   respektive layout/sida).
-2. `@astrojs/sitemap`-integrationen i `astro.config.mjs` kan behållas som den
-   är — den genererar redan en korrekt `sitemap-index.xml`.
+- Inventera nuvarande live-sajt innan nya routes, sitemap eller innehåll beslutas.
+- Bedöm vilka presentationsdelar som ska återanvändas, skrivas om eller tas bort.
+- Samla originalbilder i src/assets/images/legacy/ med ursprungliga filnamn;
+  inventera källor och rättigheter innan optimering och användning.
+- Granska FTP dry-run, document root och GitHub-miljöns skyddsregler före upload.
+- Planera senare lansering: metadata, sitemap, indexering och DNS separat.
+- Granska befintliga beroenden före publicering. npm audit vid phase 1 rapporterar
+  10 sårbarheter (1 moderate, 8 high, 1 critical), inklusive Astro
+  GHSA-26w7-cxv4-gfx2. Ingen automatisk audit fix eller versionsändring gjordes.
 
 ## Dokumentation
 

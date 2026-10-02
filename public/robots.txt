@@ -1,16 +1,8 @@
-# Hallpartner Vision Site — presentationsfas
-#
-# Denna webbplats är en privat kundpresentation. Den hålls borta från
-# sökresultat via en noindex-metatagg (se src/components/SeoHead.astro),
-# inte via robots.txt — hämtning ska vara tillåten så att legitima
-# verktyg och AI-assistenter kan läsa sidan för granskning.
-#
-# NÄR SAJTEN BLIR PUBLIK: ta bort noindex-metataggen i
-# src/components/SeoHead.astro så att sökmotorer får indexera sidan.
-# Sitemap-integrationen (@astrojs/sitemap) kan då fortsätta användas
-# som den är.
+# Hallpartner — utvecklingsfas
+# Hämtning tillåts så att sidornas noindex,nofollow kan läsas.
+# Behåll noindex i SeoHead och layouterna tills lanseringen godkänts.
 
 User-agent: *
 Allow: /
 
-Sitemap: https://hallpartner.amelio.se/sitemap-index.xml
+Sitemap: https://hallpartner.se/sitemap-index.xml

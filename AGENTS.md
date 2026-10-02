@@ -1,6 +1,6 @@
 # AGENTS.md
 
-# Hallpartner Vision Site -- AI Agent Guide
+# Hallpartner webbplats -- AI Agent Guide
 
 > Detta dokument är den primära instruktionen för alla AI-agenter som
 > arbetar i projektet. Läs dokumentet innan någon kod skrivs eller
@@ -10,9 +10,18 @@
 
 # Projektets syfte
 
-Projektet är en visionssajt som presenterar en möjlig framtida digital
-plattform för Hallpartner. Fokus ligger på att kommunicera kvalitet,
-förtroende och långsiktig affärsnytta -- inte att sälja en webbplats.
+Repot är kodbasen för Hallpartners riktiga webbplats på https://hallpartner.se.
+Migration phase 1 förbereder preview och teknisk grund. Fokus ligger på
+kvalitet, förtroende och långsiktig affärsnytta.
+
+Befintliga sidor, komponenter och bilder bevaras tills live-sajten inventerats:
+**pending live-site inventory**. Äldre sid- och innehållsspecifikationer
+beskriver visionskonceptet, inte beslutad produktionsstruktur.
+
+Preview: https://hallpartner-se.preview2.inleed.com. Behåll noindex.
+FTP får i denna fas endast köras med dry-run mot kontots root `./`.
+Granska resultatet före aktivering av upload. Ändra inte DNS, secrets eller
+arkivbranchen `archive/vision-site-2026-10-02`.
 
 ---
 
@@ -151,8 +160,7 @@ Arkitekturen ska vara redo för:
 
 # Slutord
 
-Målet är inte bara att skapa en snygg presentationssajt, utan att lägga
-grunden för en hållbar digital plattform som kan utvecklas tillsammans
-med Hallpartners verksamhet.
+Målet är en hållbar webbplats som kan utvecklas tillsammans med
+Hallpartners verksamhet.
 
 Version 1.0

@@ -2,6 +2,11 @@
 
 # Hallpartner Vision Site -- Page Specification
 
+> Migration phase 1: Repot är nu kodbasen för Hallpartners riktiga webbplats.
+> Nedanstående beskriver det bevarade visionskonceptet, inte en beslutad
+> produktionsspecifikation. Innehåll och struktur: **pending live-site inventory**.
+> Se AGENTS.md och README.md för aktuell omfattning.
+
 ## Översikt
 
 Detta dokument beskriver syftet och den funktionella specifikationen för
