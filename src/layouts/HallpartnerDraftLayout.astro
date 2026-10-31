@@ -19,34 +19,42 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content="noindex,nofollow" />
-    <title>{title} – intern Hallpartner-prototyp</title>
+    <title>{title} – Hallpartner, intern prototyp</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
   </head>
   <body class="hp-draft">
     <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
     <div class="hp-draft-alert" role="note">
-      Intern arbetsprototyp – inga publiceringsklara kundtexter eller integrerade AMP-komponenter
+      <span class="hp-draft-alert__tag"><span aria-hidden="true" class="hp-draft-alert__dot"></span> Arbetsversion</span>
+      <span>Intern arbetsprototyp – texter, bilder och kunduppgifter inväntar godkännande.</span>
     </div>
-    <!-- Temporär statisk reservnavigation; ersätts med AMP-002 först efter verifierad installation. -->
+    <!-- Tillfällig responsiv navigation. AMP-002 tar över när paketinstallation och runtime är verifierade. -->
     <header class="hp-draft-header">
       <div class="hp-draft-rail hp-draft-header__inner">
-        <a class="hp-draft-brand" href={draftBase}>
+        <a class="hp-draft-brand" href={draftBase + 'start/'} aria-label="Hallpartner – till startsidesprototypen">
           Hallpartner
-          <small>Intern sidstruktur</small>
+          <small>Visuell arbetsversion · ej originallogotyp</small>
         </a>
-        <nav class="hp-draft-nav" aria-label="Prototypens navigation">
-          <a href={draftBase} aria-current={!currentSlug ? 'page' : undefined}>Översikt</a>
+        <button
+          class="hp-draft-nav-toggle"
+          type="button"
+          aria-label="Visa meny"
+          aria-expanded="false"
+          aria-controls="hp-proto-nav"
+          data-hp-nav-toggle
+        >
+          <span aria-hidden="true" class="hp-draft-nav-toggle__icon"><span></span><span></span></span>
+          <span class="hp-draft-nav-toggle__label">Meny</span>
+        </button>
+        <nav class="hp-draft-nav" id="hp-proto-nav" aria-label="Prototypens navigation">
           <a href={draftBase + 'start/'} aria-current={isCurrent('start')}>Startsida</a>
           <a href={draftBase + 'hallar/'} aria-current={isCurrent('hallar')}>Hallar</a>
           <a href={draftBase + 'sa-gar-det-till/'} aria-current={isCurrent('sa-gar-det-till')}>Så går det till</a>
-          <a href={draftBase + 'kontakt/'} aria-current={isCurrent('kontakt')}>Kontakt</a>
+          <a class="hp-draft-nav__cta" href={draftBase + 'kontakt/'} aria-current={isCurrent('kontakt')}>Kontakt <span aria-hidden="true">↗</span></a>
         </nav>
       </div>
     </header>
@@ -54,9 +62,51 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
       <slot />
     </main>
     <footer class="hp-draft-footer">
-      <div class="hp-draft-rail">
-        <p>Endast granskning av sidstruktur. <a href={draftBase}>Till prototypöversikten</a>.</p>
+      <div class="hp-draft-rail hp-draft-footer__inner">
+        <div>
+          <p class="hp-draft-footer__brand">Hallpartner</p>
+          <p class="hp-draft-footer__note">Visuell webbplatsprototyp för intern granskning. Ingen kundgodkänd publiceringsversion.</p>
+        </div>
+        <div class="hp-draft-footer__links">
+          <a href={draftBase + 'hallar/'}>Hallar</a>
+          <a href={draftBase + 'kontakt/'}>Kontaktutkast</a>
+          <a href={draftBase}>Alla prototypsidor</a>
+        </div>
       </div>
+      <div class="hp-draft-rail hp-draft-footer__footnote">Befintliga bilder används enbart för layouttest i denna noindexerade arbetsgren. Rättigheter och referenser återstår att verifiera.</div>
     </footer>
+
+    <script>
+      const header = document.querySelector<HTMLElement>('.hp-draft-header');
+      const menuButton = header?.querySelector<HTMLButtonElement>('[data-hp-nav-toggle]');
+      const menu = header?.querySelector<HTMLElement>('#hp-proto-nav');
+      if (header && menuButton && menu) {
+        header.classList.add('hp-draft-header--js');
+
+        const closeMenu = (returnFocus = false) => {
+          menu.classList.remove('is-open');
+          menuButton.setAttribute('aria-expanded', 'false');
+          menuButton.setAttribute('aria-label', 'Visa meny');
+          if (returnFocus) menuButton.focus();
+        };
+
+        menuButton.addEventListener('click', () => {
+          const isOpen = menu.classList.toggle('is-open');
+          menuButton.setAttribute('aria-expanded', String(isOpen));
+          menuButton.setAttribute('aria-label', isOpen ? 'Stäng meny' : 'Visa meny');
+        });
+        menu.addEventListener('click', (event) => {
+          if (event.target instanceof Element && event.target.closest('a')) closeMenu();
+        });
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+            closeMenu(true);
+          }
+        });
+        window.matchMedia('(min-width: 801px)').addEventListener('change', (event) => {
+          if (event.matches) closeMenu();
+        });
+      }
+    </script>
   </body>
 </html>
