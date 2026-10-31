@@ -9,7 +9,15 @@ const base = '/prototype/hallpartner/';
 ---
 
 <div class="hp-home">
-  <section class="hp-home-hero" aria-labelledby="hp-home-title">
+  <section class="hp-home-hero" aria-labelledby="hp-home-title" data-hero data-hero-tone="dark">
+    <Image
+      src={lagerhall}
+      alt=""
+      loading="eager"
+      fetchpriority="high"
+      class="hp-home-hero__background"
+    />
+    <div class="hp-home-hero__overlay" aria-hidden="true"></div>
     <div class="hp-draft-rail hp-home-hero__grid">
       <div class="hp-home-hero__copy">
         <p class="hp-home-kicker"><span class="hp-home-kicker__line" aria-hidden="true"></span> Hallpartner / Hallar</p>
@@ -30,19 +38,6 @@ const base = '/prototype/hallpartner/';
         </div>
         <p class="hp-home-hero__caption">Arbetsutkast för visuell granskning. Sortiment och innehåll inväntar kundverifiering.</p>
       </div>
-      <figure class="hp-home-hero__visual">
-        <Image
-          src={lagerhall}
-          alt="Hallbyggnad från befintligt presentationsmaterial, använd som demonstrationsbild."
-          loading="eager"
-          fetchpriority="high"
-          class="hp-home-hero__image"
-        />
-        <figcaption class="hp-home-hero__image-note">
-          <span class="hp-home-hero__image-line" aria-hidden="true"></span>
-          <span>Hallmiljö · bild för layouttest, rättigheter ej verifierade</span>
-        </figcaption>
-      </figure>
     </div>
     <div class="hp-home-hero__edge" aria-hidden="true"></div>
   </section>
