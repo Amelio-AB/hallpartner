@@ -73,7 +73,7 @@ jobs:
             exit 0
           fi
           echo "Browser: $BROWSER" > visual-review/STATUS.txt
-          npm run preview -- --host 127.0.0.1 --port 4321 > visual-review/preview-server.log 2>&1 &
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/preview-server.log 2>&1 &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
@@ -117,7 +117,7 @@ jobs:
           mkdir -p visual-review
           BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
           if [ -z "$BROWSER" ]; then exit 0; fi
-          npm run preview -- --host 127.0.0.1 --port 4321 > visual-review/preview-tall-server.log 2>&1 &
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/preview-tall-server.log 2>&1 &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
