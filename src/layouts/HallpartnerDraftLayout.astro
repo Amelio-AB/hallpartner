@@ -113,6 +113,14 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
         menu.addEventListener('click', (event) => {
           if (event.target instanceof Element && event.target.closest('a')) closeMenu();
         });
+        // A tap outside an expanded mobile menu should restore the page view.
+        // Do not intercept clicks or change focus on the destination itself.
+        document.addEventListener('pointerdown', (event) => {
+          if (menuButton.getAttribute('aria-expanded') === 'true' &&
+              event.target instanceof Node && !header.contains(event.target)) {
+            closeMenu();
+          }
+        });
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
             closeMenu(true);
