@@ -3,7 +3,7 @@ import HallpartnerDraftLayout from '../../../layouts/HallpartnerDraftLayout.astr
 import { draftHref, draftPageSpecs, type DraftPageSpec } from '../../../config/hallpartner-draft-pages';
 
 export function getStaticPaths() {
-  return draftPageSpecs.filter((page) => page.slug !== 'start' && page.slug !== 'hallar').map((page) => ({
+  return draftPageSpecs.filter((page) => !['start', 'hallar', 'lagerhallar'].includes(page.slug)).map((page) => ({
     params: { slug: page.slug },
     props: { page },
   }));
