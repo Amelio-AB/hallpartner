@@ -59,9 +59,16 @@ test('information model keeps application, construction, and insulation distinct
   assert.equal(pageBySlug.get('isolerade-hallar')?.group, 'property');
 });
 
-test('previous home composition is not silently replaced by AMP-004', () => {
-  assert.equal(pageBySlug.get('start')?.hero, 'split');
+test('approved full-bleed home hero remains a labelled draft, not AMP integration', () => {
+  assert.equal(pageBySlug.get('start')?.hero, 'fullbleed');
   assert.equal(pageBySlug.get('ridhus')?.hero, 'signature');
+  const home = readFileSync(new URL('../src/components/prototype/HallpartnerHomePrototype.astro', import.meta.url), 'utf8');
+  const homeStyles = readFileSync(new URL('../src/styles/hallpartner-home.css', import.meta.url), 'utf8');
+  assert.ok(home.includes('src="/images/hallpartner-hero-temporary.webp"'));
+  assert.match(home, /AI-genererad konceptbild/);
+  assert.match(homeStyles, /\.hp-home-hero__background\s*\{/);
+  assert.doesNotMatch(homeStyles, /grid-template-columns:\s*1\.7rem 1fr/);
+  assert.doesNotMatch(home, /hp-home-(?:number|step|index|badge)/);
 });
 
 test('CSS shell color roles mirror the verified Direction 02 configuration', () => {

@@ -736,10 +736,6 @@
     padding-left: 1.25rem;
   }
 
-  .hp-home-planning__list li {
-    grid-template-columns: 1.7rem 1fr;
-    gap: 1rem;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

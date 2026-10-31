@@ -6,7 +6,7 @@
  * Never render intendedPath as a live navigation target until migration.
  */
 export type DraftPageGroup = 'overview' | 'usage' | 'construction' | 'property' | 'information';
-export type DraftHeroChoice = 'split' | 'signature' | 'intro';
+export type DraftHeroChoice = 'fullbleed' | 'signature' | 'intro';
 
 export interface DraftPageSpec {
   readonly slug: string;
@@ -26,11 +26,11 @@ export interface DraftPageSpec {
 
 export const draftPageSpecs: readonly DraftPageSpec[] = [
   {
-    slug: 'start', label: 'Startsida', intendedPath: '/', group: 'overview', hero: 'split',
+    slug: 'start', label: 'Startsida', intendedPath: '/', group: 'overview', hero: 'fullbleed',
     purpose: 'Orientera besökaren, förklara nästa steg och hänvisa till rätt innehåll utan att duplicera hallöversikten.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
-      { heading: 'Introduktion', editorialNote: 'Bevara startsida v0.3:s delade mörka Hero när fulltext och bildanvisningar återfunnits. AMP-004 är endast ett separat jämförelsealternativ.' },
+      { heading: 'Introduktion', editorialNote: 'Enligt nytt designbeslut har startsidan bild i helbredd, även bakom transparent header. Bild är AI-genererad konceptvisualisering; AMP-004 är ännu inte integrerad.' },
       { heading: 'Välj rätt väg', editorialNote: 'Visa relevanta användningsområden, men påstå inte att specifika hallutföranden ingår utan verifierat sortiment.' },
       { heading: 'Nästa steg', editorialNote: 'Länka till kontakt först när en verkligt fungerande kontaktväg är kontrollerad.' },
     ],
