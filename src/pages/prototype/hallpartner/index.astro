@@ -1,0 +1,49 @@
+---
+import HallpartnerDraftLayout from '../../../layouts/HallpartnerDraftLayout.astro';
+import { draftHref, draftPageSpecs, type DraftPageGroup } from '../../../config/hallpartner-draft-pages';
+
+const groups: readonly { key: DraftPageGroup; label: string; explanation: string }[] = [
+  { key: 'overview', label: 'Orientering', explanation: 'Startsidan och hallöversikten har olika uppgifter.' },
+  { key: 'usage', label: 'Användningsområden', explanation: 'Besökarens verksamhet och behov.' },
+  { key: 'construction', label: 'Konstruktionsutföranden', explanation: 'Tält och plåt är utföranden, inte användningsområden.' },
+  { key: 'property', label: 'Byggnadsegenskaper', explanation: 'Isolering kan vara relevant för flera utföranden.' },
+  { key: 'information', label: 'Företag och nästa steg', explanation: 'Process, ansvar och en fungerande kontaktväg återstår att verifiera.' },
+];
+---
+
+<HallpartnerDraftLayout
+  title="Sidstruktur"
+  description="Intern, noindexerad arbetsöversikt – inte publiceringsklar webbplats"
+>
+  <section class="hp-draft-intro">
+    <div class="hp-draft-rail">
+      <p class="hp-draft-eyebrow">Teknisk sidstruktur · version 0.1</p>
+      <h1>Hallpartners planerade sidor</h1>
+      <p class="hp-draft-lead">Detta visar vilka sidor som ska finnas och hur de länkas samman, utan att ersätta gamla sidutkast med nya texter.</p>
+      <p class="hp-draft-status">Alla 11 originalutkast saknas ännu i fulltext. Inget på denna sida är godkänd kundcopy.</p>
+    </div>
+  </section>
+  <div class="hp-draft-rail hp-draft-content">
+    <div class="hp-draft-note" role="note">
+      <strong>Vad som testas:</strong> sidstruktur, kategorier och interna länkar. Hero, meny och sidfot från Amelio Web Platform är ännu inte installerade. Inga formulär eller prisfunktioner är aktiva.
+    </div>
+    {groups.map((group) => (
+      <section aria-labelledby={`group-${group.key}`}>
+        <h2 id={`group-${group.key}`}>{group.label}</h2>
+        <p class="hp-draft-copy">{group.explanation}</p>
+        <ul class="hp-draft-cards">
+          {draftPageSpecs.filter((page) => page.group === group.key).map((page) => (
+            <li>
+              <article class="hp-draft-card">
+                <h3>{page.label}</h3>
+                <p>{page.purpose}</p>
+                <a href={draftHref(page.slug)}>Visa strukturen för {page.label.toLowerCase()}</a>
+              </article>
+            </li>
+          ))}
+        </ul>
+        <hr class="hp-draft-divider" />
+      </section>
+    ))}
+  </div>
+</HallpartnerDraftLayout>
