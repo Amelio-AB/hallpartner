@@ -72,6 +72,21 @@ for (const slug of ['hallar', 'kontakt']) {
   assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', slug, 'index.html')), 'broken storage target: ' + href);
 }
 
+// Maskinhallar has a dedicated visitor-facing composition, not generic editorial placeholders.
+const machines = readFileSync(join(dist, 'prototype', 'hallpartner', 'maskinhallar', 'index.html'), 'utf8');
+assert.ok(machines.includes('Plats för maskiner. Utrymme för arbetet.'), 'missing machine hall Hero');
+for (const id of ['hp-machines-use', 'hp-machines-movement', 'hp-machines-questions']) {
+  assert.ok(machines.includes('id="' + id + '"'), 'missing machine section: ' + id);
+}
+assert.ok((machines.match(/<img(?:\\s|>)/gi) ?? []).length >= 2, 'machine page needs two rendered images');
+assert.ok(machines.includes('Ursprungligt fulltextutkast saknas'), 'machine page must disclose unverified copy');
+assert.ok(machines.includes('noindex,nofollow'), 'machine page must remain noindex');
+for (const slug of ['hallar', 'lagerhallar', 'kontakt']) {
+  const href = '/prototype/hallpartner/' + slug + '/';
+  assert.ok(machines.includes(href), 'missing machine link: ' + href);
+  assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', slug, 'index.html')), 'broken machine target: ' + href);
+}
+
 const sitemapFiles = readdirSync(dist).filter((file) => /^sitemap.*\.xml$/.test(file));
 assert.ok(sitemapFiles.length > 0, 'expected an XML sitemap from Astro build');
 for (const file of sitemapFiles) {
