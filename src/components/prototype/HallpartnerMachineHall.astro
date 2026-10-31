@@ -1,0 +1,324 @@
+---
+import { Image } from 'astro:assets';
+import maskinhall from '../../assets/images/maskinhall.jpeg';
+import lagerhall from '../../assets/images/lagerhall.jpg';
+
+const base = '/prototype/hallpartner/';
+
+const questions = [
+  {
+    heading: 'Vilka maskiner ska stå där?',
+    body: 'Beskriv maskintyper, ungefärliga yttermått och om utrustningen förändras under året. Det ger en utgångspunkt utan att låsa hallens storlek.',
+  },
+  {
+    heading: 'Hur ska de tas in och ut?',
+    body: 'Tänk på infart, svängutrymme och hur ofta maskinerna flyttas. Portplacering och öppningsmått behöver prövas mot det verkliga projektet.',
+  },
+  {
+    heading: 'Ska du arbeta i hallen?',
+    body: 'Förvaring och löpande arbete ställer olika frågor om arbetsytor och tillgång. Beskriv hur platsen faktiskt ska användas, inte bara vad som ska få rum.',
+  },
+] as const;
+
+const checklist = [
+  'Vilka maskiner eller redskap gäller det?',
+  'Ungefärliga mått och behov av fri yta?',
+  'Hur ofta behöver maskiner köras in och ut?',
+  'Var är hallen tänkt att placeras?',
+  'Ska ytan användas till arbete eller huvudsakligen förvaring?',
+] as const;
+---
+
+<div class="hp-machine">
+  <section class="hp-machine-hero" aria-labelledby="hp-machine-title">
+    <div class="hp-draft-rail hp-machine-hero__grid">
+      <figure class="hp-machine-hero__media">
+        <Image
+          src={maskinhall}
+          class="hp-machine-hero__image"
+          loading="eager"
+          fetchpriority="high"
+          alt="Hallbyggnad från befintligt demonstrationsmaterial. Inte en verifierad Hallpartner-leverans."
+        />
+        <figcaption>Illustrationsbild för intern granskning · bildrättigheter kontrolleras före publicering</figcaption>
+      </figure>
+      <div class="hp-machine-hero__copy">
+        <p class="hp-machine-eyebrow hp-machine-eyebrow--light">Hallpartner <span aria-hidden="true">/</span> Maskinhallar</p>
+        <h1 id="hp-machine-title">Plats för maskiner. Utrymme för arbetet.</h1>
+        <p class="hp-machine-hero__lead">
+          En maskinhall planeras bäst med maskinerna som utgångspunkt.
+          Hur stora är de, hur rör de sig och vad behöver du kunna göra inne i hallen?
+        </p>
+        <div class="hp-machine-hero__actions">
+          <a class="hp-machine-button" href="#hp-machines-use">Börja med användningen <span aria-hidden="true">↓</span></a>
+          <a class="hp-machine-textlink hp-machine-textlink--light" href={base + 'hallar/'}>Se alla halltyper <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hp-machine-hero__note">Arbetsprototyp. Varken Hallpartners sortiment, tillgängliga mått eller leveransomfattning är verifierade.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="hp-machine-path">
+    <div class="hp-draft-rail hp-machine-path__inner">
+      <span>Utforska sidan</span>
+      <a href="#hp-machines-use">Användning <span aria-hidden="true">↓</span></a>
+      <a href="#hp-machines-movement">Åtkomst <span aria-hidden="true">↓</span></a>
+      <a href="#hp-machines-questions">Inför kontakt <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+
+  <section class="hp-machine-use" id="hp-machines-use" aria-labelledby="hp-machine-use-title">
+    <div class="hp-draft-rail">
+      <div class="hp-machine-use__heading">
+        <div>
+          <p class="hp-machine-eyebrow">Första frågan</p>
+          <h2 id="hp-machine-use-title">Utgå från maskinerna, inte hallmåtten.</h2>
+        </div>
+        <p>
+          En tänkt golvyta säger inte allt om hur en maskinhall ska fungera.
+          Det är maskinernas storlek och det arbete som ska göras som avgör vilka
+          frågor som behöver utredas.
+        </p>
+      </div>
+      <div class="hp-machine-use__questions">
+        {questions.map((item) => (
+          <article class="hp-machine-question">
+            <span class="hp-machine-question__rule" aria-hidden="true"></span>
+            <h3>{item.heading}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+      <p class="hp-machine-use__footnote">Frågorna är planeringsstöd. De är inte projektering eller ett löfte om ett visst utförande.</p>
+    </div>
+  </section>
+
+  <section class="hp-machine-movement" id="hp-machines-movement" aria-labelledby="hp-machine-movement-title">
+    <div class="hp-draft-rail hp-machine-movement__grid">
+      <div class="hp-machine-movement__copy">
+        <p class="hp-machine-eyebrow">En hall används på riktigt</p>
+        <h2 id="hp-machine-movement-title">Vägen in behöver också fungera.</h2>
+        <p>
+          Föreställ dig en vanlig arbetsdag. Vilka maskiner ska passera en öppning,
+          var behöver de vända och vilken utrustning ska vara lätt att nå?
+        </p>
+        <p>
+          En enkel skiss med rörelser och ytor är ofta ett bra underlag för samtal.
+          Den är däremot inte en teknisk ritning. Portar, bärverk och platsförutsättningar
+          måste prövas innan ett konkret hallförslag kan beskrivas.
+        </p>
+        <a class="hp-machine-textlink" href={base + 'lagerhallar/'}>Jämför med förvaring och lager <span aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="hp-machine-movement__figure">
+        <Image
+          src={lagerhall}
+          loading="lazy"
+          alt="Hallbyggnad i äldre presentationsmaterial. Illustrerar volym och åtkomst, inte ett verifierat maskinhallsprojekt."
+        />
+        <figcaption>Illustrationsbild · inte en dokumenterad Hallpartner-referens</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="hp-machine-questions" id="hp-machines-questions" aria-labelledby="hp-machine-questions-title">
+    <div class="hp-draft-rail hp-machine-questions__grid">
+      <div class="hp-machine-questions__intro">
+        <p class="hp-machine-eyebrow">När du vill gå vidare</p>
+        <h2 id="hp-machine-questions-title">Några uppgifter räcker för att börja prata.</h2>
+        <p>
+          Du behöver inte ha bestämt hallens konstruktion. Börja med det du känner
+          till om användningen och platsen.
+        </p>
+      </div>
+      <div>
+        <ul class="hp-machine-checklist">
+          {checklist.map((item) => (
+            <li><span aria-hidden="true">↗</span><span>{item}</span></li>
+          ))}
+        </ul>
+        <p class="hp-machine-questions__note">Inga formulär skickar meddelanden i denna prototyp. Faktisk kontaktmottagning återstår att verifiera.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-machine-final" aria-labelledby="hp-machine-final-title">
+    <div class="hp-draft-rail hp-machine-final__inner">
+      <div>
+        <p class="hp-machine-eyebrow hp-machine-eyebrow--light">Nästa steg</p>
+        <h2 id="hp-machine-final-title">Berätta hur du vill använda hallen.</h2>
+        <p>Beskriv maskiner, rörelser och platsförutsättningar. Vi har ännu inte verifierat vem som tar emot förfrågningar – kontaktsidan är tills vidare ett arbetsutkast.</p>
+      </div>
+      <a class="hp-machine-button" href={base + 'kontakt/'}>Se kontaktutkastet <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+
+  <p class="hp-draft-rail hp-machine-disclaimer">
+    Ursprungligt fulltextutkast saknas. Denna sida är ett visuellt arbetsutkast, inte kundgodkänd produktinformation.
+    Sortiment, bilder, företagets ansvar och tekniska uppgifter ska verifieras före publicering.
+  </p>
+</div>
+
+<style>
+  .hp-machine { overflow: clip; background: var(--hp-offwhite); }
+  .hp-machine *, .hp-machine *::before, .hp-machine *::after { box-sizing: border-box; }
+  .hp-machine h1, .hp-machine h2, .hp-machine h3, .hp-machine p, .hp-machine figure { margin: 0; }
+  .hp-machine a { text-decoration: none; }
+  .hp-machine a:focus-visible { outline: 3px solid #2f6842; outline-offset: 4px; }
+  .hp-machine-eyebrow {
+    color: #3f6147; font-size: .73rem; font-weight: 750; letter-spacing: .14em;
+    line-height: 1.5; text-transform: uppercase; margin-bottom: 1.25rem !important;
+  }
+  .hp-machine-eyebrow--light { color: #b8d4be; }
+  .hp-machine-eyebrow span { color: #aebeb2; padding-inline: .35rem; }
+  .hp-machine-hero { color: var(--hp-text-light); background: var(--hp-deep); }
+  .hp-machine-hero__grid {
+    display: grid; grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+    gap: clamp(2.3rem, 5vw, 6rem); align-items: center; min-height: 660px;
+  }
+  .hp-machine-hero__media {
+    position: relative; height: min(600px, 68svh); min-height: 420px;
+    margin: 2.75rem 0; background: #65716c; overflow: hidden;
+  }
+  .hp-machine-hero__image {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    object-position: center; filter: saturate(.75) contrast(1.04);
+  }
+  .hp-machine-hero__media::after {
+    content: ''; position: absolute; inset: 65% 0 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, .75)); pointer-events: none;
+  }
+  .hp-machine-hero__media figcaption {
+    position: absolute; z-index: 1; bottom: 1.1rem; left: 1.1rem; right: 1.1rem;
+    color: #fff; font-size: .71rem; line-height: 1.55; max-width: 340px;
+  }
+  .hp-machine-hero__copy { padding-block: clamp(3.6rem, 6vw, 6rem); }
+  .hp-machine h1 {
+    max-width: 11ch; font-size: clamp(3.1rem, 5.2vw, 5.8rem); line-height: 1.055;
+    font-weight: 720; letter-spacing: -.062em; text-wrap: balance;
+  }
+  .hp-machine-hero__lead {
+    max-width: 510px; margin-top: 1.9rem !important; color: #d4dcd6;
+    font-size: clamp(1.02rem, 1.3vw, 1.2rem); line-height: 1.75;
+  }
+  .hp-machine-hero__actions { display: flex; flex-wrap: wrap; align-items: center; gap: .7rem 1.4rem; margin-top: 2rem; }
+  .hp-machine-button {
+    min-height: 3.5rem; display: inline-flex; justify-content: space-between; align-items: center;
+    gap: 1.6rem; padding: .94rem 1.22rem; background: var(--hp-cta); color: #fff !important;
+    border-radius: 4px; font-size: .92rem; font-weight: 720; line-height: 1.35;
+  }
+  .hp-machine-button:hover { background: var(--hp-cta-hover); }
+  .hp-machine-textlink {
+    display: inline-flex; align-items: center; gap: .75rem; min-height: 2.8rem;
+    color: #265439 !important; font-weight: 720; font-size: .89rem;
+    text-underline-offset: .3em;
+  }
+  .hp-machine-textlink:hover { text-decoration: underline; }
+  .hp-machine-textlink--light { color: #d6e5d9 !important; }
+  .hp-machine-hero__note {
+    max-width: 470px; margin-top: 2.3rem !important; font-size: .75rem;
+    line-height: 1.7; color: #bbc7be;
+  }
+  .hp-machine-path { background: #343c3b; color: #e8ebe7; }
+  .hp-machine-path__inner {
+    display: flex; flex-wrap: wrap; align-items: center; gap: .9rem 2rem;
+    min-height: 4.65rem; padding-block: 1rem;
+  }
+  .hp-machine-path__inner > span { margin-right: auto; font-size: .8rem; font-weight: 720; }
+  .hp-machine-path a { color: #e8ebe7; font-size: .8rem; font-weight: 600; }
+  .hp-machine-path a:hover { text-decoration: underline; }
+  .hp-machine-use { padding-block: clamp(4.8rem, 8.5vw, 8rem); }
+  .hp-machine h2 {
+    max-width: 17ch; font-size: clamp(2.25rem, 4.2vw, 4.2rem); font-weight: 720;
+    letter-spacing: -.055em; line-height: 1.13; text-wrap: balance;
+  }
+  .hp-machine-use__heading {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .7fr);
+    gap: 2.3rem 6rem; align-items: end; margin-bottom: clamp(2.7rem, 5vw, 5.4rem);
+  }
+  .hp-machine-use__heading > p {
+    max-width: 510px; color: #4f5c54; font-size: 1.04rem; line-height: 1.82;
+  }
+  .hp-machine-use__questions {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.4rem;
+  }
+  .hp-machine-question { border-top: 1px solid #aeb9ae; padding-top: 1.8rem; }
+  .hp-machine-question__rule { display: block; width: 2.3rem; height: 2px; background: var(--hp-cta); margin-bottom: 1.7rem; }
+  .hp-machine h3 { font-size: clamp(1.23rem, 1.65vw, 1.56rem); letter-spacing: -.025em; line-height: 1.35; margin-bottom: 1rem; }
+  .hp-machine-question p { font-size: .93rem; line-height: 1.83; color: #526057; max-width: 390px; }
+  .hp-machine-use__footnote {
+    margin-top: 3rem !important; border-top: 1px solid #c6cfc7; padding-top: 1.1rem;
+    font-size: .75rem; line-height: 1.7; color: #606d62;
+  }
+  .hp-machine-movement { padding-block: clamp(4.6rem, 8vw, 7.5rem); background: var(--hp-concrete); }
+  .hp-machine-movement__grid {
+    display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: clamp(2.8rem, 8.5vw, 9rem); align-items: center;
+  }
+  .hp-machine-movement__copy > p:not(.hp-machine-eyebrow) {
+    max-width: 550px; margin-top: 1.35rem; color: #435048; line-height: 1.8;
+    font-size: .99rem;
+  }
+  .hp-machine-movement__copy a { margin-top: 1.4rem; }
+  .hp-machine-movement__figure {
+    position: relative; height: 480px; min-height: 0; overflow: hidden; background: #aab4aa;
+  }
+  .hp-machine-movement__figure img { display: block; height: 100%; width: 100%; object-fit: cover; filter: saturate(.78); }
+  .hp-machine-movement__figure figcaption {
+    position: absolute; bottom: 1.1rem; left: 1.1rem; right: 1.1rem;
+    max-width: fit-content; background: rgba(32, 36, 39, .88); color: #fff;
+    padding: .55rem .7rem; font-size: .68rem; line-height: 1.5;
+  }
+  .hp-machine-questions { padding-block: clamp(4.5rem, 8vw, 7rem); background: #f5f6f2; }
+  .hp-machine-questions__grid {
+    display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 8vw, 9rem); align-items: start;
+  }
+  .hp-machine-questions__intro > p:not(.hp-machine-eyebrow) {
+    max-width: 480px; color: #536157; line-height: 1.8; margin-top: 1.6rem;
+  }
+  .hp-machine-checklist { list-style: none; padding: 0; margin: 0; }
+  .hp-machine-checklist li {
+    display: grid; grid-template-columns: 1.75rem 1fr; gap: 1rem; padding-block: 1.1rem;
+    border-bottom: 1px solid #c3cec4; color: #344339; line-height: 1.6;
+    font-size: 1rem; font-weight: 630;
+  }
+  .hp-machine-checklist li:first-child { border-top: 1px solid #c3cec4; }
+  .hp-machine-checklist li > span:first-child { color: #3f764f; }
+  .hp-machine-questions__note { color: #627066; font-size: .74rem; margin-top: 1.3rem !important; line-height: 1.7; }
+  .hp-machine-final { padding-block: clamp(4.5rem, 7.5vw, 7rem); background: var(--hp-graphite); color: #f4f4f0; }
+  .hp-machine-final__inner { display: flex; justify-content: space-between; align-items: center; gap: 3rem 5rem; }
+  .hp-machine-final__inner > div { max-width: 720px; }
+  .hp-machine-final h2 { max-width: 15ch; }
+  .hp-machine-final p:not(.hp-machine-eyebrow) { max-width: 640px; color: #c7d1c9; line-height: 1.8; margin-top: 1.5rem; }
+  .hp-machine-final__inner > a { flex: 0 0 auto; }
+  .hp-machine-disclaimer { padding-block: 1.3rem; color: #57665b; font-size: .74rem; line-height: 1.7; }
+  @media (max-width: 1050px) {
+    .hp-machine-hero__grid { gap: 2.8rem; }
+    .hp-machine-hero__media { min-height: 370px; }
+    .hp-machine-questions__grid { gap: 3rem; }
+    .hp-machine-final__inner { align-items: flex-start; flex-direction: column; }
+  }
+  @media (max-width: 800px) {
+    .hp-machine-hero__grid, .hp-machine-use__heading, .hp-machine-movement__grid, .hp-machine-questions__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .hp-machine-hero__grid { gap: 0; }
+    .hp-machine-hero__copy { grid-row: 1; padding-block: 3.7rem 2.2rem; }
+    .hp-machine-hero__media { grid-row: 2; height: 400px; min-height: 0; margin: 0 0 3rem; }
+    .hp-machine-use__questions { grid-template-columns: 1fr; gap: 1rem; }
+    .hp-machine-question { padding-block: 1.3rem .3rem; }
+    .hp-machine-movement__figure { height: 370px; }
+  }
+  @media (max-width: 560px) {
+    .hp-machine h1 { font-size: clamp(2.65rem, 11vw, 4rem); }
+    .hp-machine h2 { font-size: clamp(2.15rem, 8.8vw, 3.2rem); }
+    .hp-machine-hero__actions { align-items: stretch; flex-direction: column; }
+    .hp-machine-button { width: 100%; }
+    .hp-machine-hero__media { height: 295px; margin-bottom: 2.1rem; }
+    .hp-machine-path__inner { gap: .75rem 1rem; }
+    .hp-machine-path__inner > span { flex-basis: 100%; }
+    .hp-machine-path a { font-size: .73rem; }
+    .hp-machine-movement__figure { height: 265px; }
+    .hp-machine-final__inner { gap: 2rem; }
+  }
+</style>
