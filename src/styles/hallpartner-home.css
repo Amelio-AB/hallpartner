@@ -331,20 +331,6 @@
   transform: scale(1.035);
 }
 
-.hp-home-type__number {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  display: grid;
-  width: 2.2rem;
-  height: 2.2rem;
-  place-items: center;
-  background: #fff;
-  color: var(--hp-deep);
-  font-size: 0.7rem;
-  font-weight: 700;
-}
-
 .hp-home-type__body {
   display: flex;
   align-items: start;
@@ -491,20 +477,14 @@
 
 .hp-home-planning__list li {
   display: grid;
-  grid-template-columns: 2.9rem 1fr;
-  gap: 1.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
   padding-block: 1.65rem;
   border-top: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hp-home-planning__list li:last-child {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.hp-home-planning__index {
-  color: #a3b6a7;
-  font-size: 0.86rem;
-  font-weight: 600;
 }
 
 .hp-home-planning__list h3 {
