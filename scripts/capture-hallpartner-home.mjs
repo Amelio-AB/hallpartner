@@ -12,6 +12,9 @@ import { setTimeout as sleep } from 'node:timers/promises';
 const executable = process.env.HP_CHROME || 'google-chrome';
 const url = process.env.HP_PREVIEW_URL || 'http://127.0.0.1:4321/prototype/hallpartner/start/';
 const output = resolve(process.env.HP_SCREENSHOT_DIR || 'visual-review');
+const expectedPath = new URL(url).pathname;
+const prefix = process.env.HP_SCREENSHOT_PREFIX || 'validated';
+if (!/^[a-z0-9-]+$/i.test(prefix)) throw new Error('Invalid screenshot prefix');
 const port = 9300 + process.pid % 300;
 const profile = join(tmpdir(), 'hp-cdp-' + process.pid);
 const browser = spawn(executable, [
@@ -83,7 +86,7 @@ try {
     let ready = false;
     for (let attempt = 0; attempt < 100; attempt++) {
       try {
-        ready = await evaluate('document.readyState === "complete" && location.pathname === "/prototype/hallpartner/start/"') === true;
+        ready = await evaluate('document.readyState === "complete" && location.pathname === ' + JSON.stringify(expectedPath)) === true;
       } catch {
         // A navigation can reset the execution context temporarily.
       }
@@ -125,11 +128,11 @@ try {
       format: 'png', captureBeyondViewport: true, fromSurface: true,
       clip: { x: 0, y: 0, width: Math.ceil(dimensions.width), height: Math.ceil(dimensions.height), scale: 1 },
     });
-    const filename = 'validated-' + viewport.name + '-full.png';
+    const filename = prefix + '-' + viewport.name + '-full.png';
     await writeFile(join(output, filename), Buffer.from(shot.data, 'base64'));
     report.push({ viewport, filename, ...metrics });
   }
-  await writeFile(join(output, 'validated-REPORT.json'), JSON.stringify(report, null, 2));
+  await writeFile(join(output, prefix + '-REPORT.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
   for (const page of report) {
     if (page.h1Count !== 1 || page.navCount !== 1 || page.overflow || page.images.some(i => !i.loaded)) {
@@ -141,7 +144,7 @@ try {
     throw new Error('Mobile toggle / Escape interaction failed');
   }
 } catch (error) {
-  await writeFile(join(output, 'validated-ERROR.txt'), String(error));
+  await writeFile(join(output, prefix + '-ERROR.txt'), String(error));
   console.error('Visual QA failed:', error);
   process.exitCode = 1;
 } finally {
