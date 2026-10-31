@@ -30,7 +30,7 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
     <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
     <div class="hp-draft-alert" role="note">
       <span class="hp-draft-alert__tag"><span aria-hidden="true" class="hp-draft-alert__dot"></span> Arbetsversion</span>
-      <span>Intern arbetsprototyp – AMP-komponenter är ännu inte integrerade. Texter och bilder inväntar godkännande.</span>
+      <span>För intern granskning – ej kundgodkänd</span>
     </div>
     <!-- Tillfällig responsiv navigation. AMP-002 tar över när paketinstallation och runtime är verifierade. -->
     <header class="hp-draft-header">
@@ -65,7 +65,7 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
       <div class="hp-draft-rail hp-draft-footer__inner">
         <div>
           <p class="hp-draft-footer__brand">Hallpartner</p>
-          <p class="hp-draft-footer__note">Visuell webbplatsprototyp för intern granskning. Ingen kundgodkänd publiceringsversion.</p>
+          <p class="hp-draft-footer__note">Intern arbetsprototyp för visuell granskning. AMP-komponenter är ännu inte integrerade; texter och bilder är inte kundgodkända.</p>
         </div>
         <div class="hp-draft-footer__links">
           <a href={draftBase + 'hallar/'}>Hallar</a>
