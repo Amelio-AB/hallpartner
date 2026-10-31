@@ -9,6 +9,12 @@ Slutligt innehåll och sidstruktur: **pending live-site inventory**.
 > större ändringar görs. Se även [AGENTS.md](AGENTS.md) för riktlinjer till
 > AI-agenter som arbetar i projektet.
 
+## Gemensamma dokument för beslut och öppna frågor
+
+**Läs före större arbete:** [`docs/PROJECT_DECISIONS.md`](docs/PROJECT_DECISIONS.md) är registret för **aktuella projektbeslut och deras mognadsgrad**. [`docs/TODO.md`](docs/TODO.md) är den centrala **listan över öppna frågor, blockerare och uppgifter**, med en enkel Inkorg för nya idéer.
+
+Planeringsarbete om ny sidstruktur och copy pågår även om en **befintlig Astro-preview** redan är driftsatt. Äldre visionsfiler (`docs/SITEMAP.md`, `docs/DESIGN_SYSTEM.md`, delar av `docs/AI_INSTRUCTIONS.md`) är inte automatiskt beslutad produktionsdesign. Den tidigare [research-beslutsloggen](https://github.com/Amelio-AB/hallpartner/blob/research/pre-production-analysis/docs/research/DECISION_LOG.md) är historisk källa; ändra **projektbeslut här**, inte i parallella register. Bekräfta affärsfakta med Hallpartner innan publicering.
+
 ## Aktuell live preview
 
 Utvecklingsversionen finns på:
