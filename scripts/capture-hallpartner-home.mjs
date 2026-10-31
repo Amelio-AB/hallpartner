@@ -149,7 +149,13 @@ try {
         'const solidWhenOpen=document.querySelector(".hp-home-hero")?document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
         'document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true}));' +
         'const transparentAfterEscape=document.querySelector(".hp-home-hero")?!document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
-        'return {before,opened,visible,closed:toggle.getAttribute("aria-expanded"),solidWhenOpen,transparentAfterEscape};' +
+        'const closedByEscape=toggle.getAttribute("aria-expanded");' +
+        'toggle.click();' +
+        'const reopened=toggle.getAttribute("aria-expanded");' +
+        'document.querySelector("main")?.dispatchEvent(new PointerEvent("pointerdown",{bubbles:true,pointerType:"touch"}));' +
+        'const closedAfterOutside=toggle.getAttribute("aria-expanded");' +
+        'const transparentAfterOutside=document.querySelector(".hp-home-hero")?!document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
+        'return {before,opened,visible,closed:closedByEscape,solidWhenOpen,transparentAfterEscape,reopened,closedAfterOutside,transparentAfterOutside};' +
         '})()');
     }
 
@@ -185,8 +191,8 @@ try {
   }
   for (const page of report.filter(page => page.viewport.width <= 800)) {
     const mobile = page.menu;
-    if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape))) {
-      throw new Error('Mobile toggle / Escape interaction failed at ' + page.viewport.width + 'px: ' + JSON.stringify(mobile));
+    if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || mobile.reopened !== 'true' || mobile.closedAfterOutside !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape || !mobile.transparentAfterOutside))) {
+      throw new Error('Mobile toggle / Escape / outside-tap interaction failed at ' + page.viewport.width + 'px: ' + JSON.stringify(mobile));
     }
   }
 } catch (error) {
