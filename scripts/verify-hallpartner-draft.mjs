@@ -57,6 +57,21 @@ for (const slug of ['lagerhallar', 'maskinhallar', 'ridhus', 'talthallar', 'plat
   assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', slug, 'index.html')), 'broken overview target: ' + slug);
 }
 
+// The storage-hall page has its own visual composition, not generic editorial placeholders.
+const storage = readFileSync(join(dist, 'prototype', 'hallpartner', 'lagerhallar', 'index.html'), 'utf8');
+assert.ok(storage.includes('Mer plats för det som behöver förvaras.'), 'missing storage page hero');
+for (const id of ['hp-storage-needs', 'hp-storage-flow', 'hp-storage-next']) {
+  assert.ok(storage.includes('id="' + id + '"'), 'missing storage section: ' + id);
+}
+assert.ok((storage.match(/<img(?:\\s|>)/gi) ?? []).length >= 2, 'storage page needs two rendered images');
+assert.ok(storage.includes('Ursprungligt fulltextutkast saknas'), 'storage page must disclose missing original copy');
+assert.ok(storage.includes('noindex,nofollow'), 'storage page must not be indexable');
+for (const slug of ['hallar', 'kontakt']) {
+  const href = '/prototype/hallpartner/' + slug + '/';
+  assert.ok(storage.includes(href), 'missing storage link: ' + href);
+  assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', slug, 'index.html')), 'broken storage target: ' + href);
+}
+
 const sitemapFiles = readdirSync(dist).filter((file) => /^sitemap.*\.xml$/.test(file));
 assert.ok(sitemapFiles.length > 0, 'expected an XML sitemap from Astro build');
 for (const file of sitemapFiles) {
