@@ -753,3 +753,17 @@
   .hp-home-hero__overlay { background: linear-gradient(90deg, rgba(20,25,27,.87), rgba(20,25,27,.5)), linear-gradient(0deg,rgba(20,25,27,.7), transparent 70%); }
   .hp-home-hero__grid { min-height: 100svh; padding-top: 5rem; }
 }
+
+/* In-page Hero CTAs must land below the fixed transparent/solid header.
+ * The offset intentionally exceeds the mobile/desktop header minimum height.
+ * Remove this fallback when AMP-002 owns the scroll clearance. */
+.hp-home #halltyper,
+.hp-home #att-tanka-pa {
+  scroll-margin-top: 7.25rem;
+}
+@media (max-width: 800px) {
+  .hp-home #halltyper,
+  .hp-home #att-tanka-pa {
+    scroll-margin-top: 6rem;
+  }
+}
