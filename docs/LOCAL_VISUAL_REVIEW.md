@@ -56,6 +56,16 @@ node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
 
 CI-verifiering finns i PR #5 och ska granskas på **dess aktuella HEAD**, inte på en äldre grön körning. CI-bevisar inte att designen är snygg på en riktig mobilskärm.
 
+## Validerade helsidesskärmbilder från CI
+
+GitHub Actions på [Draft PR #5](https://github.com/Amelio-AB/hallpartner/pull/5) skapar en nedladdningsbar artifact `hallpartner-home-visual-<commit>` efter varje ändring. Den innehåller:
+
+- `validated-desktop-full.png`: hela startsidan, desktopbredd 1440 px.
+- `validated-mobile-full.png`: hela startsidan, mobilbredd 390 px.
+- `validated-REPORT.json`: faktiskt antal H1/nav, horisontell overflow, att samtliga fyra bilder är laddade och att mobilmenyn öppnas/stängs med Escape.
+
+Dessa tas av headless Chrome med `scripts/capture-hallpartner-home.mjs` efter att bilder och typsnitt laddats. CI kräver att denna kontroll passerar. Det är fortfarande **inte** samma sak som ett test på en fysisk iPhone; granska också localhost manuellt.
+
 ## Avsiktliga begränsningar
 
 - Hallpartners originallogotyp saknas i repot: tillfällig textmarkering visas i stället.
