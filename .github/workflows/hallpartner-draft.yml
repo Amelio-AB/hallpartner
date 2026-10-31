@@ -82,6 +82,7 @@ jobs:
           timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/hallar/" HP_SCREENSHOT_PREFIX="hallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
 
       - name: Preserve validated visual review artifacts
         if: always()
