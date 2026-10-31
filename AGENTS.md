@@ -8,6 +8,14 @@
 
 ---
 
+## Gemensamt uppgifts- och beslutsregister (läs först)
+
+- [`docs/PROJECT_DECISIONS.md`](docs/PROJECT_DECISIONS.md) är **kanoniskt register över aktuella projektbeslut** med deras status. Projektbeslut är inte bevis för Hallpartners produkt-/leveransclaims.
+- [`docs/TODO.md`](docs/TODO.md) är **gemensamt register över öppna frågor, verifieringskrav och arbetsuppgifter**. Nya idéer läggs i Inkorg och får sedan HP-ID.
+- Läs båda före större ändringar. Dokumentera nya beroenden, uppdatera status och kräv bevis/test innan en punkt markeras `Klar`. Obekräftade verksamhetsuppgifter får aldrig lyftas till produktionscopy som fakta.
+- Äldre visionsdokument i `docs/` och researchbeslut på separata grenar är historiska underlag när de motsäger den aktuella riktningen i beslutsregistret. Uppdatera motstridiga instruktioner genom granskad PR; välj inte tyst mellan dem.
+- Befintlig Astro-preview är verklig kod att inventera, men **ny produktionsstruktur och nya produkttexter planeras först på textnivå**. Varken preview eller arbetsutkast är slutligt godkänd kundcopy.
+
 # Projektets syfte
 
 Repot är kodbasen för Hallpartners riktiga webbplats på https://hallpartner.se.
@@ -31,12 +39,13 @@ secrets eller arkivbranchen `archive/vision-site-2026-10-02`.
 När beslut behöver fattas gäller följande ordning:
 
 1.  AGENTS.md
-2.  PROJECT_BRIEF.md
-3.  DESIGN_SYSTEM.md
-4.  PAGE_SPEC.md
-5.  COMPONENTS.md
-6.  TECHNICAL_SPEC.md
-7.  CONTENT.md
+2.  docs/PROJECT_DECISIONS.md (aktuella projektbeslut, med angiven status)
+3.  PROJECT_BRIEF.md
+4.  DESIGN_SYSTEM.md (äldre vision om den strider mot aktuella beslut)
+5.  PAGE_SPEC.md
+6.  COMPONENTS.md
+7.  TECHNICAL_SPEC.md
+8.  CONTENT.md
 
 Vid konflikter har dokument högre upp alltid företräde.
 
