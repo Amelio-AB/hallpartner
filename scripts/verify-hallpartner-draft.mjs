@@ -78,7 +78,7 @@ assert.ok(machines.includes('Plats för maskiner. Utrymme för arbetet.'), 'miss
 for (const id of ['hp-machines-use', 'hp-machines-movement', 'hp-machines-questions']) {
   assert.ok(machines.includes('id="' + id + '"'), 'missing machine section: ' + id);
 }
-assert.ok((machines.match(/<img(?:\\s|>)/gi) ?? []).length >= 2, 'machine page needs two rendered images');
+assert.ok(machines.split('<img').length - 1 >= 2, 'machine page needs two rendered images');
 assert.ok(machines.includes('Ursprungligt fulltextutkast saknas'), 'machine page must disclose unverified copy');
 assert.ok(machines.includes('noindex,nofollow'), 'machine page must remain noindex');
 for (const slug of ['hallar', 'lagerhallar', 'kontakt']) {
