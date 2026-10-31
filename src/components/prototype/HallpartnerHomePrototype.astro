@@ -1,0 +1,185 @@
+---
+import { Image } from 'astro:assets';
+import lagerhall from '../../assets/images/lagerhall.jpg';
+import maskinhall from '../../assets/images/maskinhall.jpeg';
+import talthall from '../../assets/images/talthall.jpg';
+import '../../styles/hallpartner-home.css';
+
+const base = '/prototype/hallpartner/';
+---
+
+<div class="hp-home">
+  <section class="hp-home-hero" aria-labelledby="hp-home-title">
+    <div class="hp-draft-rail hp-home-hero__grid">
+      <div class="hp-home-hero__copy">
+        <p class="hp-home-kicker"><span class="hp-home-kicker__line" aria-hidden="true"></span> Hallpartner / Hallar</p>
+        <h1 id="hp-home-title">En hall börjar med ditt behov.</h1>
+        <p class="hp-home-hero__lead">
+          Lager, maskiner eller en plats för verksamheten? Börja med användningen.
+          Här får du en överblick över olika halltyper och vad som är bra att tänka igenom.
+        </p>
+        <div class="hp-home-actions">
+          <a class="hp-home-button hp-home-button--primary" href="/prototype/hallpartner/hallar/">
+            Utforska halltyper
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="hp-home-textlink" href="#att-tanka-pa">
+            Vad behöver jag veta?
+            <span aria-hidden="true">↓</span>
+          </a>
+        </div>
+        <p class="hp-home-hero__caption">Arbetsutkast för visuell granskning. Sortiment och innehåll inväntar kundverifiering.</p>
+      </div>
+      <figure class="hp-home-hero__visual">
+        <Image
+          src={lagerhall}
+          alt="Hallbyggnad från befintligt presentationsmaterial, använd som demonstrationsbild."
+          loading="eager"
+          fetchpriority="high"
+          class="hp-home-hero__image"
+        />
+        <figcaption class="hp-home-hero__image-note">
+          <span class="hp-home-hero__image-line" aria-hidden="true"></span>
+          <span>Hallmiljö · bild för layouttest, rättigheter ej verifierade</span>
+        </figcaption>
+      </figure>
+    </div>
+    <div class="hp-home-hero__edge" aria-hidden="true"></div>
+  </section>
+
+  <div class="hp-home-overview" aria-label="Välj ingång">
+    <div class="hp-draft-rail hp-home-overview__inner">
+      <p>Utgå från verksamheten</p>
+      <span aria-hidden="true" class="hp-home-overview__line"></span>
+      <a href="#halltyper">Se användningsområden <span aria-hidden="true">↓</span></a>
+      <a href="#att-tanka-pa">Förbered dina frågor <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+
+  <section id="halltyper" class="hp-home-section hp-home-types" aria-labelledby="hp-home-types-title">
+    <div class="hp-draft-rail">
+      <div class="hp-home-heading-row">
+        <div>
+          <p class="hp-home-kicker hp-home-kicker--dark">Hitta rätt ingång</p>
+          <h2 id="hp-home-types-title">Vad ska hallen användas till?</h2>
+        </div>
+        <p class="hp-home-section-lead">
+          Börja med användningsområdet. Material, isolering och andra tekniska val
+          hör hemma längre fram i diskussionen.
+        </p>
+      </div>
+      <div class="hp-home-type-grid">
+        <article class="hp-home-type">
+          <a class="hp-home-type__link" href="/prototype/hallpartner/lagerhallar/" aria-label="Läs om lagerhallar">
+            <div class="hp-home-type__image">
+              <Image src={lagerhall} alt="Hallbyggnad som illustrerar temat lager." loading="lazy" />
+              <span class="hp-home-type__number" aria-hidden="true">01</span>
+            </div>
+            <div class="hp-home-type__body">
+              <div>
+                <h3>Lagerhallar</h3>
+                <p>För dig som planerar plats för förvaring, varuflöden och åtkomst.</p>
+              </div>
+              <span class="hp-home-type__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        </article>
+        <article class="hp-home-type">
+          <a class="hp-home-type__link" href="/prototype/hallpartner/maskinhallar/" aria-label="Läs om maskinhallar">
+            <div class="hp-home-type__image">
+              <Image src={maskinhall} alt="Hallbyggnad som illustrerar temat maskiner." loading="lazy" />
+              <span class="hp-home-type__number" aria-hidden="true">02</span>
+            </div>
+            <div class="hp-home-type__body">
+              <div>
+                <h3>Maskinhallar</h3>
+                <p>För verksamheter som behöver ta hänsyn till maskinernas storlek och hur de används.</p>
+              </div>
+              <span class="hp-home-type__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        </article>
+        <article class="hp-home-type">
+          <a class="hp-home-type__link" href="/prototype/hallpartner/ridhus/" aria-label="Läs om ridhus">
+            <div class="hp-home-type__image">
+              <Image src={talthall} alt="Hallbyggnad som illustrerar möjlig hallkonstruktion. Inte ett verifierat Hallpartner-projekt." loading="lazy" />
+              <span class="hp-home-type__number" aria-hidden="true">03</span>
+            </div>
+            <div class="hp-home-type__body">
+              <div>
+                <h3>Ridhus</h3>
+                <p>För dig som vill undersöka planering av en hall för ridverksamhet.</p>
+              </div>
+              <span class="hp-home-type__arrow" aria-hidden="true">↗</span>
+            </div>
+          </a>
+        </article>
+      </div>
+      <div class="hp-home-types__bottom">
+        <p>Detta är ämnesingångar i ett utkast, inte ett verifierat produktsortiment.</p>
+        <a href="/prototype/hallpartner/hallar/">Se hela hallöversikten <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-home-perspective" aria-labelledby="hp-home-perspective-title">
+    <div class="hp-draft-rail hp-home-perspective__grid">
+      <div class="hp-home-perspective__statement">
+        <p class="hp-home-kicker hp-home-kicker--dark">En bättre utgångspunkt</p>
+        <h2 id="hp-home-perspective-title">Först funktionen.<br /><em>Sedan utförandet.</em></h2>
+      </div>
+      <div class="hp-home-perspective__text">
+        <p>
+          En lagerhall kan behöva andra lösningar än ett ridhus. Samtidigt kan samma
+          typ av konstruktion passa flera användningsområden.
+        </p>
+        <p>
+          Därför skiljer vi i den här sidstrukturen på vad hallen ska användas till,
+          hur den kan byggas och vilka egenskaper som behöver undersökas.
+        </p>
+        <a href="/prototype/hallpartner/isolerade-hallar/">Läs om isolering som egenskap <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section id="att-tanka-pa" class="hp-home-planning" aria-labelledby="hp-home-planning-title">
+    <div class="hp-draft-rail hp-home-planning__grid">
+      <div class="hp-home-planning__intro">
+        <p class="hp-home-kicker">Inför första samtalet</p>
+        <h2 id="hp-home-planning-title">Tre frågor som gör det lättare att komma vidare.</h2>
+        <p>Du behöver inte kunna konstruktion eller dimensionering. Det räcker att börja beskriva behoven.</p>
+      </div>
+      <ol class="hp-home-planning__list">
+        <li>
+          <span class="hp-home-planning__index" aria-hidden="true">01</span>
+          <div><h3>Vad ska rymmas?</h3><p>Beskriv verksamheten och vad ytan främst ska användas till.</p></div>
+        </li>
+        <li>
+          <span class="hp-home-planning__index" aria-hidden="true">02</span>
+          <div><h3>Hur ska hallen användas?</h3><p>Fundera på exempelvis infart, dagliga rörelser och behov av åtkomst.</p></div>
+        </li>
+        <li>
+          <span class="hp-home-planning__index" aria-hidden="true">03</span>
+          <div><h3>Var är hallen tänkt att stå?</h3><p>Plats och förutsättningar behöver undersökas innan tekniska beslut kan fattas.</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="hp-home-final" aria-labelledby="hp-home-final-title">
+    <div class="hp-draft-rail hp-home-final__inner">
+      <div>
+        <p class="hp-home-kicker hp-home-kicker--dark">Nästa steg</p>
+        <h2 id="hp-home-final-title">Har du ett hallprojekt i tankarna?</h2>
+        <p>Se vårt kontaktutkast och vilka uppgifter som kan vara bra att ha med. Formuläret är ännu inte anslutet.</p>
+      </div>
+      <a class="hp-home-button hp-home-button--primary" href="/prototype/hallpartner/kontakt/">
+        Till kontaktsidan <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <p class="hp-draft-rail hp-home-final__disclaimer">
+      Ursprungligt fulltextutkast saknas. Alla texter och bilder på denna sida är arbetsmaterial,
+      inte kundgodkända verksamhetsuppgifter eller verifierade referensprojekt.
+    </p>
+  </section>
+</div>
