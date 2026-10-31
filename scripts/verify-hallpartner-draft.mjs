@@ -30,6 +30,21 @@ for (const page of draftPageSpecs) {
   assert.ok(index.includes(`/prototype/hallpartner/${page.slug}/`), `index does not link to ${page.slug}`);
 }
 
+// The homepage must be an actual visual composition, not editorial placeholders.
+const homepage = readFileSync(join(dist, 'prototype', 'hallpartner', 'start', 'index.html'), 'utf8');
+assert.ok(homepage.includes('En hall börjar med ditt behov.'), 'missing homepage Hero');
+assert.ok(homepage.includes('id="halltyper"'), 'missing hall type section');
+assert.ok(homepage.includes('id="att-tanka-pa"'), 'missing planning section');
+assert.ok((homepage.match(/<img(?:\s|>)/gi) ?? []).length >= 4, 'home prototype needs built image elements');
+assert.ok(homepage.includes('aria-controls="hp-proto-nav"'), 'missing accessible mobile menu toggle');
+for (const href of homepage.matchAll(/href="(\/prototype\/hallpartner\/[^"#?]*\/)"/g)) {
+  const target = join(dist, href[1].slice(1), 'index.html');
+  assert.ok(existsSync(target), 'broken local homepage link: ' + href[1]);
+}
+for (const anchor of ['halltyper', 'att-tanka-pa']) {
+  assert.ok(homepage.includes('id="' + anchor + '"'), 'broken homepage anchor: #' + anchor);
+}
+
 const sitemapFiles = readdirSync(dist).filter((file) => /^sitemap.*\.xml$/.test(file));
 assert.ok(sitemapFiles.length > 0, 'expected an XML sitemap from Astro build');
 for (const file of sitemapFiles) {
