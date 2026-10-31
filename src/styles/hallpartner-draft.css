@@ -563,3 +563,22 @@
     padding-inline: 0.55rem;
   }
 }
+
+/* Preview-only AMP-004-style header/hero contract. Do not duplicate when
+   real AMP-002/004 are installed. Preserve server-rendered navigation. */
+.hp-draft:has(.hp-home-hero) .hp-draft-alert { display: none; }
+.hp-draft-header--overlay {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  background: transparent;
+  color: var(--hp-text-light);
+  transition: background-color 180ms ease, box-shadow 180ms ease;
+}
+.hp-draft-header--overlay.hp-draft-header--solid {
+  background: var(--hp-graphite);
+  box-shadow: 0 2px 18px rgba(0,0,0,.14);
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-draft-header--overlay { transition: none; }
+}
