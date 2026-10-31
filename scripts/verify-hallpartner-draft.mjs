@@ -63,7 +63,7 @@ assert.ok(storage.includes('Mer plats för det som behöver förvaras.'), 'missi
 for (const id of ['hp-storage-needs', 'hp-storage-flow', 'hp-storage-next']) {
   assert.ok(storage.includes('id="' + id + '"'), 'missing storage section: ' + id);
 }
-assert.ok((storage.match(/<img(?:\\s|>)/gi) ?? []).length >= 2, 'storage page needs two rendered images');
+assert.ok((storage.match(/<img(?:\s|>)/gi) ?? []).length >= 2, 'storage page needs two rendered images');
 assert.ok(storage.includes('Ursprungligt fulltextutkast saknas'), 'storage page must disclose missing original copy');
 assert.ok(storage.includes('noindex,nofollow'), 'storage page must not be indexable');
 for (const slug of ['hallar', 'kontakt']) {
