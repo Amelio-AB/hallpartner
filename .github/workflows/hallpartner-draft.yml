@@ -13,6 +13,8 @@ on:
       - 'src/layouts/HallpartnerDraftLayout.astro'
       - 'src/styles/hallpartner-draft.css'
       - 'src/pages/prototype/hallpartner/**'
+      - 'src/components/prototype/**'
+      - 'src/styles/hallpartner-home.css'
       - 'tests/hallpartner-draft.test.mjs'
       - 'tests/amp-brand.test.mjs'
       - 'scripts/verify-hallpartner-draft.mjs'
@@ -85,7 +87,7 @@ jobs:
             exit 0
           fi
           if "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=2500 --window-size=1440,900 \
+            --virtual-time-budget=7000 --window-size=1440,900 \
             --screenshot="$(pwd)/visual-review/desktop-1440.png" "$URL" > visual-review/desktop-browser.log 2>&1; then
             if [ -s visual-review/desktop-1440.png ]; then
               echo "Desktop 1440x900 screenshot captured." >> visual-review/STATUS.txt
@@ -96,7 +98,7 @@ jobs:
             echo "Desktop browser capture failed; inspect desktop-browser.log." >> visual-review/STATUS.txt
           fi
           if "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=2500 --window-size=390,844 \
+            --virtual-time-budget=7000 --window-size=390,844 \
             --screenshot="$(pwd)/visual-review/mobile-390.png" "$URL" > visual-review/mobile-browser.log 2>&1; then
             if [ -s visual-review/mobile-390.png ]; then
               echo "Mobile-sized 390x844 screenshot captured (desktop browser, not physical iPhone)." >> visual-review/STATUS.txt
@@ -124,10 +126,10 @@ jobs:
             sleep 0.5
           done
           "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=2500 --window-size=1440,3600 \
+            --virtual-time-budget=7000 --window-size=1440,3600 \
             --screenshot="$(pwd)/visual-review/desktop-full-1440.png" "$URL" > visual-review/desktop-full-browser.log 2>&1 || true
           "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=2500 --window-size=390,5800 \
+            --virtual-time-budget=7000 --window-size=390,5800 \
             --screenshot="$(pwd)/visual-review/mobile-full-390.png" "$URL" > visual-review/mobile-full-browser.log 2>&1 || true
           if [ -s visual-review/desktop-full-1440.png ]; then echo "Desktop tall-page screenshot captured (1440x3600 viewport)." >> visual-review/STATUS.txt; fi
           if [ -s visual-review/mobile-full-390.png ]; then echo "Mobile-width tall-page screenshot captured (390x5800 viewport, not actual phone)." >> visual-review/STATUS.txt; fi
