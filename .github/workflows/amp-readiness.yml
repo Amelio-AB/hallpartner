@@ -1,0 +1,90 @@
+name: AMP readiness - Node 24 - no deployment
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/amp-readiness.yml
+      - src/config/hallpartner-brand.ts
+      - tests/amp-brand.test.mjs
+      - package.json
+      - package-lock.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amp-readiness-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Existing Astro site and brand contracts on Node 24
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Record exact runtime and revision
+        run: |
+          mkdir -p reports
+          node --version | tee reports/node-version.txt
+          npm --version | tee reports/npm-version.txt
+          git rev-parse HEAD | tee reports/commit.txt
+      - name: Install existing locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Check Astro and TypeScript
+        run: npm run check
+      - name: Lint
+        run: npm run lint
+      - name: Test Direction 02 color contracts
+        run: node --experimental-strip-types --test tests/amp-brand.test.mjs
+      - name: Build existing site - no deployment
+        run: npm run build
+        env:
+          NODE_ENV: production
+      - name: Preserve build and runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-node24-${{ github.event.pull_request.head.sha }}
+          path: |
+            dist/
+            reports/
+          if-no-files-found: error
+          retention-days: 7
+
+  dependency-audit:
+    name: Current dependency audit - no automatic fixes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install dependency metadata without lifecycle scripts
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Audit all dependencies including development dependencies
+        run: |
+          mkdir -p reports
+          git rev-parse HEAD > reports/commit.txt
+          npm audit --audit-level=high --json > reports/npm-audit.json
+      - name: Preserve audit even when findings fail the gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-audit-${{ github.event.pull_request.head.sha }}
+          path: reports/
+          if-no-files-found: error
+          retention-days: 7
