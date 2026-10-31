@@ -117,6 +117,26 @@ try {
       metrics.heroState = await evaluate("(async function(){\n const hero=document.querySelector('.hp-home-hero[data-hero]');\n const header=document.querySelector('.hp-draft-header');\n const image=document.querySelector('.hp-home-hero__background');\n if(!hero||!header||!image)return {error:'Missing hero/header/image'};\n await new Promise(resolve=>setTimeout(resolve,240));\n const imageRect=image.getBoundingClientRect(),heroRect=hero.getBoundingClientRect();\n const initial={headerOverlay:header.classList.contains('hp-draft-header--overlay'),transparent:!header.classList.contains('hp-draft-header--solid')&&getComputedStyle(header).backgroundColor==='rgba(0, 0, 0, 0)',headerOverHero:Math.abs(header.getBoundingClientRect().top-heroRect.top)<3,fullWidth:Math.abs(heroRect.width-document.documentElement.clientWidth)<3,cover:getComputedStyle(image).objectFit==='cover'&&Math.abs(imageRect.width-heroRect.width)<3,imageLoaded:image.complete&&image.naturalWidth===1916&&image.currentSrc.includes('/images/hallpartner-hero-temporary.webp')};\n const questionWidths=[...document.querySelectorAll('.hp-home-planning__list li > div')].map(node=>Math.round(node.getBoundingClientRect().width));\n window.scrollTo(0,Math.ceil(heroRect.height+160));window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const solidOnExit=header.classList.contains('hp-draft-header--solid');\n window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const transparentOnReturn=!header.classList.contains('hp-draft-header--solid');\n return {...initial,solidOnExit,transparentOnReturn,minQuestionWidth:Math.min(...questionWidths)};\n})()", true);
     }
 
+    // A valid hash alone is insufficient: the fixed header must not cover the target heading.
+    // This exercises the actual Hero CTA and overview links in a rendered browser.
+    if (expectedPath.endsWith('/start/')) {
+      metrics.anchorClearance = await evaluate("(async function(){\n" +
+        "const header=document.querySelector('.hp-draft-header');\n" +
+        "const main=document.getElementById('main-content');\n" +
+        "const checks=[];\n" +
+        "for(const hash of ['#halltyper','#att-tanka-pa']){\n" +
+        "const link=document.querySelector('a[href=\"'+hash+'\"]');\n" +
+        "const target=document.querySelector(hash);\n" +
+        "if(!link||!target)return {error:'Missing CTA or anchor: '+hash};\n" +
+        "link.click();await new Promise(done=>setTimeout(done,180));\n" +
+        "const top=target.getBoundingClientRect().top, headerBottom=header.getBoundingClientRect().bottom;\n" +
+        "checks.push({hash,top:Math.round(top),headerBottom:Math.round(headerBottom),cleared:top>=headerBottom-1});\n" +
+        "}\n" +
+        "window.scrollTo(0,0);await new Promise(done=>setTimeout(done,180));\n" +
+        "return {checks,skipFocusable:main?.tabIndex===-1};\n" +
+        "})()", true);
+    }
+
     if (viewport.width <= 800) {
       metrics.menu = await evaluate('(()=>{' +
         'const toggle=document.querySelector("[data-hp-nav-toggle]");' +
@@ -155,6 +175,12 @@ try {
     const h = page.heroState;
     if (h.error || !h.headerOverlay || !h.transparent || !h.headerOverHero || !h.fullWidth || !h.cover || !h.imageLoaded || !h.solidOnExit || !h.transparentOnReturn || h.minQuestionWidth < 180) {
       throw new Error('Home hero/header/list layout failed on ' + page.viewport.name + ': ' + JSON.stringify(h));
+    }
+  }
+  for (const page of homePages) {
+    const a = page.anchorClearance;
+    if (!a || a.error || !a.skipFocusable || a.checks.length !== 2 || a.checks.some(check => !check.cleared)) {
+      throw new Error('Hero CTA anchor is obscured by fixed header on ' + page.viewport.name + ': ' + JSON.stringify(a));
     }
   }
   for (const page of report.filter(page => page.viewport.width <= 800)) {
