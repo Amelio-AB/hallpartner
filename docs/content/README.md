@@ -1,0 +1,85 @@
+# Innehållsarkiv – manifest och saknade original
+
+> Inventerat 2026-10-31. **0 av 11 efterfrågade sidutkast har kunnat arkiveras i fulltext i denna arbetsomgång.** Detta är ett manifest, inte ett färdigt innehållsarkiv. Inga ersättningstexter eller tomma sidfiler har skapats.
+
+## Status är inte källtext
+
+Andreas senaste överlämning, `Inklistrad text.txt` i projektchatten, anger nedanstående arbetsversioner. Den innehåller inte själva sidtexterna. Uppgiven arbetsstatus ska bevaras men får inte användas som bevis för återfunnen fulltext, kundgodkännande eller verifierat erbjudande.
+
+De fullständiga meddelandena från den tidigare projektchatten har inte varit åtkomliga i denna genomgång. En kort historik från chatten, tidigare dokumentregister eller en kodprototyp ersätter inte dessa original.
+
+## Mottagningslista
+
+Filnamnen är **föreslagna destinationer**, inte länkar till redan skapade filer. Gemensam fulltextstatus för samtliga rader: **saknas i detta arkiv**.
+
+| Sida | Uppgiven senaste arbetsstatus i överlämningen | Föreslagen fil när originalet finns |
+|---|---|---|
+| Startsida | v0.3 – godkänd arbetsriktning | `startsida-v0.3.md` |
+| Hallöversikt | v0.1 – textutkast | `halloversikt-v0.1.md` |
+| Lagerhallar | v0.1 – textutkast | `lagerhallar-v0.1.md` |
+| Maskinhallar | v0.1 – textutkast | `maskinhallar-v0.1.md` |
+| Ridhus | v0.1 – godkänd arbetsversion | `ridhus-v0.1.md` |
+| Tälthallar | v0.1 – textutkast | `talthallar-v0.1.md` |
+| Plåthallar | v0.1 – textutkast | `plathallar-v0.1.md` |
+| Isolerade hallar | v0.1 – textutkast enligt senaste överlämningen; se versionsskillnad nedan | `isolerade-hallar-v0.1.md` |
+| Så går det till | v0.1 – textutkast | `sa-gar-det-till-v0.1.md` |
+| Om Hallpartner | v0.1 – textutkast | `om-hallpartner-v0.1.md` |
+| Kontakt | v0.2 – godkänt arbetsupplägg med enkelt kontaktformulär | `kontakt-v0.2.md` |
+
+**Versionsskillnad:** HPD-021 och HP-031 i [PR #2 vid 8fb1960](https://github.com/Amelio-AB/hallpartner/blob/8fb19602fd48f8279e33a7558c0e2a86968e176c/docs/PROJECT_DECISIONS.md) anger att isolerade hallar återstår. Den senare överlämningen anger v0.1. Här bevaras båda uppgifternas proveniens. Ingen text har hittats som bekräftar vilken fullständig version som ska arkiveras. Uppdatera befintliga ID:n vid samordning av registren; skapa inte en konkurrerande beslutslogg.
+
+## Vad som faktiskt har kontrollerats
+
+| Källa | Vad genomgången gav | Begränsning |
+|---|---|---|
+| Överlämningsfilen `Inklistrad text.txt` | Versionslista, designbeslut, planerade URL:er och tekniska krav. | Inte fulltext för någon av sidorna. |
+| Main `92ce87c` – filinventering och relevanta dokument/komponenter | Befintlig visionssajt och äldre projektdokument. | Befintlig presentationscopy får inte märkas om som senare godkända utkast. |
+| PR #2 `8fb1960` | Besluts- och uppgiftsregister, inklusive HP-045. | Statusrader, inte ett sidtextarkiv. |
+| Research `566ff89`, `docs/research/CONTENT_PAGE_TEMPLATES.md` | Generella innehållsmallar. | Dokumentet säger uttryckligen ”struktur före copy”. |
+| PR #1 `43a33e5` – filinventering och granskad layout/hallmall | Återanvändbara koddelar och prototypupplägg. | Inte identifierat som de senare chattsidornas original. |
+| Prototyp `fd7a912`, `HOMEPAGE_DIRECTION_02.md` och `src/data/homepagePrototype.ts` | Grafisk riktning och uttryckligt placeholder-innehåll från äldre designarbete. | Ingen styrkt identitet med startsida v0.3. |
+| Sökning i tillgängliga projekt-/biblioteksfiler efter Hallpartner, sidutkast och versionsnamn | Äldre beslutsunderlag och tekniskt material. | Inga fullständiga aktuella sidutkast återfunna. Sökningen bevisar inte att de saknas i alla tidigare chattar eller externa system. |
+
+Sökningen är inte en genomgång av varje historisk commit eller varje meddelande i alla tidigare chattar. Frånvaro i detta arkiv betyder **ej återfunnet**, inte att arbetet aldrig gjorts.
+
+## Så tillförs originalen utan att tidigare arbete ändras
+
+Exportera eller kopiera de fullständiga elva sidutkasten från den tidigare chatten till Markdown eller vanlig text. Ta med versionsrubrik och tillhörande ändringar/godkännanden som avgör vilken version som är den senaste. Ett enda samlat dokument fungerar om sidgränser och versioner framgår.
+
+Vid arkivering ska varje sida innehålla:
+
+- Syfte och föreslagen URL.
+- **Fullständigt befintligt textutkast**, med bevarade formuleringar och sektionernas ordning.
+- Bild- och layoutanvisningar, CTA samt interna länkar som faktiskt finns i källan.
+- Version, källa och arbetsstatus, med datum när det går att fastställa.
+- Påståenden som behöver kundverifiering och öppna beslut, tydligt åtskilda från originalet.
+
+Saknas en uppgift i originalet, skriv **”ej angivet i källan”**. Hitta inte på en sektionsordning, CTA eller bildinstruktion för att fylla en mall. Redaktionella rekommendationer får läggas i en separat, tydligt namngiven granskningsdel; de är inte originaltext.
+
+Exempel på dokumentstruktur, inte ett nytt sidutkast:
+
+```markdown
+# [Sida] – [version enligt källa]
+
+## Proveniens och status
+Källa: [identifierbart meddelande eller fil]
+Källdatum: [datum eller ej fastställt]
+Arbetsstatus: [ordalydelse enligt källa]
+Kundfakta: [verifierade / kräver kontroll, med underlag]
+Föreslagen URL: [enligt källa eller separat arbetsförslag]
+
+## Originalutkast – oförändrat
+[Fullständig källtext]
+
+## Källans layout, bilder, CTA och sektionsordning
+[Bevara befintliga anvisningar; markera vad källan inte anger]
+
+## Redaktionell granskning – inte del av originalet
+[Öppna beslut och påståenden som behöver verifieras]
+```
+
+## Avslutskrav för HP-045
+
+HP-045 förblir öppen/blockerad av saknade fulltextkällor. Den får inte markeras klar för att katalogen eller detta manifest finns. Klar kräver att rätt versioner är arkiverade i fulltext, att källorna framgår och att inget påhittat original eller oavsiktligt uppgraderat kundgodkännande har införts.
+
+Se [webbplatsplanen](../WEBSITE_PLAN.md) för arbeten som kan fortsätta utan dessa fulltexter. Nya produktsidor ska inte fyllas med äldre demo-copy under väntan.
