@@ -108,6 +108,10 @@ try {
       'images:[...document.images].map(img=>({loaded:img.complete&&img.naturalWidth>0,src:img.currentSrc||img.src}))};' +
       '})()', true);
 
+    if (expectedPath.endsWith('/start/')) {
+      metrics.heroState = await evaluate("(async function(){\n const hero=document.querySelector('.hp-home-hero[data-hero]');\n const header=document.querySelector('.hp-draft-header');\n const image=document.querySelector('.hp-home-hero__background');\n if(!hero||!header||!image)return {error:'Missing hero/header/image'};\n await new Promise(resolve=>setTimeout(resolve,240));\n const imageRect=image.getBoundingClientRect(),heroRect=hero.getBoundingClientRect();\n const initial={headerOverlay:header.classList.contains('hp-draft-header--overlay'),transparent:!header.classList.contains('hp-draft-header--solid')&&getComputedStyle(header).backgroundColor==='rgba(0, 0, 0, 0)',headerOverHero:Math.abs(header.getBoundingClientRect().top-heroRect.top)<3,fullWidth:Math.abs(heroRect.width-innerWidth)<3,cover:getComputedStyle(image).objectFit==='cover'&&Math.abs(imageRect.width-heroRect.width)<3,imageLoaded:image.complete&&image.naturalWidth===1916&&image.currentSrc.includes('/images/hallpartner-hero-temporary.webp')};\n const questionWidths=[...document.querySelectorAll('.hp-home-planning__list li > div')].map(node=>Math.round(node.getBoundingClientRect().width));\n window.scrollTo(0,Math.ceil(heroRect.height+160));window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const solidOnExit=header.classList.contains('hp-draft-header--solid');\n window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const transparentOnReturn=!header.classList.contains('hp-draft-header--solid');\n return {...initial,solidOnExit,transparentOnReturn,minQuestionWidth:Math.min(...questionWidths)};\n})()", true);
+    }
+
     if (viewport.name === 'mobile') {
       metrics.menu = await evaluate('(()=>{' +
         'const toggle=document.querySelector("[data-hp-nav-toggle]");' +
@@ -117,8 +121,10 @@ try {
         'toggle.click();' +
         'const opened=toggle.getAttribute("aria-expanded");' +
         'const visible=getComputedStyle(nav).display!=="none";' +
+        'const solidWhenOpen=document.querySelector(".hp-home-hero")?document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
         'document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true}));' +
-        'return {before,opened,visible,closed:toggle.getAttribute("aria-expanded")};' +
+        'const transparentAfterEscape=document.querySelector(".hp-home-hero")?!document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
+        'return {before,opened,visible,closed:toggle.getAttribute("aria-expanded"),solidWhenOpen,transparentAfterEscape};' +
         '})()');
     }
 
@@ -139,8 +145,15 @@ try {
       throw new Error('Invalid rendered page on ' + page.viewport.name);
     }
   }
+  const homePages = report.filter(page => page.heroState);
+  for (const page of homePages) {
+    const h = page.heroState;
+    if (h.error || !h.headerOverlay || !h.transparent || !h.headerOverHero || !h.fullWidth || !h.cover || !h.imageLoaded || !h.solidOnExit || !h.transparentOnReturn || h.minQuestionWidth < 180) {
+      throw new Error('Home hero/header/list layout failed on ' + page.viewport.name + ': ' + JSON.stringify(h));
+    }
+  }
   const mobile = report.find(page => page.viewport.name === 'mobile')?.menu;
-  if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false') {
+  if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape))) {
     throw new Error('Mobile toggle / Escape interaction failed');
   }
 } catch (error) {
