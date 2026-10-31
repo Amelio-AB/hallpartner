@@ -50,17 +50,43 @@
 .hp-home-hero {
   position: relative;
   isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: 100svh;
   color: var(--hp-text-light);
   background: var(--hp-deep);
+  overflow: hidden;
+}
+
+.hp-home-hero__background,
+.hp-home-hero__overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.hp-home-hero__background {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hp-home-hero__overlay {
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(20,25,27,.94) 0%, rgba(20,25,27,.80) 38%, rgba(20,25,27,.35) 75%, rgba(20,25,27,.14) 100%), linear-gradient(0deg, rgba(20,25,27,.36), transparent 45%);
 }
 
 .hp-home-hero__grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
   gap: clamp(2rem, 5.2vw, 5.75rem);
-  min-height: min(810px, 79svh);
+  min-height: 100svh;
+  padding-top: 6rem;
+  padding-bottom: 3rem;
 }
 
 .hp-home-hero__copy {
@@ -722,4 +748,12 @@
   .hp-home-type__image img {
     transition: none;
   }
+}
+
+/* Home-only full-bleed image under transparent header, prototype fallback.
+   AMP-004/AMP-002 must replace this when the private package is integrated. */
+@media (max-width: 800px) {
+  .hp-home-hero__background { object-position: 67% center; }
+  .hp-home-hero__overlay { background: linear-gradient(90deg, rgba(20,25,27,.87), rgba(20,25,27,.5)), linear-gradient(0deg,rgba(20,25,27,.7), transparent 70%); }
+  .hp-home-hero__grid { min-height: 100svh; padding-top: 5rem; }
 }
