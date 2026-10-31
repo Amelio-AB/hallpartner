@@ -32,18 +32,18 @@ const builtHtml = new Map(
 );
 const ids = new Map(routes.map((slug) => [
   slug,
-  [...builtHtml.get(slug).matchAll(/\\sid="([^"]+)"/g)].map((match) => match[1]),
+  [...builtHtml.get(slug).matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]),
 ]));
 for (const slug of routes) {
   const html = builtHtml.get(slug);
   const existingIds = ids.get(slug);
   assert.equal(new Set(existingIds).size, existingIds.length, 'duplicate id on prototype route: ' + (slug || 'index'));
-  for (const [, rawHref] of html.matchAll(/\\shref="([^"]*)"/g)) {
+  for (const [, rawHref] of html.matchAll(/\shref="([^"]*)"/g)) {
     if (!rawHref.startsWith('#') && !rawHref.startsWith('/prototype/hallpartner/')) continue;
     const target = new URL(rawHref, 'https://prototype.example/prototype/hallpartner/' + slug + '/');
     const routePrefix = '/prototype/hallpartner/';
     assert.ok(target.pathname.startsWith(routePrefix), 'prototype href escaped route root: ' + rawHref);
-    const targetSlug = target.pathname.slice(routePrefix.length).replace(/\\/$/, '');
+    const targetSlug = target.pathname.slice(routePrefix.length).replace(/\/$/, '');
     assert.ok(routes.includes(targetSlug), 'unbuilt prototype link on ' + (slug || 'index') + ': ' + rawHref);
     assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', targetSlug, 'index.html')),
       'missing linked HTML on ' + (slug || 'index') + ': ' + rawHref);
@@ -58,9 +58,9 @@ for (const slug of routes) {
 
   // HPD-017: no zero-padded decorative numbers in headings. Genuine process
   // sequences belong in an explicit ordered list, not in visual heading badges.
-  for (const [, heading] of html.matchAll(/<h[1-6]\\b[^>]*>([\\s\\S]*?)<\\/h[1-6]>/gi)) {
+  for (const [, heading] of html.matchAll(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]>/gi)) {
     const content = heading.replace(/<[^>]*>/g, '').replace(/&nbsp;|&#160;/g, ' ').trim();
-    assert.doesNotMatch(content, /^0[1-9]\\b/, 'decorative heading number in ' + (slug || 'index') + ': ' + content);
+    assert.doesNotMatch(content, /^0[1-9]\b/, 'decorative heading number in ' + (slug || 'index') + ': ' + content);
   }
 }
 
