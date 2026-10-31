@@ -61,85 +61,11 @@ jobs:
           NODE_ENV: production
       - name: Verify noindex, landmarks and sitemap exclusions in dist
         run: node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
-      - name: Capture visual review screenshots (optional, no deployment)
-        # Runner browser is used only if present. Failure does not invalidate build checks.
-        continue-on-error: true
+      - name: Verify full-page visuals, images and mobile menu with Chrome
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p visual-review
-          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          if [ -z "$BROWSER" ]; then
-            echo "No browser executable available." > visual-review/STATUS.txt
-            exit 0
-          fi
-          echo "Browser: $BROWSER" > visual-review/STATUS.txt
-          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/preview-server.log 2>&1 &
-          PREVIEW_PID=$!
-          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
-          URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
-          READY=0
-          for i in $(seq 1 30); do
-            if curl -fsS "$URL" >/dev/null; then READY=1; break; fi
-            sleep 0.5
-          done
-          if [ "$READY" -ne 1 ]; then
-            echo "Local Astro preview failed to respond." >> visual-review/STATUS.txt
-            exit 0
-          fi
-          if "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=7000 --window-size=1440,900 \
-            --screenshot="$(pwd)/visual-review/desktop-1440.png" "$URL" > visual-review/desktop-browser.log 2>&1; then
-            if [ -s visual-review/desktop-1440.png ]; then
-              echo "Desktop 1440x900 screenshot captured." >> visual-review/STATUS.txt
-            else
-              echo "Desktop screenshot missing despite successful browser exit." >> visual-review/STATUS.txt
-            fi
-          else
-            echo "Desktop browser capture failed; inspect desktop-browser.log." >> visual-review/STATUS.txt
-          fi
-          if "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=7000 --window-size=390,844 \
-            --screenshot="$(pwd)/visual-review/mobile-390.png" "$URL" > visual-review/mobile-browser.log 2>&1; then
-            if [ -s visual-review/mobile-390.png ]; then
-              echo "Mobile-sized 390x844 screenshot captured (desktop browser, not physical iPhone)." >> visual-review/STATUS.txt
-            else
-              echo "Mobile screenshot missing despite successful browser exit." >> visual-review/STATUS.txt
-            fi
-          else
-            echo "Mobile browser capture failed; inspect mobile-browser.log." >> visual-review/STATUS.txt
-          fi
-
-      - name: Capture tall-page screenshots for editorial review (optional)
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p visual-review
-          BROWSER="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
-          if [ -z "$BROWSER" ]; then exit 0; fi
-          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/preview-tall-server.log 2>&1 &
-          PREVIEW_PID=$!
-          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
-          URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
-          for i in $(seq 1 30); do
-            if curl -fsS "$URL" >/dev/null; then break; fi
-            sleep 0.5
-          done
-          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=7000 --window-size=1440,3600 \
-            --screenshot="$(pwd)/visual-review/desktop-full-1440.png" "$URL" > visual-review/desktop-full-browser.log 2>&1 || true
-          "$BROWSER" --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --disable-background-networking \
-            --virtual-time-budget=7000 --window-size=390,5800 \
-            --screenshot="$(pwd)/visual-review/mobile-full-390.png" "$URL" > visual-review/mobile-full-browser.log 2>&1 || true
-          if [ -s visual-review/desktop-full-1440.png ]; then echo "Desktop tall-page screenshot captured (1440x3600 viewport)." >> visual-review/STATUS.txt; fi
-          if [ -s visual-review/mobile-full-390.png ]; then echo "Mobile-width tall-page screenshot captured (390x5800 viewport, not actual phone)." >> visual-review/STATUS.txt; fi
-
-      - name: Node 24 CDP screenshot validation (optional)
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -euo pipefail
           ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/cdp-preview-server.log 2>&1 &
           PREVIEW_PID=$!
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
@@ -155,7 +81,7 @@ jobs:
           fi
           timeout 90s node scripts/capture-hallpartner-home.mjs
 
-      - name: Preserve optional visual review artifacts
+      - name: Preserve validated visual review artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
