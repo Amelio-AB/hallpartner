@@ -82,6 +82,19 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
       const menu = header?.querySelector<HTMLElement>('#hp-proto-nav');
       if (header && menuButton && menu) {
         header.classList.add('hp-draft-header--js');
+        const hero = document.querySelector<HTMLElement>('.hp-home-hero[data-hero]');
+        if (hero) {
+          header.classList.add('hp-draft-header--overlay');
+          const syncSurface = () => {
+            const leavingHero = hero.getBoundingClientRect().bottom <= header.getBoundingClientRect().bottom;
+            header.classList.toggle('hp-draft-header--solid', leavingHero || menuButton.getAttribute('aria-expanded') === 'true');
+          };
+          const heroObserver = new IntersectionObserver(syncSurface, { threshold: [0, 1] });
+          heroObserver.observe(hero);
+          window.addEventListener('scroll', syncSurface, { passive: true });
+          syncSurface();
+          menuButton.addEventListener('click', () => requestAnimationFrame(syncSurface));
+        }
 
         const closeMenu = (returnFocus = false) => {
           menu.classList.remove('is-open');
