@@ -74,9 +74,14 @@ try {
   await call('Page.enable');
 
   const report = [];
+  // Cover narrow mobile, common mobile, tablet and desktop breakpoints.
+  // These are real rendered Chrome viewports, not stylesheet-only checks.
   for (const viewport of [
-    { name: 'desktop', width: 1440, height: 900 },
+    { name: 'mobile-320', width: 320, height: 720 },
     { name: 'mobile', width: 390, height: 844 },
+    { name: 'tablet-768', width: 768, height: 1024 },
+    { name: 'desktop-1280', width: 1280, height: 800 },
+    { name: 'desktop', width: 1440, height: 900 },
   ]) {
     await call('Emulation.setDeviceMetricsOverride', {
       width: viewport.width, height: viewport.height,
@@ -112,7 +117,7 @@ try {
       metrics.heroState = await evaluate("(async function(){\n const hero=document.querySelector('.hp-home-hero[data-hero]');\n const header=document.querySelector('.hp-draft-header');\n const image=document.querySelector('.hp-home-hero__background');\n if(!hero||!header||!image)return {error:'Missing hero/header/image'};\n await new Promise(resolve=>setTimeout(resolve,240));\n const imageRect=image.getBoundingClientRect(),heroRect=hero.getBoundingClientRect();\n const initial={headerOverlay:header.classList.contains('hp-draft-header--overlay'),transparent:!header.classList.contains('hp-draft-header--solid')&&getComputedStyle(header).backgroundColor==='rgba(0, 0, 0, 0)',headerOverHero:Math.abs(header.getBoundingClientRect().top-heroRect.top)<3,fullWidth:Math.abs(heroRect.width-document.documentElement.clientWidth)<3,cover:getComputedStyle(image).objectFit==='cover'&&Math.abs(imageRect.width-heroRect.width)<3,imageLoaded:image.complete&&image.naturalWidth===1916&&image.currentSrc.includes('/images/hallpartner-hero-temporary.webp')};\n const questionWidths=[...document.querySelectorAll('.hp-home-planning__list li > div')].map(node=>Math.round(node.getBoundingClientRect().width));\n window.scrollTo(0,Math.ceil(heroRect.height+160));window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const solidOnExit=header.classList.contains('hp-draft-header--solid');\n window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const transparentOnReturn=!header.classList.contains('hp-draft-header--solid');\n return {...initial,solidOnExit,transparentOnReturn,minQuestionWidth:Math.min(...questionWidths)};\n})()", true);
     }
 
-    if (viewport.name === 'mobile') {
+    if (viewport.width <= 800) {
       metrics.menu = await evaluate('(()=>{' +
         'const toggle=document.querySelector("[data-hp-nav-toggle]");' +
         'const nav=document.querySelector("#hp-proto-nav");' +
@@ -152,9 +157,11 @@ try {
       throw new Error('Home hero/header/list layout failed on ' + page.viewport.name + ': ' + JSON.stringify(h));
     }
   }
-  const mobile = report.find(page => page.viewport.name === 'mobile')?.menu;
-  if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape))) {
-    throw new Error('Mobile toggle / Escape interaction failed');
+  for (const page of report.filter(page => page.viewport.width <= 800)) {
+    const mobile = page.menu;
+    if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape))) {
+      throw new Error('Mobile toggle / Escape interaction failed at ' + page.viewport.width + 'px: ' + JSON.stringify(mobile));
+    }
   }
 } catch (error) {
   await writeFile(join(output, prefix + '-ERROR.txt'), String(error));
