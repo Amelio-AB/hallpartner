@@ -45,6 +45,18 @@ for (const anchor of ['halltyper', 'att-tanka-pa']) {
   assert.ok(homepage.includes('id="' + anchor + '"'), 'broken homepage anchor: #' + anchor);
 }
 
+// The hall overview must be a complete second visual page with working review links.
+const halls = readFileSync(join(dist, 'prototype', 'hallpartner', 'hallar', 'index.html'), 'utf8');
+assert.ok(halls.includes('Vilken sorts hall behöver du?'), 'missing overview Hero');
+for (const id of ['hp-halls-usage', 'hp-halls-structure', 'hp-halls-insulation']) {
+  assert.ok(halls.includes('id="' + id + '"'), 'missing overview section: ' + id);
+}
+assert.ok((halls.match(/<img(?:\\s|>)/gi) ?? []).length >= 4, 'hall overview needs built image elements');
+for (const slug of ['lagerhallar', 'maskinhallar', 'ridhus', 'talthallar', 'plathallar', 'isolerade-hallar', 'kontakt']) {
+  assert.ok(halls.includes('/prototype/hallpartner/' + slug + '/'), 'missing overview link: ' + slug);
+  assert.ok(existsSync(join(dist, 'prototype', 'hallpartner', slug, 'index.html')), 'broken overview target: ' + slug);
+}
+
 const sitemapFiles = readdirSync(dist).filter((file) => /^sitemap.*\.xml$/.test(file));
 assert.ok(sitemapFiles.length > 0, 'expected an XML sitemap from Astro build');
 for (const file of sitemapFiles) {
