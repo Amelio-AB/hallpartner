@@ -1,0 +1,68 @@
+name: Hallpartner v1 draft validation (no deployment)
+
+on:
+  pull_request:
+    branches:
+      - main
+      - feature/amp-integration-readiness-2026-10-31
+    paths:
+      - '.github/workflows/hallpartner-draft.yml'
+      - 'astro.config.mjs'
+      - 'src/config/hallpartner-draft-pages.ts'
+      - 'src/config/hallpartner-brand.ts'
+      - 'src/layouts/HallpartnerDraftLayout.astro'
+      - 'src/styles/hallpartner-draft.css'
+      - 'src/pages/prototype/hallpartner/**'
+      - 'tests/hallpartner-draft.test.mjs'
+      - 'tests/amp-brand.test.mjs'
+      - 'scripts/verify-hallpartner-draft.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hallpartner-v1-draft-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  draft-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Record revision
+        run: |
+          node --version
+          npm --version
+          git rev-parse HEAD
+      - name: Install existing locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Astro and TypeScript
+        run: npm run check
+      - name: ESLint
+        run: npm run lint
+      - name: Contract tests (no AMP package integration yet)
+        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs
+      - name: Build static Astro site (no upload)
+        run: npm run build
+        env:
+          NODE_ENV: production
+      - name: Verify noindex, landmarks and sitemap exclusions in dist
+        run: node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
+      - name: Preserve static build for later review
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-v1-draft-${{ github.event.pull_request.head.sha }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 7
