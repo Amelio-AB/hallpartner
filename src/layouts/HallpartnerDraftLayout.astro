@@ -1,0 +1,62 @@
+---
+import '../styles/hallpartner-draft.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  currentSlug?: string;
+}
+
+const { title, description, currentSlug } = Astro.props;
+const draftBase = '/prototype/hallpartner/';
+const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
+---
+
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title} – intern Hallpartner-prototyp</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+  </head>
+  <body class="hp-draft">
+    <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
+    <div class="hp-draft-alert" role="note">
+      Intern arbetsprototyp – inga publiceringsklara kundtexter eller integrerade AMP-komponenter
+    </div>
+    <!-- Temporär statisk reservnavigation; ersätts med AMP-002 först efter verifierad installation. -->
+    <header class="hp-draft-header">
+      <div class="hp-draft-rail hp-draft-header__inner">
+        <a class="hp-draft-brand" href={draftBase}>
+          Hallpartner
+          <small>Intern sidstruktur</small>
+        </a>
+        <nav class="hp-draft-nav" aria-label="Prototypens navigation">
+          <a href={draftBase} aria-current={!currentSlug ? 'page' : undefined}>Översikt</a>
+          <a href={draftBase + 'start/'} aria-current={isCurrent('start')}>Startsida</a>
+          <a href={draftBase + 'hallar/'} aria-current={isCurrent('hallar')}>Hallar</a>
+          <a href={draftBase + 'sa-gar-det-till/'} aria-current={isCurrent('sa-gar-det-till')}>Så går det till</a>
+          <a href={draftBase + 'kontakt/'} aria-current={isCurrent('kontakt')}>Kontakt</a>
+        </nav>
+      </div>
+    </header>
+    <main id="main-content" class="hp-draft-main">
+      <slot />
+    </main>
+    <footer class="hp-draft-footer">
+      <div class="hp-draft-rail">
+        <p>Endast granskning av sidstruktur. <a href={draftBase}>Till prototypöversikten</a>.</p>
+      </div>
+    </footer>
+  </body>
+</html>
