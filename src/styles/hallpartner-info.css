@@ -79,3 +79,41 @@
   .hp-info__hero-actions { align-items:flex-start; flex-direction:column; }
   .hp-info__button { width:100%; }
 }
+
+/* Om Hallpartner: human-centered sections without placeholder photos or fake references. */
+.hp-info--about .hp-info__hero { background: #E6EBE5; }
+.hp-info--about .hp-info__section--soft .hp-info__textlink { margin-top: 1.5rem; }
+.hp-info__people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+.hp-info__person {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2.4vw, 2.5rem);
+  padding: clamp(1.5rem, 3.2vw, 3rem);
+  background: #FFFFFF;
+  border: 1px solid #C5D3C6;
+}
+.hp-info__person-monogram {
+  display: grid;
+  place-items: center;
+  flex: 0 0 clamp(5rem, 8vw, 8rem);
+  height: clamp(5rem, 8vw, 8rem);
+  border-radius: 50%;
+  background: #E1E9E0;
+  color: #244F33;
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+  letter-spacing: -.045em;
+  font-weight: 700;
+}
+.hp-info__person-content { min-width: 0; }
+.hp-info__person-label { color: #376843; font-size: .73rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin-bottom: .65rem; }
+.hp-info__person h3 { font-size: clamp(1.45rem, 2.1vw, 2.1rem); margin-bottom: .7rem; }
+.hp-info__person-content > p:last-child { color: #43584A; line-height: 1.65; margin-bottom: 0; }
+.hp-info--about .hp-info__end { scroll-margin-top: 1.5rem; }
+@media (max-width: 860px) {
+  .hp-info__people { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 420px) {
+  .hp-info__person { align-items: flex-start; }
+  .hp-info__person-monogram { flex-basis: 4rem; height: 4rem; }
+}

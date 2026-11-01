@@ -327,3 +327,26 @@ test('Contact and planning pages replace legacy Amelio contact and never fake a 
   assert.match(css, /\.hp-info__contact-panel/);
   assert.match(css, /@media\(max-width:740px\)/);
 });
+
+
+test('Om Hallpartner is a distinct visitor page with sourced identities and no invented biographies', () => {
+  const page = readFileSync(new URL('../src/pages/om-oss/index.astro', import.meta.url), 'utf8');
+  const layout = readFileSync(new URL('../src/layouts/HallpartnerDraftLayout.astro', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/styles/hallpartner-info.css', import.meta.url), 'utf8');
+  assert.ok(page.includes('HallpartnerSiteLayout'), 'Om oss must use approved visitor shell');
+  assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'Om oss needs one H1');
+  for (const id of ['teamet', 'om-inriktning', 'om-kontakt']) {
+    assert.ok(page.includes('id="' + id + '"'), 'missing section ' + id);
+  }
+  for (const person of ['Jimmy Gustafsson', 'Peter Fridland']) {
+    assert.ok(page.includes(person), 'missing published Hallpartner person ' + person);
+  }
+  assert.ok(page.includes("href=\"/kontakt/\""), 'no link to real contact');
+  assert.ok(page.includes("href=\"/sa-gar-det-till/\""), 'no link to process');
+  assert.ok(page.includes("href=\"/stalhallar/\""), 'no link to hall overview');
+  assert.ok(layout.includes('<a href="/om-oss/">Om Hallpartner</a>'), 'site footer must link to Om oss');
+  assert.match(css, /\.hp-info__people/);
+  assert.match(css, /@media \(max-width: 860px\)/);
+  assert.doesNotMatch(page, /egna montörer|20 års erfarenhet|lång erfarenhet|ansvarar för våra montage|levererar över hela Norden|garanti på arbete|kostnadsfri offert|hallprojekt i\s+\d{4}/i);
+  assert.doesNotMatch(page, /<img(?:\s|>)|<Image(?:\s|>)/i, 'must not add unlicensed portraits');
+});

@@ -298,3 +298,30 @@ for (const item of [
 assert.ok(siteHome.includes('href="/kontakt/"'), 'home should link to native contact route');
 assert.ok(siteHome.includes('href="/sa-gar-det-till/"'), 'main navigation must link to native process route');
 console.log('Verified visitor Kontakt and Så går det till: native routes, noindex, no fake form, correct brand and links.');
+
+
+// About page: distinct people, only public-source role labels pending customer
+// verification, and no assumed project/gallery or false credentials.
+{
+  const html = readFileSync(join(dist, 'om-oss', 'index.html'), 'utf8');
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'Om oss must remain noindex');
+  assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/om-oss/"'), 'Om oss canonical incorrect');
+  assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'Om oss H1 count wrong');
+  assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'Om oss header count wrong');
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'Om oss needs main nav, breadcrumbs and in-page nav');
+  assert.ok(html.includes('aria-label="Brödsmulor"') && html.includes('aria-label="På den här sidan"'));
+  for (const name of ['Jimmy Gustafsson', 'Peter Fridland']) {
+    assert.ok(html.includes(name), 'missing public-source person ' + name);
+  }
+  for (const id of ['teamet', 'om-inriktning', 'om-kontakt']) {
+    assert.ok(html.includes('id="' + id + '"'), 'missing Om oss section anchor: ' + id);
+  }
+  assert.ok(!html.includes('andreas@amelio.se'), 'developer email leaked on Om oss');
+  assert.ok(!html.includes('/prototype/hallpartner/'), 'prototype links leaked on Om oss');
+  assert.ok(html.includes('href="/stalhallar/"') && html.includes('href="/kontakt/"') && html.includes('href="/sa-gar-det-till/"'));
+  assert.ok(html.includes('href="/om-oss/"'), 'about footer link missing');
+  for (const href of [...html.matchAll(/\shref="(\/[^"#?]+\/)"/g)].map(m => m[1])) {
+    assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), 'broken Om oss destination: ' + href);
+  }
+}
+console.log('Verified visitor Om Hallpartner: noindex, canonical, published names, anchors and working links.');

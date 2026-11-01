@@ -190,7 +190,7 @@ try {
   await writeFile(join(output, prefix + '-REPORT.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
   for (const page of report) {
-    if (page.h1Count !== 1 || page.navCount !== ((expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/') ? 3 : 1) || page.overflow || page.images.some(i => !i.loaded)) {
+    if (page.h1Count !== 1 || page.navCount !== ((expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/') ? 3 : 1) || page.overflow || page.images.some(i => !i.loaded)) {
       throw new Error('Invalid rendered page on ' + page.viewport.name);
     }
   }
