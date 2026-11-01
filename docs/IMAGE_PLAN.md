@@ -110,6 +110,10 @@ Behåll planens uppgifter här som **fotoarbetslista**. Rapporteringsgrindar och
 
 **Status 2026-11-01:** Ingen av IMG-01–IMG-10 är färdigstämplad. Detta är uppgifter att genomföra; inga leverantörsrättigheter eller färdiga fotografier påstås existera. **Fortsätt utveckla andra Astro-sidor utan att vänta.**
 
+## Eventuell AMP-006 för referenskort – senare
+
+[AMP-006 Expandable Card Grid](architecture/AMP_006_ADOPTION_REVIEW.md) är en möjlig **framtida** presentation av godkända referensprojekt, inte ett skäl att fotografera fler generiska bilder eller ändra redan godkända hallundersidor. Ingen installation görs innan referens- och bildrättigheterna HP-017/018/046 är verifierade.
+
 ## 7. Leveransdefinition
 
 Bildplanen är administrativt klar när den finns i repot och är länkad från webbplatsplanen. Själva foto-/publiceringsarbetet är **inte klart** förrän varje vald bild har originalkälla, kontrollerad rättighet, korrekt ändamål/alt-text och faktisk responsiv QA.

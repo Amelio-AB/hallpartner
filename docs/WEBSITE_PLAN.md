@@ -15,6 +15,7 @@ Läs först `AGENTS.md` och registren i [PR #2](https://github.com/Amelio-AB/hal
 - [Bildplan och foto-TODO v0.1](IMAGE_PLAN.md): bildbehov per sida, motiv-ID F01–F18, leverantörsrättigheter, optimering och bildurval. [Praktisk fotolista](PHOTO_SHOT_LIST.md). Uppfyller inte i sig HP-017/HP-018/HP-032.
 - [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md): prioriterade sidämnen, konkurrentjämförelse och hur inkommande leverantörsinformation används utan att stoppa arbetet.
 - [Integrationsförslag](architecture/AMP_1_2_INTEGRATION.md): komponentansvar, designjämförelse, installation och testgrindar.
+- [AMP-006 behovsprövning](architecture/AMP_006_ADOPTION_REVIEW.md): den godkända kortkomponenten finns i plattformsversion 1.3.0, men **ingen kundinstallation nu**; jämför först vid framtida godkända referensbilder.
 - [Inventering och faktiska testresultat](audits/2026-10-31-readiness.md): granskade revisioner och begränsningar.
 
 Dessa filer är tillägg. Befintliga PR #1 och #2, startsidan och historiska prototyper ändras inte av dokumentationsarbetet.
