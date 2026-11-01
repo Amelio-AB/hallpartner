@@ -30,7 +30,7 @@ Filnamnen är **föreslagna destinationer**, inte länkar till redan skapade fil
 
 ## Nyskrivna arbetsutkast i Astro – inte historiska original
 
-Sedan inventeringen den 31 oktober har åtta **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
+Sedan inventeringen den 31 oktober har nio **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
 
 | Sida | Ny fulltextkälla | Redaktionell plan |
 |---|---|---|
@@ -42,6 +42,7 @@ Sedan inventeringen den 31 oktober har åtta **nya** sidversioner skrivits direk
 | Tälthallar | [`src/pages/stalhallar/talthall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/7ddebddcf4c42096a0180a06483b1b7c3e43163c/src/pages/stalhallar/talthall/index.astro) | [Tälthallar, **nytt** utkast v0.1](../page-briefs/talthall-v01.md) |
 | Så går det till | [`src/pages/sa-gar-det-till/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/746b8f7317fba81fcd8ecf34f1779a36f9f064c8/src/pages/sa-gar-det-till/index.astro) | [Planering, **ny** v0.1](../page-briefs/sa-gar-det-till-v01.md); **inte verifierad Hallpartner-leveransprocess** |
 | Kontakt | [`src/pages/kontakt/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/746b8f7317fba81fcd8ecf34f1779a36f9f064c8/src/pages/kontakt/index.astro) | [Kontakt, **ny** v0.1](../page-briefs/kontakt-v01.md); offentlig e-post/telefon ännu kundoverifierade, **inget formulär** |
+| Om Hallpartner | [`src/pages/om-oss/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/594f6ea6792ca3cbab1d0602db7cd87624065236/src/pages/om-oss/index.astro) | [Om Hallpartner, **ny** v0.1](../page-briefs/om-hallpartner-v01.md), publik namnpresentation från äldre webbplats; **roller och publicering måste kundverifieras** |
 
 Detta betyder **inte** att äldre utkast återfunnits: `0/11` historiska fulltextoriginal i manifestet är fortfarande korrekta. Nya Kontakt v0.1 ersätter inte automatiskt den i historisk överlämning angivna Kontakt v0.2 med formulär; backend och godkännande saknas. Ridhus angavs tidigare som en godkänd *arbetsversion* i en historisk överlämning; det påståendet ska bevaras, men vår nya Astro-version får **inte** förväxlas med eller automatiskt ersätta den saknade originaltexten. De nya versionerna är inte kundgodkända och får inte ersätta originalen utan ett uttryckligt versionsbeslut. Den aktuella besökarcopy:n hålls i Astro-sidorna för att undvika två kopior som glider isär.
 

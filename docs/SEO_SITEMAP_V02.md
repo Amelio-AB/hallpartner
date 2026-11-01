@@ -5,7 +5,7 @@
 >
 > **Första genomarbetade sidbrief:** [Stålhallar /stalhallar/ v0.1](page-briefs/stalhallar-v01.md). Nyskriven innehållsplan, inte kundgodkänd copy och inte återfunnet fulltextoriginal.
 > **Nya riktiga undersidor i Draft PR #5:** [Lagerhallar](page-briefs/lagerhall-v01.md), [Maskinhallar](page-briefs/maskinhall-v01.md), [Plåthallar](page-briefs/plathall-v01.md), [Isolerade hallar](page-briefs/isolerad-hall-v01.md), [Ridhus](page-briefs/ridhus-v01.md) och [Tälthallar](page-briefs/talthall-v01.md). Alla är noindexerade, nyskrivna arbetsutkast på bevarade WordPress-vägar – **inga återfunna äldre originaltexter**.
-> **Nya informationssidor:** [Kontakt v0.1](page-briefs/kontakt-v01.md) och [Så går det till v0.1](page-briefs/sa-gar-det-till-v01.md) är också noindexerade Astro-arbetsversioner. Kontakt har nu synlig e-post/telefon, **inget fungerande formulär** och väntar på kundverifiering.
+> **Nya informationssidor:** [Kontakt v0.1](page-briefs/kontakt-v01.md), [Så går det till v0.1](page-briefs/sa-gar-det-till-v01.md) och [Om Hallpartner v0.1](page-briefs/om-hallpartner-v01.md) finns som noindexerade Astro-arbetsversioner. Kontakt har synlig e-post/telefon, **inget fungerande formulär** och väntar på kundverifiering. Om oss använder tidigare publicerade namn/roller, inte godkända biografier.
 > **Konkurrensinriktning:** [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md) – möjliga kundbehov brett, verifierade produktlöften separat.
 >
 > **URL-förslag v0.2 ersätter de korta arbets-URL:erna i WEBSITE_PLAN.md från 2026-10-31.** Inga routes, redirects, canonical-taggar, sitemaps, arbetsflöden eller publicerade sidor ändrades av denna dokumentationsrevision. Uppdatera befintliga HPD-/HP-ID i PR #2 vid faktisk status-/beslutsändring; skapa inte ett parallellt kanoniskt beslutsregister.
@@ -77,7 +77,7 @@ Titlar och beskrivningar ska **omprövas mot färdig copy och verkliga sökfråg
 | Plåthall | Plåthallar – utförande och alternativ \| Hallpartner | Vad är en plåthall? |
 | Isolerad hall | Isolerade hallar – när behövs isolering? \| Hallpartner | Isolerade hallar och isoleringsbehov |
 | Process | Så går det till \| Hallpartner | Från idé till ett tydligare behov. |
-| Om oss | Om Hallpartner – företaget och människorna \| Hallpartner | Om Hallpartner |
+| Om oss | Om Hallpartner \| Hallpartner | Lär känna Hallpartner. |
 | Kontakt | Kontakt \| Hallpartner | Berätta om ditt hallprojekt. |
 | Offert (när färdig) | Begär offert på en hall \| Hallpartner | Beskriv din hallförfrågan |
 

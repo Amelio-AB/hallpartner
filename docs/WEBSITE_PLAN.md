@@ -15,6 +15,7 @@ Läs först `AGENTS.md` och registren i [PR #2](https://github.com/Amelio-AB/hal
 - [Plåthallar v0.1](page-briefs/plathall-v01.md) och [Isolerade hallar v0.1](page-briefs/isolerad-hall-v01.md): två nya noindexerade Astro-utkast på bevarade WordPress-vägar, med skild användning/isolering och ännu ej verifierade leverantörsdata. Dessa är **inte** de äldre originalen.
 - [Ridhus v0.1](page-briefs/ridhus-v01.md) och [Tälthallar v0.1](page-briefs/talthall-v01.md): två separata nyskrivna noindexerade sidor på tidigare WordPress-URL:er. Ridhus behandlar ridverksamhet; Tälthallar behandlar duk-/tältutförande och lokala förutsättningar. Inget av dem är återfunnen äldre originalcopy.
 - [Så går det till v0.1](page-briefs/sa-gar-det-till-v01.md) och [Kontakt v0.1](page-briefs/kontakt-v01.md): nya noindexerade arbetsversioner. Kontakt har **bara telefon/mejl** tills backend, ansvar och personuppgiftsinformation finns.
+- [Om Hallpartner v0.1](page-briefs/om-hallpartner-v01.md): noindexerad Astro-arbetsversion med två personer från tidigare publicerad Om oss-sida; namn, roller och verklig företagsinformation behöver bekräftas innan publicering.
 - [Bildplan och foto-TODO v0.1](IMAGE_PLAN.md): bildbehov per sida, motiv-ID F01–F18, leverantörsrättigheter, optimering och bildurval. [Praktisk fotolista](PHOTO_SHOT_LIST.md). Uppfyller inte i sig HP-017/HP-018/HP-032.
 - [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md): prioriterade sidämnen, konkurrentjämförelse och hur inkommande leverantörsinformation används utan att stoppa arbetet.
 - [Integrationsförslag](architecture/AMP_1_2_INTEGRATION.md): komponentansvar, designjämförelse, installation och testgrindar.
@@ -25,7 +26,7 @@ Dessa filer är tillägg. Befintliga PR #1 och #2, startsidan och historiska pro
 
 ## Besökarens väg genom webbplatsen
 
-**Visuellt godkännande 2026-11-01:** Andreas har accepterat Ridhus och Tälthallar som **nuvarande visuella arbetsversioner** tillsammans med tidigare granskade hallar. Se [HPD-027 i kanoniska beslutsregistret, Draft PR #2](https://github.com/Amelio-AB/hallpartner/blob/4b354643555d715d39f3791ee27f0347f6d50fc5/docs/PROJECT_DECISIONS.md). Detta innebär inte kundgodkänd copy eller publiceringsbeslut.
+**Visuella godkännanden 2026-11-01:** Andreas har accepterat Ridhus och Tälthallar som arbetsversioner enligt [HPD-027](https://github.com/Amelio-AB/hallpartner/blob/4b354643555d715d39f3791ee27f0347f6d50fc5/docs/PROJECT_DECISIONS.md), samt Kontakt och Så går det till enligt [HPD-028](https://github.com/Amelio-AB/hallpartner/blob/c977aff85adb2bf78d262c5e957db8927ede7a2f/docs/PROJECT_DECISIONS.md). Detta gäller sidornas presentation, inte kundgodkänd copy eller publiceringsbeslut.
 
 Startsidan ska orientera: vad webbplatsen handlar om, vilka behov som leder vidare och hur en första kontakt tas. Hallöversikten ska hjälpa besökaren jämföra relevanta alternativ. Den ska inte vara en längre kopia av startsidan.
 
@@ -48,7 +49,7 @@ URL:erna nedan är **bevarandeförslag från SEO v0.2 (2026-11-01)**, inte beslu
 | Plåthallar `/stalhallar/plathall/` | Förklara plåtutförandet utan att göra det till ett användningsområde. | Relevanta användningar, isolering där relevant, kontakt. | AMP-005. |
 | Isolerade hallar `/stalhallar/isolerad-hall/` | Förklara isolering som egenskap som kan vara relevant för flera hallar. | Relevanta användnings-/utförandesidor, kontakt. | AMP-005. |
 | Så går det till `/sa-gar-det-till/` | Ny noindexerad sida med kundens förberedelser; en faktiskt avtalad Hallpartner-process kan beskrivas först efter HP-009/010. | Stålhallar och Kontakt. | Nu textbaserad Astro-intro; AMP-005 efter godkänd plattformsintegration. |
-| Om Hallpartner `/om-oss/` | Presentera verifierade uppgifter om företaget och personerna. | Kontakt. | AMP-005 med godkänt personfoto eller utan bild. |
+| Om Hallpartner `/om-oss/` | Ny noindexerad Om oss-route med neutral verksamhetsintroduktion och tidigare publicerade personnamn/roller, men **utan obekräftade erfarenhets- eller montagepåståenden**. | Stålhallar, Så går det till, Kontakt. | Tillfällig Astro-Hero, porträtt/AMP-005 efter godkänd foto- och plattformsintegration. |
 | Kontakt `/kontakt/` | Ny noindexerad Hallpartner-kontaktsida utan formulär; publik e-post/telefon från gamla webbplatsen måste verifieras hos kunden. | Direkt mejl/telefon, Stålhallar och process. | Nu textbaserad Astro-intro; AMP-005 senare. Inget skickat-/mottaget-löfte. |
 
 Ingen sida får automatiskt samma sektioner i samma ordning. Sidans bevarade originalutkast och funktion ska avgöra vad som behövs. Fullbreddsbilder används selektivt, inte som rutin mellan varje textblock.
