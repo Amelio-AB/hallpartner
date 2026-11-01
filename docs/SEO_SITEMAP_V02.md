@@ -4,7 +4,7 @@
 > Avser sidornas roller, URL-migrering, sökfokus och länkar inför Astro-implementation. Huvudkällan för tidigare textversioner är fortfarande [innehållsmanifestet](content/README.md), som anger att fulltext för 0/11 originalutkast har arkiverats. Skapa inte påstådda original av förslagen här.
 >
 > **Första genomarbetade sidbrief:** [Stålhallar /stalhallar/ v0.1](page-briefs/stalhallar-v01.md). Nyskriven innehållsplan, inte kundgodkänd copy och inte återfunnet fulltextoriginal.
-> **Nya riktiga undersidor i Draft PR #5:** [Lagerhallar v0.1](page-briefs/lagerhall-v01.md), [Maskinhallar v0.1](page-briefs/maskinhall-v01.md), [Plåthallar v0.1](page-briefs/plathall-v01.md) och [Isolerade hallar v0.1](page-briefs/isolerad-hall-v01.md). Alla är noindexerade, nyskrivna arbetsutkast på bevarade WordPress-vägar – **inga återfunna äldre originaltexter**.
+> **Nya riktiga undersidor i Draft PR #5:** [Lagerhallar](page-briefs/lagerhall-v01.md), [Maskinhallar](page-briefs/maskinhall-v01.md), [Plåthallar](page-briefs/plathall-v01.md), [Isolerade hallar](page-briefs/isolerad-hall-v01.md), [Ridhus](page-briefs/ridhus-v01.md) och [Tälthallar](page-briefs/talthall-v01.md). Alla är noindexerade, nyskrivna arbetsutkast på bevarade WordPress-vägar – **inga återfunna äldre originaltexter**.
 > **Konkurrensinriktning:** [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md) – möjliga kundbehov brett, verifierade produktlöften separat.
 >
 > **URL-förslag v0.2 ersätter de korta arbets-URL:erna i WEBSITE_PLAN.md från 2026-10-31.** Inga routes, redirects, canonical-taggar, sitemaps, arbetsflöden eller publicerade sidor ändrades av denna dokumentationsrevision. Uppdatera befintliga HPD-/HP-ID i PR #2 vid faktisk status-/beslutsändring; skapa inte ett parallellt kanoniskt beslutsregister.
@@ -15,7 +15,7 @@
 - I webbsökning den 1 november 2026 kunde sökindexets tidigare crawls från cirka juli–augusti 2026 läsas för `/stalhallar/`, `/stalhallar/lagerhall/`, `/stalhallar/talthall/`, `/stalhallar/isolerad-hall/` och `/om-oss/`. Direkt hämtning av live-sidorna misslyckades i granskningsmiljön, så **färska HTTP-statusar, kanoniska URL:er och aktuella WordPress-metadata är inte verifierade**. Indexresultat kan vara inaktuella.
 - Dessa äldre texter innehåller bland annat påståenden om eget montage, helhetslösning, leveransområde och tekniska egenskaper. En tidigare publicering är inte kundverifiering. Använd [CLAIMS_EVIDENCE_WORKING](https://github.com/Amelio-AB/hallpartner/blob/566ff893e835432f6913bcb4bb78f909513eef7a/docs/research/CLAIMS_EVIDENCE_WORKING.md).
 - Google Search Console (GSC), GA4 och backlinkdata för `hallpartner.se` har inte varit åtkomliga vid denna genomgång. Ingen sökvolym, rankingposition, konkurrensgrad eller konvertering per landningssida har uppmätts.
-- Hallpartners nya Astro-gren har redan riktig startsida på `/`, men hallundersidorna är fortfarande noindexerade prototyper. Legacy-routesna `/vision/`, `/projekt/` och `/roadmap/` finns kvar i byggresultatet. `astro.config.mjs` utesluter prototyper ur XML-sitemap men inte dessa äldre visionssidor.
+- Hallpartners nya Astro-gren har riktig startsida på `/` och sex hallundersidor på sina tidigare WordPress-vägar, men **alla är fortfarande noindexerade arbetsversioner**. Legacy-routesna `/vision/`, `/projekt/` och `/roadmap/` finns kvar i byggresultatet. `astro.config.mjs` utesluter `/prototype/` ur XML-sitemap men inte de äldre visionssidorna eller alla noindexerade arbetsvägar. **Sitemap-/indexeringspolicy återstår före lansering.**
 - Principen följer Googles rekommendationer att kartlägga och behålla relevanta ingångar vid flytt, använda beskrivande titlar och länktexter samt se till att viktiga sidor går att nå genom riktiga HTML-länkar. Källor nederst i dokumentet.
 
 ## 2. Rekommenderad struktur och URL-karta
@@ -71,8 +71,8 @@ Titlar och beskrivningar ska **omprövas mot färdig copy och verkliga sökfråg
 | Stålhallar | Stålhallar för olika behov och utföranden \| Hallpartner | Stålhallar för olika verksamheter |
 | Lagerhall | Lagerhallar för förvaring och logistik \| Hallpartner | Lagerhallar – börja med förvaringsbehovet |
 | Maskinhall | Maskinhallar – planera utrymme och åtkomst \| Hallpartner | Maskinhallar för maskiner och utrustning |
-| Ridhus | Ridhus och ridhallar – planera din hall \| Hallpartner | Att planera ett ridhus |
-| Tälthall | Tälthallar – användning och utförande \| Hallpartner | Tälthallar för olika behov |
+| Ridhus | Ridhus och ridhallar – planera för ridverksamheten \| Hallpartner | Ridhus med plats för ridningen. |
+| Tälthall | Tälthallar – användning och utförande \| Hallpartner | Tälthallar efter användning och plats. |
 | Plåthall | Plåthallar – utförande och alternativ \| Hallpartner | Vad är en plåthall? |
 | Isolerad hall | Isolerade hallar – när behövs isolering? \| Hallpartner | Isolerade hallar och isoleringsbehov |
 | Process | Så går ett hallprojekt till \| Hallpartner | Så går det till |

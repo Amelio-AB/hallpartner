@@ -30,7 +30,7 @@ Filnamnen är **föreslagna destinationer**, inte länkar till redan skapade fil
 
 ## Nyskrivna arbetsutkast i Astro – inte historiska original
 
-Sedan inventeringen den 31 oktober har fyra **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
+Sedan inventeringen den 31 oktober har sex **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
 
 | Sida | Ny fulltextkälla | Redaktionell plan |
 |---|---|---|
@@ -38,8 +38,10 @@ Sedan inventeringen den 31 oktober har fyra **nya** sidversioner skrivits direkt
 | Maskinhallar | [`src/pages/stalhallar/maskinhall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/a670774ad527cb0907ec3df41978c6e1f0d8e84d/src/pages/stalhallar/maskinhall/index.astro) | [Maskinhallar, ny v0.1](../page-briefs/maskinhall-v01.md) |
 | Plåthallar | [`src/pages/stalhallar/plathall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/f678dee43f09b655e4fd6a7a4543091e55414e34/src/pages/stalhallar/plathall/index.astro) | [Plåthallar, ny v0.1](../page-briefs/plathall-v01.md) |
 | Isolerade hallar | [`src/pages/stalhallar/isolerad-hall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/f678dee43f09b655e4fd6a7a4543091e55414e34/src/pages/stalhallar/isolerad-hall/index.astro) | [Isolerade hallar, ny v0.1](../page-briefs/isolerad-hall-v01.md) |
+| Ridhus | [`src/pages/stalhallar/ridhus/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/7ddebddcf4c42096a0180a06483b1b7c3e43163c/src/pages/stalhallar/ridhus/index.astro) | [Ridhus, **nytt** utkast v0.1](../page-briefs/ridhus-v01.md) |
+| Tälthallar | [`src/pages/stalhallar/talthall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/7ddebddcf4c42096a0180a06483b1b7c3e43163c/src/pages/stalhallar/talthall/index.astro) | [Tälthallar, **nytt** utkast v0.1](../page-briefs/talthall-v01.md) |
 
-Detta betyder **inte** att äldre utkast återfunnits: `0/11` historiska fulltextoriginal i manifestet är fortfarande korrekta. De nya versionerna är inte kundgodkända och får inte ersätta originalen utan ett uttryckligt versionsbeslut. Den aktuella besökarcopy:n hålls i Astro-sidorna för att undvika två kopior som glider isär.
+Detta betyder **inte** att äldre utkast återfunnits: `0/11` historiska fulltextoriginal i manifestet är fortfarande korrekta. Ridhus angavs tidigare som en godkänd *arbetsversion* i en historisk överlämning; det påståendet ska bevaras, men vår nya Astro-version får **inte** förväxlas med eller automatiskt ersätta den saknade originaltexten. De nya versionerna är inte kundgodkända och får inte ersätta originalen utan ett uttryckligt versionsbeslut. Den aktuella besökarcopy:n hålls i Astro-sidorna för att undvika två kopior som glider isär.
 
 ## Vad som faktiskt har kontrollerats
 
