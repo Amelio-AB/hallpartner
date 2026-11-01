@@ -1,0 +1,140 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-info.css';
+
+// This page describes the customer's planning decisions, NOT verified
+// internal Hallpartner delivery stages. HP-009/010 must be confirmed first.
+const preparations = [
+  {
+    title: 'Börja med användningen',
+    description: 'Vad ska finnas i byggnaden och vad behöver den fungera för? Lagring, maskiner och ridverksamhet kan ställa olika krav.',
+  },
+  {
+    title: 'Beskriv utrymmet',
+    description: 'Fundera på ungefärlig storlek, frihöjd, portar och hur människor eller maskiner ska röra sig i byggnaden.',
+  },
+  {
+    title: 'Undersök byggplatsen',
+    description: 'Vilken ort gäller det och vilka markförutsättningar är kända? Tillstånd och konstruktion behöver bedömas för den enskilda platsen.',
+  },
+  {
+    title: 'Klargör omfattningen',
+    description: 'Innan ett förslag kan jämföras behöver ni veta vad som ska ingå, vilka beslut som återstår och vem som ansvarar för respektive del.',
+  },
+] as const;
+
+const openQuestions = [
+  { title: 'Lov och myndighetskrav', description: 'Vilka regler som gäller beror på projektet. Kontakta kommunen och relevanta sakkunniga vid behov.' },
+  { title: 'Grund, ritningar och montage', description: 'Det behöver framgå i projektets handlingar vem som gör vad. En generell webbsida avgör inte leveransomfattningen.' },
+  { title: 'Pris och tidsplan', description: 'Jämför erbjudanden först när underlagen beskriver samma omfattning. Leveranstider och kostnader kan inte anges utan ett konkret upplägg.' },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Så går det till"
+  description="Inför ett hallprojekt är det bra att reda ut användning, utrymme, byggplats och ansvar. Här finns frågor att förbereda innan du kontaktar Hallpartner."
+>
+  <div class="hp-info hp-info--process">
+    <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Så går det till</span>
+    </nav>
+
+    <section class="hp-info__hero" aria-labelledby="process-title">
+      <div class="hp-draft-rail hp-info__hero-grid">
+        <div class="hp-info__intro">
+          <p class="hp-info__eyebrow">Inför ditt hallprojekt</p>
+          <h1 id="process-title">Från idé till <em>ett tydligare behov.</em></h1>
+          <p class="hp-info__lead">
+            Ett hallprojekt väcker ofta frågor om utrymme, byggplats och
+            utförande. Här får du en översikt över vad som är bra att
+            förbereda, så att det första samtalet kan handla om rätt saker.
+          </p>
+          <div class="hp-info__hero-actions">
+            <a class="hp-info__button" href="#projekt-forberedelser">
+              Börja planera <span aria-hidden="true">↓</span>
+            </a>
+            <a class="hp-info__textlink" href="/kontakt/">
+              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <aside class="hp-info__guide" aria-label="Vilka frågor är bra att ha med sig?">
+          <p class="hp-info__guide-title">Det är användningen som styr.</p>
+          <p>
+            En lagerhall, en maskinhall och ett ridhus kan behöva
+            helt olika utrymmen och lösningar. Börja där, inte med
+            ett på förhand bestämt utförande.
+          </p>
+          <a href="/stalhallar/">Jämför olika halltyper <span aria-hidden="true">→</span></a>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-info__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-info__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#projekt-forberedelser">Förberedelser</a>
+        <a href="#projekt-ansvar">Ansvar och nästa steg</a>
+      </div>
+    </nav>
+
+    <section class="hp-info__section hp-info__section--light" id="projekt-forberedelser" aria-labelledby="project-steps-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Fyra planeringsfrågor</p>
+            <h2 id="project-steps-heading">Det här är bra att reda ut.</h2>
+          </div>
+          <p>
+            Punkterna är ett underlag inför ett samtal, inte en utlovad
+            leveransprocess eller en färdig projektering.
+          </p>
+        </div>
+        <ol class="hp-info__steps">
+          {preparations.map((item) => (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="hp-info__section hp-info__section--soft" id="projekt-ansvar" aria-labelledby="project-responsibility-heading">
+      <div class="hp-draft-rail hp-info__split">
+        <div>
+          <p class="hp-info__eyebrow">Innan projektets omfattning bestäms</p>
+          <h2 id="project-responsibility-heading">Vem ansvarar för vad?</h2>
+          <p>
+            Projektering, tillstånd, grundläggning och montage är frågor
+            som behöver avtalas för det enskilda projektet.
+            De ingår inte automatiskt bara för att en hall diskuteras.
+          </p>
+        </div>
+        <div class="hp-info__stack">
+          {openQuestions.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-info__end" aria-labelledby="project-contact-heading">
+      <div class="hp-draft-rail hp-info__end-inner">
+        <div>
+          <p class="hp-info__eyebrow">Ta första kontakten</p>
+          <h2 id="project-contact-heading">Berätta vad du planerar.</h2>
+          <p>
+            Beskriv hallens användning, ungefärliga mått och var projektet
+            ska ligga. Det ger en bra start även om allt inte är bestämt.
+          </p>
+        </div>
+        <a class="hp-info__button" href="/kontakt/">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

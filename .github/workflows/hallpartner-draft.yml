@@ -14,6 +14,9 @@ on:
       - 'src/layouts/HallpartnerSiteLayout.astro'
       - 'src/pages/index.astro'
       - 'src/pages/stalhallar/**'
+      - 'src/pages/kontakt/**'
+      - 'src/pages/sa-gar-det-till/**'
+      - 'src/styles/hallpartner-info.css'
       - 'src/styles/hallpartner-stalhallar.css'
       - 'src/styles/hallpartner-hall-detail.css'
       - 'src/styles/hallpartner-hall-variants.css'
@@ -95,6 +98,8 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/isolerad-hall/" HP_SCREENSHOT_PREFIX="site-isolerad-hall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/ridhus/" HP_SCREENSHOT_PREFIX="site-ridhus" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/talthall/" HP_SCREENSHOT_PREFIX="site-talthall" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/kontakt/" HP_SCREENSHOT_PREFIX="site-kontakt" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/sa-gar-det-till/" HP_SCREENSHOT_PREFIX="site-process" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
 

@@ -14,6 +14,8 @@ const draftBase = '/prototype/hallpartner/';
 const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
 const isSiteHome = isSite && Astro.url.pathname === '/';
 const isSiteHalls = isSite && Astro.url.pathname.startsWith('/stalhallar/');
+const isSiteProcess = isSite && Astro.url.pathname === '/sa-gar-det-till/';
+const isSiteContact = isSite && Astro.url.pathname === '/kontakt/';
 const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 ---
 
@@ -83,8 +85,8 @@ const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site)
         <nav class="hp-draft-nav" id="hp-proto-nav" aria-label={isSite ? 'Huvudnavigation' : 'Prototypens navigation'}>
           <a href={isSite ? '/' : draftBase + 'start/'} aria-current={isSite ? (isSiteHome ? 'page' : undefined) : isCurrent('start')}>Startsida</a>
           <a href={isSite ? '/stalhallar/' : draftBase + 'hallar/'} aria-current={isSite ? (isSiteHalls ? 'page' : undefined) : isCurrent('hallar')}>Hallar</a>
-          <a href={isSite ? '/#att-tanka-pa' : draftBase + 'sa-gar-det-till/'} aria-current={isCurrent('sa-gar-det-till')}>{isSite ? 'Inför ditt projekt' : 'Så går det till'}</a>
-          <a class="hp-draft-nav__cta" href={isSite ? 'https://hallpartner.se/kontakt/' : draftBase + 'kontakt/'} aria-current={isCurrent('kontakt')}>Kontakt <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
+          <a href={isSite ? '/sa-gar-det-till/' : draftBase + 'sa-gar-det-till/'} aria-current={isSite ? (isSiteProcess ? 'page' : undefined) : isCurrent('sa-gar-det-till')}>{isSite ? 'Inför ditt projekt' : 'Så går det till'}</a>
+          <a class="hp-draft-nav__cta" href={isSite ? '/kontakt/' : draftBase + 'kontakt/'} aria-current={isSite ? (isSiteContact ? 'page' : undefined) : isCurrent('kontakt')}>Kontakt <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
         </nav>
       </div>
     </header>
@@ -105,7 +107,8 @@ const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site)
           {isSite ? (
             <>
               <a href="/stalhallar/">Hallar</a>
-              <a href="https://hallpartner.se/kontakt/">Kontakt</a>
+              <a href="/sa-gar-det-till/">Så går det till</a>
+              <a href="/kontakt/">Kontakt</a>
             </>
           ) : (
             <>

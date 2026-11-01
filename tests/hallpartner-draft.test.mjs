@@ -210,7 +210,7 @@ test('two visitor hall pages have distinct SEO intent, native navigation and saf
     }
     for (const phrase of item.distinct) assert.ok(source.includes(phrase), 'missing distinct topic ' + phrase);
     assert.ok(source.includes('href="/stalhallar/"'), 'missing overview breadcrumb');
-    assert.ok(source.includes('https://hallpartner.se/kontakt/'), 'must link to verified old live contact until native contact migrates');
+    assert.ok(source.includes("const contactHref = '/kontakt/';"), 'visitor page must use native contact destination');
     assert.doesNotMatch(source, /egna montörer|leveransgaranti|nordens bästa|garanterad leverans|bygglovsfri|frånpris/i);
     intros.push(source.match(/description="([^"]+)"/)?.[1] ?? '');
   }
@@ -241,7 +241,7 @@ test('Plåthallar and Isolerade hallar have distinct native noindex review route
     assert.equal((source.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'only one H1');
     for(const id of page.ids)assert.ok(source.includes('id="'+id+'"'), 'missing anchor '+id);
     assert.ok(source.includes('href="/stalhallar/"'));
-    assert.ok(source.includes("https://hallpartner.se/kontakt/"));
+    assert.ok(source.includes("const contactHref = '/kontakt/';"));
     assert.doesNotMatch(source,/egna montörer|nordens bästa|bygglovsfri|standardgaranti|frånpris/i);
     titles.push(source.match(/title="([^"]+)"/)?.[1]??'');
   }
@@ -277,7 +277,7 @@ test('Ridhus and Tälthallar provide distinct needs-first visitor content on nat
     assert.equal((source.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'exactly one H1 required: ' + item.slug);
     assert.ok(source.includes(item.h1), 'unique H1 missing: ' + item.slug);
     assert.ok(source.includes('href="/stalhallar/"'), 'missing overview breadcrumb: ' + item.slug);
-    assert.ok(source.includes('https://hallpartner.se/kontakt/'), 'must use existing contact page: ' + item.slug);
+    assert.ok(source.includes("const contactHref = '/kontakt/';"), 'native contact expected on ' + item.slug);
     assert.ok(source.includes('href="' + item.related + '"'), 'missing relevant mutual link: ' + item.slug);
     for (const id of item.anchors) assert.ok(source.includes('id="' + id + '"'), 'missing anchor ' + id);
     for (const phrase of item.unique) assert.ok(source.includes(phrase), 'no distinguishing content: ' + phrase);
@@ -301,4 +301,29 @@ test('Ridhus and Tälthallar provide distinct needs-first visitor content on nat
   const variants = readFileSync(new URL('../src/styles/hallpartner-hall-variants.css', import.meta.url), 'utf8');
   assert.match(variants, /\.hp-detail--ridhus \.hp-detail__hero/);
   assert.match(variants, /\.hp-detail--talthall \.hp-detail__hero/);
+});
+
+
+test('Contact and planning pages replace legacy Amelio contact and never fake a form submission', () => {
+  const contact = readFileSync(new URL('../src/pages/kontakt/index.astro', import.meta.url), 'utf8');
+  const process = readFileSync(new URL('../src/pages/sa-gar-det-till/index.astro', import.meta.url), 'utf8');
+  const shared = readFileSync(new URL('../src/layouts/HallpartnerDraftLayout.astro', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/styles/hallpartner-info.css', import.meta.url), 'utf8');
+  for (const page of [contact, process]) {
+    assert.ok(page.includes('HallpartnerSiteLayout'), 'missing shared site layout');
+    assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'page must have one H1');
+    assert.ok(page.includes('aria-label="Brödsmulor"'), 'missing visible breadcrumbs');
+    assert.ok(page.includes('aria-label="På den här sidan"'), 'missing in-page navigation');
+    assert.doesNotMatch(page, /andreas@amelio\.se|073-505 47 63|mailto:[^'" ]+amelio\.se|form action|<form(?:\s|>)/i);
+  }
+  assert.ok(contact.includes("'info@hallpartner.se'"), 'existing Hallpartner email missing');
+  assert.ok(contact.includes("'tel:+46548200490'"), 'existing Hallpartner telephone missing');
+  assert.ok(contact.includes("href={'mailto:' + contactEmail}"), 'real mailto link missing');
+  assert.ok(process.includes('id="projekt-forberedelser"'), 'missing planning section');
+  assert.ok(process.includes('id="projekt-ansvar"'), 'missing responsibilities section');
+  assert.ok(process.includes('href="/kontakt/"'), 'planning page must lead to contact');
+  assert.ok(shared.includes("isSiteProcess") && shared.includes("isSiteContact"));
+  assert.ok(shared.includes("'/sa-gar-det-till/'") && shared.includes("'/kontakt/'"));
+  assert.match(css, /\.hp-info__contact-panel/);
+  assert.match(css, /@media\(max-width:740px\)/);
 });

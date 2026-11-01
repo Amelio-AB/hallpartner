@@ -157,7 +157,7 @@ for (const phrase of ['Visuell arbetsversion', 'För intern granskning', 'Intern
   assert.ok(!siteHome.includes(phrase), 'prototype text on /: ' + phrase);
 }
 assert.ok(!siteHome.includes('/prototype/hallpartner/'), 'production path links to prototype');
-assert.ok(siteHome.includes('https://hallpartner.se/kontakt/'), 'missing verified contact link');
+assert.ok(siteHome.includes('href="/kontakt/"'), 'missing verified contact link');
 assert.ok(siteHome.includes('src="/images/logo_text_white.png"'), 'missing visitor header image');
 assert.ok(siteHome.includes('alt="Hallpartner – Hallar till alla"'), 'missing site logo alt');
 assert.ok(!homepage.includes('src="/images/logo_text_white.png"'), 'prototype brand should remain unchanged');
@@ -207,7 +207,7 @@ for (const detail of details) {
   assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'detail must have main nav, breadcrumbs, page nav');
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
   assert.ok(html.includes('href="/stalhallar/"'), 'missing overview link');
-  assert.ok(html.includes('https://hallpartner.se/kontakt/'), 'missing live contact destination');
+  assert.ok(html.includes('href="/kontakt/"'), 'missing live contact destination');
   assert.ok(!html.includes('/prototype/hallpartner/'), 'visitor detail links to old prototype');
   for (const id of detail.ids) {
     assert.ok(html.includes('id="' + id + '"'), 'missing detail anchor ' + id + ' on ' + detail.slug);
@@ -258,7 +258,7 @@ for (const item of [
   assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'three navigations expected: ' + item.slug);
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'breadcrumbs missing: ' + item.slug);
   assert.ok(html.includes('href="/stalhallar/"'), 'overview link missing: ' + item.slug);
-  assert.ok(html.includes('https://hallpartner.se/kontakt/'), 'contact link missing: ' + item.slug);
+  assert.ok(html.includes('href="/kontakt/"'), 'contact link missing: ' + item.slug);
   assert.ok(!html.includes('/prototype/hallpartner/'), 'visitor link points at prototype: ' + item.slug);
   assert.ok(!html.includes('AI-genererad konceptbild'), 'prototype claim leaked: ' + item.slug);
   for (const id of item.anchors) assert.ok(html.includes('id="' + id + '"'), 'missing section anchor ' + id);
@@ -269,3 +269,32 @@ for (const item of [
 assert.ok(siteHome.includes('href="/stalhallar/ridhus/"'), 'homepage Ridhus card still links to WordPress');
 assert.ok(hallOverview.includes('href="/stalhallar/talthall/"'), 'overview Tälthall card still links to WordPress');
 console.log('Verified Ridhus and Tälthallar: native noindex routes, canonical, links, 1 H1 and correct landmarks.');
+
+
+// The historic /kontakt/ route was an Amelio presentation form with mailto
+// directed to the web developer. Verify this is now native Hallpartner content
+// and that no false backend form or success state can escape into production.
+for (const item of [
+  {slug:'kontakt',ids:['infor-kontakt','nasta-steg'],has:['info@hallpartner.se','054-820 04 90']},
+  {slug:'sa-gar-det-till',ids:['projekt-forberedelser','projekt-ansvar'],has:['Klargör omfattningen','Vem ansvarar för vad?']},
+]) {
+  const html = readFileSync(join(dist, item.slug, 'index.html'), 'utf8');
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'info route must remain noindex: ' + item.slug);
+  assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/' + item.slug + '/"'), 'canonical mismatch: ' + item.slug);
+  assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'only one H1 on ' + item.slug);
+  assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'only one header on ' + item.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'main, breadcrumbs, jump nav required: ' + item.slug);
+  assert.ok(html.includes('aria-label="Brödsmulor"'), 'breadcrumbs missing: ' + item.slug);
+  assert.ok(!html.includes('/prototype/hallpartner/'), 'prototype link on info route: ' + item.slug);
+  assert.ok(!html.includes('andreas@amelio.se'), 'Amelio contact leaked on visitor page');
+  assert.ok(!html.includes('tel:+46735054763'), 'developer phone leaked on visitor page');
+  assert.ok(!html.includes('<form'), 'unimplemented contact form leaked on ' + item.slug);
+  for (const id of item.ids) assert.ok(html.includes('id="' + id + '"'), 'missing anchor: ' + id);
+  for (const phrase of item.has) assert.ok(html.includes(phrase), 'missing relevant info: ' + phrase);
+  for (const href of [...html.matchAll(/\shref="(\/[^"#?]+\/)"/g)].map(m => m[1])) {
+    assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), 'broken native info link: ' + href);
+  }
+}
+assert.ok(siteHome.includes('href="/kontakt/"'), 'home should link to native contact route');
+assert.ok(siteHome.includes('href="/sa-gar-det-till/"'), 'main navigation must link to native process route');
+console.log('Verified visitor Kontakt and Så går det till: native routes, noindex, no fake form, correct brand and links.');
