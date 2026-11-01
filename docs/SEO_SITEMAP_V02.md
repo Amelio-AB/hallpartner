@@ -5,6 +5,7 @@
 >
 > **Första genomarbetade sidbrief:** [Stålhallar /stalhallar/ v0.1](page-briefs/stalhallar-v01.md). Nyskriven innehållsplan, inte kundgodkänd copy och inte återfunnet fulltextoriginal.
 > **Nya riktiga undersidor i Draft PR #5:** [Lagerhallar](page-briefs/lagerhall-v01.md), [Maskinhallar](page-briefs/maskinhall-v01.md), [Plåthallar](page-briefs/plathall-v01.md), [Isolerade hallar](page-briefs/isolerad-hall-v01.md), [Ridhus](page-briefs/ridhus-v01.md) och [Tälthallar](page-briefs/talthall-v01.md). Alla är noindexerade, nyskrivna arbetsutkast på bevarade WordPress-vägar – **inga återfunna äldre originaltexter**.
+> **Nya informationssidor:** [Kontakt v0.1](page-briefs/kontakt-v01.md) och [Så går det till v0.1](page-briefs/sa-gar-det-till-v01.md) är också noindexerade Astro-arbetsversioner. Kontakt har nu synlig e-post/telefon, **inget fungerande formulär** och väntar på kundverifiering.
 > **Konkurrensinriktning:** [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md) – möjliga kundbehov brett, verifierade produktlöften separat.
 >
 > **URL-förslag v0.2 ersätter de korta arbets-URL:erna i WEBSITE_PLAN.md från 2026-10-31.** Inga routes, redirects, canonical-taggar, sitemaps, arbetsflöden eller publicerade sidor ändrades av denna dokumentationsrevision. Uppdatera befintliga HPD-/HP-ID i PR #2 vid faktisk status-/beslutsändring; skapa inte ett parallellt kanoniskt beslutsregister.
@@ -75,9 +76,9 @@ Titlar och beskrivningar ska **omprövas mot färdig copy och verkliga sökfråg
 | Tälthall | Tälthallar – användning och utförande \| Hallpartner | Tälthallar efter användning och plats. |
 | Plåthall | Plåthallar – utförande och alternativ \| Hallpartner | Vad är en plåthall? |
 | Isolerad hall | Isolerade hallar – när behövs isolering? \| Hallpartner | Isolerade hallar och isoleringsbehov |
-| Process | Så går ett hallprojekt till \| Hallpartner | Så går det till |
+| Process | Så går det till \| Hallpartner | Från idé till ett tydligare behov. |
 | Om oss | Om Hallpartner – företaget och människorna \| Hallpartner | Om Hallpartner |
-| Kontakt | Kontakta Hallpartner om ditt hallprojekt | Kontakta Hallpartner |
+| Kontakt | Kontakt \| Hallpartner | Berätta om ditt hallprojekt. |
 | Offert (när färdig) | Begär offert på en hall \| Hallpartner | Beskriv din hallförfrågan |
 
 #### Metabeskrivningar – skrivförslag, inte redan implementerade
@@ -124,7 +125,7 @@ Alla destinationssidor måste finnas som **verkligt fungerande HTML-routes** inn
 
 ## 5. Teknik – verifieringskrav före lansering
 
-1. **Routes och sidmigrering:** Bygg de beslutade adresserna som riktiga Astro-sidor. Avlägsna de gamla visionsrutterna från produktionsindex och XML-sitemap; uppdatera interna länkar. Statiska sidor som fortfarande ligger på `/kontakt/` men visar Amelios gamla vision får inte hamna i ny produktion.
+1. **Routes och sidmigrering:** Bygg de beslutade adresserna som riktiga Astro-sidor. Avlägsna de gamla visionsrutterna från produktionsindex och XML-sitemap; uppdatera interna länkar. Den äldre Amelio-presentationssidan på `/kontakt/` har nu ersatts i Draft PR #5 av ett noindexerat Hallpartner-utkast med telefon/mejl – **inte** av ett verifierat kontaktformulär. Innan ny produktion ska mottagare och kontaktuppgifter verifieras, och befintligt WordPress-flöde jämföras så att ingen kontaktväg försvinner.
 2. **Canonical:** Varje indexerbar HTML-sida får en absolut själv-refererande `rel="canonical"` med slutligt `https://hallpartner.se/.../`. Kontrollera att sitemap, canonical, brödsmulor och interna länkar använder exakt samma destinations-URL. Skapa inga två parallella övervakade kanoniska adresser för samma innehåll.
 3. **Indexering:** Preview och prototyper fortsätter med `noindex` och exkluderas från sitemap. Produktionssidor får indexeringsbart svar **först vid separat lanseringsgodkännande**; kontrollera genererad HTML/HTTP i respektive miljö, inte bara komponentprop. En HTML-noindex fungerar bara när roboten får hämta sidan.
 4. **XML-sitemap:** Endast avsedda publika, kanoniska, indexerbara sidor; inte `/prototype/`, `/workshop/`, `/vision/`, `/projekt/`, `/roadmap/` eller avvecklade URL:er.
