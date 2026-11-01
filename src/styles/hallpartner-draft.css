@@ -24,6 +24,30 @@
   line-height: 1.55;
 }
 
+
+/*
+ * Customer moodboard color trial — real / homepage only.
+ * Keep Direction 02 on /prototype/ until this trial is visually accepted.
+ * Only color roles change. Typography, layout and motion are unchanged.
+ */
+.hp-site {
+  --hp-graphite: #132822;
+  --hp-deep: #071A16;
+  --hp-green: #72BF7B;
+  --hp-cta: #287B39;
+  --hp-cta-hover: #1D6529;
+  --hp-link-on-light: #236F31;
+}
+
+.hp-site .hp-draft-nav a:hover,
+.hp-site .hp-draft-nav a[aria-current='page']:not(.hp-draft-nav__cta) {
+  text-decoration-color: var(--hp-green);
+}
+
+.hp-site .hp-draft-nav-toggle:focus-visible {
+  outline-color: var(--hp-green);
+}
+
 .hp-draft *,
 .hp-draft *::before,
 .hp-draft *::after {

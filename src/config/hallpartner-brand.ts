@@ -15,6 +15,24 @@ export const hallpartnerPalette = Object.freeze({
   lightText: '#F4F4F0',
 } as const);
 
+
+/**
+ * Site-only color trial from Hallpartner's AI-generated customer moodboard,
+ * 2026-11-01. This does NOT replace the legacy Direction 02/AMP configuration
+ * until the customer approves the trial after a visual review.
+ */
+export const hallpartnerPaletteTrial = Object.freeze({
+  graphite: '#132822',
+  deepGraphite: '#071A16',
+  green: '#72BF7B',
+  ctaGreen: '#287B39',
+  ctaHover: '#1D6529',
+  linkOnLight: '#236F31',
+  offWhite: hallpartnerPalette.offWhite,
+  concrete: hallpartnerPalette.concrete,
+  lightText: hallpartnerPalette.lightText,
+} as const);
+
 /**
  * White is intentional for normal-sized CTA text in both normal/hover states.
  * Direction 02 used 19px/700 light text; that large-text exception must not

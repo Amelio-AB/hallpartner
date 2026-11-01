@@ -767,3 +767,39 @@
     scroll-margin-top: 6rem;
   }
 }
+
+
+/*
+ * 2026-11-01 customer-inspired color trial on / only.
+ * Preserve the exact existing gradient stops, image, spacing and typography.
+ * The more saturated green is reserved for dark-area accents. Use a darker
+ * link tone on pale backgrounds so small text remains legible.
+ */
+.hp-site .hp-home-hero__overlay {
+  background:
+    linear-gradient(90deg, rgba(7,26,22,.94) 0%, rgba(7,26,22,.80) 38%, rgba(7,26,22,.35) 75%, rgba(7,26,22,.14) 100%),
+    linear-gradient(0deg, rgba(7,26,22,.36), transparent 45%);
+}
+
+.hp-site .hp-home-overview {
+  background: var(--hp-graphite);
+}
+
+.hp-site .hp-home-kicker {
+  color: var(--hp-green);
+}
+
+.hp-site .hp-home-kicker--dark,
+.hp-site .hp-home-types__bottom a,
+.hp-site .hp-home-perspective__text a,
+.hp-site .hp-home-perspective h2 em {
+  color: var(--hp-link-on-light) !important;
+}
+
+@media (max-width: 800px) {
+  .hp-site .hp-home-hero__overlay {
+    background:
+      linear-gradient(90deg, rgba(7,26,22,.87), rgba(7,26,22,.5)),
+      linear-gradient(0deg, rgba(7,26,22,.7), transparent 70%);
+  }
+}

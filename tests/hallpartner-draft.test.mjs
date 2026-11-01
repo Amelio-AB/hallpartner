@@ -8,6 +8,7 @@ import {
 import {
   hallpartnerPalette,
   hallpartnerActionText,
+  hallpartnerPaletteTrial,
 } from '../src/config/hallpartner-brand.ts';
 
 const pageBySlug = new Map(draftPageSpecs.map((page) => [page.slug, page]));
@@ -102,4 +103,39 @@ test('prototype shell has explicit noindex, skip-link and no production claims',
 test('sitemap explicitly excludes any prototype routes', () => {
   const config = readFileSync(new URL('../astro.config.mjs', import.meta.url), 'utf8');
   assert.match(config, /!pathname\.startsWith\('\/prototype\/'\)/);
+});
+
+test('customer moodboard trial is scoped to / and meets WCAG AA normal-text contrast', () => {
+  const originalShell = stylesheet.match(/\.hp-draft\s*\{([\s\S]*?)\}/)?.[1] ?? '';
+  const siteColors = stylesheet.match(/\.hp-site\s*\{([\s\S]*?)\}/)?.[1] ?? '';
+  const roles = {
+    graphite: hallpartnerPaletteTrial.graphite,
+    deep: hallpartnerPaletteTrial.deepGraphite,
+    green: hallpartnerPaletteTrial.green,
+    cta: hallpartnerPaletteTrial.ctaGreen,
+    'cta-hover': hallpartnerPaletteTrial.ctaHover,
+    'link-on-light': hallpartnerPaletteTrial.linkOnLight,
+  };
+  for (const [role, hex] of Object.entries(roles)) {
+    assert.ok(siteColors.includes(`--hp-${role}: ${hex};`), `incorrect trial site ${role} token`);
+  }
+  assert.ok(originalShell.includes(`--hp-cta: ${hallpartnerPalette.ctaGreen};`), 'prototype palette must stay unchanged');
+  const homeStyles = readFileSync(new URL('../src/styles/hallpartner-home.css', import.meta.url), 'utf8');
+  assert.match(homeStyles, /\.hp-site \.hp-home-hero__overlay\s*\{/);
+  assert.match(homeStyles, /\.hp-site \.hp-home-kicker--dark,/);
+  assert.match(homeStyles, /rgba\(7,26,22,\.94\)/);
+  const luminance = (hex) => {
+    const channels = [1, 3, 5].map((offset) => parseInt(hex.slice(offset, offset + 2), 16) / 255);
+    const [r, g, b] = channels.map((v) => v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a, b) => {
+    const [dark, light] = [luminance(a), luminance(b)].sort((x, y) => x - y);
+    return (light + 0.05) / (dark + 0.05);
+  };
+  assert.ok(contrast('#FFFFFF', hallpartnerPaletteTrial.ctaGreen) >= 4.5);
+  assert.ok(contrast('#FFFFFF', hallpartnerPaletteTrial.ctaHover) >= 4.5);
+  assert.ok(contrast(hallpartnerPaletteTrial.linkOnLight, hallpartnerPaletteTrial.concrete) >= 4.5);
+  assert.ok(contrast(hallpartnerPaletteTrial.linkOnLight, hallpartnerPaletteTrial.offWhite) >= 4.5);
+  assert.ok(contrast(hallpartnerPaletteTrial.green, hallpartnerPaletteTrial.deepGraphite) >= 4.5);
 });
