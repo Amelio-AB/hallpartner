@@ -20,7 +20,7 @@ test('all eleven planned pages have unique draft URLs and explicit unverified st
   assert.equal(new Set(draftPageSpecs.map((page) => page.intendedPath)).size, 11);
   for (const page of draftPageSpecs) {
     assert.match(page.slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/);
-    assert.match(page.intendedPath, /^\/(?:[a-z0-9-]+\/)?$/);
+    assert.match(page.intendedPath, /^\/(?:[a-z0-9-]+\/)*$/);
     assert.equal(page.originalTextStatus, 'not-recovered');
     assert.equal(page.sourceIsApprovedCustomerCopy, false);
     assert.ok(page.purpose.trim().length > 15);
@@ -158,4 +158,28 @@ test('new visitor logo preserves original transparent image and prototype brandi
   assert.match(css, /width:\s*clamp\(210px, 20vw, 280px\)/);
   assert.match(css, /width:\s*clamp\(150px, 44vw, 190px\)/);
   assert.match(css, /height:\s*auto/);
+});
+
+test('SEO hub /stalhallar/ has a distinct noindex visitor page and accurate route destinations', () => {
+  const page = readFileSync(new URL('../src/pages/stalhallar/index.astro', import.meta.url), 'utf8');
+  const layout = readFileSync(new URL('../src/layouts/HallpartnerDraftLayout.astro', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../src/styles/hallpartner-stalhallar.css', import.meta.url), 'utf8');
+  assert.match(page, /HallpartnerSiteLayout/);
+  assert.match(page, /Stålhallar för/);
+  assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1);
+  for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+    assert.ok(page.includes('https://hallpartner.se/stalhallar/' + slug + '/'), 'missing pre-migration link to ' + slug);
+  }
+  for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
+    assert.ok(page.includes('id="' + id + '"'), 'missing content anchor: ' + id);
+  }
+  assert.ok(layout.includes('rel="canonical"'), 'site canonical element missing');
+  assert.ok(layout.includes("Astro.url.pathname"), 'canonical must follow actual route');
+  assert.ok(layout.includes("'/stalhallar/'"), 'main navigation must reach the new overview');
+  assert.match(css, /\.hp-stal__hero-grid/);
+  assert.match(css, /@media \(max-width: 740px\)/);
+  assert.doesNotMatch(page, /montage ingår alltid|egna montörer|totalentreprenad|nordens bästa|fri bygglov|garanterad leverans/i);
+  for (const spec of draftPageSpecs.filter((p) => ['hallar', 'lagerhallar', 'maskinhallar', 'ridhus', 'talthallar', 'plathallar', 'isolerade-hallar'].includes(p.slug))) {
+    assert.ok(spec.intendedPath.startsWith('/stalhallar/'), 'outdated planned URL: ' + spec.slug);
+  }
 });

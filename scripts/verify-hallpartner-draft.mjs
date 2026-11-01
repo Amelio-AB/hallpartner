@@ -168,3 +168,25 @@ for (const href of [...siteHome.matchAll(/\shref="([^"]+)"/g)].map(x=>x[1]).filt
   assert.ok(id && siteHome.includes('id="'+id+'"'), 'broken root anchor: '+href);
 }
 console.log('Verified / homepage: Hero, one H1/header/nav, noindex, anchor targets and no prototype links.');
+
+// New real-path Hall overview: useful content and preserved SEO identity, but
+// intentionally noindex while customer claims, imagery and migration are reviewed.
+const hallOverview = readFileSync(join(dist, 'stalhallar', 'index.html'), 'utf8');
+assert.match(hallOverview, /<meta\s+name="robots"\s+content="noindex,nofollow"/);
+assert.match(hallOverview, /<link\s+rel="canonical"\s+href="https:\/\/hallpartner\.se\/stalhallar\/"/);
+assert.equal((hallOverview.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'hall overview must have exactly one H1');
+assert.equal((hallOverview.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'hall overview has duplicate header');
+assert.equal((hallOverview.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'hall overview needs main navigation, breadcrumbs and content navigation');
+assert.ok(hallOverview.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
+assert.ok(hallOverview.includes('aria-label="På den här sidan"'), 'missing page shortcuts');
+assert.ok(hallOverview.includes('href="/stalhallar/"'), 'navigation does not link to real hall overview');
+for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
+  assert.ok(hallOverview.includes('id="' + id + '"'), 'missing section anchor: ' + id);
+}
+for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+  assert.ok(hallOverview.includes('href="https://hallpartner.se/stalhallar/' + slug + '/"'), 'missing hall destination: ' + slug);
+}
+assert.ok(!hallOverview.includes('/prototype/hallpartner/'), 'draft links must never be part of real overview');
+assert.ok(!hallOverview.includes('AI-genererad konceptbild'), 'internal draft copy must not leak');
+assert.ok(siteHome.includes('href="/stalhallar/"'), 'homepage must link to the actual hall overview');
+console.log('Verified /stalhallar/: noindex, canonical, single H1, section anchors, all six hall destinations.');

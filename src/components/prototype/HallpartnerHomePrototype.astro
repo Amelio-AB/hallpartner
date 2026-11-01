@@ -10,7 +10,6 @@ const { variant = 'prototype' } = Astro.props;
 const isSite = variant === 'site';
 // Real current WordPress routes are temporary destinations, until native routes exist.
 const existingPages = {
-  overview: 'https://hallpartner.se/stalhallar/',
   lagerhallar: 'https://hallpartner.se/stalhallar/lagerhall/',
   maskinhallar: 'https://hallpartner.se/stalhallar/maskinhall/',
   ridhus: 'https://hallpartner.se/stalhallar/ridhus/',
@@ -129,7 +128,7 @@ const existingPages = {
       </div>
       <div class="hp-home-types__bottom">
         <p>{isSite ? 'Läs mer om användningsområden och olika hallsystem.' : 'Detta är ämnesingångar i ett utkast, inte ett verifierat produktsortiment.'}</p>
-        <a href={isSite ? existingPages.overview : '/prototype/hallpartner/hallar/'}>Se hela hallöversikten <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
+        <a href={isSite ? '/stalhallar/' : '/prototype/hallpartner/hallar/'}>Se hela hallöversikten <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
       </div>
     </div>
   </section>

@@ -37,7 +37,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['hallar', 'kontakt'],
   },
   {
-    slug: 'hallar', label: 'Hallar', intendedPath: '/hallar/', group: 'overview', hero: 'intro',
+    slug: 'hallar', label: 'Hallar', intendedPath: '/stalhallar/', group: 'overview', hero: 'intro',
     purpose: 'Hjälpa besökaren skilja användningsområde från konstruktion och egenskap.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -48,7 +48,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['lagerhallar', 'maskinhallar', 'ridhus', 'talthallar', 'plathallar', 'isolerade-hallar'],
   },
   {
-    slug: 'lagerhallar', label: 'Lagerhallar', intendedPath: '/lagerhallar/', group: 'usage', hero: 'intro',
+    slug: 'lagerhallar', label: 'Lagerhallar', intendedPath: '/stalhallar/lagerhall/', group: 'usage', hero: 'intro',
     purpose: 'Ta upp praktiska lagerbehov och vilka uppgifter som behövs inför ett samtal.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -58,7 +58,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['hallar', 'sa-gar-det-till', 'kontakt'],
   },
   {
-    slug: 'maskinhallar', label: 'Maskinhallar', intendedPath: '/maskinhallar/', group: 'usage', hero: 'intro',
+    slug: 'maskinhallar', label: 'Maskinhallar', intendedPath: '/stalhallar/maskinhall/', group: 'usage', hero: 'intro',
     purpose: 'Behandla maskinanvändning separat från lagerhallarnas behov.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -68,7 +68,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['hallar', 'kontakt'],
   },
   {
-    slug: 'ridhus', label: 'Ridhus', intendedPath: '/ridhus/', group: 'usage', hero: 'signature',
+    slug: 'ridhus', label: 'Ridhus', intendedPath: '/stalhallar/ridhus/', group: 'usage', hero: 'signature',
     purpose: 'Ge ridhus en egen informationsordning och ett relevant användningssammanhang.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -78,7 +78,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['sa-gar-det-till', 'kontakt'],
   },
   {
-    slug: 'talthallar', label: 'Tälthallar', intendedPath: '/talthallar/', group: 'construction', hero: 'intro',
+    slug: 'talthallar', label: 'Tälthallar', intendedPath: '/stalhallar/talthall/', group: 'construction', hero: 'intro',
     purpose: 'Beskriva ett konstruktionsutförande, inte ett eget användningsområde.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -88,7 +88,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['hallar', 'kontakt'],
   },
   {
-    slug: 'plathallar', label: 'Plåthallar', intendedPath: '/plathallar/', group: 'construction', hero: 'intro',
+    slug: 'plathallar', label: 'Plåthallar', intendedPath: '/stalhallar/plathall/', group: 'construction', hero: 'intro',
     purpose: 'Beskriva plåt som utförande utan att utge det för ett eget användningsområde.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [
@@ -98,7 +98,7 @@ export const draftPageSpecs: readonly DraftPageSpec[] = [
     relatedSlugs: ['hallar', 'isolerade-hallar'],
   },
   {
-    slug: 'isolerade-hallar', label: 'Isolerade hallar', intendedPath: '/isolerade-hallar/', group: 'property', hero: 'intro',
+    slug: 'isolerade-hallar', label: 'Isolerade hallar', intendedPath: '/stalhallar/isolerad-hall/', group: 'property', hero: 'intro',
     purpose: 'Förklara isolering som en möjlig egenskap hos olika halltyper.',
     originalTextStatus: 'not-recovered', sourceIsApprovedCustomerCopy: false,
     sectionPrompts: [

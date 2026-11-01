@@ -1,0 +1,275 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-stalhallar.css';
+
+/**
+ * A reviewable site route, not customer-approved product copy.
+ * Its six product destinations are the existing WordPress pages until native
+ * routes are migrated. The quote wizard and AMP-005 are not installed here.
+ */
+const contactHref = 'https://hallpartner.se/kontakt/';
+const useCases = [
+  {
+    context: 'Lager och logistik',
+    title: 'Lagerhallar',
+    description: 'Förvaring börjar med vad som ska få plats. Tänk på varuflödet, hur lastning sker och hur ofta olika delar av hallen behöver nås.',
+    href: 'https://hallpartner.se/stalhallar/lagerhall/',
+  },
+  {
+    context: 'Maskiner och fordon',
+    title: 'Maskinhallar',
+    description: 'Maskinernas mått räcker inte alltid som planeringsunderlag. Portöppningar, körvägar och utrymme runt utrustningen spelar också roll.',
+    href: 'https://hallpartner.se/stalhallar/maskinhall/',
+  },
+  {
+    context: 'Hästverksamhet',
+    title: 'Ridhus',
+    description: 'En hall för ridning behöver planeras utifrån aktiviteten, fri yta, ljusinsläpp och hur byggnaden ska användas under året.',
+    href: 'https://hallpartner.se/stalhallar/ridhus/',
+  },
+] as const;
+
+const choices = [
+  {
+    eyebrow: 'Väggar och tak',
+    title: 'Plåthallar',
+    description: 'Plåt beskriver ett utförande – inte vad hallen används till. Vilka vägg- och taklösningar som passar beror på projektet.',
+    href: 'https://hallpartner.se/stalhallar/plathall/',
+    link: 'Läs om plåthallar',
+  },
+  {
+    eyebrow: 'Dukbeklädnad',
+    title: 'Tälthallar',
+    description: 'Dukbeklädda hallar är ett annat utförande att jämföra. Användningen, placeringen och kraven på byggnaden behöver vägas in.',
+    href: 'https://hallpartner.se/stalhallar/talthall/',
+    link: 'Läs om tälthallar',
+  },
+  {
+    eyebrow: 'Inomhusmiljö',
+    title: 'Isolerade hallar',
+    description: 'Isolering kan vara relevant för flera typer av hallar. Börja med vad som ska ske i byggnaden och vilken inomhusmiljö som behövs.',
+    href: 'https://hallpartner.se/stalhallar/isolerad-hall/',
+    link: 'Läs om isolerade hallar',
+  },
+] as const;
+
+const projectQuestions = [
+  {
+    title: 'Vad ska hallen användas till?',
+    body: 'Beskriv det som ska förvaras, tillverkas eller göras i byggnaden. Det hjälper dig att bedöma vilka ytor som behövs.',
+  },
+  {
+    title: 'Hur mycket plats behövs?',
+    body: 'Ungefärlig bredd, längd och frihöjd räcker som början. Fundera också på portar, interna rörelser och framtida förändringar.',
+  },
+  {
+    title: 'Var ska hallen stå?',
+    body: 'Byggplatsens läge, markförhållanden och eventuella lokala krav behöver undersökas innan lösningen bestäms.',
+  },
+  {
+    title: 'Vilken inomhusmiljö behöver du?',
+    body: 'Ska hallen vara uppvärmd, ha ett särskilt klimat eller framför allt ge väderskydd? Det påverkar valen längre fram.',
+  },
+] as const;
+
+const questions = [
+  {
+    title: 'Vad är skillnaden mellan en stålhall och en lagerhall?',
+    body: 'Stålhall beskriver vanligtvis en byggnad med bärande stålstomme. Lagerhall beskriver i stället hur byggnaden används. En lagerhall kan alltså också vara en stålhall.',
+  },
+  {
+    title: 'Måste jag veta exakta mått innan första kontakten?',
+    body: 'En uppskattning av användning, platsbehov och byggort är en bra början. De tekniska kraven behöver utredas innan ett slutligt utförande bestäms.',
+  },
+  {
+    title: 'Vad påverkar kostnaden för en hall?',
+    body: 'Storlek, utförande, portar, isoleringsbehov, byggplats och vad som ska ingå i leveransen påverkar projektets omfattning. Ett jämförbart pris kräver att omfattningen är tydlig.',
+  },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Stålhallar för olika behov"
+  description="Utforska stålhallar för lager, maskiner och andra verksamheter. Jämför utföranden och se vad du behöver veta inför en första förfrågan."
+>
+  <div class="hp-stal">
+    <nav class="hp-stal__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Stålhallar</span>
+    </nav>
+
+    <section class="hp-stal__hero" aria-labelledby="stalhallar-title">
+      <div class="hp-draft-rail hp-stal__hero-grid">
+        <div class="hp-stal__hero-copy">
+          <p class="hp-stal__eyebrow">Hallar efter dina behov</p>
+          <h1 id="stalhallar-title">Stålhallar för <em>verksamheten.</em></h1>
+          <p class="hp-stal__lead">
+            Börja med vad hallen ska användas till. Här får du hjälp att skilja
+            på användningsområde, utförande och de praktiska frågor som är bra
+            att ha med sig inför ett hallprojekt.
+          </p>
+          <div class="hp-stal__hero-actions">
+            <a class="hp-stal__button" href="#anvandningsomraden">
+              Utforska halltyper <span aria-hidden="true">↓</span>
+            </a>
+            <a class="hp-stal__text-link" href={contactHref}>
+              Beskriv ditt projekt <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <aside class="hp-stal__guide" aria-label="Så jämför du hallalternativ">
+          <p class="hp-stal__guide-title">En hall. Flera viktiga val.</p>
+          <dl>
+            <div>
+              <dt>Användningen</dt>
+              <dd>Lager, maskiner, ridverksamhet eller något annat.</dd>
+            </div>
+            <div>
+              <dt>Utförandet</dt>
+              <dd>Hur stommen, väggarna och taket ska vara utformade.</dd>
+            </div>
+            <div>
+              <dt>Förutsättningarna</dt>
+              <dd>Byggplats, utrymme och behov av särskild inomhusmiljö.</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-stal__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-stal__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#anvandningsomraden">Användning</a>
+        <a href="#utforanden">Utföranden</a>
+        <a href="#infor-projektet">Inför projektet</a>
+        <a href="#vanliga-fragor">Vanliga frågor</a>
+      </div>
+    </nav>
+
+    <section class="hp-stal__section hp-stal__uses" id="anvandningsomraden" aria-labelledby="uses-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-stal__heading-row">
+          <div>
+            <p class="hp-stal__eyebrow">Utgå från verksamheten</p>
+            <h2 id="uses-heading">Vad ska hallen användas till?</h2>
+          </div>
+          <p>
+            Börja med funktionen. När du vet vad byggnaden behöver rymma
+            blir det lättare att diskutera konstruktion, material och andra val.
+          </p>
+        </div>
+        <div class="hp-stal__use-grid">
+          {useCases.map((item) => (
+            <article class="hp-stal__use-card">
+              <p class="hp-stal__card-context">{item.context}</p>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <a href={item.href}>
+                Läs om {item.title.toLocaleLowerCase('sv-SE')} <span aria-hidden="true">→</span>
+              </a>
+            </article>
+          ))}
+        </div>
+        <div class="hp-stal__other-uses">
+          <div>
+            <h3>Industrihall, verkstad eller lantbruksbyggnad?</h3>
+            <p>
+              Samma fråga gäller här: vad behöver fungera i byggnaden?
+              Produktion, servicearbete och lantbruk kan ställa olika krav
+              på ytor, åtkomst och inomhusmiljö. Beskriv gärna ditt behov,
+              även om du ännu inte har valt halltyp.
+            </p>
+          </div>
+          <a class="hp-stal__inline-link" href={contactHref}>
+            Diskutera ett annat hallbehov <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-stal__section hp-stal__choices" id="utforanden" aria-labelledby="choices-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-stal__heading-row hp-stal__heading-row--light">
+          <div>
+            <p class="hp-stal__eyebrow">När användningen är tydlig</p>
+            <h2 id="choices-heading">Hur ska hallen vara uppbyggd?</h2>
+          </div>
+          <p>
+            En lagerhall kan exempelvis vara isolerad, och plåt är inte samma
+            sak som ett användningsområde. De här valen hänger ihop men
+            behöver inte bestämmas samtidigt.
+          </p>
+        </div>
+        <div class="hp-stal__choice-grid">
+          {choices.map((item) => (
+            <article class="hp-stal__choice">
+              <p class="hp-stal__card-context">{item.eyebrow}</p>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+              <a href={item.href}>{item.link} <span aria-hidden="true">→</span></a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-stal__section hp-stal__planning" id="infor-projektet" aria-labelledby="planning-heading">
+      <div class="hp-draft-rail hp-stal__planning-grid">
+        <div class="hp-stal__planning-heading">
+          <p class="hp-stal__eyebrow">Inför första kontakten</p>
+          <h2 id="planning-heading">Fyra frågor som hjälper dig framåt.</h2>
+          <p>
+            Du behöver inte ha alla svar. Men med en ungefärlig bild av
+            behovet blir det enklare att börja samtalet.
+          </p>
+        </div>
+        <ul class="hp-stal__question-list">
+          {projectQuestions.map((item) => (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="hp-stal__section hp-stal__faq" id="vanliga-fragor" aria-labelledby="faq-heading">
+      <div class="hp-draft-rail hp-stal__faq-grid">
+        <div>
+          <p class="hp-stal__eyebrow">Bra att känna till</p>
+          <h2 id="faq-heading">Vanliga frågor om hallar</h2>
+          <p class="hp-stal__faq-intro">
+            Varje projekt är olika. Här är några grundläggande begrepp som
+            gör det lättare att jämföra alternativ.
+          </p>
+        </div>
+        <div class="hp-stal__faq-items">
+          {questions.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-stal__final" aria-labelledby="final-heading">
+      <div class="hp-draft-rail hp-stal__final-inner">
+        <div>
+          <p class="hp-stal__eyebrow">Nästa steg</p>
+          <h2 id="final-heading">Har du ett hallprojekt på gång?</h2>
+          <p>
+            Berätta vad hallen är tänkt att användas till, ungefär hur
+            mycket plats du behöver och var den ska stå. Det räcker
+            som utgångspunkt för en första kontakt.
+          </p>
+        </div>
+        <a class="hp-stal__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

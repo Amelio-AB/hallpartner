@@ -12,6 +12,9 @@ const { title, description, currentSlug, variant = 'prototype' } = Astro.props;
 const isSite = variant === 'site';
 const draftBase = '/prototype/hallpartner/';
 const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
+const isSiteHome = isSite && Astro.url.pathname === '/';
+const isSiteHalls = isSite && Astro.url.pathname.startsWith('/stalhallar/');
+const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 ---
 
 <!doctype html>
@@ -23,6 +26,16 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
     <meta name="robots" content="noindex,nofollow" />
     <title>{isSite ? `${title} | Hallpartner` : `${title} – Hallpartner, intern prototyp`}</title>
     <meta name="description" content={description} />
+    {isSite && canonical && (
+      <>
+        <link rel="canonical" href={canonical} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Hallpartner" />
+        <meta property="og:title" content={`${title} | Hallpartner`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+      </>
+    )}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -68,8 +81,8 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
           <span class="hp-draft-nav-toggle__label">Meny</span>
         </button>
         <nav class="hp-draft-nav" id="hp-proto-nav" aria-label={isSite ? 'Huvudnavigation' : 'Prototypens navigation'}>
-          <a href={isSite ? '/' : draftBase + 'start/'} aria-current={isSite ? 'page' : isCurrent('start')}>Startsida</a>
-          <a href={isSite ? '/#halltyper' : draftBase + 'hallar/'} aria-current={isCurrent('hallar')}>Hallar</a>
+          <a href={isSite ? '/' : draftBase + 'start/'} aria-current={isSite ? (isSiteHome ? 'page' : undefined) : isCurrent('start')}>Startsida</a>
+          <a href={isSite ? '/stalhallar/' : draftBase + 'hallar/'} aria-current={isSite ? (isSiteHalls ? 'page' : undefined) : isCurrent('hallar')}>Hallar</a>
           <a href={isSite ? '/#att-tanka-pa' : draftBase + 'sa-gar-det-till/'} aria-current={isCurrent('sa-gar-det-till')}>{isSite ? 'Inför ditt projekt' : 'Så går det till'}</a>
           <a class="hp-draft-nav__cta" href={isSite ? 'https://hallpartner.se/kontakt/' : draftBase + 'kontakt/'} aria-current={isCurrent('kontakt')}>Kontakt <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
         </nav>
@@ -91,7 +104,7 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
         <div class="hp-draft-footer__links">
           {isSite ? (
             <>
-              <a href="/#halltyper">Hallar</a>
+              <a href="/stalhallar/">Hallar</a>
               <a href="https://hallpartner.se/kontakt/">Kontakt</a>
             </>
           ) : (
