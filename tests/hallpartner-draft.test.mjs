@@ -167,7 +167,10 @@ test('SEO hub /stalhallar/ has a distinct noindex visitor page and accurate rout
   assert.match(page, /HallpartnerSiteLayout/);
   assert.match(page, /Stålhallar för/);
   assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1);
-  for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+  for (const slug of ['lagerhall', 'maskinhall']) {
+    assert.ok(page.includes("href: '/stalhallar/" + slug + "/'"), 'missing migrated internal link to ' + slug);
+  }
+  for (const slug of ['ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
     assert.ok(page.includes('https://hallpartner.se/stalhallar/' + slug + '/'), 'missing pre-migration link to ' + slug);
   }
   for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {

@@ -183,8 +183,11 @@ assert.ok(hallOverview.includes('href="/stalhallar/"'), 'navigation does not lin
 for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
   assert.ok(hallOverview.includes('id="' + id + '"'), 'missing section anchor: ' + id);
 }
-for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
-  assert.ok(hallOverview.includes('href="https://hallpartner.se/stalhallar/' + slug + '/"'), 'missing hall destination: ' + slug);
+for (const slug of ['lagerhall', 'maskinhall']) {
+  assert.ok(hallOverview.includes('href="/stalhallar/' + slug + '/"'), 'missing native overview destination: ' + slug);
+}
+for (const slug of ['ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+  assert.ok(hallOverview.includes('href="https://hallpartner.se/stalhallar/' + slug + '/"'), 'missing legacy destination: ' + slug);
 }
 assert.ok(!hallOverview.includes('/prototype/hallpartner/'), 'draft links must never be part of real overview');
 assert.ok(!hallOverview.includes('AI-genererad konceptbild'), 'internal draft copy must not leak');
