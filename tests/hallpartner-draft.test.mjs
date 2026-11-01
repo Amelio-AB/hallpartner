@@ -281,7 +281,10 @@ test('Ridhus and Tälthallar provide distinct needs-first visitor content on nat
     assert.ok(source.includes('href="' + item.related + '"'), 'missing relevant mutual link: ' + item.slug);
     for (const id of item.anchors) assert.ok(source.includes('id="' + id + '"'), 'missing anchor ' + id);
     for (const phrase of item.unique) assert.ok(source.includes(phrase), 'no distinguishing content: ' + phrase);
-    assert.doesNotMatch(source, /egna montörer|montage ingår alltid|nordens bästa|garanterad leverans|alltid bygglovsfri|standardgaranti|frånpris:/i);
+    assert.doesNotMatch(source, /egna montörer|montage ingår alltid|nordens bästa|garanterad leverans|tälthallar (?:är|blir) bygglovsfria|standardgaranti|frånpris:/i);
+    if (item.slug === 'talthall') {
+      assert.ok(source.includes('Nej, det kan inte förutsättas.'), 'building permit question must not assert an exemption');
+    }
     assert.doesNotMatch(source, /<img(?:\s|>)|<Image(?:\s|>)/i, 'do not use unverified photography on new route');
     titles.push(source.match(/title="([^"]+)"/)?.[1] ?? '');
     descriptions.push(source.match(/description="([^"]+)"/)?.[1] ?? '');
