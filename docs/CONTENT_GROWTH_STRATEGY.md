@@ -57,6 +57,10 @@ Google Search Console och GA4-data för Hallpartner saknas i denna genomgång. I
 
 För en nordisk ambition behövs separat beslut om vilka länder Hallpartner kan leverera i, vem som ansvarar för krav och avtal där och om lokaliserade språkversioner är motiverade. Svensk copy som bara översätts eller upprepar sökord är inte en nordisk marknadsstrategi.
 
+## Fotografering och bildbevis
+
+Andreas planerar egen fotografering och Hallpartner har uppgett att bildmaterial hittills främst kommer från leverantör. För varje ny sida används [bildplanen](IMAGE_PLAN.md) och [fotolistan F01–F18](PHOTO_SHOT_LIST.md) för att få verkliga produktmotiv. Utvecklingen fortsätter med bilder som **separat granskad komplettering**; Hallpartners godkända noindexade Lagerhallar/Maskinhallar ändras inte bara för att en ny bild finns. Proveniens och kommersiell rätt krävs även för självtagna bilder av kundens eller leverantörens objekt. Rätten att fotografera betyder inte automatiskt rätt att påstå att det är en Hallpartner-referens.
+
 ## Viktiga gränser
 
 - Publicera inte "Nordens bästa", "egna montörer", "helhetsentreprenad", standardmått, priser, garantier, svarstider eller leverans i alla nordiska länder som fakta utan underlag.
