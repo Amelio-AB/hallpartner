@@ -70,6 +70,7 @@
 | HP-031 | P1 | Under textarbete | Utreds | Andreas | Plåthallar, isolerade hallar | **Plåthallssidan v0.1 finns som första textutkast men är inte slutligt godkänd.** Återstår: ta fram utkast för isolerade hallar, kontrollera sökintention/överlapp och faktagranska båda innan publicering; klart efter dokumenterade arbetsutkast och genomgång. | [URL][urlresearch], [beslut] |
 | HP-045 | P1 | Under textarbete | Öppen | Andreas/innehållsansvarig | `docs/content/`, alla sidutkast | Samla **hela, befintliga sidutkast** i versionsmärkta filer under `docs/content/` (bl.a. startsida v0.3, hallöversikt, lagerhall, maskinhall, ridhus, tälthall och plåthall v0.1 där källtext finns). Ange källa, versionsdatum, arbetsstatus och kvarstående verifiering; samla inte bara godkännandestatus. Klart när texterna är sparade och lätta att hitta för AI-agenter; **hitta inte på saknad text och märk inget utkast som slutgodkänd produktionscopy**. | [beslut], HP-029–031 |
 | HP-032 | P1 | Före implementation | Öppen | Andreas | Sidmallar och bilder | Säkerställ autentisk Hallpartner-logotyp, bildbeskärning, tillgänglighet och desktop/mobil-layout enligt Direction 02; klart efter godkänd visuell granskning. | [direction], [beslut] |
+| HP-046 | P1 | Före lansering | Öppen | Andreas + Peter/Jimmy | Bildproduktion: startsida, Stålhallar, Lagerhallar, Maskinhallar och senare referenser | **Planera och genomför prioriterad egen fotografering** enligt [bildplan v0.1][photo-plan] och [F01–F18-fotolistan][photo-list]. Klart när de första valda bilderna har fotograferats, faktiska objekt och Hallpartners roll dokumenterats, nödvändiga publiceringsrättigheter verifierats (HP-018), ansvarig godkänt urvalet och mobil-/desktopbeskärningen testats (HP-032). Bilder behöver inte blockera annat text-/kodarbete. | [photo-plan], [photo-list], HP-017–018, HP-032 |
 
 ## SEO och URL-migrering
 
@@ -103,6 +104,8 @@ Lägg till en rad nedan utan att behöva välja prioritet. Klassificera sedan ti
 
 ## Snabbreferens till källor
 
+[photo-plan]: https://github.com/Amelio-AB/hallpartner/blob/35de1fd44edeacd7edb7b00cc074a01d845b7c85/docs/IMAGE_PLAN.md
+[photo-list]: https://github.com/Amelio-AB/hallpartner/blob/35de1fd44edeacd7edb7b00cc074a01d845b7c85/docs/PHOTO_SHOT_LIST.md
 [beslut]: PROJECT_DECISIONS.md
 [offert]: OFFERTFLODE.md
 [mainagents]: ../AGENTS.md
