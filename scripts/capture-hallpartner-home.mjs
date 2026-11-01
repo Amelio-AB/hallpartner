@@ -137,6 +137,24 @@ try {
         "})()", true);
     }
 
+    if (expectedPath === '/') {
+      metrics.siteLogo = await evaluate('(()=>{' +
+        'const image=document.querySelector(".hp-site .hp-draft-brand img.hp-site-logo");' +
+        'const wrapper=document.querySelector(".hp-draft-header__inner");' +
+        'const sibling=window.innerWidth<=800?document.querySelector("[data-hp-nav-toggle]"):document.querySelector("#hp-proto-nav");' +
+        'if(!image||!wrapper||!sibling)return {error:"Missing logo/header/navigation"};' +
+        'const logo=image.getBoundingClientRect(), header=wrapper.getBoundingClientRect(), neighbor=sibling.getBoundingClientRect();' +
+        'return {loaded:image.complete&&image.naturalWidth===1536&&image.naturalHeight===274,' +
+        'alt:image.alt==="Hallpartner – Hallar till alla",' +
+        'src:image.currentSrc.includes("/images/logo_text_white.png"),' +
+        'ratio:Math.abs(logo.width/logo.height-1536/274)<0.05,' +
+        'insideHeader:logo.top>=header.top-2&&logo.bottom<=header.bottom+2,' +
+        'insideViewport:logo.left>=-1&&logo.right<=innerWidth+1,' +
+        'noNavOverlap:logo.right<=neighbor.left+2,' +
+        'visible:logo.height>=22&&logo.height<=65};' +
+        '})()');
+    }
+
     if (viewport.width <= 800) {
       metrics.menu = await evaluate('(()=>{' +
         'const toggle=document.querySelector("[data-hp-nav-toggle]");' +
@@ -174,6 +192,12 @@ try {
   for (const page of report) {
     if (page.h1Count !== 1 || page.navCount !== 1 || page.overflow || page.images.some(i => !i.loaded)) {
       throw new Error('Invalid rendered page on ' + page.viewport.name);
+    }
+  }
+  for (const page of report.filter(page => page.siteLogo)) {
+    const logo = page.siteLogo;
+    if (logo.error || !logo.loaded || !logo.alt || !logo.src || !logo.ratio || !logo.insideHeader || !logo.insideViewport || !logo.noNavOverlap || !logo.visible) {
+      throw new Error('Hallpartner logo layout failed at ' + page.viewport.width + 'px: ' + JSON.stringify(logo));
     }
   }
   const homePages = report.filter(page => page.heroState);

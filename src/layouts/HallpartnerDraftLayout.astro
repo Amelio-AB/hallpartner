@@ -40,8 +40,21 @@ const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
     <header class="hp-draft-header">
       <div class="hp-draft-rail hp-draft-header__inner">
         <a class="hp-draft-brand" href={isSite ? '/' : draftBase + 'start/'} aria-label={isSite ? 'Hallpartner – startsida' : 'Hallpartner – till startsidesprototypen'}>
-          Hallpartner
-          {!isSite && <small>Visuell arbetsversion · ej originallogotyp</small>}
+          {isSite ? (
+            <img
+              class="hp-site-logo"
+              src="/images/logo_text_white.png"
+              alt="Hallpartner – Hallar till alla"
+              width="1536"
+              height="274"
+              decoding="async"
+            />
+          ) : (
+            <>
+              Hallpartner
+              <small>Visuell arbetsversion · ej originallogotyp</small>
+            </>
+          )}
         </a>
         <button
           class="hp-draft-nav-toggle"

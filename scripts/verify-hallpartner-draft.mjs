@@ -158,6 +158,10 @@ for (const phrase of ['Visuell arbetsversion', 'För intern granskning', 'Intern
 }
 assert.ok(!siteHome.includes('/prototype/hallpartner/'), 'production path links to prototype');
 assert.ok(siteHome.includes('https://hallpartner.se/kontakt/'), 'missing verified contact link');
+assert.ok(siteHome.includes('src="/images/logo_text_white.png"'), 'missing visitor header image');
+assert.ok(siteHome.includes('alt="Hallpartner – Hallar till alla"'), 'missing site logo alt');
+assert.ok(!homepage.includes('src="/images/logo_text_white.png"'), 'prototype brand should remain unchanged');
+assert.ok(existsSync(join(dist, 'images', 'logo_text_white.png')), 'static logo asset missing');
 assert.ok((siteHome.match(/<img(?:\s|>)/gi) ?? []).length >= 4, 'site images missing');
 for (const href of [...siteHome.matchAll(/\shref="([^"]+)"/g)].map(x=>x[1]).filter(x=>x.startsWith('#')||x.startsWith('/#'))) {
   const id=href.split('#')[1];

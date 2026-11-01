@@ -139,3 +139,23 @@ test('customer moodboard trial is scoped to / and meets WCAG AA normal-text cont
   assert.ok(contrast(hallpartnerPaletteTrial.linkOnLight, hallpartnerPaletteTrial.offWhite) >= 4.5);
   assert.ok(contrast(hallpartnerPaletteTrial.green, hallpartnerPaletteTrial.deepGraphite) >= 4.5);
 });
+
+test('new visitor logo preserves original transparent image and prototype branding', () => {
+  const png = readFileSync(new URL('../public/images/logo_text_white.png', import.meta.url));
+  assert.equal(png.subarray(0, 8).toString('hex'), '89504e470d0a1a0a');
+  assert.equal(png.readUInt32BE(16), 1536);
+  assert.equal(png.readUInt32BE(20), 274);
+  assert.equal(png[25], 6, 'expected RGBA PNG with alpha');
+
+  const layout = readFileSync(new URL('../src/layouts/HallpartnerDraftLayout.astro', import.meta.url), 'utf8');
+  assert.ok(layout.includes('src="/images/logo_text_white.png"'), 'missing real logo');
+  assert.ok(layout.includes('alt="Hallpartner – Hallar till alla"'), 'missing meaningful alt text');
+  assert.ok(layout.includes('width="1536"') && layout.includes('height="274"'), 'intrinsic dimensions not set');
+  assert.ok(layout.includes('{isSite ? ('), 'site and prototype branding should be separate');
+  assert.ok(layout.includes('Visuell arbetsversion · ej originallogotyp'), 'prototype label lost');
+  const css = readFileSync(new URL('../src/styles/hallpartner-draft.css', import.meta.url), 'utf8');
+  assert.match(css, /\.hp-site \.hp-site-logo\s*\{/);
+  assert.match(css, /width:\s*clamp\(210px, 20vw, 280px\)/);
+  assert.match(css, /width:\s*clamp\(150px, 44vw, 190px\)/);
+  assert.match(css, /height:\s*auto/);
+});

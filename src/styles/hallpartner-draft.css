@@ -25,6 +25,27 @@
 }
 
 
+
+/* Visitor-site logo with its intrinsic 1536:274 aspect ratio. */
+.hp-site .hp-draft-brand {
+  display: inline-flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.hp-site .hp-site-logo {
+  display: block;
+  width: clamp(210px, 20vw, 280px);
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 800px) {
+  .hp-site .hp-site-logo {
+    width: clamp(150px, 44vw, 190px);
+  }
+}
+
 /*
  * Customer moodboard color trial — real / homepage only.
  * Keep Direction 02 on /prototype/ until this trial is visually accepted.
