@@ -202,9 +202,9 @@ for (const detail of details) {
   const expected = 'https://hallpartner.se/stalhallar/' + detail.slug + '/';
   assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'detail leaked indexability: ' + detail.slug);
   assert.ok(html.includes('rel="canonical" href="' + expected + '"'), 'wrong canonical for ' + detail.slug);
-  assert.equal((html.match(/<h1(?:\\s|>)/gi) ?? []).length, 1, 'duplicate or missing detail H1');
-  assert.equal((html.match(/<header(?:\\s|>)/gi) ?? []).length, 1, 'duplicate detail header');
-  assert.equal((html.match(/<nav(?:\\s|>)/gi) ?? []).length, 3, 'detail must have main nav, breadcrumbs, page nav');
+  assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'duplicate or missing detail H1');
+  assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'duplicate detail header');
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'detail must have main nav, breadcrumbs, page nav');
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
   assert.ok(html.includes('href="/stalhallar/"'), 'missing overview link');
   assert.ok(html.includes('https://hallpartner.se/kontakt/'), 'missing live contact destination');
@@ -212,7 +212,7 @@ for (const detail of details) {
   for (const id of detail.ids) {
     assert.ok(html.includes('id="' + id + '"'), 'missing detail anchor ' + id + ' on ' + detail.slug);
   }
-  for (const href of [...html.matchAll(/\\shref="(\\/stalhallar\\/[^"#?]*\\/)"\\s*/g)].map(x => x[1])) {
+  for (const href of [...html.matchAll(/\shref="(\/stalhallar\/[^"#?]*\/)"\s*/g)].map(x => x[1])) {
     assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), 'broken local hall detail link: ' + href);
   }
 }

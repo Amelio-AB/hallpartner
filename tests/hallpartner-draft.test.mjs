@@ -204,7 +204,7 @@ test('two visitor hall pages have distinct SEO intent, native navigation and saf
     const source = readFileSync(new URL('../src/pages/stalhallar/' + item.name + '/index.astro', import.meta.url), 'utf8');
     assert.ok(source.includes('HallpartnerSiteLayout'), 'wrong shell on ' + item.name);
     assert.ok(source.includes(item.heading), 'wrong heading on ' + item.name);
-    assert.equal((source.match(/<h1(?:\\s|>)/g) ?? []).length, 1, 'wrong H1 in ' + item.name);
+    assert.equal((source.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'wrong H1 in ' + item.name);
     for (const id of item.anchors) {
       assert.ok(source.includes('id="' + id + '"'), 'missing anchor ' + id);
     }
