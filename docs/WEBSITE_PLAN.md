@@ -1,6 +1,7 @@
 # Hallpartner – webbplatsplan inför implementation
 
 > 2026-10-31 · Arbetsplan, inte godkänd produktionscopy eller slutligt URL-beslut.
+> **Uppdatering 2026-11-01:** [SEO-sitemap och internlänkningsplan v0.2](SEO_SITEMAP_V02.md) föreslår att befintliga `/stalhallar/...`-adresser bevaras i stället för nya korta URL:er. Detta ersätter de äldre URL-förslagen i just denna arbetsplan tills GSC/crawl och verksamhetsfakta möjliggör slutbeslut. Startsidan på `/` har numera en separat godkänd fullbredds-Hero som visuell arbetsriktning i Draft PR #5, inte längre det äldre v0.3-delade layoutförslaget.
 > Utgår från Andreas överlämning **”Fortsätt utvecklingen av Hallpartner.se – från innehållsplan till Astro-implementation”**, bifogad som `Inklistrad text.txt`, och granskade GitHub-källor. Inga saknade originaltexter har återskapats.
 
 ## Läsordning och dokumentens ansvar
@@ -8,6 +9,7 @@
 Läs först `AGENTS.md` och registren i [PR #2](https://github.com/Amelio-AB/hallpartner/pull/2), även innan den mergas. [PROJECT_DECISIONS.md vid granskad revision](https://github.com/Amelio-AB/hallpartner/blob/8fb19602fd48f8279e33a7558c0e2a86968e176c/docs/PROJECT_DECISIONS.md) förblir det kanoniska beslutsregistret; [TODO.md vid samma revision](https://github.com/Amelio-AB/hallpartner/blob/8fb19602fd48f8279e33a7558c0e2a86968e176c/docs/TODO.md) förblir uppgiftsregistret. Denna plan ersätter inget av registren.
 
 - [Innehållsmanifest](content/README.md): vilka fullständiga källtexter som har återfunnits respektive saknas.
+- [SEO-sitemap v0.2](SEO_SITEMAP_V02.md): prioriterad URL-bevarandeplan, sökintention, metadataförslag, internlänkning och krav inför migrering; URL-arbetsförslagen här nedan ska läsas tillsammans med v0.2.
 - [Integrationsförslag](architecture/AMP_1_2_INTEGRATION.md): komponentansvar, designjämförelse, installation och testgrindar.
 - [Inventering och faktiska testresultat](audits/2026-10-31-readiness.md): granskade revisioner och begränsningar.
 
@@ -23,18 +25,18 @@ Detta är en planeringsmodell. Påståenden om vad Hallpartner faktiskt leverera
 
 ## Sidor i första innehållsomgången
 
-URL:erna nedan är arbetsförslag. Kolumnen ”sidans uppgift” är redaktionell planering, inte ny kundcopy. Fullständiga utkast och deras sektionsordning måste läsas in innan respektive sida byggs.
+URL:erna nedan är **bevarandeförslag från SEO v0.2 (2026-11-01)**, inte beslutade nya routes. De gamla WordPress-adresserna ska först verifieras med full crawl och GSC. Kolumnen ”sidans uppgift” är redaktionell planering, inte ny kundcopy. Fullständiga utkast och deras sektionsordning måste läsas in innan respektive sida byggs.
 
 | Sida / föreslagen URL | Sidans särskilda uppgift | Vidare väg | Hero att utvärdera |
 |---|---|---|---|
-| Startsida `/` | Orientera och leda till rätt behov utan att återge hela sortimentsjämförelsen. | Hallöversikt, relevant hallsida, kontakt. | Bevara v0.3:s uppgivna mörka delade komposition. AMP-004 endast som separat jämförelse. |
-| Hallöversikt `/hallar/` | Förklara skillnaden mellan användning, konstruktion och isolering; hjälpa besökaren välja nästa sida. | Relevanta användnings-/utförandesidor. | AMP-005, ljus. |
-| Lagerhallar `/lagerhallar/` | Behandla lagerbehov och vilka uppgifter som behövs för att diskutera ett lagerprojekt. | Relevant utförande, Så går det till, kontakt. | AMP-005. |
-| Maskinhallar `/maskinhallar/` | Behandla maskinanvändning och behov som behöver fångas före projektering. | Relevant utförande, Så går det till, kontakt. | AMP-005. |
-| Ridhus `/ridhus/` | Ge ridhusbehov ett eget sammanhang, inte återanvända lagerhallstext med nytt namn. | Så går det till, kontakt. | AMP-004 enligt överlämningens fullbreddsriktning. |
-| Tälthallar `/talthallar/` | Förklara utförandet utan generella löften om bygglovsfrihet eller leverans. | Relevanta användningar, kontakt. | AMP-005. |
-| Plåthallar `/plathallar/` | Förklara plåtutförandet utan att göra det till ett användningsområde. | Relevanta användningar, isolering där relevant, kontakt. | AMP-005. |
-| Isolerade hallar `/isolerade-hallar/` | Förklara isolering som egenskap som kan vara relevant för flera hallar. | Relevanta användnings-/utförandesidor, kontakt. | AMP-005. |
+| Startsida `/` | Orientera och leda till rätt behov utan att återge hela sortimentsjämförelsen. | Hallöversikt, relevant hallsida, kontakt. | Fullbredds-Hero som nu finns på `/` i Draft PR #5; AMP-004 testas separat innan byte. |
+| Hallöversikt `/stalhallar/` | Förklara skillnaden mellan användning, konstruktion och isolering; hjälpa besökaren välja nästa sida. | Relevanta användnings-/utförandesidor. | AMP-005, ljus. |
+| Lagerhallar `/stalhallar/lagerhall/` | Behandla lagerbehov och vilka uppgifter som behövs för att diskutera ett lagerprojekt. | Relevant utförande, Så går det till, kontakt. | AMP-005. |
+| Maskinhallar `/stalhallar/maskinhall/` | Behandla maskinanvändning och behov som behöver fångas före projektering. | Relevant utförande, Så går det till, kontakt. | AMP-005. |
+| Ridhus `/stalhallar/ridhus/` | Ge ridhusbehov ett eget sammanhang, inte återanvända lagerhallstext med nytt namn. | Så går det till, kontakt. | AMP-004 enligt överlämningens fullbreddsriktning. |
+| Tälthallar `/stalhallar/talthall/` | Förklara utförandet utan generella löften om bygglovsfrihet eller leverans. | Relevanta användningar, kontakt. | AMP-005. |
+| Plåthallar `/stalhallar/plathall/` | Förklara plåtutförandet utan att göra det till ett användningsområde. | Relevanta användningar, isolering där relevant, kontakt. | AMP-005. |
+| Isolerade hallar `/stalhallar/isolerad-hall/` | Förklara isolering som egenskap som kan vara relevant för flera hallar. | Relevanta användnings-/utförandesidor, kontakt. | AMP-005. |
 | Så går det till `/sa-gar-det-till/` | Samla den verifierade projektgången och ansvarsfördelningen. | Förberedelse för första kontakt. | AMP-005 utan bild. |
 | Om Hallpartner `/om-oss/` | Presentera verifierade uppgifter om företaget och personerna. | Kontakt. | AMP-005 med godkänt personfoto eller utan bild. |
 | Kontakt `/kontakt/` | Ge en enkel faktisk kontaktväg; skilj kontaktmeddelande från offertspecifikation. | Bekräftat mottagande när backend finns. | AMP-005 utan bild. |
@@ -45,7 +47,7 @@ Ingen sida får automatiskt samma sektioner i samma ordning. Sidans bevarade ori
 
 **Användningsområde:** lager, maskiner och ridverksamhet. **Konstruktionsutförande:** exempelvis tält eller plåt. **Egenskap:** isolering. Ett projekt kan behöva beskrivas utifrån flera av dessa samtidigt; de är inte ett enda ömsesidigt uteslutande val.
 
-Navigationen kan samla sidorna under Hallar, med tydlig gruppering. Det är inte ett beslut om kundens slutliga sortiment. AMP-002 gör en gruppförälder till en menyknapp även när den har `href`. Lägg därför en uttrycklig länk till **Alla hallar** inne i gruppen så att `/hallar/` kan nås på både mobil och desktop.
+Navigationen kan samla sidorna under Hallar, med tydlig gruppering. Det är inte ett beslut om kundens slutliga sortiment. AMP-002 gör en gruppförälder till en menyknapp även när den har `href`. Lägg därför en uttrycklig länk till **Alla stålhallar** inne i gruppen så att `/stalhallar/` kan nås på både mobil och desktop. Den nya URL:en är ännu bara ett bevarandeförslag; se [SEO-sitemap v0.2](SEO_SITEMAP_V02.md).
 
 Gemensamma menydata ska vara samma källa för AMP-002 och en serverrenderad reservnavigation. Visa inte länkar till framtida destinationssidor innan de finns. Alla CTA ska landa på en fungerande väg; ordet ”offert” får inte dölja att ett formulär endast skickar ett vanligt kontaktmeddelande.
 
