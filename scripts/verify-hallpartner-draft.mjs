@@ -143,3 +143,24 @@ for (const file of sitemapFiles) {
 }
 
 console.log(`Verified ${routes.length} static prototype pages: one header/navigation/H1, noindex, and no sitemap leaks.`);
+
+// Rendered production-path homepage (still noindex while under construction).
+const siteHome = readFileSync(join(dist, 'index.html'), 'utf8');
+assert.match(siteHome, /<meta\s+name="robots"\s+content="noindex,nofollow"/);
+assert.ok(siteHome.includes('En hall börjar med ditt behov.'), 'root homepage is not the approved Hero');
+assert.ok(siteHome.includes('aria-label="Huvudnavigation"'), 'site nav is not visitor facing');
+assert.ok(siteHome.includes('aria-controls="hp-proto-nav"'), 'mobile menu control missing');
+assert.equal((siteHome.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'site has incorrect H1 count');
+assert.equal((siteHome.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'site has duplicate header');
+assert.equal((siteHome.match(/<nav(?:\s|>)/gi) ?? []).length, 1, 'site has duplicate navigation');
+for (const phrase of ['Visuell arbetsversion', 'För intern granskning', 'Intern arbetsprototyp', 'AI-genererad konceptbild', 'Ursprungligt fulltextutkast saknas', 'digital analys och vision']) {
+  assert.ok(!siteHome.includes(phrase), 'prototype text on /: ' + phrase);
+}
+assert.ok(!siteHome.includes('/prototype/hallpartner/'), 'production path links to prototype');
+assert.ok(siteHome.includes('https://hallpartner.se/kontakt/'), 'missing verified contact link');
+assert.ok((siteHome.match(/<img(?:\s|>)/gi) ?? []).length >= 4, 'site images missing');
+for (const href of [...siteHome.matchAll(/\shref="([^"]+)"/g)].map(x=>x[1]).filter(x=>x.startsWith('#')||x.startsWith('/#'))) {
+  const id=href.split('#')[1];
+  assert.ok(id && siteHome.includes('id="'+id+'"'), 'broken root anchor: '+href);
+}
+console.log('Verified / homepage: Hero, one H1/header/nav, noindex, anchor targets and no prototype links.');
