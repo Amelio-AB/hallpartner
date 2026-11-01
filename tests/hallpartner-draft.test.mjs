@@ -183,3 +183,46 @@ test('SEO hub /stalhallar/ has a distinct noindex visitor page and accurate rout
     assert.ok(spec.intendedPath.startsWith('/stalhallar/'), 'outdated planned URL: ' + spec.slug);
   }
 });
+
+test('two visitor hall pages have distinct SEO intent, native navigation and safe review-only content', () => {
+  const pages = [
+    {
+      name: 'lagerhall',
+      heading: 'Lagerhallar – börja med',
+      anchors: ['lagerbehov', 'varuflode', 'lagerutforande', 'lagerfragor'],
+      distinct: ['Vad ska lagras?', 'Hur rör sig godset?', 'Hur används lagret över tid?'],
+    },
+    {
+      name: 'maskinhall',
+      heading: 'Maskinhallar med',
+      anchors: ['maskinernas-behov', 'korvagar', 'arbetsytan', 'maskinhall-fragor'],
+      distinct: ['In i hallen', 'På arbetsytan', 'Ut igen'],
+    },
+  ];
+  const intros = [];
+  for (const item of pages) {
+    const source = readFileSync(new URL('../src/pages/stalhallar/' + item.name + '/index.astro', import.meta.url), 'utf8');
+    assert.ok(source.includes('HallpartnerSiteLayout'), 'wrong shell on ' + item.name);
+    assert.ok(source.includes(item.heading), 'wrong heading on ' + item.name);
+    assert.equal((source.match(/<h1(?:\\s|>)/g) ?? []).length, 1, 'wrong H1 in ' + item.name);
+    for (const id of item.anchors) {
+      assert.ok(source.includes('id="' + id + '"'), 'missing anchor ' + id);
+    }
+    for (const phrase of item.distinct) assert.ok(source.includes(phrase), 'missing distinct topic ' + phrase);
+    assert.ok(source.includes('href="/stalhallar/"'), 'missing overview breadcrumb');
+    assert.ok(source.includes('https://hallpartner.se/kontakt/'), 'must link to verified old live contact until native contact migrates');
+    assert.doesNotMatch(source, /egna montörer|leveransgaranti|nordens bästa|garanterad leverans|bygglovsfri|frånpris/i);
+    intros.push(source.match(/description="([^"]+)"/)?.[1] ?? '');
+  }
+  assert.notEqual(intros[0], intros[1], 'duplicate page descriptions');
+  const overview = readFileSync(new URL('../src/pages/stalhallar/index.astro', import.meta.url), 'utf8');
+  assert.ok(overview.includes("href: '/stalhallar/lagerhall/'"), 'overview still links to WordPress lagerhall');
+  assert.ok(overview.includes("href: '/stalhallar/maskinhall/'"), 'overview still links to WordPress maskinhall');
+  const home = readFileSync(new URL('../src/components/prototype/HallpartnerHomePrototype.astro', import.meta.url), 'utf8');
+  assert.ok(home.includes("lagerhallar: '/stalhallar/lagerhall/'"));
+  assert.ok(home.includes("maskinhallar: '/stalhallar/maskinhall/'"));
+  const styles = readFileSync(new URL('../src/styles/hallpartner-hall-detail.css', import.meta.url), 'utf8');
+  assert.match(styles, /\.hp-detail__split/);
+  assert.match(styles, /\.hp-detail--machine/);
+  assert.match(styles, /@media \(max-width: 740px\)/);
+});

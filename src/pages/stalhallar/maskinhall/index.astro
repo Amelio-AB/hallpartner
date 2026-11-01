@@ -1,0 +1,200 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-hall-detail.css';
+
+// A new, needs-first draft. Supplier claims, specifications and delivery
+// responsibility are not yet customer-verified.
+const contactHref = 'https://hallpartner.se/kontakt/';
+
+const movement = [
+  { title: 'In i hallen', body: 'Vilka maskiner ska passera porten? Ta med både själva maskinens mått och hur den behöver manövreras på väg in.' },
+  { title: 'På arbetsytan', body: 'Behöver det finnas utrymme för service, redskap eller arbete runt maskinerna? Rita gärna in rörelser och ytor som måste hållas fria.' },
+  { title: 'Ut igen', body: 'Fundera på var maskinerna ska kunna vända, hur ofta de flyttas och om infart och utfart behöver fungera samtidigt.' },
+] as const;
+
+const considerations = [
+  { heading: 'Portar och fri höjd', detail: 'Maskiner kan vara bredare eller högre än vad som först syns på ett grundmått. Kontrollera även utrustning som sitter monterad ovanpå.' },
+  { heading: 'Service och underhåll', detail: 'Om arbete ska ske inne i hallen behöver det finnas plats att öppna luckor, använda verktyg och röra sig säkert runt utrustningen.' },
+  { heading: 'Förvaring och utrustning', detail: 'Redskap, reservdelar och annan utrustning kan behöva egna ytor även när maskinerna inte används.' },
+  { heading: 'Inomhusmiljö och drift', detail: 'Uppvärmning, ventilation, fukthantering och eventuella särskilda installationer måste bedömas efter vad verksamheten ska göra i byggnaden.' },
+] as const;
+
+const questions = [
+  { question: 'Hur mäter jag behovet av en maskinhall?', answer: 'Utgå från de största maskinernas mått, men ta också med öppningar, körvägar, vändytor och plats för arbete runt utrustningen. Ett mått på själva maskinen räcker sällan som enda underlag.' },
+  { question: 'Kan en maskinhall även användas som verkstad?', answer: 'Det är en fråga som behöver utredas utifrån hur arbetet ska gå till. Service, installationer och inomhusmiljö kan ställa andra krav än ren uppställning eller förvaring.' },
+  { question: 'Behöver en maskinhall vara isolerad?', answer: 'Det beror på vad som sker i hallen och om maskiner, material eller personer behöver en viss inomhusmiljö. Isolering är en separat fråga från vilket användningsområde hallen har.' },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Maskinhallar – plats för maskiner och arbete"
+  description="Planerar du en maskinhall? Läs om portöppningar, frihöjd, körvägar, serviceytor och vad som är bra att veta inför ett hallprojekt."
+>
+  <div class="hp-detail hp-detail--machine">
+    <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a>
+      <span aria-hidden="true">/</span>
+      <a href="/stalhallar/">Stålhallar</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Maskinhallar</span>
+    </nav>
+
+    <section class="hp-detail__hero" aria-labelledby="hp-machine-page-title">
+      <div class="hp-draft-rail hp-detail__hero-grid">
+        <div class="hp-detail__hero-copy">
+          <p class="hp-detail__eyebrow">Maskinhallar / Arbetsytor</p>
+          <h1 id="hp-machine-page-title">Maskinhallar med <em>plats för arbetet.</em></h1>
+          <p class="hp-detail__lead">
+            En maskinhall handlar inte bara om att ställa maskiner under tak.
+            De ska kunna ta sig in, få plats och användas på det sätt verksamheten
+            kräver. Där börjar en bra planering.
+          </p>
+          <div class="hp-detail__hero-actions">
+            <a class="hp-detail__button" href="#maskinernas-behov">Planera maskinhallen <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <aside class="hp-detail__hero-aside" aria-label="Tre frågor om maskinhallen">
+          <p class="hp-detail__aside-title">Se bortom maskinens mått</p>
+          <dl>
+            <div><dt>Passagen</dt><dd>Vilka portar och körvägar behövs?</dd></div>
+            <div><dt>Arbetsytan</dt><dd>Vad ska kunna göras runt maskinerna?</dd></div>
+            <div><dt>Förutsättningarna</dt><dd>Hur används byggnaden under året?</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-detail__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-detail__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#maskinernas-behov">Behovet</a>
+        <a href="#korvagar">Rörelserna</a>
+        <a href="#arbetsytan">Arbetsytan</a>
+        <a href="#maskinhall-fragor">Vanliga frågor</a>
+      </div>
+    </nav>
+
+    <section id="maskinernas-behov" class="hp-detail__section hp-detail__section--paper" aria-labelledby="machine-needs-title">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Börja med det som ska in</p>
+          <h2 id="machine-needs-title">Maskinens mått är bara början.</h2>
+          <p>
+            Höjd, bredd och längd är viktiga utgångspunkter. Men en hall kan också
+            behöva rymma rörelser, redskap och arbete när maskinerna används.
+          </p>
+          <a class="hp-detail__text-link" href="/stalhallar/lagerhall/">
+            Behöver du främst förvaring? Läs om lagerhallar <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <aside class="hp-detail__fact-panel" aria-label="Uppgifter att förbereda">
+          <h3>Ta gärna reda på</h3>
+          <ul>
+            <li>Vilka maskiner som behöver få plats och deras ungefärliga mått.</li>
+            <li>Hur maskinerna körs eller flyttas in och ut.</li>
+            <li>Vilken utrustning som behöver följa med maskinerna.</li>
+            <li>Om hallen används för uppställning, service eller annat arbete.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="korvagar" class="hp-detail__section hp-detail__section--soft" aria-labelledby="machine-movement-title">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div>
+            <p class="hp-detail__eyebrow">Följ en vanlig arbetsdag</p>
+            <h2 id="machine-movement-title">Rita upp hur maskinerna rör sig.</h2>
+          </div>
+          <p>En enkel skiss av användningen kan vara mer värdefull i början än en detaljerad lösning som ännu inte är dimensionerad.</p>
+        </div>
+        <ol class="hp-detail__movement">
+          {movement.map((item) => (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section id="arbetsytan" class="hp-detail__section hp-detail__section--dark" aria-labelledby="machine-work-title">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row hp-detail__heading-row--light">
+          <div>
+            <p class="hp-detail__eyebrow">När hallen används</p>
+            <h2 id="machine-work-title">Vilken arbetsmiljö behövs?</h2>
+          </div>
+          <p>
+            En maskinhall som också fungerar som arbetsplats kan behöva
+            andra lösningar än en byggnad som främst används för uppställning.
+            De tekniska kraven måste undersökas för det enskilda projektet.
+          </p>
+        </div>
+        <div class="hp-detail__considerations">
+          {considerations.map((item) => (
+            <article>
+              <h3>{item.heading}</h3>
+              <p>{item.detail}</p>
+            </article>
+          ))}
+        </div>
+        <div class="hp-detail__related-inline">
+          <p>Om verksamheten kräver särskild inomhusmiljö kan isolering vara en viktig del av diskussionen.</p>
+          <a href="https://hallpartner.se/stalhallar/isolerad-hall/">Läs om isolerade hallar <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--paper" aria-labelledby="machine-prep-title">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Underlag inför första kontakten</p>
+          <h2 id="machine-prep-title">Du behöver inte ha valt hallens utförande.</h2>
+          <p>
+            Börja med användningen, måtten på utrustningen och var projektet
+            ska ligga. Andra frågor kan utredas när förutsättningarna är kända.
+          </p>
+        </div>
+        <div class="hp-detail__note-list">
+          <h3>Det här hjälper oss att förstå behovet</h3>
+          <p>En beskrivning av maskinerna och deras mått.</p>
+          <p>En enkel skiss över in- och utfarter samt arbetsytor.</p>
+          <p>Uppgifter om ungefärlig byggplats och tänkt användning.</p>
+          <p>Eventuella behov av servicearbete, uppvärmning eller förvaring.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="maskinhall-fragor" class="hp-detail__section hp-detail__section--soft" aria-labelledby="machine-faq-title">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Inför planeringen</p>
+          <h2 id="machine-faq-title">Vanliga frågor om maskinhallar</h2>
+          <p>Frågorna nedan hjälper dig att beskriva behovet. De ersätter inte teknisk projektering.</p>
+        </div>
+        <div class="hp-detail__faq-list">
+          {questions.map((item) => (
+            <article>
+              <h3>{item.question}</h3>
+              <p>{item.answer}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__end" aria-labelledby="machine-next-title">
+      <div class="hp-draft-rail hp-detail__end-inner">
+        <div>
+          <p class="hp-detail__eyebrow">Nästa steg</p>
+          <h2 id="machine-next-title">Berätta vad du behöver få plats med.</h2>
+          <p>Vilka maskiner ska användas, hur ska de förflyttas och var är hallen tänkt att stå? Med en sådan beskrivning kan samtalet börja.</p>
+        </div>
+        <a class="hp-detail__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

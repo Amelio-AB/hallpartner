@@ -8,10 +8,10 @@ import '../../styles/hallpartner-home.css';
 export interface Props { variant?: 'prototype' | 'site'; }
 const { variant = 'prototype' } = Astro.props;
 const isSite = variant === 'site';
-// Real current WordPress routes are temporary destinations, until native routes exist.
+// Migrated hall pages use native routes; remaining WordPress links are temporary until migration.
 const existingPages = {
-  lagerhallar: 'https://hallpartner.se/stalhallar/lagerhall/',
-  maskinhallar: 'https://hallpartner.se/stalhallar/maskinhall/',
+  lagerhallar: '/stalhallar/lagerhall/',
+  maskinhallar: '/stalhallar/maskinhall/',
   ridhus: 'https://hallpartner.se/stalhallar/ridhus/',
   isolerade: 'https://hallpartner.se/stalhallar/isolerad-hall/',
   kontakt: 'https://hallpartner.se/kontakt/',

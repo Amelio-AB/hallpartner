@@ -190,3 +190,34 @@ assert.ok(!hallOverview.includes('/prototype/hallpartner/'), 'draft links must n
 assert.ok(!hallOverview.includes('AI-genererad konceptbild'), 'internal draft copy must not leak');
 assert.ok(siteHome.includes('href="/stalhallar/"'), 'homepage must link to the actual hall overview');
 console.log('Verified /stalhallar/: noindex, canonical, single H1, section anchors, all six hall destinations.');
+
+// Pages migrated from WordPress paths must use the same canonical URL,
+// real breadcrumbs, unique content, and only functioning local destinations.
+const details = [
+  { slug: 'lagerhall', label: 'Lagerhallar', ids: ['lagerbehov', 'varuflode', 'lagerutforande', 'lagerfragor'] },
+  { slug: 'maskinhall', label: 'Maskinhallar', ids: ['maskinernas-behov', 'korvagar', 'arbetsytan', 'maskinhall-fragor'] },
+];
+for (const detail of details) {
+  const html = readFileSync(join(dist, 'stalhallar', detail.slug, 'index.html'), 'utf8');
+  const expected = 'https://hallpartner.se/stalhallar/' + detail.slug + '/';
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'detail leaked indexability: ' + detail.slug);
+  assert.ok(html.includes('rel="canonical" href="' + expected + '"'), 'wrong canonical for ' + detail.slug);
+  assert.equal((html.match(/<h1(?:\\s|>)/gi) ?? []).length, 1, 'duplicate or missing detail H1');
+  assert.equal((html.match(/<header(?:\\s|>)/gi) ?? []).length, 1, 'duplicate detail header');
+  assert.equal((html.match(/<nav(?:\\s|>)/gi) ?? []).length, 3, 'detail must have main nav, breadcrumbs, page nav');
+  assert.ok(html.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
+  assert.ok(html.includes('href="/stalhallar/"'), 'missing overview link');
+  assert.ok(html.includes('https://hallpartner.se/kontakt/'), 'missing live contact destination');
+  assert.ok(!html.includes('/prototype/hallpartner/'), 'visitor detail links to old prototype');
+  for (const id of detail.ids) {
+    assert.ok(html.includes('id="' + id + '"'), 'missing detail anchor ' + id + ' on ' + detail.slug);
+  }
+  for (const href of [...html.matchAll(/\\shref="(\\/stalhallar\\/[^"#?]*\\/)"\\s*/g)].map(x => x[1])) {
+    assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), 'broken local hall detail link: ' + href);
+  }
+}
+assert.ok(hallOverview.includes('href="/stalhallar/lagerhall/"'), 'overview should link to local storage hall');
+assert.ok(hallOverview.includes('href="/stalhallar/maskinhall/"'), 'overview should link to local machine hall');
+assert.ok(siteHome.includes('href="/stalhallar/lagerhall/"'), 'home should link to local storage hall');
+assert.ok(siteHome.includes('href="/stalhallar/maskinhall/"'), 'home should link to local machine hall');
+console.log('Verified migrated /stalhallar/lagerhall/ and /stalhallar/maskinhall/: noindex, canonical, anchors and internal links.');
