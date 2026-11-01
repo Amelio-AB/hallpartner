@@ -92,7 +92,9 @@ test('prototype shell has explicit noindex, skip-link and no production claims',
   const layout = readFileSync(new URL('../src/layouts/HallpartnerDraftLayout.astro', import.meta.url), 'utf8');
   assert.ok(layout.includes('name="robots" content="noindex,nofollow"'));
   assert.ok(layout.includes('href="#main-content"'));
-  assert.ok(layout.includes('aria-label="Prototypens navigation"'));
+  // The shared shell must support both the internal prototype and the real root.
+  assert.ok(layout.includes("'Prototypens navigation'"));
+  assert.ok(layout.includes("'Huvudnavigation'"));
   assert.ok(layout.includes('AMP-komponenter'));
   assert.ok(!layout.includes('mountHeaderMenu('));
 });
