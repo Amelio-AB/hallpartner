@@ -1,0 +1,249 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-hall-detail.css';
+import '../../../styles/hallpartner-hall-variants.css';
+
+// New editorial draft, not a recovered, previously customer-approved text.
+// No unsupported reference projects, product dimensions or supplier claims.
+const contactHref = 'https://hallpartner.se/kontakt/';
+
+const riderNeeds = [
+  {
+    title: 'Hur ska ridytan användas?',
+    body: 'Träning, undervisning och annan ridverksamhet kan behöva olika upplägg. Börja med de aktiviteter som hallen ska ge plats för.',
+  },
+  {
+    title: 'Vem ska använda anläggningen?',
+    body: 'Tänk på flödet för hästar, ryttare och personal. Om fler grupper ska använda hallen kan deras vägar behöva planeras separat.',
+  },
+  {
+    title: 'Vad behövs runt ridytan?',
+    body: 'Tillträde för skötsel, eventuell förvaring och andra funktioner kan påverka planeringen. Alla utrymmen hör inte hemma på själva ridytan.',
+  },
+] as const;
+
+const ridingSpace = [
+  {
+    title: 'Fri yta och ridhöjd',
+    body: 'Beskriv vilken ridning som ska bedrivas och vilken fri yta verksamheten behöver. Slutliga mått och höjder måste prövas mot projektets krav.',
+  },
+  {
+    title: 'Entréer och skötsel',
+    body: 'Se till att vägen in och ut fungerar för den tänkta användningen. Fundera även på hur underlaget och hallen ska skötas.',
+  },
+  {
+    title: 'Rörelser kring hallen',
+    body: 'Inpassering, uppställning och ytor för människor eller utrustning behöver ses i relation till platsen och verksamheten.',
+  },
+] as const;
+
+const ridingClimate = [
+  {
+    title: 'Dagsljus och belysning',
+    body: 'Ljusinsläpp och armaturer behöver placeras med hänsyn till aktiviteterna, så att viktiga delar av ridytan går att använda utan störande bländning.',
+  },
+  {
+    title: 'Luft, fukt och damm',
+    body: 'Ridverksamhetens användning kan ge särskilda frågor kring luftväxling, fukt och skötsel. Dessa ska utredas för den aktuella anläggningen.',
+  },
+  {
+    title: 'Mark och vatten',
+    body: 'Placering, grundförutsättningar och vattenhantering behöver tas med tidigt. Ett fotografi eller ett exempel är inte ett projekteringsunderlag.',
+  },
+  {
+    title: 'Verksamhet över året',
+    body: 'Hur ofta ridhuset ska användas och under vilka årstider är relevant för byggnadens utformning och önskad inomhusmiljö.',
+  },
+] as const;
+
+const questions = [
+  {
+    title: 'Hur stort behöver ett ridhus vara?',
+    body: 'Det beror på vilken ridverksamhet som planeras och vilka funktioner som ska rymmas. Utgå från verksamhetens behov; slutlig dimensionering och val av byggnad måste prövas separat.',
+  },
+  {
+    title: 'Vad är viktigt utöver själva ridytan?',
+    body: 'Entréer, ytor för skötsel, ljus och luft är exempel på frågor som påverkar hur ridhuset fungerar. Det behövs också underlag för byggplatsen.',
+  },
+  {
+    title: 'Kan ett ridhus byggas med olika hallutföranden?',
+    body: 'Olika konstruktionsprinciper kan vara värda att undersöka. Vilka system som faktiskt passar ridverksamheten och kan levereras behöver bekräftas för projektet.',
+  },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Ridhus och ridhallar – planera för ridverksamheten"
+  description="Planerar du ridhus eller ridhall? Läs om ridyta, tillträde, belysning och vilka frågor som behöver utredas inför ett ridhusprojekt."
+>
+  <div class="hp-detail hp-detail--ridhus">
+    <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a>
+      <span aria-hidden="true">/</span>
+      <a href="/stalhallar/">Stålhallar</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Ridhus</span>
+    </nav>
+
+    <section class="hp-detail__hero" aria-labelledby="ridhus-title">
+      <div class="hp-draft-rail hp-detail__hero-grid">
+        <div class="hp-detail__hero-copy">
+          <p class="hp-detail__eyebrow">Ridhus / Ridverksamhet</p>
+          <h1 id="ridhus-title">Ridhus med plats för <em>ridningen.</em></h1>
+          <p class="hp-detail__lead">
+            Ett ridhus ska fungera för aktiviteterna som ska ske där.
+            Hur ridytan används, hur hästar och människor rör sig och vad
+            som behövs runt omkring är en bra början på planeringen.
+          </p>
+          <div class="hp-detail__hero-actions">
+            <a class="hp-detail__button" href="#ridhus-verksamhet">
+              Planera ridhuset <span aria-hidden="true">↓</span>
+            </a>
+            <a class="hp-detail__text-link" href={contactHref}>
+              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <aside class="hp-detail__hero-aside" aria-label="Börja med ridverksamheten">
+          <p class="hp-detail__aside-title">Vad behöver ridhuset rymma?</p>
+          <dl>
+            <div><dt>Ridningen</dt><dd>Vilka aktiviteter och hur många användare behöver få plats?</dd></div>
+            <div><dt>Tillträdet</dt><dd>Hur ska hästar, ryttare och utrustning röra sig?</dd></div>
+            <div><dt>Miljön</dt><dd>Vilket ljus och vilken inomhusmiljö behöver verksamheten?</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-detail__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-detail__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#ridhus-verksamhet">Ridverksamheten</a>
+        <a href="#ridhus-ridyta">Ridyta och tillträde</a>
+        <a href="#ridhus-miljo">Ljus och miljö</a>
+        <a href="#ridhus-fragor">Vanliga frågor</a>
+      </div>
+    </nav>
+
+    <section class="hp-detail__section hp-detail__section--paper" id="ridhus-verksamhet" aria-labelledby="riding-needs-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div>
+            <p class="hp-detail__eyebrow">Börja med användningen</p>
+            <h2 id="riding-needs-heading">Vad ska hända inne i ridhuset?</h2>
+          </div>
+          <p>
+            Ridhus handlar om mer än en stor, fri byggnadsyta.
+            Utgå från ridverksamheten innan hallens konstruktionssystem diskuteras.
+          </p>
+        </div>
+        <div class="hp-detail__cards">
+          {riderNeeds.map((item) => (
+            <article class="hp-detail__card">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--soft" id="ridhus-ridyta" aria-labelledby="riding-area-heading">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Utrymmet behöver fungera</p>
+          <h2 id="riding-area-heading">Planera också vägen till ridytan.</h2>
+          <p>
+            En byggnad kan ha stor golvyta och ändå behöva bättre
+            planering av tillträde och funktioner runt omkring.
+            Tänk igenom en vanlig dag i anläggningen.
+          </p>
+          <a class="hp-detail__text-link" href="/stalhallar/">
+            Jämför olika hallar <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="hp-detail__stack">
+          {ridingSpace.map((item) => (
+            <article class="hp-detail__stack-item">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--dark" id="ridhus-miljo" aria-labelledby="riding-climate-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row hp-detail__heading-row--light">
+          <div>
+            <p class="hp-detail__eyebrow">För ridning i vardagen</p>
+            <h2 id="riding-climate-heading">Ljus och inomhusmiljö spelar roll.</h2>
+          </div>
+          <p>
+            Hur anläggningen används påverkar vilka frågor som behöver
+            utredas kring belysning, luft och byggplats. De tekniska
+            lösningarna ska väljas utifrån projektets förutsättningar.
+          </p>
+        </div>
+        <div class="hp-detail__considerations">
+          {ridingClimate.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+        <div class="hp-detail__related-inline">
+          <p>
+            Vill du jämföra möjliga hallutföranden? Läs om tälthallar
+            som ett konstruktionsspår att undersöka – inte som ett
+            färdigt löfte om ett visst ridhussystem.
+          </p>
+          <a href="/stalhallar/talthall/">
+            Läs om tälthallar <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--paper" id="ridhus-fragor" aria-labelledby="riding-faq-heading">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Inför första samtalet</p>
+          <h2 id="riding-faq-heading">Vanliga frågor om ridhus</h2>
+          <p>
+            Beskriv ridverksamheten och byggplatsen så långt du kan.
+            Mått och andra tekniska egenskaper behöver fastställas
+            när projektets krav är kända.
+          </p>
+        </div>
+        <div class="hp-detail__faq-list">
+          {questions.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__end" aria-labelledby="ridhus-next-heading">
+      <div class="hp-draft-rail hp-detail__end-inner">
+        <div>
+          <p class="hp-detail__eyebrow">När du vill gå vidare</p>
+          <h2 id="ridhus-next-heading">Berätta om ditt ridhusprojekt.</h2>
+          <p>
+            Vad ska ridhuset användas till, ungefär hur mycket plats
+            behövs och var är det tänkt att ligga? Det är en bra
+            utgångspunkt för ett första samtal.
+          </p>
+        </div>
+        <a class="hp-detail__button" href={contactHref}>
+          Kontakta Hallpartner <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

@@ -183,11 +183,8 @@ assert.ok(hallOverview.includes('href="/stalhallar/"'), 'navigation does not lin
 for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
   assert.ok(hallOverview.includes('id="' + id + '"'), 'missing section anchor: ' + id);
 }
-for (const slug of ['lagerhall', 'maskinhall', 'plathall', 'isolerad-hall']) {
+for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
   assert.ok(hallOverview.includes('href="/stalhallar/' + slug + '/"'), 'missing native overview destination: ' + slug);
-}
-for (const slug of ['ridhus', 'talthall']) {
-  assert.ok(hallOverview.includes('href="https://hallpartner.se/stalhallar/' + slug + '/"'), 'missing legacy destination: ' + slug);
 }
 assert.ok(!hallOverview.includes('/prototype/hallpartner/'), 'draft links must never be part of real overview');
 assert.ok(!hallOverview.includes('AI-genererad konceptbild'), 'internal draft copy must not leak');
@@ -245,3 +242,30 @@ for (const detail of [
 }
 assert.ok(siteHome.includes('href="/stalhallar/isolerad-hall/"'), 'homepage isolate link not migrated');
 console.log('Verified Plåthallar and Isolerade hallar: noindex, canonical, breadcrumbs, H1 and local links.');
+
+
+// Ridhus and Tälthallar retain their original search URLs as local drafts,
+// with distinct editorial content and a tested HTML/no-JS navigation baseline.
+for (const item of [
+  { slug: 'ridhus', title: 'Ridhus', anchors: ['ridhus-verksamhet', 'ridhus-ridyta', 'ridhus-miljo', 'ridhus-fragor'] },
+  { slug: 'talthall', title: 'Tälthallar', anchors: ['talthall-utforande', 'talthall-anvandning', 'talthall-byggplats', 'talthall-fragor'] },
+]) {
+  const html = readFileSync(join(dist, 'stalhallar', item.slug, 'index.html'), 'utf8');
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'missing noindex: ' + item.slug);
+  assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/stalhallar/' + item.slug + '/"'), 'canonical mismatch: ' + item.slug);
+  assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'H1 count: ' + item.slug);
+  assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'duplicate Header: ' + item.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'three navigations expected: ' + item.slug);
+  assert.ok(html.includes('aria-label="Brödsmulor"'), 'breadcrumbs missing: ' + item.slug);
+  assert.ok(html.includes('href="/stalhallar/"'), 'overview link missing: ' + item.slug);
+  assert.ok(html.includes('https://hallpartner.se/kontakt/'), 'contact link missing: ' + item.slug);
+  assert.ok(!html.includes('/prototype/hallpartner/'), 'visitor link points at prototype: ' + item.slug);
+  assert.ok(!html.includes('AI-genererad konceptbild'), 'prototype claim leaked: ' + item.slug);
+  for (const id of item.anchors) assert.ok(html.includes('id="' + id + '"'), 'missing section anchor ' + id);
+  for (const href of [...html.matchAll(/\shref="(\/stalhallar\/[^"#?]*\/)"/g)].map(m => m[1])) {
+    assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), 'broken native hall link: ' + href);
+  }
+}
+assert.ok(siteHome.includes('href="/stalhallar/ridhus/"'), 'homepage Ridhus card still links to WordPress');
+assert.ok(hallOverview.includes('href="/stalhallar/talthall/"'), 'overview Tälthall card still links to WordPress');
+console.log('Verified Ridhus and Tälthallar: native noindex routes, canonical, links, 1 H1 and correct landmarks.');

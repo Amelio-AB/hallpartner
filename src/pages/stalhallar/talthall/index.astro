@@ -1,0 +1,239 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-hall-detail.css';
+import '../../../styles/hallpartner-hall-variants.css';
+
+// A new content draft. Do not inherit earlier WordPress claims about
+// building permits, anchoring, rental, lifetime or guaranteed performance.
+const contactHref = 'https://hallpartner.se/kontakt/';
+
+const constructionQuestions = [
+  {
+    title: 'Stomme och duk',
+    body: 'En tälthall kan beskrivas med en bärande konstruktion och en dukbeklädnad. Hur systemet är uppbyggt och vad det tål måste styrkas för den lösning som faktiskt diskuteras.',
+  },
+  {
+    title: 'Portar och öppningar',
+    body: 'Fundera på vad som ska passera in och ut. Öppningarnas antal, läge och storlek behöver passa användningen och den valda konstruktionen.',
+  },
+  {
+    title: 'Hur länge den ska användas',
+    body: 'Planerad användningstid och hur ofta hallen används är viktiga uppgifter. Benämningen tälthall säger i sig inget säkert om lovplikt, livslängd eller flyttbarhet.',
+  },
+] as const;
+
+const planningSteps = [
+  {
+    title: 'Beskriv användningen',
+    body: 'Vad behöver skyddas eller få plats? Varor, fordon och olika verksamheter kan kräva olika ytor och öppningar.',
+  },
+  {
+    title: 'Undersök byggplatsen',
+    body: 'Mark, tillträde, vind och snö behöver hanteras utifrån platsen. Förankring och grundlösning är frågor för det specifika byggsystemet och projektet.',
+  },
+  {
+    title: 'Klargör lov och ansvar',
+    body: 'Bygglov och andra krav får inte antas bort för att konstruktionen kallas tälthall. Kontakta kommunen och berörda sakkunniga när projektets förutsättningar är kända.',
+  },
+] as const;
+
+const faq = [
+  {
+    title: 'Är en tälthall alltid bygglovsfri?',
+    body: 'Nej, det kan inte förutsättas. Bedömningen beror på byggnadens och platsens förutsättningar samt gällande regler. Frågan ska kontrolleras med kommunen för det aktuella projektet.',
+  },
+  {
+    title: 'Vad skiljer en tälthall från en lagerhall?',
+    body: 'Tälthall beskriver främst en typ av utförande. Lagerhall beskriver i stället användningen. En lagringsverksamhet kan behöva jämföra flera olika utföranden.',
+  },
+  {
+    title: 'Kan man använda en tälthall året runt?',
+    body: 'Användning under olika årstider kräver att det valda byggsystemet och förutsättningarna på platsen klarar kraven. Det går inte att avgöra utifrån ordet tälthall ensamt.',
+  },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Tälthallar – användning och utförande"
+  description="Planerar du en tälthall? Läs om dukbeklädnad, användningsområden, byggplats, förankring och varför lovfrågor behöver utredas inför projektet."
+>
+  <div class="hp-detail hp-detail--talthall">
+    <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a>
+      <span aria-hidden="true">/</span>
+      <a href="/stalhallar/">Stålhallar</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Tälthallar</span>
+    </nav>
+
+    <section class="hp-detail__hero" aria-labelledby="talthall-title">
+      <div class="hp-draft-rail hp-detail__hero-grid">
+        <div class="hp-detail__hero-copy">
+          <p class="hp-detail__eyebrow">Tälthallar / Dukutförande</p>
+          <h1 id="talthall-title">Tälthallar efter <em>användning och plats.</em></h1>
+          <p class="hp-detail__lead">
+            En tälthall kan vara ett alternativ att undersöka när du
+            planerar mer utrymme. Börja med vad den ska användas till
+            och var den ska stå – innan konstruktion och tekniska val bestäms.
+          </p>
+          <div class="hp-detail__hero-actions">
+            <a class="hp-detail__button" href="#talthall-utforande">
+              Utforska tälthallar <span aria-hidden="true">↓</span>
+            </a>
+            <a class="hp-detail__text-link" href={contactHref}>
+              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+        <aside class="hp-detail__hero-aside" aria-label="Vad avgör om ett utförande kan passa?">
+          <p class="hp-detail__aside-title">Börja med förutsättningarna</p>
+          <dl>
+            <div><dt>Användningen</dt><dd>Vad ska finnas och göras i hallen?</dd></div>
+            <div><dt>Platsen</dt><dd>Vilka mark- och byggplatsförhållanden är kända?</dd></div>
+            <div><dt>Varaktigheten</dt><dd>Hur länge och under vilka perioder ska hallen användas?</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-detail__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-detail__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#talthall-utforande">Utförandet</a>
+        <a href="#talthall-anvandning">Användningar</a>
+        <a href="#talthall-byggplats">Byggplatsen</a>
+        <a href="#talthall-fragor">Vanliga frågor</a>
+      </div>
+    </nav>
+
+    <section class="hp-detail__section hp-detail__section--paper" id="talthall-utforande" aria-labelledby="tent-design-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div>
+            <p class="hp-detail__eyebrow">Förstå lösningen</p>
+            <h2 id="tent-design-heading">Vad behöver en tälthall klara?</h2>
+          </div>
+          <p>
+            Duk som beklädnad beskriver inte hela byggnaden. Systemets
+            uppbyggnad och användningen behöver bedömas tillsammans.
+          </p>
+        </div>
+        <div class="hp-detail__cards">
+          {constructionQuestions.map((item) => (
+            <article class="hp-detail__card">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--dark" id="talthall-anvandning" aria-labelledby="tent-uses-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row hp-detail__heading-row--light">
+          <div>
+            <p class="hp-detail__eyebrow">Från utförande till funktion</p>
+            <h2 id="tent-uses-heading">Vad behöver få plats?</h2>
+          </div>
+          <p>
+            En tälthall är inte ett användningsområde i sig.
+            Förvaring och maskinverksamhet ställer olika frågor
+            som är bra att reda ut när alternativ jämförs.
+          </p>
+        </div>
+        <div class="hp-detail__related">
+          <article>
+            <p class="hp-detail__mini-label">Förvaring</p>
+            <h3>Lagerhallar</h3>
+            <p>Vad ska lagras och hur behöver varor komma in och ut?</p>
+            <a href="/stalhallar/lagerhall/">
+              Läs om lagerhallar <span aria-hidden="true">→</span>
+            </a>
+          </article>
+          <article>
+            <p class="hp-detail__mini-label">Maskiner och åtkomst</p>
+            <h3>Maskinhallar</h3>
+            <p>Vilket utrymme behöver maskinerna och hur ska de röra sig?</p>
+            <a href="/stalhallar/maskinhall/">
+              Läs om maskinhallar <span aria-hidden="true">→</span>
+            </a>
+          </article>
+        </div>
+        <div class="hp-detail__related-inline">
+          <p>
+            Undersöker du en hall för ridverksamhet? Börja med
+            aktiviteterna som ridhuset behöver fungera för.
+            Vilka konstruktionsalternativ som passar får prövas senare.
+          </p>
+          <a href="/stalhallar/ridhus/">
+            Planera ett ridhus <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--soft" id="talthall-byggplats" aria-labelledby="tent-site-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div>
+            <p class="hp-detail__eyebrow">Inför ett riktigt projekt</p>
+            <h2 id="tent-site-heading">Byggplatsen behöver utredas.</h2>
+          </div>
+          <p>
+            Ett lämpligt utförande beror inte bara på hallens mått.
+            Förutsättningarna på platsen och vad som ingår i projektet
+            behöver klarläggas.
+          </p>
+        </div>
+        <ol class="hp-detail__movement">
+          {planningSteps.map((item) => (
+            <li>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section class="hp-detail__section hp-detail__section--paper" id="talthall-fragor" aria-labelledby="tent-faq-heading">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Vanliga frågor</p>
+          <h2 id="tent-faq-heading">Att tänka på inför en tälthall</h2>
+          <p>
+            Frågorna hjälper dig att börja planeringen.
+            Faktiska lov- och konstruktionsbesked ska grundas
+            på projektets förutsättningar och aktuella regler.
+          </p>
+        </div>
+        <div class="hp-detail__faq-list">
+          {faq.map((item) => (
+            <article>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-detail__end" aria-labelledby="talthall-next-heading">
+      <div class="hp-draft-rail hp-detail__end-inner">
+        <div>
+          <p class="hp-detail__eyebrow">Nästa steg</p>
+          <h2 id="talthall-next-heading">Beskriv vad hallen ska användas till.</h2>
+          <p>
+            Berätta vad som behöver få plats, ungefär hur stor hall
+            du har i åtanke och var den ska stå. Det ger oss
+            en utgångspunkt för ett första samtal.
+          </p>
+        </div>
+        <a class="hp-detail__button" href={contactHref}>
+          Kontakta Hallpartner <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

@@ -167,11 +167,8 @@ test('SEO hub /stalhallar/ has a distinct noindex visitor page and accurate rout
   assert.match(page, /HallpartnerSiteLayout/);
   assert.match(page, /Stålhallar för/);
   assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1);
-  for (const slug of ['lagerhall', 'maskinhall', 'plathall', 'isolerad-hall']) {
-    assert.ok(page.includes("href: '/stalhallar/" + slug + "/'"), 'missing migrated internal link to ' + slug);
-  }
-  for (const slug of ['ridhus', 'talthall']) {
-    assert.ok(page.includes('https://hallpartner.se/stalhallar/' + slug + '/'), 'missing pre-migration link to ' + slug);
+  for (const slug of ['lagerhall', 'maskinhall', 'ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+    assert.ok(page.includes("href: '/stalhallar/" + slug + "/'"), 'missing native internal link to ' + slug);
   }
   for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
     assert.ok(page.includes('id="' + id + '"'), 'missing content anchor: ' + id);
@@ -252,4 +249,53 @@ test('Plåthallar and Isolerade hallar have distinct native noindex review route
   const overview=readFileSync(new URL('../src/pages/stalhallar/index.astro',import.meta.url),'utf8');
   assert.ok(overview.includes("href: '/stalhallar/plathall/'"));
   assert.ok(overview.includes("href: '/stalhallar/isolerad-hall/'"));
+});
+
+
+test('Ridhus and Tälthallar provide distinct needs-first visitor content on native routes', () => {
+  const pages = [
+    {
+      slug: 'ridhus',
+      h1: 'Ridhus med plats för',
+      anchors: ['ridhus-verksamhet', 'ridhus-ridyta', 'ridhus-miljo', 'ridhus-fragor'],
+      unique: ['Vad ska hända inne i ridhuset?', 'Ljus och inomhusmiljö spelar roll.', 'Hur stort behöver ett ridhus vara?'],
+      related: '/stalhallar/talthall/',
+    },
+    {
+      slug: 'talthall',
+      h1: 'Tälthallar efter',
+      anchors: ['talthall-utforande', 'talthall-anvandning', 'talthall-byggplats', 'talthall-fragor'],
+      unique: ['Vad behöver en tälthall klara?', 'Byggplatsen behöver utredas.', 'Är en tälthall alltid bygglovsfri?'],
+      related: '/stalhallar/ridhus/',
+    },
+  ];
+  const titles = [];
+  const descriptions = [];
+  for (const item of pages) {
+    const source = readFileSync(new URL('../src/pages/stalhallar/' + item.slug + '/index.astro', import.meta.url), 'utf8');
+    assert.ok(source.includes('HallpartnerSiteLayout'), 'missing visitor shell: ' + item.slug);
+    assert.equal((source.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'exactly one H1 required: ' + item.slug);
+    assert.ok(source.includes(item.h1), 'unique H1 missing: ' + item.slug);
+    assert.ok(source.includes('href="/stalhallar/"'), 'missing overview breadcrumb: ' + item.slug);
+    assert.ok(source.includes('https://hallpartner.se/kontakt/'), 'must use existing contact page: ' + item.slug);
+    assert.ok(source.includes('href="' + item.related + '"'), 'missing relevant mutual link: ' + item.slug);
+    for (const id of item.anchors) assert.ok(source.includes('id="' + id + '"'), 'missing anchor ' + id);
+    for (const phrase of item.unique) assert.ok(source.includes(phrase), 'no distinguishing content: ' + phrase);
+    assert.doesNotMatch(source, /egna montörer|montage ingår alltid|nordens bästa|garanterad leverans|alltid bygglovsfri|standardgaranti|frånpris:/i);
+    assert.doesNotMatch(source, /<img(?:\s|>)|<Image(?:\s|>)/i, 'do not use unverified photography on new route');
+    titles.push(source.match(/title="([^"]+)"/)?.[1] ?? '');
+    descriptions.push(source.match(/description="([^"]+)"/)?.[1] ?? '');
+  }
+  assert.notEqual(titles[0], titles[1], 'different search intents need distinct SEO titles');
+  assert.notEqual(descriptions[0], descriptions[1], 'different search intents need distinct SEO descriptions');
+
+  const overview = readFileSync(new URL('../src/pages/stalhallar/index.astro', import.meta.url), 'utf8');
+  const homepage = readFileSync(new URL('../src/components/prototype/HallpartnerHomePrototype.astro', import.meta.url), 'utf8');
+  for (const slug of ['ridhus', 'talthall']) {
+    assert.ok(overview.includes("href: '/stalhallar/" + slug + "/'"), 'overview must use native route: ' + slug);
+  }
+  assert.ok(homepage.includes("ridhus: '/stalhallar/ridhus/'"), 'homepage must link to native Ridhus');
+  const variants = readFileSync(new URL('../src/styles/hallpartner-hall-variants.css', import.meta.url), 'utf8');
+  assert.match(variants, /\.hp-detail--ridhus \.hp-detail__hero/);
+  assert.match(variants, /\.hp-detail--talthall \.hp-detail__hero/);
 });

@@ -93,6 +93,8 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/maskinhall/" HP_SCREENSHOT_PREFIX="site-maskinhall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/plathall/" HP_SCREENSHOT_PREFIX="site-plathall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/isolerad-hall/" HP_SCREENSHOT_PREFIX="site-isolerad-hall" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/ridhus/" HP_SCREENSHOT_PREFIX="site-ridhus" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/talthall/" HP_SCREENSHOT_PREFIX="site-talthall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
 

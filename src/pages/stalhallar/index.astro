@@ -4,8 +4,8 @@ import '../../styles/hallpartner-stalhallar.css';
 
 /**
  * A reviewable site route, not customer-approved product copy.
- * The two not-yet-migrated product destinations are existing WordPress pages until native
- * routes are migrated. The quote wizard and AMP-005 are not installed here.
+ * All six linked hall types have native noindex Astro drafts. The quote
+ * wizard and AMP-005 are not installed here; actual delivery facts are pending.
  */
 const contactHref = 'https://hallpartner.se/kontakt/';
 const useCases = [
@@ -25,7 +25,7 @@ const useCases = [
     context: 'Hästverksamhet',
     title: 'Ridhus',
     description: 'En hall för ridning behöver planeras utifrån aktiviteten, fri yta, ljusinsläpp och hur byggnaden ska användas under året.',
-    href: 'https://hallpartner.se/stalhallar/ridhus/',
+    href: '/stalhallar/ridhus/',
   },
 ] as const;
 
@@ -41,7 +41,7 @@ const choices = [
     eyebrow: 'Dukbeklädnad',
     title: 'Tälthallar',
     description: 'Dukbeklädda hallar är ett annat utförande att jämföra. Användningen, placeringen och kraven på byggnaden behöver vägas in.',
-    href: 'https://hallpartner.se/stalhallar/talthall/',
+    href: '/stalhallar/talthall/',
     link: 'Läs om tälthallar',
   },
   {

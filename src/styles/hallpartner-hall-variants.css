@@ -10,3 +10,39 @@
 .hp-detail--insulated .hp-detail__hero-aside dl > div { border-top-color: rgba(255,255,255,.2); }
 .hp-detail--insulated .hp-detail__hero-aside dt { color: #E4F2E5; }
 .hp-detail--insulated .hp-detail__hero-aside dd { color: #D6E3D8; }
+
+/* Ridhus: a calm, light opening before editorial use/circulation details. */
+.hp-detail--ridhus .hp-detail__hero {
+  background: #E6EAE4;
+}
+.hp-detail--ridhus .hp-detail__hero-aside {
+  background: #D5DED5;
+}
+/* Tälthallar: a subdued graphite-green opening without an unlicensed image. */
+.hp-detail--talthall .hp-detail__hero {
+  background: #132822;
+  color: #F4F4F0;
+}
+.hp-detail--talthall .hp-detail__hero h1 em,
+.hp-detail--talthall .hp-detail__hero .hp-detail__eyebrow {
+  color: #B3D8B8;
+}
+.hp-detail--talthall .hp-detail__lead {
+  color: #E1ECE2;
+}
+.hp-detail--talthall .hp-detail__hero .hp-detail__text-link {
+  color: #F4F4F0 !important;
+}
+.hp-detail--talthall .hp-detail__hero-aside {
+  color: #F4F4F0;
+  background: #264438;
+}
+.hp-detail--talthall .hp-detail__hero-aside dl > div {
+  border-top-color: rgba(255, 255, 255, .2);
+}
+.hp-detail--talthall .hp-detail__hero-aside dt {
+  color: #E4F2E5;
+}
+.hp-detail--talthall .hp-detail__hero-aside dd {
+  color: #D6E3D8;
+}
