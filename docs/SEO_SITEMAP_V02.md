@@ -4,7 +4,7 @@
 > Avser sidornas roller, URL-migrering, sökfokus och länkar inför Astro-implementation. Huvudkällan för tidigare textversioner är fortfarande [innehållsmanifestet](content/README.md), som anger att fulltext för 0/11 originalutkast har arkiverats. Skapa inte påstådda original av förslagen här.
 >
 > **Första genomarbetade sidbrief:** [Stålhallar /stalhallar/ v0.1](page-briefs/stalhallar-v01.md). Nyskriven innehållsplan, inte kundgodkänd copy och inte återfunnet fulltextoriginal.
-> **Nästa separata sidor:** [Lagerhallar v0.1](page-briefs/lagerhall-v01.md) och [Maskinhallar v0.1](page-briefs/maskinhall-v01.md), byggda i Draft PR #5 på de bevarade WordPress-vägarna. Båda är noindexerade nya arbetsutkast, inte återfunnen äldre originalcopy.
+> **Nya riktiga undersidor i Draft PR #5:** [Lagerhallar v0.1](page-briefs/lagerhall-v01.md), [Maskinhallar v0.1](page-briefs/maskinhall-v01.md), [Plåthallar v0.1](page-briefs/plathall-v01.md) och [Isolerade hallar v0.1](page-briefs/isolerad-hall-v01.md). Alla är noindexerade, nyskrivna arbetsutkast på bevarade WordPress-vägar – **inga återfunna äldre originaltexter**.
 > **Konkurrensinriktning:** [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md) – möjliga kundbehov brett, verifierade produktlöften separat.
 >
 > **URL-förslag v0.2 ersätter de korta arbets-URL:erna i WEBSITE_PLAN.md från 2026-10-31.** Inga routes, redirects, canonical-taggar, sitemaps, arbetsflöden eller publicerade sidor ändrades av denna dokumentationsrevision. Uppdatera befintliga HPD-/HP-ID i PR #2 vid faktisk status-/beslutsändring; skapa inte ett parallellt kanoniskt beslutsregister.

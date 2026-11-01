@@ -30,7 +30,7 @@ Håll tre begrepp åtskilda i redaktionen: hallens användning, dess konstruktio
 | Hög – nu | Stålhallar/hallöversikt | Gemensam kundingång och internlänkningsnav. Första verkliga `/stalhallar/`-arbetsversion finns nu i Draft PR #5, commit `9c3b28ce8209da1c6181ac04150876df7a82a7e8`, fortfarande noindex |
 | Hög – nu | Lagerhallar och Maskinhallar | Två nya, separat skrivna noindexerade Astro-sidor i Hallpartners Draft PR #5, på de bevarade URL:erna. Återstår: visuell granskning, faktaverifiering, godkända bilder, senare AMP-002/005 och verklig kontaktmottagning. |
 | Hög – nu | Startsidan, navigation och kontaktväg | Koppla rätt behov till fungerande nästa steg utan att bygga om godkänd Hero |
-| Medel – efter sidutkast | Tälthallar, Plåthallar, Isolerade hallar, Ridhus | Egna användnings-/utförandefrågor; tekniska fakta kompletteras efter leverantörssvar |
+| Medel – efter sidutkast | Tälthallar, Plåthallar, Isolerade hallar, Ridhus | Plåthallar och Isolerade hallar har nu egna **noindexerade Astro-arbetsversioner** på planerade WordPress-vägar. Teknik, leverantörer, publiceringsrätt och senare AMP-/fotoanpassning återstår. Tälthallar och Ridhus är fortfarande endast prototyper. |
 | Medel – före lansering | Så går det till, Om oss, Kontakt | Sann projektprocess och verifierat företag, sedan pålitlig kontaktmottagning |
 | Kritisk för faktiskt offertflöde | AMP-001 och mottagande backend | Säker servervalidering, integritet, mottagare och testad leverans |
 | Senare efter sökdata | Industrihallar, Verkstadshallar, Lantbrukshallar, prisguider och referenser | Bara om faktisk egen sökintention, kundunderlag och verkligt erbjudande motiverar separata sidor |

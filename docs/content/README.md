@@ -30,12 +30,14 @@ Filnamnen är **föreslagna destinationer**, inte länkar till redan skapade fil
 
 ## Nyskrivna arbetsutkast i Astro – inte historiska original
 
-Sedan inventeringen den 31 oktober har två **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
+Sedan inventeringen den 31 oktober har fyra **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
 
 | Sida | Ny fulltextkälla | Redaktionell plan |
 |---|---|---|
 | Lagerhallar | [`src/pages/stalhallar/lagerhall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/a670774ad527cb0907ec3df41978c6e1f0d8e84d/src/pages/stalhallar/lagerhall/index.astro) | [Lagerhallar, ny v0.1](../page-briefs/lagerhall-v01.md) |
 | Maskinhallar | [`src/pages/stalhallar/maskinhall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/a670774ad527cb0907ec3df41978c6e1f0d8e84d/src/pages/stalhallar/maskinhall/index.astro) | [Maskinhallar, ny v0.1](../page-briefs/maskinhall-v01.md) |
+| Plåthallar | [`src/pages/stalhallar/plathall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/f678dee43f09b655e4fd6a7a4543091e55414e34/src/pages/stalhallar/plathall/index.astro) | [Plåthallar, ny v0.1](../page-briefs/plathall-v01.md) |
+| Isolerade hallar | [`src/pages/stalhallar/isolerad-hall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/f678dee43f09b655e4fd6a7a4543091e55414e34/src/pages/stalhallar/isolerad-hall/index.astro) | [Isolerade hallar, ny v0.1](../page-briefs/isolerad-hall-v01.md) |
 
 Detta betyder **inte** att äldre utkast återfunnits: `0/11` historiska fulltextoriginal i manifestet är fortfarande korrekta. De nya versionerna är inte kundgodkända och får inte ersätta originalen utan ett uttryckligt versionsbeslut. Den aktuella besökarcopy:n hålls i Astro-sidorna för att undvika två kopior som glider isär.
 
