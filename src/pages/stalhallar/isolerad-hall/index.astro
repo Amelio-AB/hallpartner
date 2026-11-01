@@ -1,0 +1,103 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-hall-detail.css';
+import '../../../styles/hallpartner-hall-variants.css';
+
+// New editorial draft; no unverified U-values, technical product
+// specifications, project imagery, delivery scope or cost claims.
+const contactHref = 'https://hallpartner.se/kontakt/';
+const needs = [
+  { title: 'Temperatur', body: 'Vad ska hallen användas till och vilken temperatur behöver kunna hållas? Börja med verksamhetens behov.' },
+  { title: 'Fukt och luft', body: 'Kondens, ventilation och luftväxling kan behöva utredas. Isolering är inte hela lösningen för en god inomhusmiljö.' },
+  { title: 'Hur ofta hallen används', body: 'Dagligt arbete, långvarig förvaring och tillfällig uppställning kan ställa olika krav på byggnaden.' },
+] as const;
+const factors = [
+  { title: 'Väggar och tak', body: 'Val av isolerat utförande och eventuell prestanda behöver styrkas av leverantörens dokumenterade byggsystem.' },
+  { title: 'Portar och öppningar', body: 'Hur ofta portarna öppnas och vilken trafik som passerar kan påverka inomhusmiljön.' },
+  { title: 'Värme och ventilation', body: 'Isolering ersätter inte en bedömning av uppvärmning, ventilation och andra installationer.' },
+  { title: 'Byggplats och drift', body: 'Verksamhetens användning och byggplatsens förutsättningar behöver vara kända innan teknik och driftskostnader bedöms.' },
+] as const;
+const faq = [
+  { question: 'Är en isolerad hall automatiskt uppvärmd?', answer: 'Nej. Isolering beskriver en del av byggnadens klimatskal. Behov av uppvärmning, ventilation och temperaturkontroll är separata frågor.' },
+  { question: 'Kan lagerhallar eller maskinhallar vara isolerade?', answer: 'Isolering kan vara relevant för flera användningsområden. Vilket utförande som faktiskt kan erbjudas måste kontrolleras för varje projekt.' },
+  { question: 'Kan man ange energiförbrukning utan att känna byggsystemet?', answer: 'Nej, ett meningsfullt underlag kräver verifierade byggdelar, faktisk användning och projektspecifika förutsättningar.' },
+] as const;
+---
+
+<HallpartnerSiteLayout title="Isolerade hallar – inomhusmiljö och användning" description="När behöver en hall vara isolerad? Läs om temperatur, ventilation, öppningar och hur lagerhallar eller maskinhallar kan behöva en särskild inomhusmiljö.">
+  <div class="hp-detail hp-detail--insulated">
+    <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><a href="/stalhallar/">Stålhallar</a>
+      <span aria-hidden="true">/</span><span aria-current="page">Isolerade hallar</span>
+    </nav>
+    <section class="hp-detail__hero" aria-labelledby="insulated-title">
+      <div class="hp-draft-rail hp-detail__hero-grid">
+        <div class="hp-detail__hero-copy">
+          <p class="hp-detail__eyebrow">Isolerade hallar / Inomhusmiljö</p>
+          <h1 id="insulated-title">Isolerade hallar för <em>rätt inomhusmiljö.</em></h1>
+          <p class="hp-detail__lead">Ska hallen användas för förvaring, maskiner eller arbete? Börja med vad som behöver fungera inomhus. Det gör det lättare att bedöma om och hur byggnaden behöver isoleras.</p>
+          <div class="hp-detail__hero-actions">
+            <a href="#isolering-behov" class="hp-detail__button">Undersök behovet <span aria-hidden="true">↓</span></a>
+            <a href={contactHref} class="hp-detail__text-link">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <aside class="hp-detail__hero-aside" aria-label="Vad påverkar inomhusmiljön?">
+          <p class="hp-detail__aside-title">Tre frågor att börja med</p>
+          <dl>
+            <div><dt>Användningen</dt><dd>Vad ska förvaras eller göras i hallen?</dd></div>
+            <div><dt>Temperaturen</dt><dd>Finns ett särskilt behov av värme eller temperaturskydd?</dd></div>
+            <div><dt>Öppningarna</dt><dd>Hur används portar och entréer?</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+    <nav class="hp-detail__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-detail__jump-inner">
+        <span>På den här sidan</span><a href="#isolering-behov">Behov</a><a href="#isolering-samspel">Helheten</a><a href="#isolering-anvandning">Användning</a><a href="#isolering-fragor">Frågor</a>
+      </div>
+    </nav>
+    <section id="isolering-behov" class="hp-detail__section hp-detail__section--paper" aria-labelledby="insulated-needs">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div><p class="hp-detail__eyebrow">Börja med funktionen</p><h2 id="insulated-needs">Vad behöver hallen skydda mot?</h2></div>
+          <p>En isolerad hall är inte ett enda, färdigt utförande. Hur byggnaden ska användas avgör vilka frågor som behöver utredas.</p>
+        </div>
+        <div class="hp-detail__cards">{needs.map(item => <article class="hp-detail__card"><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+      </div>
+    </section>
+    <section id="isolering-samspel" class="hp-detail__section hp-detail__section--soft" aria-labelledby="insulated-factors">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Inte bara en isolerad vägg</p><h2 id="insulated-factors">Hela byggnaden påverkar inomhusmiljön.</h2>
+          <p>Det som fungerar för en ouppvärmd förvaringshall passar inte självklart en hall som används som arbetsplats. Isolering behöver ses i sitt sammanhang.</p>
+          <a href="/stalhallar/plathall/" class="hp-detail__text-link">Läs om plåt som utförande <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hp-detail__stack">{factors.map(item => <article class="hp-detail__stack-item"><h3>{item.title}</h3><p>{item.body}</p></article>)}</div>
+      </div>
+    </section>
+    <section id="isolering-anvandning" class="hp-detail__section hp-detail__section--dark" aria-labelledby="insulated-uses">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row hp-detail__heading-row--light">
+          <div><p class="hp-detail__eyebrow">En egenskap för flera behov</p><h2 id="insulated-uses">Vad ska hallen användas till?</h2></div>
+          <p>Isolering är en egenskap att diskutera när verksamhetens behov är tydliga. Börja gärna med en halltyp som motsvarar användningen.</p>
+        </div>
+        <div class="hp-detail__related">
+          <article><p class="hp-detail__mini-label">Förvaring</p><h3>Lagerhallar</h3><p>Varorna och varuflödet kan påverka vilka krav som finns på temperatur och fukthantering.</p><a href="/stalhallar/lagerhall/">Läs om lagerhallar <span aria-hidden="true">→</span></a></article>
+          <article><p class="hp-detail__mini-label">Maskiner och arbete</p><h3>Maskinhallar</h3><p>Uppställning, service och arbetsmoment kan kräva olika inomhusförhållanden.</p><a href="/stalhallar/maskinhall/">Läs om maskinhallar <span aria-hidden="true">→</span></a></article>
+        </div>
+      </div>
+    </section>
+    <section id="isolering-fragor" class="hp-detail__section hp-detail__section--paper" aria-labelledby="insulated-faq">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro"><p class="hp-detail__eyebrow">Inför planeringen</p><h2 id="insulated-faq">Vanliga frågor om isolerade hallar</h2><p>Här skiljer vi mellan allmänna planeringsfrågor och tekniska besked som behöver dokumentation.</p></div>
+        <div class="hp-detail__faq-list">{faq.map(item => <article><h3>{item.question}</h3><p>{item.answer}</p></article>)}</div>
+      </div>
+    </section>
+    <section class="hp-detail__end" aria-labelledby="insulated-next">
+      <div class="hp-draft-rail hp-detail__end-inner">
+        <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="insulated-next">Berätta vad som är viktigt inomhus.</h2><p>Beskriv verksamheten, om hallen behöver värmas upp och vilka förutsättningar som finns på platsen. Där kan samtalet börja.</p></div>
+        <a class="hp-detail__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

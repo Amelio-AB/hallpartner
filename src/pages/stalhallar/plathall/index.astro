@@ -1,0 +1,115 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-hall-detail.css';
+import '../../../styles/hallpartner-hall-variants.css';
+
+// New editorial draft. Actual products, technical performance and scope
+// must be confirmed with Hallpartner and its suppliers before launch.
+const contactHref = 'https://hallpartner.se/kontakt/';
+const distinctions = [
+  { title: 'Stommen', body: 'Stommen bär byggnaden. Ordet plåthall anger inte i sig vilket stomsystem som används eller hur det dimensioneras.' },
+  { title: 'Väggarna och taket', body: 'Plåt kan användas som tak- och väggbeklädnad. Öppningar, infästningar och takets utformning behöver prövas för projektet.' },
+  { title: 'Användningen', body: 'Lager, maskiner och andra verksamheter har olika praktiska krav. Det är klokt att utgå från funktionen innan materialvalet låses.' },
+] as const;
+const decisions = [
+  { title: 'Vilken verksamhet ska hallen rymma?', body: 'Beskriv gods, maskiner eller arbetsmoment och hur hallen används dagligen.' },
+  { title: 'Hur ska man komma in och ut?', body: 'Portöppningar, trafik och tillgänglighet påverkar utformningen redan från början.' },
+  { title: 'Vilken inomhusmiljö behövs?', body: 'Ett plåtutförande säger inte ensamt om hallen ska vara isolerad eller uppvärmd.' },
+] as const;
+const faq = [
+  { question: 'Vad menas med plåthall?', answer: 'Begreppet används ofta för hallar med plåt på väggar eller tak. Det beskriver främst ett utförande, medan själva hallen kan ha olika användningar.' },
+  { question: 'Är en plåthall alltid oisolerad?', answer: 'Nej. Beklädnad och isoleringsbehov är olika frågor. Lämpliga material och tillgängliga system måste kontrolleras för det aktuella projektet.' },
+  { question: 'Hur väljer jag mellan hallutföranden?', answer: 'Börja med användning, byggplats, åtkomst och inomhusmiljö. Det ger ett mer användbart underlag för att diskutera rätt konstruktion.' },
+] as const;
+---
+
+<HallpartnerSiteLayout title="Plåthallar – utförande och alternativ" description="Vad är en plåthall? Läs om tak, väggar och praktiska val inför ett hallprojekt. Utforska möjliga användningar och vad som kan påverka utförandet.">
+  <div class="hp-detail hp-detail--plathall">
+    <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><a href="/stalhallar/">Stålhallar</a>
+      <span aria-hidden="true">/</span><span aria-current="page">Plåthallar</span>
+    </nav>
+    <section class="hp-detail__hero" aria-labelledby="plathall-title">
+      <div class="hp-draft-rail hp-detail__hero-grid">
+        <div class="hp-detail__hero-copy">
+          <p class="hp-detail__eyebrow">Plåthallar / Utförande</p>
+          <h1 id="plathall-title">Plåthallar för <em>olika behov.</em></h1>
+          <p class="hp-detail__lead">Plåt beskriver hur en hall kan vara klädd – inte vad byggnaden ska användas till. Här får du en överblick över hur material, användning och praktiska krav hänger ihop.</p>
+          <div class="hp-detail__hero-actions">
+            <a class="hp-detail__button" href="#plathall-begrepp">Utforska utförandet <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <aside class="hp-detail__hero-aside" aria-label="Tre saker att skilja på">
+          <p class="hp-detail__aside-title">En hall består av flera val.</p>
+          <dl>
+            <div><dt>Stommen</dt><dd>Den bärande konstruktionen.</dd></div>
+            <div><dt>Beklädnaden</dt><dd>Material på tak och väggar.</dd></div>
+            <div><dt>Verksamheten</dt><dd>Det hallen faktiskt ska användas till.</dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+    <nav class="hp-detail__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-detail__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#plathall-begrepp">Vad är en plåthall?</a>
+        <a href="#plathall-val">Viktiga val</a>
+        <a href="#plathall-anvandning">Användning</a>
+        <a href="#plathall-fragor">Vanliga frågor</a>
+      </div>
+    </nav>
+    <section id="plathall-begrepp" class="hp-detail__section hp-detail__section--paper" aria-labelledby="plathall-meaning">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row">
+          <div><p class="hp-detail__eyebrow">Förstå skillnaderna</p><h2 id="plathall-meaning">En plåthall är mer än sin fasad.</h2></div>
+          <p>Skilj på stommen, beklädnaden och hur hallen används. Då blir det lättare att jämföra lösningar utan att blanda ihop begreppen.</p>
+        </div>
+        <div class="hp-detail__cards">
+          {distinctions.map(item => <article class="hp-detail__card"><h3>{item.title}</h3><p>{item.body}</p></article>)}
+        </div>
+      </div>
+    </section>
+    <section id="plathall-val" class="hp-detail__section hp-detail__section--soft" aria-labelledby="plathall-decisions">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Utgå från projektet</p>
+          <h2 id="plathall-decisions">Materialvalet är inte första frågan.</h2>
+          <p>En genomtänkt hall börjar med vad som ska få plats och hur byggnaden ska användas. Väggar, tak och öppningar behöver sedan passa de förutsättningarna.</p>
+          <a href="/stalhallar/isolerad-hall/" class="hp-detail__text-link">Om isolering och inomhusmiljö <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hp-detail__stack">
+          {decisions.map(item => <article class="hp-detail__stack-item"><h3>{item.title}</h3><p>{item.body}</p></article>)}
+        </div>
+      </div>
+    </section>
+    <section id="plathall-anvandning" class="hp-detail__section hp-detail__section--dark" aria-labelledby="plathall-uses">
+      <div class="hp-draft-rail">
+        <div class="hp-detail__heading-row hp-detail__heading-row--light">
+          <div><p class="hp-detail__eyebrow">Vad hallen ska användas till</p><h2 id="plathall-uses">Samma utförande, olika verksamheter.</h2></div>
+          <p>Lager- och maskinhallar behöver planeras utifrån olika aktiviteter. Därför är det klokt att välja användningsområde innan den slutliga konstruktionen bestäms.</p>
+        </div>
+        <div class="hp-detail__related">
+          <article><p class="hp-detail__mini-label">Varor och logistik</p><h3>Lagerhallar</h3><p>Planera förvaring, portar och hur godset ska kunna hanteras.</p><a href="/stalhallar/lagerhall/">Läs om lagerhallar <span aria-hidden="true">→</span></a></article>
+          <article><p class="hp-detail__mini-label">Maskiner och arbete</p><h3>Maskinhallar</h3><p>Planera körvägar, plats runt maskiner och tillgänglighet.</p><a href="/stalhallar/maskinhall/">Läs om maskinhallar <span aria-hidden="true">→</span></a></article>
+        </div>
+      </div>
+    </section>
+    <section id="plathall-fragor" class="hp-detail__section hp-detail__section--paper" aria-labelledby="plathall-faq">
+      <div class="hp-draft-rail hp-detail__split">
+        <div class="hp-detail__section-intro">
+          <p class="hp-detail__eyebrow">Bra att känna till</p>
+          <h2 id="plathall-faq">Vanliga frågor om plåthallar</h2>
+          <p>Generella begrepp kan förklaras redan nu. Faktiska material och tekniska egenskaper kontrolleras inför varje projekt.</p>
+        </div>
+        <div class="hp-detail__faq-list">{faq.map(item => <article><h3>{item.question}</h3><p>{item.answer}</p></article>)}</div>
+      </div>
+    </section>
+    <section class="hp-detail__end" aria-labelledby="plathall-next">
+      <div class="hp-draft-rail hp-detail__end-inner">
+        <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="plathall-next">Berätta vad hallen ska användas till.</h2><p>Beskriv användning, ungefärligt platsbehov och byggort. Det ger en bra start inför diskussionen om utförande.</p></div>
+        <a href={contactHref} class="hp-detail__button">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

@@ -16,6 +16,7 @@ on:
       - 'src/pages/stalhallar/**'
       - 'src/styles/hallpartner-stalhallar.css'
       - 'src/styles/hallpartner-hall-detail.css'
+      - 'src/styles/hallpartner-hall-variants.css'
       - 'src/styles/hallpartner-draft.css'
       - 'src/pages/prototype/hallpartner/**'
       - 'src/components/prototype/**'
@@ -90,6 +91,8 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_PREFIX="site-stalhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/lagerhall/" HP_SCREENSHOT_PREFIX="site-lagerhall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/maskinhall/" HP_SCREENSHOT_PREFIX="site-maskinhall" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/plathall/" HP_SCREENSHOT_PREFIX="site-plathall" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/isolerad-hall/" HP_SCREENSHOT_PREFIX="site-isolerad-hall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
 

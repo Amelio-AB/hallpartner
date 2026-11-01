@@ -167,10 +167,10 @@ test('SEO hub /stalhallar/ has a distinct noindex visitor page and accurate rout
   assert.match(page, /HallpartnerSiteLayout/);
   assert.match(page, /Stålhallar för/);
   assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1);
-  for (const slug of ['lagerhall', 'maskinhall']) {
+  for (const slug of ['lagerhall', 'maskinhall', 'plathall', 'isolerad-hall']) {
     assert.ok(page.includes("href: '/stalhallar/" + slug + "/'"), 'missing migrated internal link to ' + slug);
   }
-  for (const slug of ['ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+  for (const slug of ['ridhus', 'talthall']) {
     assert.ok(page.includes('https://hallpartner.se/stalhallar/' + slug + '/'), 'missing pre-migration link to ' + slug);
   }
   for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
@@ -228,4 +228,28 @@ test('two visitor hall pages have distinct SEO intent, native navigation and saf
   assert.match(styles, /\.hp-detail__split/);
   assert.match(styles, /\.hp-detail--machine/);
   assert.match(styles, /@media \(max-width: 740px\)/);
+});
+
+
+test('Plåthallar and Isolerade hallar have distinct native noindex review routes', () => {
+  const pages = [
+    { slug:'plathall', title:'Plåthallar för', ids:['plathall-begrepp','plathall-val','plathall-anvandning','plathall-fragor'] },
+    { slug:'isolerad-hall', title:'Isolerade hallar för', ids:['isolering-behov','isolering-samspel','isolering-anvandning','isolering-fragor'] },
+  ];
+  const titles=[];
+  for (const page of pages) {
+    const source = readFileSync(new URL('../src/pages/stalhallar/'+page.slug+'/index.astro', import.meta.url),'utf8');
+    assert.ok(source.includes('HallpartnerSiteLayout'));
+    assert.ok(source.includes(page.title));
+    assert.equal((source.match(/<h1(?:\s|>)/g) ?? []).length, 1, 'only one H1');
+    for(const id of page.ids)assert.ok(source.includes('id="'+id+'"'), 'missing anchor '+id);
+    assert.ok(source.includes('href="/stalhallar/"'));
+    assert.ok(source.includes("https://hallpartner.se/kontakt/"));
+    assert.doesNotMatch(source,/egna montörer|nordens bästa|bygglovsfri|standardgaranti|frånpris/i);
+    titles.push(source.match(/title="([^"]+)"/)?.[1]??'');
+  }
+  assert.notEqual(titles[0],titles[1]);
+  const overview=readFileSync(new URL('../src/pages/stalhallar/index.astro',import.meta.url),'utf8');
+  assert.ok(overview.includes("href: '/stalhallar/plathall/'"));
+  assert.ok(overview.includes("href: '/stalhallar/isolerad-hall/'"));
 });

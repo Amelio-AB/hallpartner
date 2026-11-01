@@ -183,10 +183,10 @@ assert.ok(hallOverview.includes('href="/stalhallar/"'), 'navigation does not lin
 for (const id of ['anvandningsomraden', 'utforanden', 'infor-projektet', 'vanliga-fragor']) {
   assert.ok(hallOverview.includes('id="' + id + '"'), 'missing section anchor: ' + id);
 }
-for (const slug of ['lagerhall', 'maskinhall']) {
+for (const slug of ['lagerhall', 'maskinhall', 'plathall', 'isolerad-hall']) {
   assert.ok(hallOverview.includes('href="/stalhallar/' + slug + '/"'), 'missing native overview destination: ' + slug);
 }
-for (const slug of ['ridhus', 'talthall', 'plathall', 'isolerad-hall']) {
+for (const slug of ['ridhus', 'talthall']) {
   assert.ok(hallOverview.includes('href="https://hallpartner.se/stalhallar/' + slug + '/"'), 'missing legacy destination: ' + slug);
 }
 assert.ok(!hallOverview.includes('/prototype/hallpartner/'), 'draft links must never be part of real overview');
@@ -224,3 +224,24 @@ assert.ok(hallOverview.includes('href="/stalhallar/maskinhall/"'), 'overview sho
 assert.ok(siteHome.includes('href="/stalhallar/lagerhall/"'), 'home should link to local storage hall');
 assert.ok(siteHome.includes('href="/stalhallar/maskinhall/"'), 'home should link to local machine hall');
 console.log('Verified migrated /stalhallar/lagerhall/ and /stalhallar/maskinhall/: noindex, canonical, anchors and internal links.');
+
+
+for (const detail of [
+  {slug:'plathall',ids:['plathall-begrepp','plathall-val','plathall-anvandning','plathall-fragor']},
+  {slug:'isolerad-hall',ids:['isolering-behov','isolering-samspel','isolering-anvandning','isolering-fragor']}
+]) {
+  const html=readFileSync(join(dist,'stalhallar',detail.slug,'index.html'),'utf8');
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'), 'wrong robots '+detail.slug);
+  assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/stalhallar/'+detail.slug+'/"'),'wrong canonical '+detail.slug);
+  assert.equal((html.match(/<h1(?:\s|>)/gi)??[]).length,1,'H1 count '+detail.slug);
+  assert.equal((html.match(/<header(?:\s|>)/gi)??[]).length,1,'header count '+detail.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi)??[]).length,3,'nav count '+detail.slug);
+  assert.ok(html.includes('aria-label="Brödsmulor"'));
+  for(const id of detail.ids)assert.ok(html.includes('id="'+id+'"'), 'missing section '+id);
+  assert.ok(!html.includes('/prototype/hallpartner/'));
+  for (const href of [...html.matchAll(/\shref="(\/stalhallar\/[^"#?]*\/)"/g)].map(x=>x[1])) {
+    assert.ok(existsSync(join(dist,href.slice(1),'index.html')),'broken internal href '+href);
+  }
+}
+assert.ok(siteHome.includes('href="/stalhallar/isolerad-hall/"'), 'homepage isolate link not migrated');
+console.log('Verified Plåthallar and Isolerade hallar: noindex, canonical, breadcrumbs, H1 and local links.');
