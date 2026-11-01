@@ -28,7 +28,7 @@ Håll tre begrepp åtskilda i redaktionen: hallens användning, dess konstruktio
 | Prioritet | Innehåll | Motivering |
 |---|---|---|
 | Hög – nu | Stålhallar/hallöversikt | Gemensam kundingång och internlänkningsnav. Första verkliga `/stalhallar/`-arbetsversion finns nu i Draft PR #5, commit `9c3b28ce8209da1c6181ac04150876df7a82a7e8`, fortfarande noindex |
-| Hög – nu | Lagerhallar och Maskinhallar | Tydligt skilda köpbehov och fungerande äldre URL:er som vi vill bevara |
+| Hög – nu | Lagerhallar och Maskinhallar | Två nya, separat skrivna noindexerade Astro-sidor i Hallpartners Draft PR #5, på de bevarade URL:erna. Återstår: visuell granskning, faktaverifiering, godkända bilder, senare AMP-002/005 och verklig kontaktmottagning. |
 | Hög – nu | Startsidan, navigation och kontaktväg | Koppla rätt behov till fungerande nästa steg utan att bygga om godkänd Hero |
 | Medel – efter sidutkast | Tälthallar, Plåthallar, Isolerade hallar, Ridhus | Egna användnings-/utförandefrågor; tekniska fakta kompletteras efter leverantörssvar |
 | Medel – före lansering | Så går det till, Om oss, Kontakt | Sann projektprocess och verifierat företag, sedan pålitlig kontaktmottagning |

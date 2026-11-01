@@ -11,6 +11,7 @@ Läs först `AGENTS.md` och registren i [PR #2](https://github.com/Amelio-AB/hal
 - [Innehållsmanifest](content/README.md): vilka fullständiga källtexter som har återfunnits respektive saknas.
 - [SEO-sitemap v0.2](SEO_SITEMAP_V02.md): prioriterad URL-bevarandeplan, sökintention, metadataförslag, internlänkning och krav inför migrering; URL-arbetsförslagen här nedan ska läsas tillsammans med v0.2.
 - [Sidbrief för Stålhallar v0.1](page-briefs/stalhallar-v01.md): konkret sektionsordning, sidmetadata, textförslag, länkar och öppna verifieringsfrågor. Denna är ett **nytt redaktionellt underlag**, inte originaltext från den tidigare chatten.
+- [Lagerhallar v0.1](page-briefs/lagerhall-v01.md) och [Maskinhallar v0.1](page-briefs/maskinhall-v01.md): två separata nyskrivna Astro-utkast med specifik sökintention och kontextlänkar. De är **inte** de saknade äldre originalen.
 - [Innehållsstrategi för bredare marknad](CONTENT_GROWTH_STRATEGY.md): prioriterade sidämnen, konkurrentjämförelse och hur inkommande leverantörsinformation används utan att stoppa arbetet.
 - [Integrationsförslag](architecture/AMP_1_2_INTEGRATION.md): komponentansvar, designjämförelse, installation och testgrindar.
 - [Inventering och faktiska testresultat](audits/2026-10-31-readiness.md): granskade revisioner och begränsningar.

@@ -28,6 +28,17 @@ Filnamnen är **föreslagna destinationer**, inte länkar till redan skapade fil
 
 **Versionsskillnad:** HPD-021 och HP-031 i [PR #2 vid 8fb1960](https://github.com/Amelio-AB/hallpartner/blob/8fb19602fd48f8279e33a7558c0e2a86968e176c/docs/PROJECT_DECISIONS.md) anger att isolerade hallar återstår. Den senare överlämningen anger v0.1. Här bevaras båda uppgifternas proveniens. Ingen text har hittats som bekräftar vilken fullständig version som ska arkiveras. Uppdatera befintliga ID:n vid samordning av registren; skapa inte en konkurrerande beslutslogg.
 
+## Nyskrivna arbetsutkast i Astro – inte historiska original
+
+Sedan inventeringen den 31 oktober har två **nya** sidversioner skrivits direkt i Astro på den separata Draft PR #5-arbetsgrenen:
+
+| Sida | Ny fulltextkälla | Redaktionell plan |
+|---|---|---|
+| Lagerhallar | [`src/pages/stalhallar/lagerhall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/a670774ad527cb0907ec3df41978c6e1f0d8e84d/src/pages/stalhallar/lagerhall/index.astro) | [Lagerhallar, ny v0.1](../page-briefs/lagerhall-v01.md) |
+| Maskinhallar | [`src/pages/stalhallar/maskinhall/index.astro`](https://github.com/Amelio-AB/hallpartner/blob/a670774ad527cb0907ec3df41978c6e1f0d8e84d/src/pages/stalhallar/maskinhall/index.astro) | [Maskinhallar, ny v0.1](../page-briefs/maskinhall-v01.md) |
+
+Detta betyder **inte** att äldre utkast återfunnits: `0/11` historiska fulltextoriginal i manifestet är fortfarande korrekta. De nya versionerna är inte kundgodkända och får inte ersätta originalen utan ett uttryckligt versionsbeslut. Den aktuella besökarcopy:n hålls i Astro-sidorna för att undvika två kopior som glider isär.
+
 ## Vad som faktiskt har kontrollerats
 
 | Källa | Vad genomgången gav | Begränsning |
