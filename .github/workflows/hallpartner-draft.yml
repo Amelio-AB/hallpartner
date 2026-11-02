@@ -122,6 +122,16 @@ jobs:
         run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs tests/hallpartner-amp-header.test.mjs
       - name: Validate legacy WordPress URL inventory (no redirects)
         run: node --test tests/url-migration.test.mjs
+      - name: AMP-001 customer configuration and disabled review transport
+        run: node --experimental-strip-types --test tests/lead-intake.test.mjs
+      - name: PHP intake syntax and independent receiver validation
+        run: |
+          php -v
+          php -l public/api/lead.php
+          php -l server/lead/validator.php
+          php -l server/lead/receiver.php
+          php -l server/lead/config.example.php
+          php tests/lead-receiver.test.php
       - name: Build static Astro site (no upload)
         run: npm run build
         env:
