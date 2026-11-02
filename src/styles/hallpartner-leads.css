@@ -1,0 +1,24 @@
+/* Host-only form theming. Shared Header, Hero and AMP-003 Footer untouched. */
+.hp-leads-note { max-width:58rem; padding:1rem 1.25rem; background:#EDF3E9; border-inline-start:4px solid #287B39; color:#153B21; line-height:1.65; }
+.hp-leads-note--review { background:#F5F0E5; border-inline-start-color:#806531; color:#473927; }
+.hp-leads-note a { text-decoration:underline; text-underline-offset:.2em; }
+.hp-quote-shell { padding-block:clamp(1rem,3vw,3rem); }
+.hp-quote-shell__lead { max-width:50rem; margin-inline:auto; }
+.hp-quote-shell__lead h1 { font-size:clamp(2.7rem,5vw,5.1rem); line-height:1.08; letter-spacing:-.055em; }
+.hp-quote-shell__lead p { max-width:38rem; line-height:1.7; }
+.hp-quote-shell__notice { max-width:54rem; margin:1.5rem auto; }
+.hp-quote-shell .qf { --quote-background:#EBEBE8; --quote-surface:#fff; --quote-surface-muted:#EFF3EC; --quote-text:#071A16; --quote-muted:#385649; --quote-primary:#287B39; --quote-primary-hover:#1D6529; --quote-primary-muted:#E4EFE5; --quote-accent:#4E7A5B; --quote-border:#C0D1C3; --quote-error:#A32F26; }
+.hp-contact-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.2rem; max-width:100%; margin-top:1.7rem; }
+.hp-contact-form__field { display:grid; gap:.45rem; min-width:0; }
+.hp-contact-form__field--wide { grid-column:1/-1; }
+.hp-contact-form label { font-weight:650; font-size:.9rem; }
+.hp-contact-form input,.hp-contact-form textarea { width:100%; min-width:0; min-height:3.2rem; border:1px solid #A9BCAE; border-radius:4px; background:#fff; color:#071A16; font:inherit; padding:.75rem .9rem; }
+.hp-contact-form textarea { resize:vertical; min-height:9rem; }
+.hp-contact-form :is(input,textarea):focus-visible { outline:3px solid #287B39; outline-offset:3px; }
+.hp-contact-form__submit { width:fit-content; min-height:3.3rem; padding:.8rem 1.25rem; border:0; border-radius:4px; background:#287B39; color:#fff; font:inherit; font-weight:750; cursor:pointer; }
+.hp-contact-form__submit:disabled { cursor:not-allowed; opacity:.65; }
+.hp-contact-form__status { grid-column:1/-1; margin:0; min-height:1.5rem; font-weight:650; }
+.hp-contact-form__status[data-state="error"] { color:#A32F26; }
+.hp-contact-form__status[data-state="success"] { color:#1A672C; }
+.hp-contact-form__website { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+@media (max-width:650px) { .hp-contact-form { grid-template-columns:1fr; } }

@@ -1,0 +1,61 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-leads.css';
+import '@amelio/web-platform/quote-flow/style.css';
+
+// Only enable after SMTP receipt, approved recipient and privacy notice are tested.
+const ready = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
+---
+
+<HallpartnerSiteLayout
+  title="Begär offert"
+  description="Beskriv vad din hall ska användas till, ungefärliga mått och byggort. En första förfrågan till Hallpartner – ingen automatisk prisberäkning."
+>
+  <div class="hp-quote-shell">
+    <nav class="hp-draft-rail hp-info__crumbs" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Offert</span>
+    </nav>
+    <div class="hp-draft-rail hp-quote-shell__lead">
+      <p class="hp-info__eyebrow">Hallpartner / Offertförfrågan</p>
+      <h1>Beskriv din hallförfrågan.</h1>
+      <p>Berätta om användningen, byggplatsen och de mått du känner till. Du behöver inte ha alla tekniska val klara.</p>
+    </div>
+    <p class:list={['hp-leads-note', 'hp-quote-shell__notice', { 'hp-leads-note--review': !ready }]} id="hp-offert-notice">
+      {ready
+        ? 'Beskriv projektet i guiden för att skicka en förfrågan till Hallpartner.'
+        : 'Arbetsversion: du kan prova guiden, men inskickning är ännu inte aktiverad. Kontakta Hallpartner via telefon eller mejl tills mottagningen har verifierats.'}
+    </p>
+    <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)}
+      aria-describedby="hp-offert-notice"></div>
+    <noscript><p class="hp-draft-rail">Guiden behöver JavaScript. <a href="/kontakt/">Kontakta Hallpartner här.</a></p></noscript>
+    <p class="hp-draft-rail">Vill du börja med ett samtal? <a href="/kontakt/">Se kontaktuppgifter</a>.</p>
+  </div>
+</HallpartnerSiteLayout>
+
+<script>
+  import { mountQuoteFlow, createJsonAdapter } from '@amelio/web-platform/quote-flow';
+  import type { Adapter } from '@amelio/web-platform/quote-flow';
+  import { hallpartnerQuoteConfig } from '../../config/hallpartner-quote';
+  const host = document.querySelector<HTMLElement>('#hp-offert-guide');
+  if (host) {
+    const enabled = host.dataset.enabled === 'true';
+    const blocked: Adapter = async () => ({ status: 'failed' });
+    const instance = mountQuoteFlow(host, hallpartnerQuoteConfig,
+      enabled ? createJsonAdapter('/api/lead.php') : blocked, { timeoutMs: 15000 });
+    if (!enabled) {
+      const protect = () => {
+        for (const button of host.querySelectorAll<HTMLButtonElement>('button[type="submit"]')) {
+          if (button.textContent?.includes('Skicka förfrågan')) {
+            button.disabled = true;
+            button.title = 'Arbetsversion. Inskickning är inte aktiverad.';
+          }
+        }
+      };
+      const observer = new MutationObserver(protect);
+      observer.observe(host, {childList: true, subtree: true});
+      protect();
+      window.addEventListener('pagehide', () => observer.disconnect(), {once:true});
+    }
+    window.addEventListener('pagehide', () => instance.destroy(), {once:true});
+  }
+</script>
