@@ -1430,29 +1430,29 @@ ID:t ska genereras på serversidan.
 
 # 26. Framtida kalkyl
 
-Automatisk kundkalkyl ska inte byggas in i första produktionsversionen.
+**Omprövat 2026-11-02:** Hallpartner har inte valt någon kalkylator man
+vill använda och förhandling med en ny leverantör pågår. Andreas har
+beslutat att webbplatsens **v1 byggs och kan färdigställas helt utan
+kalkylator, automatisk prissättning, köp eller leverantörsintegration**.
+Detta är inte ett blockerande beroende för AMP-001, hallsidor eller
+kontaktflöde. Se [scopebeslutet](checkpoints/2026-11-02-calculator-paused.md).
 
-Plan:
+Aktuell plan:
 
 ```text
 v1
-→ offertförfrågan
+→ fristående offertförfrågan (AMP-001, ingen prisberäkning)
+→ manuell behovs- och offertbedömning efter kundkontakt
 
-senare
-→ intern kalkyl
-
-ännu senare
-→ eventuell prisindikering för standardhallar
+eventuell senare fas – kräver NYTT uttryckligt beslut
+→ intern kalkyl och/eller vald leverantörs konfigurator
+→ först efter verifierat affärsflöde, prisunderlag och integrationsvillkor
 ```
 
-Intern kalkyl kan senare innehålla:
-
-- material
-- montage
-- transport
-- tillägg
-- totalpris
-- revisionshistorik
+En möjlig framtida intern kalkyl skulle kunna hantera material, montage,
+transport, tillägg, totalpris och revisionshistorik, men **inget av detta
+är beslutad funktion eller beställt arbete i v1**. Något eget prisverktyg
+ska inte påbörjas som en tillfällig ersättning.
 
 ---
 
