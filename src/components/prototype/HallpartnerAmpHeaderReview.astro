@@ -3,7 +3,7 @@ import { renderFooter } from '@amelio/web-platform/footer';
 import type { HeaderVariant } from '@amelio/web-platform/header-menu';
 import HallpartnerHomePrototype from './HallpartnerHomePrototype.astro';
 import { hallpartnerFooterConfig } from '../../config/hallpartner-footer.mjs';
-import { ampHeaderItems, ampHeaderBrand, ampHeaderCTA } from '../../config/hallpartner-amp-header';
+import { ampHeaderItems, ampHeaderCTA } from '../../config/hallpartner-amp-header';
 import '../../styles/hallpartner-draft.css';
 import '../../styles/hallpartner-amp-footer.css';
 import '../../styles/hallpartner-amp-header-review.css';
@@ -15,7 +15,7 @@ interface Props {
   mode: 'hero' | 'solid';
 }
 const { variant, mode } = Astro.props;
-const footerHtml = renderFooter(hallpartnerFooterConfig);
+const footerHtml = renderFooter({ ...hallpartnerFooterConfig, variant: 'compact' });
 const reviewBase = '/prototype/amp/header/';
 ---
 
