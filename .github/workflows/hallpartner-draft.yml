@@ -126,3 +126,94 @@ jobs:
           path: dist/
           if-no-files-found: error
           retention-days: 7
+
+  # Optional privileged integration smoke. No secret is used by project code.
+  # A read-only token for just the private platform repo is needed; normal CI
+  # remains green and explicitly reports when this smoke was NOT executed.
+  amp003-private-consumer:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - name: Check platform access (read-only secret, no output of token)
+        id: platform-access
+        env:
+          PRIVATE_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        shell: bash
+        run: |
+          if [ -n "$PRIVATE_READ_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::AMP-003 private consumer smoke skipped: repository secret AMELIO_PLATFORM_READ_TOKEN is not configured."
+            echo "AMP-003 private integration was **not tested** in this workflow run (missing read-only cross-repo credential)." >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Checkout exact Hallpartner PR commit
+        if: steps.platform-access.outputs.enabled == 'true'
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Checkout approved private AMP-003 release source
+        if: steps.platform-access.outputs.enabled == 'true'
+        uses: actions/checkout@v6
+        with:
+          repository: Amelio-AB/amelio-web-platform
+          ref: a11811bfbf51416e7fe7d58aed4551be77914d65
+          token: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+          path: .amp-platform
+          persist-credentials: false
+      - name: Setup Node 24
+        if: steps.platform-access.outputs.enabled == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install private AMP-003 and validate source SHA
+        if: steps.platform-access.outputs.enabled == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C .amp-platform rev-parse HEAD)" = 'a11811bfbf51416e7fe7d58aed4551be77914d65'
+          npm ci --no-audit --no-fund
+          npm install --no-save --ignore-scripts --no-audit --no-fund ./.amp-platform
+          node -e "const p=require('./node_modules/@amelio/web-platform/package.json');if(p.name!=='@amelio/web-platform'||p.version!=='1.1.0'||!p.exports['./footer'])process.exit(1)"
+      - name: Verify AMP-003 real renderer, build, and HTML
+        if: steps.platform-access.outputs.enabled == 'true'
+        shell: bash
+        env:
+          HALLPARTNER_FOOTER_MODE: amp-003
+        run: |
+          set -euo pipefail
+          npm run test:footer
+          npm run check
+          npm run lint
+          npm run build
+          node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
+          echo "AMP-003 private consumer install and build: PASS (exact source SHA, no deployment)." >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify AMP-003 responsive render with Chrome
+        if: steps.platform-access.outputs.enabled == 'true'
+        shell: bash
+        env:
+          HALLPARTNER_FOOTER_MODE: amp-003
+        run: |
+          set -euo pipefail
+          mkdir -p visual-review
+          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 >visual-review/amp-server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          ready=0
+          for i in $(seq 1 40); do
+            if curl -fsS http://127.0.0.1:4321/om-oss/ >/dev/null; then ready=1; break; fi
+            sleep 0.5
+          done
+          test "$ready" -eq 1
+          HP_PREVIEW_URL='http://127.0.0.1:4321/' HP_SCREENSHOT_PREFIX=amp003-home timeout 100s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL='http://127.0.0.1:4321/om-oss/' HP_SCREENSHOT_PREFIX=amp003-about timeout 100s node scripts/capture-hallpartner-home.mjs
+      - name: Save AMP-003 browser evidence (not private source)
+        if: always() && steps.platform-access.outputs.enabled == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: amp003-consumer-${{ github.event.pull_request.head.sha }}
+          path: visual-review/
+          if-no-files-found: warn
+          retention-days: 7

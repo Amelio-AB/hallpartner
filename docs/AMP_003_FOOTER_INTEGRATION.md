@@ -1,6 +1,6 @@
 # Hallpartner – AMP-003 Footer-integration (förberedelse 2026-11-02)
 
-**Status: kodadapter klar att aktivera lokalt, men ännu INTE aktiverad i vanlig CI, inte verifierad mot installerat privat paket och inte publicerad.** Arbetsgren/PR #5 förblir Draft. Den hittills godkända Headern, startsidans Hero och alla prototyper är oförändrade.
+**Status 2026-11-02: riktig AMP-003 v1.1.0-installation och AMP-aktiverat bygge är verifierade i en isolerad GitHub Actions-consumer. Paketet är ännu INTE versionslåst i Hallpartners ordinarie package-lock.json, inte aktiverat som standard och inte publicerat.** Arbetsgren/PR #5 förblir Draft. Den hittills godkända Headern, startsidans Hero och alla prototyper är oförändrade.
 
 ## Vad adapterändringen gör
 
@@ -33,6 +33,14 @@ npm run dev
 Öppna http://localhost:4321/ och http://localhost:4321/om-oss/. Alla riktiga sidor använder då den gemensamma AMP-003 Footern. Jämför mobil 320/390 px och desktop 1280/1440 px, kontrollera alla disclosure-länkar, fokusmarkeringar, overflow och att exakt en Footer finns. Kör sedan npm run check, npm run lint, npm run build, node scripts/verify-hallpartner-draft.mjs och den renderade Chrome-QA:n innan godkännande. Testet kan kräva lokal Chrome-konfiguration.
 
 **Observera:** npm ci installerar om låsta beroenden och tar bort en manuellt länkad privat modul. Kör därför npm link igen efter npm ci. Länken är en lokal granskningsmetod – inte ett reproducerbart releasepaket. Om du behöver återgå: ta bort miljövariabeln och kör npm run dev igen.
+
+## Verifierad installation och byggtest, 2 november 2026
+
+[Isolerad consumer-testkörning i privata plattformsrepot](https://github.com/Amelio-AB/amelio-web-platform/actions/runs/41396852845) kontrollerade exakt release-SHA `a11811bfbf51416e7fe7d58aed4551be77914d65`, installerade dess lokalt utcheckade **verkliga privata paket** i en separat Hallpartner-arbetskopias `node_modules` på Node 24 och körde `HALLPARTNER_FOOTER_MODE=amp-003` med byggd HTML, tester och Chrome i 320/390/768/1280/1440 px. **PASS**. Det var en korrekt runtime-/API-integrationstest med `npm install --no-save`; **det var inte** ett permanent SHA-pinnat beroende i Hallpartners ordinarie lockfile och testade **inte** cross-repo-token för Hallpartners Actions.
+
+En separat **valfri** `amp003-private-consumer`-kontroll har nu lagts till i Hallpartners no-deploy PR-workflow. Med en konfigurering av en *endast läsbar* repository secret `AMELIO_PLATFORM_READ_TOKEN` för just `Amelio-AB/amelio-web-platform` checkar jobbet ut release-SHA och installerar/testar det riktiga paketet i samma PR-kod. Utan secret visar jobbet en uttrycklig **warning / SKIPPED** och gör ingen privat installation. Det vanliga baseline-jobbet med legacy-footer fortsätter att köra. Ingen secret kopieras till JavaScript, CSS, npm-loggar eller artifacts; checkout har `persist-credentials: false`.
+
+**Nästa behörighetssteg för repository-administratör:** GitHub → Hallpartner → Settings → Secrets and variables → Actions → New repository secret. Skapa `AMELIO_PLATFORM_READ_TOKEN` med en tidsbegränsad, organisationsgodkänd read-only credential som enbart får läsa det privata plattformsrepots Contents. Ange aldrig hemligheten i denna chatt, i `package*.json` eller i URL:er. Kör om PR-kontrollen för att verifiera åtkomst. Om den redan finns med annat namn, samordna med ansvarig och justera den lästa hemlighetens **namn**, inte dess värde i kod.
 
 ## Före permanent AMP-003-aktivering i CI
 
