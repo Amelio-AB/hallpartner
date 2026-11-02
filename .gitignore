@@ -26,3 +26,8 @@ pnpm-debug.log*
 # AMP-003 build-only artifacts: generated from private package; never vendored
 .generated/
 public/generated/amp-003-footer.css
+
+# Never commit SMTP credentials or server-only vendor/runtime data
+server/lead/config.local.php
+server/lead/vendor/
+server/lead/private-rates/

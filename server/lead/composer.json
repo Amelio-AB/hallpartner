@@ -1,0 +1,14 @@
+{
+  "name": "hallpartner/private-lead-receiver",
+  "description": "Private SMTP intake runtime for Hallpartner, installed outside public_html",
+  "type": "project",
+  "license": "UNLICENSED",
+  "require": {
+    "php": ">=8.2",
+    "phpmailer/phpmailer": "7.1.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "platform-check": true
+  }
+}
