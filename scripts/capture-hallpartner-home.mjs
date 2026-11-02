@@ -194,7 +194,7 @@ try {
   for (const page of report) {
     const isInfoPage = expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/';
     const isVisitorPage = expectedPath === '/' || isInfoPage;
-    const ampExpected = isVisitorPage && process.env.HALLPARTNER_FOOTER_MODE === 'amp-003';
+    const ampExpected = isVisitorPage && process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
     const expectedNavs = (isInfoPage ? 3 : 1) + (ampExpected ? 3 : 0);
     if (page.h1Count !== 1 || page.navCount !== expectedNavs || page.footerCount !== 1 || page.ampFooter !== ampExpected || page.overflow || page.images.some(i => !i.loaded)) {
       throw new Error('Invalid rendered page on ' + page.viewport.name);

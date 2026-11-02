@@ -38,14 +38,15 @@ test('AMP Footer contact values match the provisional visitor contact page', asy
   assert.ok(contact.includes(config.contact.phone));
 });
 
-test('AMP opt-in keeps prototype Footer and refuses a missing private package', async () => {
+test('AMP-003 is the visitor default, prototypes retain legacy Footer, and missing private packages fail fast', async () => {
   const layout = await readFile(join(root, 'src/layouts/HallpartnerDraftLayout.astro'), 'utf8');
   const prep = await readFile(join(root, 'scripts/prepare-amp-footer.mjs'), 'utf8');
-  assert.match(layout, /isSite && process\.env\.HALLPARTNER_FOOTER_MODE === 'amp-003'/);
+  assert.match(layout, /isSite && process\.env\.HALLPARTNER_FOOTER_MODE !== 'legacy'/);
   assert.match(layout, /<Fragment set:html=\{ampFooterHtml\}/);
   assert.match(layout, /<footer class="hp-draft-footer">/);
   assert.match(prep, /await import\('@amelio\/web-platform\/footer'\)/);
   assert.match(prep, /import\.meta\.resolve\('@amelio\/web-platform\/footer\/style\.css'\)/);
   assert.match(prep, /manifest\.version !== AMP003_APPROVED_VERSION/);
   assert.match(prep, /throw new Error\('AMP-003 is not installed/);
+  assert.match(prep, /process\.env\.HALLPARTNER_FOOTER_MODE \|\| 'amp-003'/);
 });

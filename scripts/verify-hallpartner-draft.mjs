@@ -1,4 +1,4 @@
-const extraAmpFooterNavs = process.env.HALLPARTNER_FOOTER_MODE === 'amp-003' ? 3 : 0;
+const extraAmpFooterNavs = process.env.HALLPARTNER_FOOTER_MODE !== 'legacy' ? 3 : 0;
 /**
  * Verify rendered HTML from npm run build; source-only checks are insufficient.
  * This is a prototype guard, not an end-to-end AMP or accessibility audit.

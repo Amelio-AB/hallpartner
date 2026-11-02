@@ -11,7 +11,7 @@ import { AMP003_APPROVED_VERSION, hallpartnerFooterConfig } from '../src/config/
 const root = fileURLToPath(new URL('../', import.meta.url));
 const htmlPath = join(root, '.generated', 'amp-003-footer.html');
 const cssPath = join(root, 'public', 'generated', 'amp-003-footer.css');
-const mode = process.env.HALLPARTNER_FOOTER_MODE || 'legacy';
+const mode = process.env.HALLPARTNER_FOOTER_MODE || 'amp-003';
 
 if (mode !== 'legacy' && mode !== 'amp-003') {
   throw new Error('HALLPARTNER_FOOTER_MODE must be legacy or amp-003');

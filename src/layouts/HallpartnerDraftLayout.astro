@@ -20,9 +20,9 @@ const isSiteHalls = isSite && Astro.url.pathname.startsWith('/stalhallar/');
 const isSiteProcess = isSite && Astro.url.pathname === '/sa-gar-det-till/';
 const isSiteContact = isSite && Astro.url.pathname === '/kontakt/';
 const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
-// Explicit opt-in: normal builds retain the tested legacy Footer until private
-// AMP-003 package access, pinning and rendered QA have been verified.
-const useAmpFooter = isSite && process.env.HALLPARTNER_FOOTER_MODE === 'amp-003';
+// AMP-003 is now the default for real visitor pages. Explicit legacy mode
+// remains available as a reversible rollback during Draft review.
+const useAmpFooter = isSite && process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
 const ampFooterHtml = useAmpFooter
   ? readFileSync(join(process.cwd(), '.generated', 'amp-003-footer.html'), 'utf8')
   : '';
