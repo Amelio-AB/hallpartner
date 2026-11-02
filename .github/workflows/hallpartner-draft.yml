@@ -35,6 +35,12 @@ on:
       - 'scripts/prepare-amp-footer.mjs'
       - 'tests/hallpartner-amp-footer.test.mjs'
       - 'package-lock.json'
+      - 'src/config/hallpartner-amp-header.ts'
+      - 'src/components/prototype/HallpartnerAmpHeaderReview.astro'
+      - 'src/pages/prototype/amp/header/**'
+      - 'src/styles/hallpartner-amp-header-review.css'
+      - 'tests/hallpartner-amp-header.test.mjs'
+      - 'scripts/capture-hallpartner-amp-header.mjs'
 
 permissions:
   contents: read
@@ -101,7 +107,7 @@ jobs:
       - name: ESLint
         run: npm run lint
       - name: Contract tests (AMP-003 default, legacy rollback available)
-        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs
+        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs tests/hallpartner-amp-header.test.mjs
       - name: Build static Astro site (no upload)
         run: npm run build
         env:
