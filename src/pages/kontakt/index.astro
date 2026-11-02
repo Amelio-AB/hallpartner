@@ -1,6 +1,7 @@
 ---
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
+import ContactForm from '../../components/ContactForm.astro';
 
 // Published on the former Hallpartner WordPress footer (2026-11-01 review).
 // Customer verification of ownership, recipient and current phone is still
@@ -62,10 +63,13 @@ const preparations = [
     <nav class="hp-info__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-info__jump-inner">
         <span>På den här sidan</span>
+        <a href="#kontaktformular">Kontaktformulär</a>
         <a href="#infor-kontakt">Förbered din fråga</a>
         <a href="#nasta-steg">Nästa steg</a>
       </div>
     </nav>
+
+    <ContactForm />
 
     <section class="hp-info__section hp-info__section--light" id="infor-kontakt" aria-labelledby="contact-preparation-heading">
       <div class="hp-draft-rail">
