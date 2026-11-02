@@ -153,9 +153,12 @@ function hp_allow_rate(string $directory, string $secret, string $address, int $
         $times[] = $now;
         rewind($handle);
         if (!ftruncate($handle, 0)) return false;
-        $written = fwrite($handle, json_encode(array_values($times), JSON_THROW_ON_ERROR));
-        fflush($handle);
-        return $written !== false;
+        $payload = json_encode(array_values($times), JSON_THROW_ON_ERROR);
+        $written = fwrite($handle, $payload);
+        // Disk/quota exhaustion may return 0 or a short write: never allow
+        // an SMTP attempt unless the updated rate counter was fully stored.
+        if ($written === false || $written !== strlen($payload)) return false;
+        return fflush($handle);
     } catch (Throwable) {
         return false;
     } finally {
