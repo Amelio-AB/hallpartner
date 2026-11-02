@@ -4,7 +4,7 @@ import type { QuoteConfig } from '@amelio/web-platform/quote-flow';
 export const hallpartnerQuoteConfig = {
   id: 'hallpartner-offert-v1',
   title: 'Berätta om hallen du planerar.',
-  intro: 'Beskriv användning, ungefärliga mått och byggort. Detta är en förfrågan, inte en prisberäkning.',
+  intro: 'Beskriv användning, ungefärliga mått och byggort. Du lämnar underlag för en offertförfrågan, inte en automatisk prisberäkning eller beställning.',
   steps: [
     { id: 'project', title: 'Vad behöver du hallen till?', fields: [
       { id: 'project.use', kind: 'select', presentation: 'cards', required: true,
