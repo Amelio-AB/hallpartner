@@ -1,0 +1,82 @@
+name: TEMP Hallpartner legacy public URL survey (read-only)
+
+on:
+  push:
+    branches:
+      - feature/hallpartner-v1-skeleton-20261031
+    paths:
+      - '.github/workflows/legacy-url-survey.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  survey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Public site GET status and redirect destinations (no mutation)
+        shell: bash
+        run: |
+          set +e
+          URLs=(
+            "https://hallpartner.se/"
+            "https://hallpartner.se/stalhallar/"
+            "https://hallpartner.se/stalhallar/lagerhall/"
+            "https://hallpartner.se/stalhallar/maskinhall/"
+            "https://hallpartner.se/stalhallar/plathall/"
+            "https://hallpartner.se/stalhallar/isolerad-hall/"
+            "https://hallpartner.se/stalhallar/ridhus/"
+            "https://hallpartner.se/stalhallar/talthall/"
+            "https://hallpartner.se/om-oss/"
+            "https://hallpartner.se/kontakt/"
+            "https://hallpartner.se/offert/"
+            "https://www.hallpartner.se/"
+            "http://hallpartner.se/"
+            "https://hallpartner.se/stalhallar"
+            "https://hallpartner.se/offert"
+          )
+          for url in "${URLs[@]}"; do
+            printf 'URL_CHECK '
+            curl --silent --show-error --location --max-redirs 6 --connect-timeout 6 --max-time 18 \
+              -A 'Hallpartner-URL-Migration-ReadOnly/2026-11-02' \
+              --output /dev/null \
+              --write-out 'SOURCE:%{url} CODE:%{http_code} DEST:%{url_effective} HOPS:%{num_redirects}\n' \
+              "$url" || echo "ERROR checking $url"
+          done
+      - name: Read robots and XML sitemaps (do not submit or modify)
+        shell: bash
+        run: |
+          set +e
+          for path in robots.txt sitemap.xml sitemap_index.xml wp-sitemap.xml; do
+            url="https://hallpartner.se/$path"
+            file="$RUNNER_TEMP/hp-${path//\//_}"
+            code=$(curl --silent --show-error --location --max-redirs 4 --connect-timeout 6 --max-time 20 \
+              -A 'Hallpartner-URL-Migration-ReadOnly/2026-11-02' \
+              --output "$file" --write-out '%{http_code}' "$url")
+            echo "DISCOVERY:$path CODE:$code"
+            if [ "$code" = "200" ]; then
+              export HP_SURVEY_FILE="$file" HP_SURVEY_PATH="$path"
+              python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import re
+          import xml.etree.ElementTree as ET
+          src=Path(os.environ['HP_SURVEY_FILE'])
+          s=src.read_text(errors='replace')
+          path=os.environ['HP_SURVEY_PATH']
+          if path=='robots.txt':
+              for line in s.splitlines():
+                  if line.lower().startswith(('sitemap:','disallow:','allow:','user-agent:')):
+                      print('ROBOTS: '+line[:350])
+          else:
+              try:
+                  root=ET.fromstring(s)
+                  urls=[(x.text or '').strip() for x in root.iter() if x.tag.split('}')[-1]=='loc']
+                  print('XML_COUNT:'+str(len(urls))+' ROOT:'+root.tag.split('}')[-1])
+                  for loc in urls[:250]: print('XML_LOC:'+loc[:450])
+              except Exception as e:
+                  print('XML_NOT_PARSEABLE:'+str(e)[:160]+' FIRST:'+re.sub(r'\s+',' ',s[:160]))
+          PY
+            fi
+          done
