@@ -13,6 +13,7 @@ on:
       - 'src/layouts/HallpartnerDraftLayout.astro'
       - 'src/layouts/HallpartnerSiteLayout.astro'
       - 'src/pages/index.astro'
+      - 'src/pages/404.astro'
       - 'src/pages/stalhallar/**'
       - 'src/pages/kontakt/**'
       - 'src/pages/om-oss/**'
@@ -145,6 +146,7 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/kontakt/" HP_SCREENSHOT_PREFIX="site-kontakt" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/sa-gar-det-till/" HP_SCREENSHOT_PREFIX="site-process" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/om-oss/" HP_SCREENSHOT_PREFIX="site-om-oss" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/404.html" HP_SCREENSHOT_PREFIX="site-not-found" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           timeout 180s node scripts/capture-hallpartner-amp-header.mjs

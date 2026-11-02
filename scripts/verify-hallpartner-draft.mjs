@@ -364,3 +364,33 @@ for (const route of ['prototype/amp/header','prototype/amp/header/mega','prototy
   assert.ok(html.includes('class="af af--compact"'),route+' missing already-approved AMP-003');
 }
 console.log('Verified AMP-002 isolated prototype routes: noindex, SSR fallback and single Footer.');
+
+
+// Public-facing 404 shares the accepted Hallpartner Header/Footer, has one H1,
+// and helps users recover without linking to the historical Amelio presentation.
+{
+  const errorHtml = readFileSync(join(dist, '404.html'), 'utf8');
+  assert.equal((errorHtml.match(/<h1(?:\s|>)/gi) ?? []).length, 1, '404 must have exactly one H1');
+  assert.equal((errorHtml.match(/<header(?:\s|>)/gi) ?? []).length, 1, '404 must share the visitor Header');
+  assert.equal((errorHtml.match(/<footer(?:\s|>)/gi) ?? []).length, 1, '404 must share the visitor Footer');
+  assert.ok(errorHtml.includes('name="robots" content="noindex,nofollow"'), '404 needs noindex');
+  assert.ok(!errorHtml.includes('rel="canonical"'), '404 should not advertise itself as canonical');
+  assert.ok(errorHtml.includes('Sidan kunde inte hittas | Hallpartner'), '404 page title is wrong');
+  assert.ok(!errorHtml.includes('href="/vision/"') && !errorHtml.includes('Hallpartner — nästa kapitel'), 'old vision content leaked on 404');
+  for (const href of ['/', '/stalhallar/', '/kontakt/']) {
+    assert.ok(errorHtml.includes('href="' + href + '"'), '404 recovery link missing: ' + href);
+    if (href !== '/') assert.ok(existsSync(join(dist, href.slice(1), 'index.html')), '404 points at missing route: ' + href);
+  }
+  if (process.env.HALLPARTNER_FOOTER_MODE === 'legacy') {
+    assert.ok(errorHtml.includes('class="hp-draft-footer"'), '404 legacy Footer rollback broken');
+  } else {
+    assert.ok(errorHtml.includes('class="af af--compact"'), '404 AMP-003 Footer missing');
+  }
+}
+for (const file of sitemapFiles) {
+  const xml = readFileSync(join(dist, file), 'utf8');
+  for (const path of ['/404/', '/404.html', '/vision/', '/projekt/', '/roadmap/', '/workshop/']) {
+    assert.ok(!xml.includes('https://hallpartner.se' + path), 'legacy URL leaked into ' + file + ': ' + path);
+  }
+}
+console.log('Verified visitor 404 and legacy sitemap exclusions without redirecting/deleting routes.');

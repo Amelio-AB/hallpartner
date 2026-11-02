@@ -350,3 +350,24 @@ test('Om Hallpartner is a distinct visitor page with sourced identities and no i
   assert.doesNotMatch(page, /egna montörer|20 års erfarenhet|lång erfarenhet|ansvarar för våra montage|levererar över hela Norden|garanti på arbete|kostnadsfri offert|hallprojekt i\s+\d{4}/i);
   assert.doesNotMatch(page, /<img(?:\s|>)|<Image(?:\s|>)/i, 'must not add unlicensed portraits');
 });
+
+
+test('visitor 404 offers real Hallpartner recovery links and no vision-era copy', () => {
+  const page = readFileSync(new URL('../src/pages/404.astro', import.meta.url), 'utf8');
+  const siteLayout = readFileSync(new URL('../src/layouts/HallpartnerSiteLayout.astro', import.meta.url), 'utf8');
+  assert.ok(page.includes('HallpartnerSiteLayout'));
+  assert.ok(page.includes('omitCanonical'));
+  assert.equal((page.match(/<h1(?:\s|>)/g) ?? []).length, 1);
+  for (const href of ['/', '/stalhallar/', '/kontakt/']) {
+    assert.ok(page.includes('href="' + href + '"'), 'missing recovery link: ' + href);
+  }
+  assert.doesNotMatch(page, /\/vision\/|\/projekt\/|Manrope|nästa kapitel/i);
+  assert.ok(siteLayout.includes('omitCanonical={omitCanonical}'));
+});
+
+test('old Amelio presentation URLs and 404 are excluded from sitemap', () => {
+  const config = readFileSync(new URL('../astro.config.mjs', import.meta.url), 'utf8');
+  for (const path of ['/404/', '/404.html', '/vision/', '/projekt/', '/roadmap/', '/workshop/']) {
+    assert.ok(config.includes("'" + path + "'"), 'missing sitemap exclusion for ' + path);
+  }
+});
