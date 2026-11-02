@@ -187,6 +187,54 @@ try {
     });
     const filename = prefix + '-' + viewport.name + '-full.png';
     await writeFile(join(output, filename), Buffer.from(shot.data, 'base64'));
+
+    // Real DOM check: a visually interactive preview must NOT allow a live
+    // submission when neither customer recipient nor private backend is ready.
+    if (expectedPath === '/kontakt/') {
+      metrics.contactIntake = await evaluate('(() => {' +
+        'const form=document.querySelector("#hp-contact-form");' +
+        'const button=form?.querySelector("button[type=submit]");' +
+        'return {found:!!form,enabled:form?.dataset.enabled,buttonDisabled:button?.disabled,' +
+        'hasStatus:!!form?.querySelector("[role=status]"),notice:!!document.querySelector(".hp-leads-note--review")};' +
+        '})()');
+      if (!metrics.contactIntake.found || metrics.contactIntake.enabled !== 'false' ||
+          !metrics.contactIntake.buttonDisabled || !metrics.contactIntake.hasStatus ||
+          !metrics.contactIntake.notice) {
+        throw new Error('Contact receiving must stay disabled: ' + JSON.stringify(metrics.contactIntake));
+      }
+    }
+    if (expectedPath === '/offert/') {
+      metrics.quoteIntake = await evaluate("(async function(){" +
+        "const host=document.querySelector('#hp-offert-guide');" +
+        "const form=host?.querySelector('form.qf-panel');" +
+        "if(!host||!form)return {error:'AMP-001 not mounted'};" +
+        "const use=host.querySelector('input[name=\"project.use\"][value=\"storage\"]');" +
+        "use?.click();" +
+        "const desc=host.querySelector('textarea[name=\"project.description\"]');" +
+        "if(desc){desc.value='Synthetic example enquiry for a warehouse hall.';desc.dispatchEvent(new Event('input',{bubbles:true}));}" +
+        "form.requestSubmit();" +
+        "const confidence=host.querySelector('select[name=\"dimensions.confidence\"]');" +
+        "if(confidence){confidence.value='need_help';confidence.dispatchEvent(new Event('input',{bubbles:true}));}" +
+        "form.requestSubmit();" +
+        "form.requestSubmit();" +
+        "const name=host.querySelector('input[name=\"contact.name\"]');" +
+        "if(name){name.value='Test Person';name.dispatchEvent(new Event('input',{bubbles:true}));}" +
+        "const email=host.querySelector('input[name=\"contact.email\"]');" +
+        "if(email){email.value='test@example.invalid';email.dispatchEvent(new Event('input',{bubbles:true}));}" +
+        "form.requestSubmit();" +
+        "await Promise.resolve();" +
+        "const send=[...host.querySelectorAll('button[type=submit]')].find(b=>b.textContent.includes('Skicka förfrågan'));" +
+        "return {mounted:!!host.querySelector('.qf'),enabled:host.dataset.enabled," +
+        "reachedReview:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar')," +
+        "sendDisabled:send?.disabled,reviewNotice:!!document.querySelector('.hp-leads-note--review')};" +
+        "})()", true);
+      if (!metrics.quoteIntake.mounted || metrics.quoteIntake.enabled !== 'false' ||
+          !metrics.quoteIntake.reachedReview || !metrics.quoteIntake.sendDisabled ||
+          !metrics.quoteIntake.reviewNotice) {
+        throw new Error('AMP-001 quote must reach review without sending: ' + JSON.stringify(metrics.quoteIntake));
+      }
+    }
+
     report.push({ viewport, filename, ...metrics });
   }
   await writeFile(join(output, prefix + '-REPORT.json'), JSON.stringify(report, null, 2));
