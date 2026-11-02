@@ -3,6 +3,20 @@
 **Status: kod finns och automatiska offline-test genomförs; kundmottagning INTE aktiverad.**
 Inga mail, personuppgifter, DNS-, FTP-, Inleed- eller main-ändringar ingår i denna Draft. All publik WordPress-funktion finns kvar.
 
+## Beslut om kalkylator och konvertering (2026-11-02)
+
+Hallpartner har **ingen vald leverantörskalkylator** att använda. Andreas har
+beslutat att webbplatsens första version fortsätter med **fristående
+offertförfrågan utan automatiska priser eller köp**. Leverantörskalkylator,
+prismodell, produktimport och eventuell e-handel är pausade framtidsspår
+(HPD-010 i dokumentations-PR #2, se
+[checkpoint](checkpoints/2026-11-02-calculator-paused.md)).
+
+**Mottagnings- och integritetsgrindarna nedan är fortfarande obligatoriska.**
+Ingen kund ska kunna skicka uppgifter förrän servermottagare, relevant
+integritetsinformation och faktiskt inbox-test har godkänts. Att kalkylatorn
+pausas innebär inte att mottagningen automatiskt kan aktiveras.
+
 ## Levererat i arbetsgrenen
 
 - Kontakt: egen frågeform på /kontakt/ med obligatoriskt namn/e-post/meddelande, frivilligt företag och telefon, plus synliga mailto-/telefonalternativ.
