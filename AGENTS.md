@@ -8,6 +8,31 @@
 
 ---
 
+## Aktuellt scope: inga kundpriser eller köp i v1 (2026-11-02)
+
+Peter har meddelat att Hallpartner fortfarande förhandlar med en leverantör
+och inte har någon kalkylator man vill använda. Andreas har därför beslutat
+att **den nya webbplatsen ska fortsätta byggas utan extern konfigurator**.
+
+- Bygg och granska hallar, innehåll, kontaktvägar och den fristående
+  **AMP-001-offertförfrågan** utan beroende av leverantör, prislista,
+  automatiska priser, checkout eller köpknapp.
+- `/offert/` är en kort **inaktiv arbetsguide** tills kundens frågor, säker
+  servermottagning, SMTP/inbox och integritetsinformation har godkänts.
+  Fungerande `/kontakt/` med telefon/mejl ska fortsatt vara alternativet.
+- Gör inga provisoriska API-/iframe-kopplingar eller publik
+  kalkylatorfunktion. Återuppta ett separat kalkylatorspår först efter att
+  Hallpartner valt lösning och godkänt integrationens omfattning och kostnad.
+- Beslutet dokumenteras också i
+  [checkpointen](docs/checkpoints/2026-11-02-calculator-paused.md) och i
+  [projektbeslutsregistret i dokumentations-PR #2](https://github.com/Amelio-AB/hallpartner/pull/2)
+  (HPD-010). Dokumentations-PR #2 är ännu inte mergad till denna gren.
+
+Detta är ett **scopebeslut, inte en godkänd produktlansering**; rör inte
+noindex, DNS, FTP, credentials eller main på grund av ändringen.
+
+---
+
 # Projektets syfte
 
 Repot är kodbasen för Hallpartners riktiga webbplats på https://hallpartner.se.
