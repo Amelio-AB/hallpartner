@@ -30,6 +30,10 @@ on:
       - 'tests/amp-brand.test.mjs'
       - 'scripts/verify-hallpartner-draft.mjs'
       - 'package.json'
+      - 'src/config/hallpartner-footer.mjs'
+      - 'src/styles/hallpartner-amp-footer.css'
+      - 'scripts/prepare-amp-footer.mjs'
+      - 'tests/hallpartner-amp-footer.test.mjs'
       - 'package-lock.json'
 
 permissions:
@@ -63,8 +67,8 @@ jobs:
         run: npm run check
       - name: ESLint
         run: npm run lint
-      - name: Contract tests (no AMP package integration yet)
-        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs
+      - name: Contract tests (AMP-003 adapter prepared, default fallback)
+        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs
       - name: Build static Astro site (no upload)
         run: npm run build
         env:

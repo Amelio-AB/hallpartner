@@ -107,7 +107,9 @@ try {
       'window.scrollTo(0,document.body.scrollHeight);' +
       'await new Promise(r=>setTimeout(r,300));' +
       'window.scrollTo(0,0);' +
-      'return {h1Count:document.querySelectorAll("h1").length,' +
+      'return {footerCount:document.querySelectorAll("footer").length,' +
+      'ampFooter:!!document.querySelector("footer.af--compact"),' +
+      'h1Count:document.querySelectorAll("h1").length,' +
       'navCount:document.querySelectorAll("nav").length,' +
       'overflow:document.documentElement.scrollWidth>window.innerWidth,' +
       'images:[...document.images].map(img=>({loaded:img.complete&&img.naturalWidth>0,src:img.currentSrc||img.src}))};' +
@@ -190,7 +192,11 @@ try {
   await writeFile(join(output, prefix + '-REPORT.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
   for (const page of report) {
-    if (page.h1Count !== 1 || page.navCount !== ((expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/') ? 3 : 1) || page.overflow || page.images.some(i => !i.loaded)) {
+    const isInfoPage = expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/';
+    const isVisitorPage = expectedPath === '/' || isInfoPage;
+    const ampExpected = isVisitorPage && process.env.HALLPARTNER_FOOTER_MODE === 'amp-003';
+    const expectedNavs = (isInfoPage ? 3 : 1) + (ampExpected ? 4 : 0);
+    if (page.h1Count !== 1 || page.navCount !== expectedNavs || page.footerCount !== 1 || page.ampFooter !== ampExpected || page.overflow || page.images.some(i => !i.loaded)) {
       throw new Error('Invalid rendered page on ' + page.viewport.name);
     }
   }

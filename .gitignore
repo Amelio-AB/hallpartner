@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# AMP-003 build-only artifacts: generated from private package; never vendored
+.generated/
+public/generated/amp-003-footer.css

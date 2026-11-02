@@ -13,7 +13,10 @@
     "astro": "astro",
     "check": "astro check",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "predev": "node scripts/prepare-amp-footer.mjs",
+    "prebuild": "node scripts/prepare-amp-footer.mjs",
+    "test:footer": "node --test tests/hallpartner-amp-footer.test.mjs"
   },
   "dependencies": {
     "astro": "^7.1.3",

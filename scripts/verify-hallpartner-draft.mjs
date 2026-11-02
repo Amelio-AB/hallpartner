@@ -1,3 +1,4 @@
+const extraAmpFooterNavs = process.env.HALLPARTNER_FOOTER_MODE === 'amp-003' ? 4 : 0;
 /**
  * Verify rendered HTML from npm run build; source-only checks are insufficient.
  * This is a prototype guard, not an end-to-end AMP or accessibility audit.
@@ -152,7 +153,7 @@ assert.ok(siteHome.includes('aria-label="Huvudnavigation"'), 'site nav is not vi
 assert.ok(siteHome.includes('aria-controls="hp-proto-nav"'), 'mobile menu control missing');
 assert.equal((siteHome.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'site has incorrect H1 count');
 assert.equal((siteHome.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'site has duplicate header');
-assert.equal((siteHome.match(/<nav(?:\s|>)/gi) ?? []).length, 1, 'site has duplicate navigation');
+assert.equal((siteHome.match(/<nav(?:\s|>)/gi) ?? []).length, 1 + extraAmpFooterNavs, 'site has duplicate navigation');
 for (const phrase of ['Visuell arbetsversion', 'För intern granskning', 'Intern arbetsprototyp', 'AI-genererad konceptbild', 'Ursprungligt fulltextutkast saknas', 'digital analys och vision']) {
   assert.ok(!siteHome.includes(phrase), 'prototype text on /: ' + phrase);
 }
@@ -176,7 +177,7 @@ assert.match(hallOverview, /<meta\s+name="robots"\s+content="noindex,nofollow"/)
 assert.match(hallOverview, /<link\s+rel="canonical"\s+href="https:\/\/hallpartner\.se\/stalhallar\/"/);
 assert.equal((hallOverview.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'hall overview must have exactly one H1');
 assert.equal((hallOverview.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'hall overview has duplicate header');
-assert.equal((hallOverview.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'hall overview needs main navigation, breadcrumbs and content navigation');
+assert.equal((hallOverview.match(/<nav(?:\s|>)/gi) ?? []).length, 3 + extraAmpFooterNavs, 'hall overview needs main navigation, breadcrumbs and content navigation');
 assert.ok(hallOverview.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
 assert.ok(hallOverview.includes('aria-label="På den här sidan"'), 'missing page shortcuts');
 assert.ok(hallOverview.includes('href="/stalhallar/"'), 'navigation does not link to real hall overview');
@@ -204,7 +205,7 @@ for (const detail of details) {
   assert.ok(html.includes('rel="canonical" href="' + expected + '"'), 'wrong canonical for ' + detail.slug);
   assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'duplicate or missing detail H1');
   assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'duplicate detail header');
-  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'detail must have main nav, breadcrumbs, page nav');
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3 + extraAmpFooterNavs, 'detail must have main nav, breadcrumbs, page nav');
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'missing breadcrumbs');
   assert.ok(html.includes('href="/stalhallar/"'), 'missing overview link');
   assert.ok(html.includes('href="/kontakt/"'), 'missing live contact destination');
@@ -232,7 +233,7 @@ for (const detail of [
   assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/stalhallar/'+detail.slug+'/"'),'wrong canonical '+detail.slug);
   assert.equal((html.match(/<h1(?:\s|>)/gi)??[]).length,1,'H1 count '+detail.slug);
   assert.equal((html.match(/<header(?:\s|>)/gi)??[]).length,1,'header count '+detail.slug);
-  assert.equal((html.match(/<nav(?:\s|>)/gi)??[]).length,3,'nav count '+detail.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi)??[]).length,3 + extraAmpFooterNavs,'nav count '+detail.slug);
   assert.ok(html.includes('aria-label="Brödsmulor"'));
   for(const id of detail.ids)assert.ok(html.includes('id="'+id+'"'), 'missing section '+id);
   assert.ok(!html.includes('/prototype/hallpartner/'));
@@ -255,7 +256,7 @@ for (const item of [
   assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/stalhallar/' + item.slug + '/"'), 'canonical mismatch: ' + item.slug);
   assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'H1 count: ' + item.slug);
   assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'duplicate Header: ' + item.slug);
-  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'three navigations expected: ' + item.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3 + extraAmpFooterNavs, 'three navigations expected: ' + item.slug);
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'breadcrumbs missing: ' + item.slug);
   assert.ok(html.includes('href="/stalhallar/"'), 'overview link missing: ' + item.slug);
   assert.ok(html.includes('href="/kontakt/"'), 'contact link missing: ' + item.slug);
@@ -283,7 +284,7 @@ for (const item of [
   assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/' + item.slug + '/"'), 'canonical mismatch: ' + item.slug);
   assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'only one H1 on ' + item.slug);
   assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'only one header on ' + item.slug);
-  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'main, breadcrumbs, jump nav required: ' + item.slug);
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3 + extraAmpFooterNavs, 'main, breadcrumbs, jump nav required: ' + item.slug);
   assert.ok(html.includes('aria-label="Brödsmulor"'), 'breadcrumbs missing: ' + item.slug);
   assert.ok(!html.includes('/prototype/hallpartner/'), 'prototype link on info route: ' + item.slug);
   assert.ok(!html.includes('andreas@amelio.se'), 'Amelio contact leaked on visitor page');
@@ -308,7 +309,7 @@ console.log('Verified visitor Kontakt and Så går det till: native routes, noin
   assert.ok(html.includes('rel="canonical" href="https://hallpartner.se/om-oss/"'), 'Om oss canonical incorrect');
   assert.equal((html.match(/<h1(?:\s|>)/gi) ?? []).length, 1, 'Om oss H1 count wrong');
   assert.equal((html.match(/<header(?:\s|>)/gi) ?? []).length, 1, 'Om oss header count wrong');
-  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3, 'Om oss needs main nav, breadcrumbs and in-page nav');
+  assert.equal((html.match(/<nav(?:\s|>)/gi) ?? []).length, 3 + extraAmpFooterNavs, 'Om oss needs main nav, breadcrumbs and in-page nav');
   assert.ok(html.includes('aria-label="Brödsmulor"') && html.includes('aria-label="På den här sidan"'));
   for (const name of ['Jimmy Gustafsson', 'Peter Fridland']) {
     assert.ok(html.includes(name), 'missing public-source person ' + name);
@@ -325,3 +326,26 @@ console.log('Verified visitor Kontakt and Så går det till: native routes, noin
   }
 }
 console.log('Verified visitor Om Hallpartner: noindex, canonical, published names, anchors and working links.');
+
+
+// The site uses a single shared Footer across every actual Astro route.
+// AMP-enabled builds must use the approved renderer, not a CSS mock or duplicate.
+for (const route of [
+  '', 'stalhallar', 'stalhallar/lagerhall', 'stalhallar/maskinhall',
+  'stalhallar/plathall', 'stalhallar/isolerad-hall',
+  'stalhallar/ridhus', 'stalhallar/talthall',
+  'kontakt', 'sa-gar-det-till', 'om-oss',
+]) {
+  const html = readFileSync(join(dist, route, 'index.html'), 'utf8');
+  assert.equal((html.match(/<footer(?:\s|>)/gi) || []).length, 1, 'exactly one footer required: ' + route);
+  if (extraAmpFooterNavs) {
+    assert.ok(html.includes('class="af af--compact"'), 'approved AMP Footer missing: ' + route);
+    assert.ok(html.includes('href="/generated/amp-003-footer.css"'), 'approved AMP CSS missing: ' + route);
+    assert.ok(html.includes('class="af__mobile-groups"'), 'accessible AMP disclosure markup missing: ' + route);
+    assert.ok(!html.includes('class="hp-draft-footer"'), 'duplicate legacy Footer: ' + route);
+  } else {
+    assert.ok(html.includes('class="hp-draft-footer"'), 'legacy Footer fallback missing: ' + route);
+    assert.ok(!html.includes('class="af af--compact"'), 'AMP Footer appeared without explicit opt-in: ' + route);
+  }
+}
+console.log('Verified all real Astro routes use exactly one intended Footer provider.');

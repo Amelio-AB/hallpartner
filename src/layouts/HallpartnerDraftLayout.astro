@@ -1,5 +1,8 @@
 ---
 import '../styles/hallpartner-draft.css';
+import '../styles/hallpartner-amp-footer.css';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 export interface Props {
   title: string;
@@ -17,6 +20,12 @@ const isSiteHalls = isSite && Astro.url.pathname.startsWith('/stalhallar/');
 const isSiteProcess = isSite && Astro.url.pathname === '/sa-gar-det-till/';
 const isSiteContact = isSite && Astro.url.pathname === '/kontakt/';
 const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+// Explicit opt-in: normal builds retain the tested legacy Footer until private
+// AMP-003 package access, pinning and rendered QA have been verified.
+const useAmpFooter = isSite && process.env.HALLPARTNER_FOOTER_MODE === 'amp-003';
+const ampFooterHtml = useAmpFooter
+  ? readFileSync(join(process.cwd(), '.generated', 'amp-003-footer.html'), 'utf8')
+  : '';
 ---
 
 <!doctype html>
@@ -39,6 +48,7 @@ const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site)
       </>
     )}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {useAmpFooter && <link rel="stylesheet" href="/generated/amp-003-footer.css" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
@@ -93,6 +103,9 @@ const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site)
     <main id="main-content" class="hp-draft-main" tabindex="-1">
       <slot />
     </main>
+    {useAmpFooter ? (
+      <Fragment set:html={ampFooterHtml} />
+    ) : (
     <footer class="hp-draft-footer">
       <div class="hp-draft-rail hp-draft-footer__inner">
         <div>
@@ -124,6 +137,7 @@ const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site)
       <div class="hp-draft-rail hp-draft-footer__footnote">Befintliga bilder används enbart för layouttest i denna noindexerade arbetsgren. Rättigheter och referenser återstår att verifiera.</div>
       )}
     </footer>
+    )}
 
     <script>
       const header = document.querySelector<HTMLElement>('.hp-draft-header');
