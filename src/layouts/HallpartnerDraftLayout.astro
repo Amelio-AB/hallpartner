@@ -9,9 +9,10 @@ export interface Props {
   description: string;
   currentSlug?: string;
   variant?: 'prototype' | 'site';
+  omitCanonical?: boolean;
 }
 
-const { title, description, currentSlug, variant = 'prototype' } = Astro.props;
+const { title, description, currentSlug, variant = 'prototype', omitCanonical = false } = Astro.props;
 const isSite = variant === 'site';
 const draftBase = '/prototype/hallpartner/';
 const isCurrent = (slug: string) => currentSlug === slug ? 'page' : undefined;
@@ -19,7 +20,8 @@ const isSiteHome = isSite && Astro.url.pathname === '/';
 const isSiteHalls = isSite && Astro.url.pathname.startsWith('/stalhallar/');
 const isSiteProcess = isSite && Astro.url.pathname === '/sa-gar-det-till/';
 const isSiteContact = isSite && Astro.url.pathname === '/kontakt/';
-const canonical = isSite && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+// The 404 error document must not claim its own URL as canonical.
+const canonical = isSite && !omitCanonical && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
 // AMP-003 is now the default for real visitor pages. Explicit legacy mode
 // remains available as a reversible rollback during Draft review.
 const useAmpFooter = isSite && process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';

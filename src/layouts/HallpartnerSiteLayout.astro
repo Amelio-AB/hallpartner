@@ -3,12 +3,13 @@ import HallpartnerDraftLayout from './HallpartnerDraftLayout.astro';
 export interface Props {
   title: string;
   description: string;
+  omitCanonical?: boolean;
 }
-const { title, description } = Astro.props;
+const { title, description, omitCanonical = false } = Astro.props;
 ---
 
 <!-- Temporary shared shell retains the existing tested header behavior.
      Replace with real AMP integration once package access is verified. -->
-<HallpartnerDraftLayout title={title} description={description} variant="site">
+<HallpartnerDraftLayout title={title} description={description} variant="site" omitCanonical={omitCanonical}>
   <slot />
 </HallpartnerDraftLayout>

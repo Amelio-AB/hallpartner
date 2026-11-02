@@ -1,43 +1,50 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import ButtonLink from '../components/ButtonLink.astro';
+import HallpartnerSiteLayout from '../layouts/HallpartnerSiteLayout.astro';
 ---
 
-<BaseLayout
-  title="Sidan kunde inte hittas | Hallpartner — nästa kapitel"
-  description="Sidan du sökte kunde inte hittas."
+<HallpartnerSiteLayout
+  title="Sidan kunde inte hittas"
+  description="Sidan du söker finns inte på den här adressen. Gå till Hallpartners startsida, utforska hallar eller kontakta oss."
+  omitCanonical
 >
-  <section class="section not-found">
-    <div class="container container-text">
-      <p class="text-eyebrow">404</p>
-      <h1>Sidan kunde inte hittas.</h1>
-      <p class="text-lead text-muted">
-        Länken kan vara felaktig eller sidan kan ha flyttats. Utforska visionen eller gå tillbaka
-        till startsidan.
-      </p>
-      <div class="not-found__actions">
-        <ButtonLink href="/" label="Till startsidan" variant="primary" />
-        <ButtonLink href="/vision/" label="Utforska visionen" variant="secondary" />
+  <div class="hp-not-found">
+    <section class="hp-not-found__section" aria-labelledby="not-found-heading">
+      <div class="hp-draft-rail hp-not-found__inner">
+        <p class="hp-not-found__eyebrow">404 / Sidan saknas</p>
+        <h1 id="not-found-heading">Vi hittar inte sidan du söker.</h1>
+        <p class="hp-not-found__lead">
+          Adressen kan vara felaktig, eller så finns inte sidan längre.
+          Här kan du gå vidare till Hallpartners aktuella sidor.
+        </p>
+        <div class="hp-not-found__actions">
+          <a class="hp-not-found__button" href="/">
+            Till startsidan <span aria-hidden="true">→</span>
+          </a>
+          <a class="hp-not-found__link" href="/stalhallar/">
+            Utforska halltyper <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <p class="hp-not-found__contact">
+          Behöver du hjälp att hitta rätt? <a href="/kontakt/">Kontakta Hallpartner</a>.
+        </p>
       </div>
-    </div>
-  </section>
-</BaseLayout>
+    </section>
+  </div>
+</HallpartnerSiteLayout>
 
 <style>
-  .not-found {
-    min-height: 60svh;
-    display: flex;
-    align-items: center;
-  }
-
-  .container-text > * + * {
-    margin-top: var(--space-2);
-  }
-
-  .not-found__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2);
-    margin-top: var(--space-3) !important;
+  .hp-not-found { background: #E6EBE5; color: #071A16; }
+  .hp-not-found__section { min-height: min(76svh, 760px); display: flex; align-items: center; padding-block: clamp(4rem, 8vw, 7rem); }
+  .hp-not-found__eyebrow { color: #236F31; font-size: .77rem; font-weight: 750; letter-spacing: .12em; text-transform: uppercase; margin: 0 0 1.5rem; }
+  .hp-not-found h1 { max-width: 15ch; font-size: clamp(2.8rem, 5.5vw, 5.7rem); line-height: 1.06; letter-spacing: -.055em; font-weight: 700; margin: 0 0 1.5rem; text-wrap: balance; }
+  .hp-not-found__lead { max-width: 40rem; font-size: clamp(1.05rem, 1.4vw, 1.24rem); line-height: 1.7; color: #385446; margin: 0 0 1.8rem; }
+  .hp-not-found__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem 1.8rem; }
+  .hp-not-found__button { display: inline-flex; align-items: center; justify-content: space-between; gap: 1.8rem; min-height: 3.5rem; padding: .9rem 1.25rem; border-radius: 4px; background: #287B39; color: #fff !important; font-weight: 700; text-decoration: none; }
+  .hp-not-found__button:hover { background: #1D6529; }
+  .hp-not-found__link, .hp-not-found__contact a { color: #236F31 !important; font-weight: 700; text-underline-offset: .3em; }
+  .hp-not-found__contact { margin: 2.5rem 0 0; line-height: 1.7; color: #385446; }
+  @media (max-width: 420px) {
+    .hp-not-found__actions { align-items: stretch; flex-direction: column; }
+    .hp-not-found__button { width: 100%; }
   }
 </style>
