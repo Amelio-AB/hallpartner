@@ -10,6 +10,42 @@ Mappa alltså den äldre filens `from_email` till `smtp_from` och `to_email` til
 
 **Lösenordet ska fyllas i enbart i serverns privata `config.local.php` och aldrig skickas till chatten eller läggas i GitHub.** Använd [`server/lead/config.example.php`](../server/lead/config.example.php) som mall. Lämna `enabled = false` och `privacy_approved = false` så länge de publika formulären saknar godkänd kundmottagning. Välj endast rätt, faktiskt installerad HTTPS-origin som `allowed_origin`, en privat skrivbar `rate_dir` och en slumpmässig `rate_secret` om minst 32 tecken.
 
+## Blockerare: PHP tolkar inte privat config.local.php
+
+Den **2 november 2026** fungerade SSH, PHP 8.3.36 och PHPMailer-autoload,
+men ett manuellt försök avbröts **före varje SMTP-anslutning**:
+
+```text
+strict_types declaration must be the very first statement in the script
+in config.local.php on line 4
+```
+
+Börja nästa manuella felsökning med ett **icke-sändande** syntaxprov i
+`~/hallpartner-leads`:
+
+```bash
+php -l config.local.php
+```
+
+Filen ska börja med `<?php` som **första byte**, utan UTF-8 BOM,
+tomrad eller annat innehåll framför. `declare(strict_types=1);` ska
+vara den första PHP-satsen (kommentarer och blankrader **efter**
+`<?php` i sig ger inte detta fel). Spara som UTF-8 **utan BOM**.
+
+Vid osäkerhet kan följande **endast läsa de första fem byten och skriva
+en diagnos, aldrig några lösenord eller övriga filvärden**:
+
+```bash
+php -r '$f=@fopen("config.local.php","rb"); if (!$f) { fwrite(STDERR,"Kan inte läsa filen.\n"); exit(1); } $h=fread($f,5); fclose($f); echo str_starts_with($h,"\xEF\xBB\xBF") ? "UTF-8 BOM före PHP-taggen.\n" : ($h === "<?php" ? "PHP-öppning finns på byte 1.\n" : "Det finns innehåll före eller i stället för PHP-öppningen.\n");'
+```
+
+Visa inte filens innehåll, använd inte `cat` eller `xxd` på den privata
+konfigurationen, och kopiera inte hemligheter till GitHub eller chatten.
+Ändra ingenting på servern automatiskt. Behåll `enabled=false` och
+`privacy_approved=false` även efter en lyckad syntaxkontroll.
+Först efter rättning och godkänd manuell kontroll får det syntetiska
+SMTP-provet köras **en gång**, följt av kontroll av den riktiga inkorgen.
+
 Efter PHP 8.2+ och privat Composer-installation (med versionslåsta beroenden), kör i den privata servermappen:
 
 ```bash

@@ -55,9 +55,13 @@ function hp_validate_lead(mixed $input): array
             continue;
         }
         $normalized = trim($value);
-        if (strlen($normalized) > $allowed[$key] * 4 ||
+        // The first byte check is an inexpensive DoS bound; enforce the
+        // configured limit in Unicode characters, not four times as many
+        // ASCII bytes. /s also counts newlines in free-text fields.
+        $characters = preg_match_all('/./us', $normalized);
+        if ($characters === false || $characters > $allowed[$key] ||
             preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $normalized)) {
-            $errors[$key] = 'Ogiltiga tecken.';
+            $errors[$key] = 'Texten är för lång eller innehåller ogiltiga tecken.';
             continue;
         }
         if (!in_array($key, ['contact.message', 'project.description'], true) &&
@@ -69,11 +73,11 @@ function hp_validate_lead(mixed $input): array
     }
 
     foreach (['contact.name', 'contact.email'] as $key) {
-        if (!isset($values[$key]) || $values[$key] === '') {
+        if (!isset($errors[$key]) && (!isset($values[$key]) || $values[$key] === '')) {
             $errors[$key] = 'Fältet måste fyllas i.';
         }
     }
-    if (isset($values['contact.name']) && strlen($values['contact.name']) < 2) {
+    if (isset($values['contact.name']) && preg_match_all('/./us', $values['contact.name']) < 2) {
         $errors['contact.name'] = 'Ange minst två tecken.';
     }
     if (isset($values['contact.email']) &&
@@ -86,7 +90,8 @@ function hp_validate_lead(mixed $input): array
     }
 
     if ($kind === 'hallpartner-contact-v1') {
-        if (strlen($values['contact.message'] ?? '') < 10) {
+        if (!isset($errors['contact.message']) &&
+            preg_match_all('/./us', $values['contact.message'] ?? '') < 10) {
             $errors['contact.message'] = 'Beskriv din fråga med minst tio tecken.';
         }
         if (!empty($values['website'])) {
@@ -96,7 +101,8 @@ function hp_validate_lead(mixed $input): array
         if (!in_array($values['project.use'] ?? '', ['storage','machinery','riding','other','unknown'], true)) {
             $errors['project.use'] = 'Välj ett giltigt alternativ.';
         }
-        if (strlen($values['project.description'] ?? '') < 10) {
+        if (!isset($errors['project.description']) &&
+            preg_match_all('/./us', $values['project.description'] ?? '') < 10) {
             $errors['project.description'] = 'Beskriv projektet med minst tio tecken.';
         }
         $confidence = $values['dimensions.confidence'] ?? '';
@@ -147,9 +153,12 @@ function hp_allow_rate(string $directory, string $secret, string $address, int $
         $times[] = $now;
         rewind($handle);
         if (!ftruncate($handle, 0)) return false;
-        $written = fwrite($handle, json_encode(array_values($times), JSON_THROW_ON_ERROR));
-        fflush($handle);
-        return $written !== false;
+        $payload = json_encode(array_values($times), JSON_THROW_ON_ERROR);
+        $written = fwrite($handle, $payload);
+        // Disk/quota exhaustion may return 0 or a short write: never allow
+        // an SMTP attempt unless the updated rate counter was fully stored.
+        if ($written === false || $written !== strlen($payload)) return false;
+        return fflush($handle);
     } catch (Throwable) {
         return false;
     } finally {
