@@ -193,9 +193,10 @@ try {
   console.log(JSON.stringify(report, null, 2));
   for (const page of report) {
     const isInfoPage = expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/';
-    const isVisitorPage = expectedPath === '/' || isInfoPage || expectedPath === '/404.html';
+    const isOfferPage = expectedPath === '/offert/';
+    const isVisitorPage = expectedPath === '/' || isInfoPage || isOfferPage || expectedPath === '/404.html';
     const ampExpected = isVisitorPage && process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
-    const expectedNavs = (isInfoPage ? 3 : 1) + (ampExpected ? 3 : 0);
+    const expectedNavs = (isInfoPage || isOfferPage ? 3 : 1) + (ampExpected ? 3 : 0);
     if (page.h1Count !== 1 || page.navCount !== expectedNavs || page.footerCount !== 1 || page.ampFooter !== ampExpected || page.overflow || page.images.some(i => !i.loaded)) {
       throw new Error('Invalid rendered page on ' + page.viewport.name);
     }

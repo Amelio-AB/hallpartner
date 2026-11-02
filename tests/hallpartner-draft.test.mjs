@@ -371,3 +371,16 @@ test('old Amelio presentation URLs and 404 are excluded from sitemap', () => {
     assert.ok(config.includes("'" + path + "'"), 'missing sitemap exclusion for ' + path);
   }
 });
+
+
+test('Contact intake is preview-only until server and privacy are approved', () => {
+  const page=readFileSync(new URL('../src/pages/kontakt/index.astro', import.meta.url),'utf8');
+  const component=readFileSync(new URL('../src/components/ContactForm.astro', import.meta.url),'utf8');
+  assert.ok(page.includes('ContactForm'));
+  assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
+  assert.match(component,/type="submit" disabled/);
+  assert.match(component,/response.status === 200 && body\?\.status === 'success'/);
+  assert.match(component,/response.status === 503 && body\?\.status === 'failed'/);
+  assert.ok(component.includes('role="status"'));
+  assert.ok(page.includes("href={'mailto:' + contactEmail}"));
+});

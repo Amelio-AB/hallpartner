@@ -289,7 +289,13 @@ for (const item of [
   assert.ok(!html.includes('/prototype/hallpartner/'), 'prototype link on info route: ' + item.slug);
   assert.ok(!html.includes('andreas@amelio.se'), 'Amelio contact leaked on visitor page');
   assert.ok(!html.includes('tel:+46735054763'), 'developer phone leaked on visitor page');
-  assert.ok(!html.includes('<form'), 'unimplemented contact form leaked on ' + item.slug);
+  if (item.slug === 'kontakt') {
+    assert.ok(html.includes('id="hp-contact-form"') && html.includes('data-enabled="false"'),
+      'contact review form must exist but remain disabled');
+    assert.ok(html.includes('Skicka meddelande'), 'contact submit button missing');
+  } else {
+    assert.ok(!html.includes('<form'), 'unimplemented form on ' + item.slug);
+  }
   for (const id of item.ids) assert.ok(html.includes('id="' + id + '"'), 'missing anchor: ' + id);
   for (const phrase of item.has) assert.ok(html.includes(phrase), 'missing relevant info: ' + phrase);
   for (const href of [...html.matchAll(/\shref="(\/[^"#?]+\/)"/g)].map(m => m[1])) {
@@ -394,3 +400,20 @@ for (const file of sitemapFiles) {
   }
 }
 console.log('Verified visitor 404 and legacy sitemap exclusions without redirecting/deleting routes.');
+
+
+// AMP-001 and PHP intake are only code-ready: SMTP+privacy configuration is
+// intentionally absent from the published static Draft. No success simulation.
+{
+  const quote=readFileSync(join(dist,'offert','index.html'),'utf8');
+  assert.ok(quote.includes('name="robots" content="noindex,nofollow"'),'offert not noindex');
+  assert.ok(quote.includes('rel="canonical" href="https://hallpartner.se/offert/"'),'offert canonical');
+  assert.equal((quote.match(/<h1(?:\s|>)/gi)??[]).length,1,'offert one H1');
+  assert.ok(quote.includes('id="hp-offert-guide"')&&quote.includes('data-enabled="false"'),'offert send gate is on');
+  assert.ok(quote.includes('mottagningen har verifierats'),'offert disabled notice missing');
+  assert.ok(existsSync(join(dist,'api','lead.php')),'PHP intake bridge missing from dist');
+  for(const name of sitemapFiles) {
+    assert.ok(!readFileSync(join(dist,name),'utf8').includes('https://hallpartner.se/offert/'),'unapproved offert URL in sitemap');
+  }
+}
+console.log('Verified quote and contact drafts remain incapable of real submission.');

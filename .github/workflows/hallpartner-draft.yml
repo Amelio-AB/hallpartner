@@ -16,6 +16,14 @@ on:
       - 'src/pages/404.astro'
       - 'src/pages/stalhallar/**'
       - 'src/pages/kontakt/**'
+      - 'src/pages/offert/**'
+      - 'src/components/ContactForm.astro'
+      - 'src/config/hallpartner-quote.ts'
+      - 'src/styles/hallpartner-leads.css'
+      - 'public/api/lead.php'
+      - 'server/lead/**'
+      - 'tests/lead-intake.test.mjs'
+      - 'tests/lead-receiver.test.php'
       - 'src/pages/om-oss/**'
       - 'src/pages/sa-gar-det-till/**'
       - 'src/styles/hallpartner-info.css'
@@ -151,6 +159,7 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/ridhus/" HP_SCREENSHOT_PREFIX="site-ridhus" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/talthall/" HP_SCREENSHOT_PREFIX="site-talthall" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/kontakt/" HP_SCREENSHOT_PREFIX="site-kontakt" timeout 90s node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/offert/" HP_SCREENSHOT_PREFIX="site-offert" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/sa-gar-det-till/" HP_SCREENSHOT_PREFIX="site-process" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/om-oss/" HP_SCREENSHOT_PREFIX="site-om-oss" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/404.html" HP_SCREENSHOT_PREFIX="site-not-found" timeout 90s node scripts/capture-hallpartner-home.mjs
