@@ -132,6 +132,7 @@ jobs:
           php -l server/lead/receiver.php
           php -l server/lead/config.example.php
           php -l server/lead/smtp-smoke.php
+          git check-ignore -q server/lead/config.local.php
           if php server/lead/smtp-smoke.php >/dev/null 2>&1; then
             echo "::error::SMTP test must require explicit --send-test"
             exit 1
