@@ -48,7 +48,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          for path in robots.txt sitemap.xml sitemap_index.xml wp-sitemap.xml; do
+          for path in robots.txt sitemap.xml sitemap_index.xml wp-sitemap.xml page-sitemap.xml; do
             url="https://hallpartner.se/$path"
             file="$RUNNER_TEMP/hp-${path//\//_}"
             code=$(curl --silent --show-error --location --max-redirs 4 --connect-timeout 6 --max-time 20 \
