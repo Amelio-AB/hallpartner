@@ -43,6 +43,29 @@ $invalid = $contact;
 $invalid['answers']['contact.message'] = str_repeat('x', 20000);
 must(hp_validate_lead($invalid)['valid'] === false, 'oversized payload rejected');
 
+// Server-side limits must match the intended field lengths even if someone
+// bypasses HTML maxlength. Previously the x4 UTF-8 byte ceiling let 480
+// ASCII letters through a 120-character field.
+$invalid = $contact;
+$invalid['answers']['contact.name'] = str_repeat('a', 121);
+must(hp_validate_lead($invalid)['valid'] === false, 'ASCII name over 120 characters rejected');
+$invalid = $contact;
+$invalid['answers']['contact.company'] = str_repeat('å', 121);
+must(hp_validate_lead($invalid)['valid'] === false, 'Unicode company over 120 characters rejected');
+$invalid = $contact;
+$invalid['answers']['contact.message'] = str_repeat('a', 4001);
+must(hp_validate_lead($invalid)['valid'] === false, 'ASCII message over 4000 characters rejected');
+$invalid = $contact;
+$invalid['answers']['contact.name'] = 'Å';
+must(hp_validate_lead($invalid)['valid'] === false, 'single multibyte name character rejected');
+$invalid = $contact;
+$invalid['answers']['contact.message'] = 'åäöåäö';
+must(hp_validate_lead($invalid)['valid'] === false, 'six multibyte message characters below ten rejected');
+$validUnicode = $contact;
+$validUnicode['answers']['contact.name'] = 'Åsa';
+$validUnicode['answers']['contact.message'] = 'Åäö och flera bokstäver.';
+must(hp_validate_lead($validUnicode)['valid'] === true, 'valid Swedish Unicode contact accepted');
+
 $quote = [
     'contractVersion' => 1,
     'technicalId' => 'quote-flow',
@@ -71,6 +94,16 @@ must(hp_validate_lead($invalid)['valid'] === false, 'negative dimensions rejecte
 $invalid = $quote;
 $invalid['answers']['site.postal_code'] = '123 abc';
 must(hp_validate_lead($invalid)['valid'] === false, 'invalid postal code rejected');
+
+$invalid = $quote;
+$invalid['answers']['project.description'] = 'åäöåäö';
+must(hp_validate_lead($invalid)['valid'] === false, 'six multibyte project characters below ten rejected');
+$invalid = $quote;
+$invalid['answers']['project.description'] = str_repeat('a', 4001);
+must(hp_validate_lead($invalid)['valid'] === false, 'ASCII project description over 4000 characters rejected');
+$invalid = $quote;
+$invalid['answers']['site.city'] = str_repeat('x', 121);
+must(hp_validate_lead($invalid)['valid'] === false, 'city over 120 characters rejected');
 
 $dir = sys_get_temp_dir() . '/hp-intake-test-' . bin2hex(random_bytes(7));
 must(mkdir($dir, 0700), 'create private rate directory');
