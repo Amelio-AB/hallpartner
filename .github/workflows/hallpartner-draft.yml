@@ -135,6 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 16
     steps:
+      # Re-check cross-repository access after the owner added the scoped secret.
       - name: Check platform access (read-only secret, no output of token)
         id: platform-access
         env:
