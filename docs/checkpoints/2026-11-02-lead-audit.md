@@ -37,6 +37,6 @@ Nästa manuella steg när Andreas är tillbaka: kör **`php -l config.local.php`
 
 ## Stoppgräns och överlämning
 
-- Inga lösenord, serverfiler, produktsidor, Header, Hero, Footer, DNS, FTP, redirects, noindex, produktionsmiljövariabler eller kunduppgifter har lästs/ändrats.
+- Inga lösenord eller privata filer på Inleed har hämtats, lästs eller ändrats. Inga produktsidor, Header, Hero, Footer, DNS, FTP, redirects, noindex eller produktionsmiljövariabler har ändrats. Endast öppet granskningsbara källfiler i GitHub har lästs; ändringar begränsas till PR #6:s PHP-kod, syntetiska tester, CI och dokumentation.
 - Ingen merge till huvudgren eller PR #5. Inget mejl skickat, ingen ny publik endpoint aktiverad. Testade syntetiska uppgifter är inte riktiga leads.
 - **PR #6 är förberedelse för manuell granskning**, inte releasegodkännande. Innan någon merge: granska diffen och CI, dokumentera felhanteringen kring 422, samt planera idempotens/gallring och integritetsbeslut utan att utöka v1 till en kalkylator.
