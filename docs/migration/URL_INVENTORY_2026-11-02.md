@@ -20,14 +20,14 @@
 | `/stalhallar/talthall/` | 200 | `/stalhallar/talthall/` | Behåll URL | Nej |
 | `/om-oss/` | 200 | `/om-oss/` | Behåll URL | Nej |
 | `/kontakt/` | 200 | `/kontakt/` | Behåll URL | Ja |
-| `/offert/` | 200 | Saknas | Utred | Ja |
+| `/offert/` | 200 | `/offert/` (avstängd arbetsversion) | Utred | Ja |
 | `/quote-engine-test/` | 200 | Saknas | Utred | Ja |
 
 [Maskinläsbar karta](legacy-url-map.v01.json) innehåller precis de 12 sid-URL:erna, status/proveniens och inga aktiva redirects.
 
 ## Tre frågor som måste lösas innan lansering
 
-**1. `/offert/` – högsta prioritet.** Den nuvarande publika sidan visar ett offertformulär med måttfrågor. Astro saknar `/offert/` och AMP-001:s verkliga mottagare. Vi har inte skickat ett formulär eller verifierat att WordPress-mottagningen fungerar. Behåll kundens offertväg fram till godkänd fungerande ersättare; **redirecta inte till startsida eller kontakt som genväg**.
+**1. `/offert/` – högsta prioritet.** Den nuvarande publika sidan visar ett offertformulär med måttfrågor. Astro har nu en **avstängd AMP-001-arbetsversion på `/offert/`**, men saknar verifierad SMTP-mottagare och kundgodkänt fullständigt offertflöde. Vi har inte skickat ett formulär eller verifierat att WordPress-mottagningen fungerar. Behåll kundens offertväg fram till godkänd fungerande ersättare; **redirecta inte till startsida eller kontakt som genväg**.
 
 **2. `/kontakt/` – samma adress men försämrad funktion utan beslut.** Nuvarande WordPress har synligt kontaktformulär medan Astro visar telefon och `mailto:` utan backend. Välj och testa en verklig, kundgodkänd kontaktväg. Se HP-007/008.
 

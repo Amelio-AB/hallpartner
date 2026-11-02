@@ -151,9 +151,9 @@
       "label": "Offert",
       "actionProposal": "HOLD_FOR_DECISION",
       "destinationPath": null,
-      "astroRoute": null,
+      "astroRoute": "src/pages/offert/index.astro",
       "decision": "UNRESOLVED",
-      "functionGap": "Critical: public WordPress offer form has no built Astro replacement or verified receiver. Do not redirect to contact/home by default."
+      "functionGap": "Compact AMP-001 Astro preview now exists, but delivery is disabled pending verified SMTP and privacy notice. The full ten-step quote specification remains pending; no launch approval."
     },
     {
       "sourcePath": "/quote-engine-test/",

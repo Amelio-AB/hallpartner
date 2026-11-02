@@ -20,7 +20,14 @@ const siteMaps=readdirSync(dist).filter(x=>/^sitemap.*\.xml$/.test(x));
 assert.ok(siteMaps.length);
 for(const r of unresolved){
  assert.equal(r.destinationPath,null);
- assert.ok(!existsSync(join(dist,r.sourcePath.slice(1),'index.html')),'unapproved new route '+r.sourcePath);
+ if(r.sourcePath==='/offert/') {
+   const draftFile=join(dist,'offert','index.html');
+   assert.ok(existsSync(draftFile),'missing disabled AMP-001 draft');
+   const html=readFileSync(draftFile,'utf8');
+   assert.ok(html.includes('noindex,nofollow') && html.includes('data-enabled="false"'),'quote preview must be non-delivering');
+ } else {
+   assert.ok(!existsSync(join(dist,r.sourcePath.slice(1),'index.html')),'unapproved new route '+r.sourcePath);
+ }
  for(const file of siteMaps){
   assert.ok(!readFileSync(join(dist,file),'utf8').includes('https://hallpartner.se'+r.sourcePath),'unresolved URL in sitemap');
  }
