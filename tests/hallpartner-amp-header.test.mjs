@@ -39,7 +39,7 @@ test('AMP header review does not replace existing visitor shell',()=>{
   assert.ok(review.includes('fallback.hidden = true'));
   assert.ok(review.includes('id="hp-amp-header-fallback"'));
   assert.ok(review.includes('name="robots" content="noindex,nofollow"'));
-  assert.ok(review.includes('renderFooter(hallpartnerFooterConfig)'));
+  assert.ok(review.includes("renderFooter({ ...hallpartnerFooterConfig, variant: 'compact' })"));
   assert.ok(review.includes('<HallpartnerHomePrototype variant="site" />'));
 });
 test('three noindex review views stay outside sitemap',()=>{

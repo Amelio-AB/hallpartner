@@ -349,3 +349,18 @@ for (const route of [
   }
 }
 console.log('Verified all real Astro routes use exactly one intended Footer provider.');
+
+
+// AMP-002 is deliberately isolated: never count these noindex routes as
+// customer-visible pages or replace the current tested visitor Header.
+for (const route of ['prototype/amp/header','prototype/amp/header/mega','prototype/amp/header/solid']) {
+  const html=readFileSync(join(dist,route,'index.html'),'utf8');
+  assert.ok(html.includes('name="robots" content="noindex,nofollow"'),route+' must be noindex');
+  assert.equal((html.match(/<h1(?:\s|>)/gi)||[]).length,1,route+' must have exactly one H1');
+  assert.equal((html.match(/<header(?:\s|>)/gi)||[]).length,1,route+' must have exactly one SSR fallback Header');
+  assert.equal((html.match(/<footer(?:\s|>)/gi)||[]).length,1,route+' must have exactly one Footer');
+  assert.ok(html.includes('id="hp-amp-header-target"') && html.includes('id="hp-amp-header-fallback"'),route+' missing progressive-enhancement targets');
+  assert.ok(html.includes('aria-label="Reservnavigation"'),route+' missing no-JS navigation');
+  assert.ok(html.includes('class="af af--compact"'),route+' missing already-approved AMP-003');
+}
+console.log('Verified AMP-002 isolated prototype routes: noindex, SSR fallback and single Footer.');
