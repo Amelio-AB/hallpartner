@@ -36,6 +36,9 @@ on:
       - 'scripts/prepare-amp-footer.mjs'
       - 'tests/hallpartner-amp-footer.test.mjs'
       - 'package-lock.json'
+      - 'docs/migration/**'
+      - 'tests/url-migration.test.mjs'
+      - 'scripts/verify-url-migration-draft.mjs'
       - 'src/config/hallpartner-amp-header.ts'
       - 'src/components/prototype/HallpartnerAmpHeaderReview.astro'
       - 'src/pages/prototype/amp/header/**'
@@ -109,12 +112,16 @@ jobs:
         run: npm run lint
       - name: Contract tests (AMP-003 default, legacy rollback available)
         run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs tests/hallpartner-amp-header.test.mjs
+      - name: Validate legacy WordPress URL inventory (no redirects)
+        run: node --test tests/url-migration.test.mjs
       - name: Build static Astro site (no upload)
         run: npm run build
         env:
           NODE_ENV: production
       - name: Verify noindex, landmarks and sitemap exclusions in dist
         run: node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
+      - name: Verify same-path URL mapping in generated noindex Astro HTML
+        run: node scripts/verify-url-migration-draft.mjs
       - name: Verify full-page visuals, images and mobile menu with Chrome
         shell: bash
         run: |
