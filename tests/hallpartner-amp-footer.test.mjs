@@ -12,7 +12,7 @@ test('AMP-003 config is one compact shared footer, not an extra global CTA', () 
   assert.equal(AMP003_APPROVED_VERSION, '1.1.0');
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
-  assert.equal(config.groups.length, 3);
+  assert.equal(config.groups.length, 2);
   assert.ok(config.groups.every((group) => group.links.length > 0));
   assert.equal(config.contact.primary.href, '/kontakt/');
   assert.equal(new Set(allLinks.map((link) => link.href)).size, allLinks.length);

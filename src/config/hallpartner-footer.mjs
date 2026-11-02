@@ -13,18 +13,15 @@ export const hallpartnerFooterConfig = {
     logoSrc: '/images/logo_text_white.png',
     tagline: 'Hallar för verksamheter som behöver mer utrymme.',
   },
+  // AMP-003 desktop grid has three columns: two navigation groups + Contact.
   groups: [
     {
-      heading: 'Användningsområden',
+      heading: 'Hallar',
       links: [
+        { label: 'Alla hallar', href: '/stalhallar/' },
         { label: 'Lagerhallar', href: '/stalhallar/lagerhall/' },
         { label: 'Maskinhallar', href: '/stalhallar/maskinhall/' },
         { label: 'Ridhus', href: '/stalhallar/ridhus/' },
-      ],
-    },
-    {
-      heading: 'Utföranden',
-      links: [
         { label: 'Plåthallar', href: '/stalhallar/plathall/' },
         { label: 'Isolerade hallar', href: '/stalhallar/isolerad-hall/' },
         { label: 'Tälthallar', href: '/stalhallar/talthall/' },
@@ -33,7 +30,6 @@ export const hallpartnerFooterConfig = {
     {
       heading: 'Hallpartner',
       links: [
-        { label: 'Alla hallar', href: '/stalhallar/' },
         { label: 'Inför ditt projekt', href: '/sa-gar-det-till/' },
         { label: 'Om Hallpartner', href: '/om-oss/' },
         { label: 'Kontakt', href: '/kontakt/' },
