@@ -2,6 +2,8 @@
 import { Image } from 'astro:assets';
 import hallPoster from '../../assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg';
 import ImageGallery from '../../components/ImageGallery.astro';
+import ExpandableImageCards from '../../components/ExpandableImageCards.astro';
+import warehouse from '../../assets/images/legacy/Lagertalt-1536x1023.jpg';
 import exterior from '../../assets/images/legacy/plathall-1536x1152.jpeg';
 import interior from '../../assets/images/legacy/bygga-maskinhall.jpeg';
 import frame from '../../assets/images/legacy/Stalstomme-1-1536x1152.jpg';
@@ -26,22 +28,28 @@ const galleryImages = [
 ] as const;
 const useCases = [
   {
-    context: 'Lager och logistik',
+    category: 'Lager och logistik',
     title: 'Lagerhallar',
-    description: 'Förvaring börjar med vad som ska få plats. Tänk på varuflödet, hur lastning sker och hur ofta olika delar av hallen behöver nås.',
+    description: 'Planera för det som ska lagras, hur varorna flyttas och hur lastningen ska fungera.',
     href: '/stalhallar/lagerhall/',
+    linkText: 'Läs om lagerhallar',
+    image: { src: warehouse, alt: 'Två hallar med staplat gods och lastytor runt byggnaderna, sedda ovanifrån.' },
   },
   {
-    context: 'Maskiner och fordon',
+    category: 'Maskiner och fordon',
     title: 'Maskinhallar',
-    description: 'Maskinernas mått räcker inte alltid som planeringsunderlag. Portöppningar, körvägar och utrymme runt utrustningen spelar också roll.',
+    description: 'Ge maskiner och fordon plats med genomtänkta portar, körvägar och serviceytor.',
     href: '/stalhallar/maskinhall/',
+    linkText: 'Läs om maskinhallar',
+    image: { src: interior, alt: 'Stor maskin och lastbil i en rymlig hallbyggnad.' },
   },
   {
-    context: 'Hästverksamhet',
+    category: 'Hästverksamhet',
     title: 'Ridhus',
-    description: 'En hall för ridning behöver planeras utifrån aktiviteten, fri yta, ljusinsläpp och hur byggnaden ska användas under året.',
+    description: 'Utgå från ridytan, ljuset och hur anläggningen ska användas under året.',
     href: '/stalhallar/ridhus/',
+    linkText: 'Läs om ridhus',
+    image: { src: riding, alt: 'Ridhus med upplyst ridbana och ryttare.' },
   },
 ] as const;
 
@@ -188,18 +196,7 @@ const questions = [
             blir det lättare att diskutera konstruktion, material och andra val.
           </p>
         </div>
-        <div class="hp-stal__use-grid">
-          {useCases.map((item) => (
-            <article class="hp-stal__use-card">
-              <p class="hp-stal__card-context">{item.context}</p>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
-              <a href={item.href}>
-                Läs om {item.title.toLocaleLowerCase('sv-SE')} <span aria-hidden="true">→</span>
-              </a>
-            </article>
-          ))}
-        </div>
+        <ExpandableImageCards id="stalhallar-use-cards" items={useCases} />
         <div class="hp-stal__other-uses">
           <div>
             <h3>Industrihall, verkstad eller lantbruksbyggnad?</h3>

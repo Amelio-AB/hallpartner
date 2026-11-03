@@ -1,0 +1,49 @@
+---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { renderExpandableCardGrid } from '@amelio/web-platform/expandable-card-grid';
+import type { ExpandableCardItem, ExpandableCardGridConfig } from '@amelio/web-platform/expandable-card-grid';
+import '@amelio/web-platform/expandable-card-grid/style.css';
+import '../styles/hallpartner-expandable-cards.css';
+
+type Card = Omit<ExpandableCardItem, 'image'> & {
+  image: { src: ImageMetadata; alt: string };
+};
+interface Props {
+  id: string;
+  items: readonly Card[];
+}
+const { id, items } = Astro.props;
+const cards = await Promise.all(items.map(async ({ image, ...item }) => {
+  // Size for an expanded desktop card; cap candidates at the original width.
+  const width = Math.min(768, image.src.width);
+  // Cover crops need enough pixels for the card height, even on a narrow screen.
+  const ratio = image.src.width / image.src.height;
+  const mobileCover = Math.ceil(390 * ratio);
+  const desktopCover = Math.ceil(410 * ratio);
+  const optimized = await getImage({
+    src: image.src, width, format: 'webp',
+    widths: [...new Set([360, 640, 768, 960, 1280, image.src.width].filter(w => w <= image.src.width))],
+  });
+  return { ...item, image: {
+    src: optimized.src, alt: image.alt,
+    width: Number(optimized.attributes.width), height: Number(optimized.attributes.height),
+    srcset: optimized.srcSet.attribute,
+    sizes: '(max-width: 600px) max(calc(100vw - 32px), ' + mobileCover + 'px), (max-width: 900px) max(calc((100vw - 50px) / 2), ' + mobileCover + 'px), (max-width: 1440px) max(50vw, ' + desktopCover + 'px), ' + Math.max(610, desktopCover) + 'px',
+  } };
+}));
+// The enclosing section owns its H2. No duplicate section/group heading.
+const config: ExpandableCardGridConfig = {
+  id, headingLevel: 3, desktopColumns: 3, groups: [{ items: cards }],
+};
+---
+<div class="hp-expandable-cards" data-hp-expandable-cards>
+  <Fragment set:html={renderExpandableCardGrid(config)} />
+</div>
+<script>
+  import { enhanceExpandableCardGrid } from '@amelio/web-platform/expandable-card-grid';
+  // Static Astro page, as in the official consumer example; no client router.
+  document.querySelectorAll<HTMLElement>('[data-hp-expandable-cards] > .ecg').forEach(root => {
+    enhanceExpandableCardGrid(root);
+  });
+</script>

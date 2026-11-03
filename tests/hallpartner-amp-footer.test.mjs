@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const allLinks = config.groups.flatMap((group) => group.links);
 
 test('AMP-003 config is one compact shared footer, not an extra global CTA', () => {
-  assert.equal(AMP003_APPROVED_VERSION, '1.1.0');
+  assert.equal(AMP003_APPROVED_VERSION, '1.4.0');
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
   assert.equal(config.groups.length, 2);

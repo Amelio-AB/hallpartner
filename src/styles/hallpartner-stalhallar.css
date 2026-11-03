@@ -97,7 +97,6 @@
 .hp-stal__button:hover { background: var(--hp-cta-hover); text-decoration: none !important; }
 .hp-stal__button span,
 .hp-stal__text-link span,
-.hp-stal__use-card a span,
 .hp-stal__choice a span,
 .hp-stal__inline-link span {
   font-size: 1.18rem;
@@ -164,16 +163,6 @@
 }
 .hp-stal__heading-row > p { max-width: 29rem; margin-bottom: 0; line-height: 1.7; }
 .hp-stal__uses { background: #F4F4F0; }
-.hp-stal__use-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
-.hp-stal__use-card {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 21rem;
-  padding: clamp(1.5rem, 2.5vw, 2.5rem);
-  border: 1px solid #CAD3CC;
-  background: #FFFFFF;
-}
 .hp-stal__card-context {
   margin-bottom: .9rem;
   color: var(--hp-link-on-light, #236F31);
@@ -181,18 +170,6 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .07em;
-}
-.hp-stal__use-card h3 { margin-bottom: 1rem; font-size: clamp(1.55rem, 2vw, 2.1rem); }
-.hp-stal__use-card > p:not(.hp-stal__card-context) { color: #3C5144; line-height: 1.65; }
-.hp-stal__use-card a {
-  display: inline-flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: .5rem;
-  margin-top: auto;
-  padding-top: 1.6rem;
-  color: var(--hp-link-on-light, #236F31) !important;
-  font-weight: 700;
 }
 .hp-stal__other-uses {
   display: flex;
@@ -263,8 +240,8 @@
   .hp-stal__planning-grid, .hp-stal__faq-grid { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
 }
 @media (max-width: 740px) {
-  .hp-stal__use-grid, .hp-stal__choice-grid { grid-template-columns: minmax(0, 1fr); }
-  .hp-stal__use-card, .hp-stal__choice { min-height: 0; }
+  .hp-stal__choice-grid { grid-template-columns: minmax(0, 1fr); }
+  .hp-stal__choice { min-height: 0; }
   .hp-stal__heading-row { align-items: flex-start; flex-direction: column; gap: 1rem; }
   .hp-stal__hero { padding-block: 3rem 4rem; }
   .hp-stal__guide { padding: 1.6rem; }
