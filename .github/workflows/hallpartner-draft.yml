@@ -198,6 +198,8 @@ jobs:
             echo "CDP visual preview failed to start" > visual-review/validated-ERROR.txt
             exit 1
           fi
+          # Validate AMP-002 first; only then capture the broader site's regression screenshots.
+          timeout 180s node scripts/capture-hallpartner-amp-header.mjs
           timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/" HP_SCREENSHOT_PREFIX="site-home" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/hallar/" HP_SCREENSHOT_PREFIX="hallar" timeout 90s node scripts/capture-hallpartner-home.mjs
@@ -215,7 +217,6 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/404.html" HP_SCREENSHOT_PREFIX="site-not-found" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          timeout 180s node scripts/capture-hallpartner-amp-header.mjs
 
       - name: Preserve validated visual review artifacts
         if: always()
