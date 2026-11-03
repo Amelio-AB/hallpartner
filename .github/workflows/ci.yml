@@ -2,23 +2,74 @@ name: CI
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: [main]
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
   contents: read
 
 jobs:
   ci:
-    uses: Amelio-AB/github-workflows/.github/workflows/astro-ci.yml@v1
-    with:
-      node-version: "22.12.0"
-      working-directory: "."
-      lint-command: npm run lint
-      typecheck-command: npm run check
-      build-command: npm run build
-      artifact-path: dist
-      artifact-name: hallpartner-ci-dist
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install SHA-locked private AMP dependencies using read-only auth
+        shell: bash
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$AMP_GITHUB_READ_TOKEN" ]; then
+            echo "::error::Private AMP requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
+            exit 1
+          fi
+          # The credential is used only during install; never stored in Git URLs,
+          # npm lockfile, scripts, or build/test environment.
+          cat > "$RUNNER_TEMP/amp-askpass.sh" <<'SH'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "$AMP_GITHUB_READ_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SH
+          chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
+          trap 'rm -f "$RUNNER_TEMP/amp-askpass.sh"' EXIT
+          # Translate the locked SSH URL to HTTPS without persisting credentials/config.
+          export GIT_CONFIG_COUNT=2
+          export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_0=ssh://git@github.com/
+          export GIT_CONFIG_KEY_1=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_1=git@github.com:
+          GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
+      - name: Validate approved AMP package source after install
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
+          const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
+          const pkg=JSON.parse(readFileSync('package.json','utf8'));
+          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
+          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
+             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
+             ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
+             ||lock.packages[''].dependencies['@amelio/web-platform']!==pkg.dependencies['@amelio/web-platform']
+             ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
+            throw Error('AMP private source pin is incorrect');
+          console.log('Approved AMP package v1.4.0 locked source verified.');
+          JS
+      - name: Astro and TypeScript
+        run: npm run check
+      - name: ESLint
+        run: npm run lint
+      - name: Build static site (no deployment)
+        run: npm run build

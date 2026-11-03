@@ -8,51 +8,16 @@ on:
     paths:
       - '.github/workflows/hallpartner-draft.yml'
       - 'astro.config.mjs'
-      - 'src/config/hallpartner-draft-pages.ts'
-      - 'src/config/hallpartner-brand.ts'
-      - 'src/layouts/HallpartnerDraftLayout.astro'
-      - 'src/layouts/HallpartnerSiteLayout.astro'
-      - 'src/pages/index.astro'
-      - 'src/pages/404.astro'
-      - 'src/pages/stalhallar/**'
-      - 'src/pages/kontakt/**'
-      - 'src/pages/offert/**'
-      - 'src/components/ContactForm.astro'
-      - 'src/config/hallpartner-quote.ts'
-      - 'src/styles/hallpartner-leads.css'
-      - 'public/api/lead.php'
-      - 'server/lead/**'
-      - 'tests/lead-intake.test.mjs'
-      - 'tests/lead-receiver.test.php'
-      - 'src/pages/om-oss/**'
-      - 'src/pages/sa-gar-det-till/**'
-      - 'src/styles/hallpartner-info.css'
-      - 'src/styles/hallpartner-stalhallar.css'
-      - 'src/styles/hallpartner-hall-detail.css'
-      - 'src/styles/hallpartner-hall-variants.css'
-      - 'src/styles/hallpartner-draft.css'
-      - 'src/pages/prototype/hallpartner/**'
-      - 'src/components/prototype/**'
-      - 'src/styles/hallpartner-home.css'
-      - 'scripts/capture-hallpartner-home.mjs'
-      - 'tests/hallpartner-draft.test.mjs'
-      - 'tests/amp-brand.test.mjs'
-      - 'scripts/verify-hallpartner-draft.mjs'
+      - 'tsconfig.json'
+      - 'eslint.config.js'
       - 'package.json'
-      - 'src/config/hallpartner-footer.mjs'
-      - 'src/styles/hallpartner-amp-footer.css'
-      - 'scripts/prepare-amp-footer.mjs'
-      - 'tests/hallpartner-amp-footer.test.mjs'
       - 'package-lock.json'
+      - 'src/**'
+      - 'public/**'
+      - 'server/lead/**'
+      - 'scripts/**'
+      - 'tests/**'
       - 'docs/migration/**'
-      - 'tests/url-migration.test.mjs'
-      - 'scripts/verify-url-migration-draft.mjs'
-      - 'src/config/hallpartner-amp-header.ts'
-      - 'src/components/prototype/HallpartnerAmpHeaderReview.astro'
-      - 'src/pages/prototype/amp/header/**'
-      - 'src/styles/hallpartner-amp-header-review.css'
-      - 'tests/hallpartner-amp-header.test.mjs'
-      - 'scripts/capture-hallpartner-amp-header.mjs'
 
 permissions:
   contents: read
@@ -64,7 +29,7 @@ concurrency:
 jobs:
   draft-validation:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
         with:
@@ -86,7 +51,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$AMP_GITHUB_READ_TOKEN" ]; then
-            echo "::error::AMP-003 requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
+            echo "::error::Private AMP requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
             exit 1
           fi
           # The credential is used only during install; never stored in Git URLs,
@@ -100,30 +65,36 @@ jobs:
           esac
           SH
           chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
+          trap 'rm -f "$RUNNER_TEMP/amp-askpass.sh"' EXIT
+          # Translate the locked SSH URL to HTTPS without persisting credentials/config.
+          export GIT_CONFIG_COUNT=2
+          export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_0=ssh://git@github.com/
+          export GIT_CONFIG_KEY_1=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_1=git@github.com:
           GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
-      - name: Validate approved AMP-003 package source after install
+      - name: Validate approved AMP package source after install
         run: |
           node --input-type=module <<'JS'
           import { readFileSync } from 'node:fs';
           const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
           const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
-          const sha='a11811bfbf51416e7fe7d58aed4551be77914d65';
-          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.1.0'
-             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.1.0'
+          const pkg=JSON.parse(readFileSync('package.json','utf8'));
+          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
+          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
+             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
+             ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
+             ||lock.packages[''].dependencies['@amelio/web-platform']!==pkg.dependencies['@amelio/web-platform']
              ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
-            throw Error('AMP-003 private release pin is incorrect');
-          console.log('Approved AMP-003 v1.1.0 locked source verified.');
+            throw Error('AMP private source pin is incorrect');
+          console.log('Approved AMP package v1.4.0 locked source verified.');
           JS
       - name: Astro and TypeScript
         run: npm run check
       - name: ESLint
         run: npm run lint
-      - name: Contract tests (AMP-003 default, legacy rollback available)
-        run: node --experimental-strip-types --test tests/amp-brand.test.mjs tests/hallpartner-draft.test.mjs tests/hallpartner-amp-footer.test.mjs tests/hallpartner-amp-header.test.mjs
-      - name: Validate legacy WordPress URL inventory (no redirects)
-        run: node --test tests/url-migration.test.mjs
-      - name: AMP-001 customer configuration and disabled review transport
-        run: node --experimental-strip-types --test tests/lead-intake.test.mjs
+      - name: All Node contracts (including Footer and disabled forms)
+        run: node --test tests/*.test.mjs
       - name: PHP intake syntax and independent receiver validation
         run: |
           php -v
@@ -201,6 +172,8 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           timeout 180s node scripts/capture-hallpartner-amp-header.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_DIR="visual-review/amp006" timeout 240s node scripts/verify-hallpartner-amp006.mjs
+          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_DIR="visual-review/gallery" timeout 240s node scripts/verify-hallpartner-gallery.mjs
 
       - name: Preserve validated visual review artifacts
         if: always()
