@@ -52,6 +52,11 @@ jobs:
           git rev-parse HEAD > reports/preview/commit.txt
           node --version
           npm --version
+      - name: Validate workflow YAML and shell
+        run: |-
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq shellcheck >/dev/null
+          bash scripts/preview/lint-workflows.sh
       - name: Quality and all Node regressions
         run: |-
           npm run check
@@ -110,11 +115,6 @@ jobs:
           node scripts/preview/payload.mjs verify
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
-      - name: Validate workflow YAML and shell
-        run: |-
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq shellcheck >/dev/null
-          bash scripts/preview/lint-workflows.sh
       - name: Install FTPS client for read-only PR target proof
         if: github.event_name == 'pull_request'
         run: sudo apt-get install -y -qq lftp >/dev/null
