@@ -74,6 +74,16 @@
 | HP-032 | P1 | Före implementation | Öppen | Andreas | Sidmallar och bilder | Säkerställ autentisk Hallpartner-logotyp, bildbeskärning, tillgänglighet och desktop/mobil-layout enligt Direction 02; klart efter godkänd visuell granskning. | [direction], [beslut] |
 | HP-046 | P1 | Före lansering | Öppen | Andreas + Peter/Jimmy | Bildproduktion: startsida, Stålhallar, Lagerhallar, Maskinhallar och senare referenser | **Planera och genomför prioriterad egen fotografering** enligt [bildplan v0.1][photo-plan] och [F01–F18-fotolistan][photo-list]. Klart när de första valda bilderna har fotograferats, faktiska objekt och Hallpartners roll dokumenterats, nödvändiga publiceringsrättigheter verifierats (HP-018), ansvarig godkänt urvalet och mobil-/desktopbeskärningen testats (HP-032). Bilder behöver inte blockera annat text-/kodarbete. | [photo-plan], [photo-list], HP-017–018, HP-032 |
 
+## Navigation och grafiska förbättringar
+
+> Inkomna önskemål från Andreas 2026-11-03. Dessa är **öppna utvecklingsuppgifter**, inte beställd eller färdig implementation. Prioritet och fas nedan är preliminära och kan omprövas vid nästa designgenomgång.
+
+| ID | Prioritet | Behövs senast | Status | Ansvar/underlag | Berör | Uppgift och avslutskrav | Källa |
+|---|---|---|---|---|---|---|---|
+| HP-047 | P2 | Senare | Öppen | Andreas/utveckling | Header, navigation, sök | **Utred sökfält i headern.** Bedöm först om webbplatsens innehållsmängd motiverar intern sökning och hur sökindex/resultat ska fungera utan onödiga beroenden. Om det införs: anpassa för mobil/desktop, tangentbord och skärmläsare samt testa sökresultat och tomma träffar. Klart först när funktionen är användbar och visuellt godkänd. | Andreas önskemål 2026-11-03 |
+| HP-048 | P1 | Före lansering | Öppen | Andreas/utveckling | Header, primär CTA | **Byt headerknappens synliga text från ”Kontakt” till exempelvis ”Få en offert”.** Välj slutlig formulering och kontrollera att den leder till ett verkligt fungerande nästa steg. Länka till fungerande kontaktväg så länge /offert/ inte tar emot förfrågningar; koppla inte till inaktivt formulär innan HP-005–008 är godkända. Kontrollera tydlighet och layout på mobil/desktop. | Andreas önskemål 2026-11-03, HP-005–008 |
+| HP-049 | P2 | Senare | Öppen | Andreas/design + utveckling | Footer, utvalda undersidor | **Återanvänd Hallpartners befintliga symbol som grafiskt element i Footer och på utvalda andra sidor.** Undersök placering och storlek i befintlig AMP-003 Footer och sidmallar; undvik att symbolen konkurrerar med innehållet. Säkerställ rätt logotypfil, kontrast, responsiv beskärning och korrekt hantering av dekorativ grafik. Klart efter visuell granskning på mobil/desktop. | Andreas önskemål 2026-11-03, HP-032 |
+
 ## SEO och URL-migrering
 
 | ID | Prioritet | Behövs senast | Status | Ansvar/underlag | Berör | Uppgift och avslutskrav | Källa |
