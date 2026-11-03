@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@amelio/web-platform": "github:Amelio-AB/amelio-web-platform#fec9ca01b3c0d4bc9002fa21832a51cf51009749",
-    "astro": "^7.1.3",
+    "astro": "^7.3.3",
     "@astrojs/sitemap": "^3.6.0"
   },
   "devDependencies": {
