@@ -1,0 +1,163 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-info.css';
+
+// Names and role labels reflect Hallpartner's previously published Om oss page,
+// as indexed in 2026. Peter/Jimmy must verify current roles and publication
+// before launch. Earlier personal biographies / tenure / responsibility claims
+// are deliberately not inherited here. Photos await F12 image rights.
+const people = [
+  {
+    name: 'Jimmy Gustafsson',
+    role: 'Säljare och projektledare för hallar',
+    initials: 'JG',
+  },
+  {
+    name: 'Peter Fridland',
+    role: 'Säljare och projektledare för hallar',
+    initials: 'PF',
+  },
+] as const;
+
+const topics = [
+  {
+    label: 'Användningsområdet',
+    body: 'Vad ska få plats i byggnaden och hur ska utrymmet användas?',
+  },
+  {
+    label: 'Byggplatsen',
+    body: 'Var planeras hallen och vilka förutsättningar känner du redan till?',
+  },
+  {
+    label: 'Projektets omfattning',
+    body: 'Vilka frågor om utförande, ansvar och underlag behöver klarläggas?',
+  },
+] as const;
+---
+
+<HallpartnerSiteLayout
+  title="Om Hallpartner"
+  description="Lär känna Hallpartner och personerna bakom verksamheten. Läs om hur du kan börja planera ett hallprojekt och hur du kommer i kontakt."
+>
+  <div class="hp-info hp-info--about">
+    <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Om Hallpartner</span>
+    </nav>
+
+    <section class="hp-info__hero" aria-labelledby="about-title">
+      <div class="hp-draft-rail hp-info__hero-grid">
+        <div class="hp-info__intro">
+          <p class="hp-info__eyebrow">Hallpartner / Om oss</p>
+          <h1 id="about-title">Lär känna <em>Hallpartner.</em></h1>
+          <p class="hp-info__lead">
+            Hallpartner är inriktat på hallar för verksamheter som behöver
+            mer utrymme. Oavsett om det gäller lager, maskiner eller
+            ridverksamhet börjar planeringen med att förstå vad byggnaden
+            behöver fungera för.
+          </p>
+          <div class="hp-info__hero-actions">
+            <a class="hp-info__button" href="#teamet">
+              Möt personerna <span aria-hidden="true">↓</span>
+            </a>
+            <a class="hp-info__textlink" href="/kontakt/">
+              Ta kontakt <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <aside class="hp-info__guide" aria-labelledby="about-guide-heading">
+          <h2 class="hp-info__guide-title" id="about-guide-heading">Börja med ditt hallbehov.</h2>
+          <p>
+            Du behöver inte bestämma halltyp innan du vet hur utrymmet
+            ska användas. På webbplatsen kan du jämföra olika
+            användningar, utföranden och frågor inför ett hallprojekt.
+          </p>
+          <a href="/stalhallar/">
+            Se hallöversikten <span aria-hidden="true">→</span>
+          </a>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="hp-info__jump" aria-label="På den här sidan">
+      <div class="hp-draft-rail hp-info__jump-inner">
+        <span>På den här sidan</span>
+        <a href="#teamet">Personerna</a>
+        <a href="#om-inriktning">Att planera en hall</a>
+        <a href="#om-kontakt">Kontakt</a>
+      </div>
+    </nav>
+
+    <section class="hp-info__section hp-info__section--light" id="teamet" aria-labelledby="about-team-title">
+      <div class="hp-draft-rail">
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Människorna bakom</p>
+            <h2 id="about-team-title">Möt personerna bakom Hallpartner.</h2>
+          </div>
+          <p>
+            Här får du veta vilka du kan komma i kontakt med.
+            Vi kompletterar med porträtt och mer information när
+            presentationen och bildmaterialet är godkända.
+          </p>
+        </div>
+        <div class="hp-info__people">
+          {people.map((person) => (
+            <article class="hp-info__person">
+              <div class="hp-info__person-monogram" aria-hidden="true">{person.initials}</div>
+              <div class="hp-info__person-content">
+                <p class="hp-info__person-label">Hallpartner</p>
+                <h3>{person.name}</h3>
+                <p>{person.role}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-info__section hp-info__section--soft" id="om-inriktning" aria-labelledby="about-focus-title">
+      <div class="hp-draft-rail hp-info__split">
+        <div>
+          <p class="hp-info__eyebrow">Inför ett hallprojekt</p>
+          <h2 id="about-focus-title">Det som behöver bli tydligt innan ett förslag kan jämföras.</h2>
+          <p>
+            En hall kan beskrivas efter vad den ska användas till, hur
+            den byggs och vilka egenskaper den behöver. Det är olika
+            val som hänger ihop. Därför hjälper det att samla några
+            grunduppgifter innan diskussionen går vidare.
+          </p>
+          <a class="hp-info__textlink" href="/sa-gar-det-till/">
+            Läs om förberedelser inför projektet <span aria-hidden="true">→</span>
+          </a>
+        </div>
+        <div class="hp-info__stack">
+          {topics.map((topic) => (
+            <article>
+              <h3>{topic.label}</h3>
+              <p>{topic.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="hp-info__end" id="om-kontakt" aria-labelledby="about-contact-title">
+      <div class="hp-draft-rail hp-info__end-inner">
+        <div>
+          <p class="hp-info__eyebrow">Nästa steg</p>
+          <h2 id="about-contact-title">Har du en hall i tankarna?</h2>
+          <p>
+            Berätta vad du planerar och var hallen ska stå.
+            På kontaktsidan hittar du Hallpartners e-post och telefon.
+          </p>
+        </div>
+        <a class="hp-info__button" href="/kontakt/">
+          Kontakta Hallpartner <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

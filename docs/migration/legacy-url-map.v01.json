@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "observedDate": "2026-11-02",
+  "scope": "PARTIAL_XML_SITEMAP_PLUS_PUBLIC_NAVIGATION_NOT_GSC_FULL_CRAWL",
+  "status": "PROPOSED_NO_REDIRECT_AUTHORIZATION",
+  "evidence": {
+    "sitemap": "https://hallpartner.se/page-sitemap.xml",
+    "robots": "https://hallpartner.se/robots.txt",
+    "githubSurvey": "https://github.com/Amelio-AB/hallpartner/actions/runs/41405561051",
+    "htmlUrlCount": 12,
+    "mediaLocEntries": 41,
+    "distinctMedia": 32
+  },
+  "testedNormalization": [
+    {
+      "from": "https://www.hallpartner.se/",
+      "to": "https://hallpartner.se/",
+      "redirectHops": 1
+    },
+    {
+      "from": "http://hallpartner.se/",
+      "to": "https://hallpartner.se/",
+      "redirectHops": 1
+    },
+    {
+      "from": "https://hallpartner.se/stalhallar",
+      "to": "https://hallpartner.se/stalhallar/",
+      "redirectHops": 1
+    },
+    {
+      "from": "https://hallpartner.se/offert",
+      "to": "https://hallpartner.se/offert/",
+      "redirectHops": 1
+    }
+  ],
+  "oldPages": [
+    {
+      "sourcePath": "/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Startsidan",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/",
+      "astroRoute": "src/pages/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Stålhallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/",
+      "astroRoute": "src/pages/stalhallar/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/lagerhall/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Lagerhallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/lagerhall/",
+      "astroRoute": "src/pages/stalhallar/lagerhall/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/maskinhall/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Maskinhallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/maskinhall/",
+      "astroRoute": "src/pages/stalhallar/maskinhall/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/plathall/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Plåthallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/plathall/",
+      "astroRoute": "src/pages/stalhallar/plathall/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/isolerad-hall/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Isolerade hallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/isolerad-hall/",
+      "astroRoute": "src/pages/stalhallar/isolerad-hall/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/ridhus/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Ridhus",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/ridhus/",
+      "astroRoute": "src/pages/stalhallar/ridhus/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/stalhallar/talthall/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Tälthallar",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/stalhallar/talthall/",
+      "astroRoute": "src/pages/stalhallar/talthall/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/om-oss/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Om Hallpartner",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/om-oss/",
+      "astroRoute": "src/pages/om-oss/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": null
+    },
+    {
+      "sourcePath": "/kontakt/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Kontakt",
+      "actionProposal": "KEEP_PATH_200",
+      "destinationPath": "/kontakt/",
+      "astroRoute": "src/pages/kontakt/index.astro",
+      "decision": "PENDING_LAUNCH_APPROVAL",
+      "functionGap": "Live WordPress shows a form; Astro currently only has telephone and mailto, no form receiver."
+    },
+    {
+      "sourcePath": "/offert/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Offert",
+      "actionProposal": "HOLD_FOR_DECISION",
+      "destinationPath": null,
+      "astroRoute": "src/pages/offert/index.astro",
+      "decision": "UNRESOLVED",
+      "functionGap": "Compact AMP-001 Astro preview now exists, but delivery is disabled pending verified SMTP and privacy notice. The full ten-step quote specification remains pending; no launch approval."
+    },
+    {
+      "sourcePath": "/quote-engine-test/",
+      "sourceGetStatus": 200,
+      "sourceObservedDate": "2026-11-02",
+      "label": "Offertmotortest",
+      "actionProposal": "HOLD_FOR_DECISION",
+      "destinationPath": null,
+      "astroRoute": null,
+      "decision": "UNRESOLVED",
+      "functionGap": "Public 200 page in WordPress sitemap but not main navigation. Examine purpose and traffic before deciding 200/301/410."
+    }
+  ],
+  "newAstroOnly": [
+    "/sa-gar-det-till/"
+  ],
+  "proposedRedirects": [],
+  "activatedRedirects": [],
+  "stillUnknown": [
+    "Google Search Console URLs/queries/backlinks",
+    "non-sitemap CMS pages and media",
+    "GA4/server logs",
+    "all host and trailing-slash variants",
+    "form handlers and legal receiving flow",
+    "media publishing rights"
+  ]
+}

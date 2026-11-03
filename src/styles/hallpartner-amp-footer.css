@@ -1,0 +1,11 @@
+/* Host-only alignment for approved AMP-003. Do not copy or fork its CSS. */
+.hp-site .af__frame {
+  max-width: calc(var(--hp-rail) + 3rem);
+  padding-inline: 1.5rem;
+}
+
+@media (max-width: 48rem) {
+  .hp-site .af__frame {
+    padding-inline: 1.15rem;
+  }
+}

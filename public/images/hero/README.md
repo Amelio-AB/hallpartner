@@ -1,14 +1,6 @@
-# public/images/hero/
+# Hero-material
 
-Bilder för hero-sektioner (helskärm).
-
-**Behövs:**
-
-- Drönarbild över en färdig hall (används på startsidan, se `src/components/Hero.astro`)
-
-**Riktlinjer (docs/DESIGN_SYSTEM.md):**
-
-- Drönarbilder, industri, montage, färdiga hallar, svenska miljöer
-- Undvik stockbilder med poserande människor, överdriven HDR, onaturliga färger
-- Hög upplösning (minst 2400px bredd) för skärpa på stora skärmar
-- Bilden ska fungera med en mörk overlay och vänsterställd text ovanpå
+Aktiv Hero finns i `src/components/prototype/HallpartnerHomePrototype.astro`.
+Den använder `public/images/hallpartner-hero-temporary.webp`, en tillfällig
+AI-konceptbild. Proveniens finns i `docs/MIGRATION_FIRST_PASS.md`.
+Mappen bevaras för framtida rättighetskontrollerat originalmaterial.

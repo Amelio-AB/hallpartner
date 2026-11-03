@@ -13,12 +13,31 @@ yarn-error.log*
 pnpm-debug.log*
 
 
-# environment variables
+# Local environment and npm credentials (examples may be tracked)
 .env
-.env.production
+.env.*
+!.env.example
+!.env.*.example
+.npmrc
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# AMP-003 build-only artifacts: generated from private package; never vendored
+.generated/
+public/generated/amp-003-footer.css
+
+# Never commit SMTP credentials or server-only vendor/runtime data
+server/lead/config.local.php
+server/lead/vendor/
+server/lead/private-rates/
+
+# Local QA output and incremental TypeScript cache
+visual-review/
+*.tsbuildinfo
+
+# Local receiver runtime data
+server/lead/rates/

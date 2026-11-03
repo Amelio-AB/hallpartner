@@ -1,0 +1,164 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface GalleryImage {
+  src: ImageMetadata;
+  alt: string;
+  title: string;
+  caption: string;
+  position?: string;
+}
+
+interface Props {
+  id: string;
+  heading: string;
+  description: string;
+  images: readonly GalleryImage[];
+}
+
+const { id, heading, description, images } = Astro.props;
+---
+
+<section class="hp-gallery" id={id} aria-labelledby={`${id}-heading`} data-image-gallery>
+  <div class="hp-draft-rail">
+    <div class="hp-gallery__heading">
+      <div>
+        <p class="hp-gallery__eyebrow">Hallar i bild</p>
+        <h2 id={`${id}-heading`}>{heading}</h2>
+      </div>
+      <p>{description}</p>
+    </div>
+    <p class="hp-gallery__hint" id={`${id}-hint`}>Svep eller använd piltangenterna för att se fler bilder.</p>
+    <ol
+      class="hp-gallery__track"
+      id={`${id}-track`}
+      tabindex="0"
+      aria-label="Bilder av hallar och deras användning"
+      aria-describedby={`${id}-hint`}
+      data-gallery-track
+    >
+      {images.map((image) => (
+        <li class="hp-gallery__slide">
+          <figure>
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[320, 480, 640, Math.min(1280, image.src.width)]}
+              sizes="(max-width: 740px) 86vw, (max-width: 1260px) 48vw, 598px"
+              loading="lazy"
+              style={image.position ? `object-position: ${image.position};` : undefined}
+            />
+            <figcaption>
+              <strong>{image.title}</strong>
+              <span>{image.caption}</span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ol>
+    <div class="hp-gallery__controls" data-gallery-controls hidden>
+      <button type="button" aria-label="Föregående bild" aria-controls={`${id}-track`} aria-disabled="true" data-gallery-previous>
+        <span aria-hidden="true">←</span> Föregående
+      </button>
+      <p class="hp-gallery__status" role="status" aria-live="polite" aria-atomic="true" data-gallery-status></p>
+      <button type="button" aria-label="Nästa bild" aria-controls={`${id}-track`} aria-disabled="false" data-gallery-next>
+        Nästa <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-image-gallery]').forEach((gallery) => {
+    const track = gallery.querySelector<HTMLOListElement>('[data-gallery-track]');
+    const previous = gallery.querySelector<HTMLButtonElement>('[data-gallery-previous]');
+    const next = gallery.querySelector<HTMLButtonElement>('[data-gallery-next]');
+    const status = gallery.querySelector<HTMLElement>('[data-gallery-status]');
+    const controls = gallery.querySelector<HTMLElement>('[data-gallery-controls]');
+    const slides = Array.from(gallery.querySelectorAll<HTMLLIElement>('.hp-gallery__slide'));
+    if (!track || !previous || !next || !status || !controls || slides.length < 2) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const nearest = () => slides.reduce((best, slide, index) =>
+      Math.abs(slide.offsetLeft - track.scrollLeft) < Math.abs(slides[best].offsetLeft - track.scrollLeft) ? index : best, 0);
+
+    const updateButtons = () => {
+      const atStart = track.scrollLeft <= 2;
+      const atEnd = track.scrollWidth - track.clientWidth - track.scrollLeft <= 2;
+      // aria-disabled preserves focus when a focused button reaches an end.
+      previous.setAttribute('aria-disabled', String(atStart));
+      next.setAttribute('aria-disabled', String(atEnd));
+    };
+    const update = () => {
+      updateButtons();
+      const visible = slides.map((slide, index) => ({ slide, index })).filter(({ slide }) =>
+        slide.offsetLeft >= track.scrollLeft - 2 && slide.offsetLeft + slide.offsetWidth <= track.scrollLeft + track.clientWidth + 2);
+      const first = (visible[0]?.index ?? nearest()) + 1;
+      const last = (visible.at(-1)?.index ?? nearest()) + 1;
+      const label = first === last ? `Bild ${first} av ${slides.length}` : `Bilder ${first}–${last} av ${slides.length}`;
+      if (status.textContent !== label) status.textContent = label;
+    };
+    const goTo = (index: number) => {
+      const target = slides[Math.max(0, Math.min(slides.length - 1, index))];
+      track.scrollTo({ left: target.offsetLeft, behavior: reducedMotion.matches ? 'instant' : 'smooth' });
+    };
+    previous.addEventListener('click', () => {
+      if (previous.getAttribute('aria-disabled') !== 'true') goTo(nearest() - 1);
+    });
+    next.addEventListener('click', () => {
+      if (next.getAttribute('aria-disabled') !== 'true') goTo(nearest() + 1);
+    });
+    track.addEventListener('keydown', (event) => {
+      if (event.target !== track) return;
+      const targets: Record<string, number> = { ArrowLeft: nearest() - 1, ArrowRight: nearest() + 1, Home: 0, End: slides.length - 1 };
+      if (!(event.key in targets)) return;
+      event.preventDefault();
+      goTo(targets[event.key]);
+    });
+    let scrollTimer: ReturnType<typeof setTimeout>;
+    track.addEventListener('scroll', () => {
+      updateButtons();
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(update, 120);
+    }, { passive: true });
+    new ResizeObserver(update).observe(track);
+    controls.hidden = false;
+    update();
+  });
+</script>
+
+<style>
+  .hp-gallery { padding-block: clamp(4rem, 7.5vw, 7rem); background: #E3E8E2; color: var(--hp-deep); }
+  .hp-gallery__heading { display: flex; justify-content: space-between; align-items: end; gap: 1.5rem 4rem; margin-bottom: 2rem; }
+  .hp-gallery__heading > div { max-width: 39rem; }
+  .hp-gallery__heading h2 { font-size: clamp(2.3rem, 3.8vw, 4rem); font-weight: 700; margin-bottom: 0; text-wrap: balance; }
+  .hp-gallery__heading > p { max-width: 28rem; margin-bottom: 0; line-height: 1.7; }
+  .hp-gallery__eyebrow { color: var(--hp-link-on-light, #236F31); font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+  .hp-gallery__hint { margin-bottom: 1rem; color: #42564B; font-size: .88rem; }
+  .hp-gallery__track { position: relative; display: flex; gap: 1.5rem; margin: 0; padding: 0 0 1rem; list-style: none; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; scrollbar-color: #4E7A5B #D0DBD1; }
+  .hp-gallery__slide { flex: 0 0 calc((100% - 1.5rem) / 2); min-width: 0; scroll-snap-align: start; }
+  .hp-gallery figure { margin: 0; height: 100%; background: #FFF; }
+  .hp-gallery img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
+  .hp-gallery figcaption { padding: 1.3rem 1.5rem; line-height: 1.6; }
+  .hp-gallery figcaption strong { display: block; font-size: 1.16rem; margin-bottom: .4rem; }
+  .hp-gallery figcaption span { color: #3C5144; }
+  .hp-gallery__controls { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-top: 1.2rem; }
+  .hp-gallery__controls[hidden] { display: none; }
+  .hp-gallery__controls button { display: inline-flex; align-items: center; justify-content: center; gap: .75rem; min-height: 44px; padding: .6rem 1rem; border: 1px solid #47624F; background: transparent; border-radius: 4px; color: inherit; font: inherit; font-size: .88rem; font-weight: 700; cursor: pointer; }
+  .hp-gallery__controls button:hover:not([aria-disabled="true"]) { background: #FFF; }
+  .hp-gallery__controls button[aria-disabled="true"] { color: #526256; border-color: #849888; cursor: default; }
+  .hp-gallery__status { margin: 0; font-size: .85rem; text-align: center; }
+  .hp-gallery__track:focus-visible, .hp-gallery button:focus-visible { outline: 3px solid #236F31; outline-offset: 4px; }
+  @media (max-width: 740px) {
+    .hp-gallery__heading { flex-direction: column; align-items: start; }
+    .hp-gallery__slide { flex-basis: 86%; }
+    .hp-gallery__track { gap: 1rem; }
+    .hp-gallery figcaption { padding: 1rem; }
+    .hp-gallery__controls { flex-wrap: wrap; }
+    .hp-gallery__status { flex-basis: 100%; order: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-gallery__track { scroll-behavior: auto; }
+  }
+</style>

@@ -1,0 +1,80 @@
+name: Hallpartner private PHPMailer vendor package (no deploy)
+
+on:
+  push:
+    branches:
+      - feature/hallpartner-v1-skeleton-20261031
+    paths:
+      - '.github/workflows/hallpartner-phpmailer-vendor.yml'
+      - 'server/lead/composer.json'
+      - 'server/lead/composer.lock'
+
+permissions:
+  contents: read
+
+jobs:
+  vendor-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout locked Hallpartner source (read-only)
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Show PHP and Composer environment
+        run: |
+          php --version
+          composer --version
+      - name: Install exactly the private receiver's Composer dependencies
+        working-directory: server/lead
+        env:
+          COMPOSER_NO_INTERACTION: '1'
+        run: |
+          set -euo pipefail
+          composer validate --no-check-publish
+          if test -f composer.lock; then
+            composer install --no-dev --prefer-dist --no-progress --no-interaction --classmap-authoritative
+          else
+            composer update --no-dev --prefer-dist --no-progress --no-interaction --classmap-authoritative
+          fi
+          composer audit --locked
+          test -s vendor/autoload.php
+          test -f vendor/phpmailer/phpmailer/src/PHPMailer.php
+          php -r "require 'vendor/autoload.php'; if (!class_exists('PHPMailer\\PHPMailer\\PHPMailer')) exit(1); echo 'PHPMailer loader verified', PHP_EOL;"
+      - name: Build clean portable private vendor archive
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          import base64, hashlib
+          root=Path('server/lead')
+          lock=root/'composer.lock'
+          vendor=root/'vendor'
+          assert lock.is_file() and vendor.is_dir()
+          paths=sorted(p for p in vendor.rglob('*') if p.is_file())
+          assert len(paths)>5
+          assert all(p.is_relative_to(vendor) and not p.is_symlink() for p in paths)
+          archive=Path('hallpartner-phpmailer-vendor.zip')
+          with ZipFile(archive,'w',compression=ZIP_DEFLATED,compresslevel=8) as z:
+              for p in paths:
+                  z.write(p,arcname=p.relative_to(root).as_posix())
+          with ZipFile(archive) as z:
+              names=z.namelist()
+              assert 'vendor/autoload.php' in names
+              assert 'vendor/phpmailer/phpmailer/src/PHPMailer.php' in names
+              assert all(name.startswith('vendor/') and '..' not in Path(name).parts for name in names)
+          print('HP_LOCK_B64='+base64.b64encode(lock.read_bytes()).decode())
+          print('VENDOR_ZIP_SHA256='+hashlib.sha256(archive.read_bytes()).hexdigest())
+          print('VENDOR_ZIP_BYTES='+str(archive.stat().st_size))
+          print('VENDOR_FILES='+str(len(paths)))
+          PY
+      - name: Attach vendor archive and genuine composer.lock (no credentials)
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-private-phpmailer-dependencies
+          path: |
+            hallpartner-phpmailer-vendor.zip
+            server/lead/composer.lock
+          retention-days: 7
+          if-no-files-found: error

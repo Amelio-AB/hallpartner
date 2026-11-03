@@ -1,0 +1,122 @@
+[
+  {
+    "pr": "2",
+    "head": "54f175c24a28153316dbdd6944cf91a810a4af38",
+    "mergeBase": "92ce87c7ddeef89adbc0400bf0b301b4aab2da8f",
+    "alreadyAncestor": false,
+    "files": [
+      "AGENTS.md",
+      "README.md",
+      "docs/PROJECT_DECISIONS.md",
+      "docs/TODO.md"
+    ],
+    "overlap": [
+      "AGENTS.md",
+      "README.md"
+    ],
+    "mergeExit": 1,
+    "conflicts": [
+      "AGENTS.md",
+      "README.md"
+    ],
+    "stderr": ""
+  },
+  {
+    "pr": "4",
+    "head": "bdc1c38145d2b3a41d20a446d5b9d7e0bf3cc537",
+    "mergeBase": "92ce87c7ddeef89adbc0400bf0b301b4aab2da8f",
+    "alreadyAncestor": false,
+    "files": [
+      "docs/CONTENT_GROWTH_STRATEGY.md",
+      "docs/IMAGE_PLAN.md",
+      "docs/PHOTO_SHOT_LIST.md",
+      "docs/SEO_SITEMAP_V02.md",
+      "docs/WEBSITE_PLAN.md",
+      "docs/architecture/AMP_006_ADOPTION_REVIEW.md",
+      "docs/architecture/AMP_1_2_INTEGRATION.md",
+      "docs/audits/2026-10-31-readiness.md",
+      "docs/content/README.md",
+      "docs/page-briefs/isolerad-hall-v01.md",
+      "docs/page-briefs/kontakt-v01.md",
+      "docs/page-briefs/lagerhall-v01.md",
+      "docs/page-briefs/maskinhall-v01.md",
+      "docs/page-briefs/om-hallpartner-v01.md",
+      "docs/page-briefs/plathall-v01.md",
+      "docs/page-briefs/ridhus-v01.md",
+      "docs/page-briefs/sa-gar-det-till-v01.md",
+      "docs/page-briefs/stalhallar-v01.md",
+      "docs/page-briefs/talthall-v01.md"
+    ],
+    "overlap": [],
+    "mergeExit": 0,
+    "conflicts": [],
+    "stderr": ""
+  },
+  {
+    "pr": "6",
+    "head": "34f333029c8a2bcf39a3f0832ac97d560159e2ac",
+    "mergeBase": "db0d81082cf8ad4438ec830675e6107801ebacf3",
+    "alreadyAncestor": false,
+    "files": [
+      ".github/workflows/hallpartner-intake-audit.yml",
+      "docs/SMTP_TEST_AMELIO_ACCOUNT.md",
+      "docs/checkpoints/2026-11-02-lead-audit.md",
+      "server/lead/validator.php",
+      "tests/lead-receiver.test.php"
+    ],
+    "overlap": [],
+    "mergeExit": 0,
+    "conflicts": [],
+    "stderr": ""
+  },
+  {
+    "pr": "7",
+    "head": "f0fda2360d9bc3c2aee5a5e1b34a86dacdfbdca6",
+    "mergeBase": "db0d81082cf8ad4438ec830675e6107801ebacf3",
+    "alreadyAncestor": false,
+    "files": [
+      ".github/workflows/hallpartner-draft.yml",
+      "docs/AMP_002_HEADER_REVIEW.md",
+      "package-lock.json",
+      "package.json",
+      "scripts/capture-hallpartner-amp-header.mjs",
+      "scripts/prepare-amp-footer.mjs",
+      "src/components/prototype/HallpartnerAmpHeaderReview.astro",
+      "src/config/hallpartner-footer.mjs",
+      "src/pages/prototype/amp/header/solid/index.astro",
+      "tests/hallpartner-amp-footer.test.mjs",
+      "tests/hallpartner-amp-header.test.mjs"
+    ],
+    "overlap": [
+      ".github/workflows/hallpartner-draft.yml",
+      "package-lock.json",
+      "package.json",
+      "scripts/prepare-amp-footer.mjs",
+      "src/config/hallpartner-footer.mjs",
+      "tests/hallpartner-amp-footer.test.mjs"
+    ],
+    "mergeExit": 1,
+    "conflicts": [
+      ".github/workflows/hallpartner-draft.yml",
+      "package-lock.json",
+      "src/config/hallpartner-footer.mjs",
+      "tests/hallpartner-amp-footer.test.mjs"
+    ],
+    "stderr": ""
+  },
+  {
+    "pr": "9",
+    "head": "1f43788914b50039f5ad8038bc1e33446af0f145",
+    "mergeBase": "db0d81082cf8ad4438ec830675e6107801ebacf3",
+    "alreadyAncestor": false,
+    "files": [
+      "src/components/ContactForm.astro",
+      "src/lib/contact-field-errors.ts",
+      "tests/contact-field-errors.test.mjs"
+    ],
+    "overlap": [],
+    "mergeExit": 0,
+    "conflicts": [],
+    "stderr": ""
+  }
+]

@@ -1,9 +1,5 @@
-# public/images/details/
+# Detaljbilder
 
-Detaljbilder som stärker känslan av hantverk och kvalitet: materialval,
-konstruktionsdetaljer, montage i närbild.
-
-**Används i:** sektioner som `StatementSection.astro` ("Mer än en byggnad.")
-och andra platser där en stor, stämningsfull bild kompletterar text.
-
-**Riktlinjer:** se docs/DESIGN_SYSTEM.md — bildstil.
+Bevarad planeringsmapp från visionskonceptet för material, konstruktion och montage.
+Ingen aktiv komponent använder filer här. Äldre StatementSection är borttagen som
+oanvänd och finns kvar i Git-historiken.

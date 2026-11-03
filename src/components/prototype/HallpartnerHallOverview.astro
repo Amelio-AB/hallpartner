@@ -1,0 +1,166 @@
+---
+import { Image } from 'astro:assets';
+import lagerhall from '../../assets/images/lagerhall.jpg';
+import maskinhall from '../../assets/images/maskinhall.jpeg';
+import talthall from '../../assets/images/talthall.jpg';
+import '../../styles/hallpartner-halls.css';
+
+const base = '/prototype/hallpartner/';
+const useCases = [
+  {
+    title: 'Lagerhallar',
+    context: 'Förvaring och logistik',
+    text: 'Börja med vad som ska förvaras, hur varor ska komma in och vilka ytor som behöver vara tillgängliga.',
+    href: base + 'lagerhallar/',
+    image: lagerhall,
+    alt: 'Hallbyggnad som används som illustration av lager. Inte ett verifierat Hallpartner-projekt.',
+  },
+  {
+    title: 'Maskinhallar',
+    context: 'Maskiner och arbetsytor',
+    text: 'Utgå från maskinernas platsbehov, rörelser och vilken åtkomst verksamheten behöver.',
+    href: base + 'maskinhallar/',
+    image: maskinhall,
+    alt: 'Hallbyggnad som används som illustration av maskinhall. Inte ett verifierat Hallpartner-projekt.',
+  },
+  {
+    title: 'Ridhus',
+    context: 'Ridverksamhet',
+    text: 'En hall för ridning behöver planeras utifrån användning, yta och de praktiska förutsättningarna på platsen.',
+    href: base + 'ridhus/',
+    image: talthall,
+    alt: 'Illustration av hallkonstruktion, inte en verifierad ridhusleverans från Hallpartner.',
+  },
+] as const;
+---
+
+<div class="hp-halls">
+  <section class="hp-halls-hero" aria-labelledby="hp-halls-title">
+    <div class="hp-draft-rail hp-halls-hero__grid">
+      <div class="hp-halls-hero__copy">
+        <p class="hp-halls-kicker">Hallpartner / Hallöversikt</p>
+        <h1 id="hp-halls-title">Vilken sorts hall behöver du?</h1>
+        <p class="hp-halls-hero__lead">
+          En hall kan beskrivas på flera sätt: efter hur den används, hur den byggs och vilka
+          egenskaper den behöver. Här kan du hitta en väg vidare utifrån ditt projekt.
+        </p>
+        <div class="hp-halls-hero__actions">
+          <a class="hp-halls-button" href="#hp-halls-usage">Jämför användningsområden <span aria-hidden="true">↓</span></a>
+          <a class="hp-halls-link" href={base + 'kontakt/'}>Till kontaktutkastet <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hp-halls-hero__note">Visuell arbetsversion. Halltyper, bilder och produktuppgifter ska verifieras före kundpublicering.</p>
+      </div>
+      <div class="hp-halls-hero__media" aria-label="Exempelbilder för layoutgranskning">
+        <figure class="hp-halls-hero__photo hp-halls-hero__photo--large">
+          <Image src={lagerhall} alt="Hallbyggnad i demonstrationsmaterial, inte en verifierad Hallpartner-referens." loading="eager" fetchpriority="high" />
+          <figcaption>Illustrationsbild · rättigheter utreds</figcaption>
+        </figure>
+        <figure class="hp-halls-hero__photo hp-halls-hero__photo--small">
+          <Image src={maskinhall} alt="Mörk hallbyggnad i demonstrationsmaterial." loading="eager" />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <div class="hp-halls-wayfinding">
+    <div class="hp-draft-rail hp-halls-wayfinding__inner">
+      <p>Tre olika frågor i samma projekt</p>
+      <a href="#hp-halls-usage">Användning <span aria-hidden="true">↓</span></a>
+      <a href="#hp-halls-structure">Utförande <span aria-hidden="true">↓</span></a>
+      <a href="#hp-halls-insulation">Isolering <span aria-hidden="true">↓</span></a>
+    </div>
+  </div>
+
+  <section class="hp-halls-usage" id="hp-halls-usage" aria-labelledby="hp-halls-usage-title">
+    <div class="hp-draft-rail hp-halls-usage__layout">
+      <div class="hp-halls-usage__intro">
+        <p class="hp-halls-kicker">Utgå från användningen</p>
+        <h2 id="hp-halls-usage-title">Vad ska hända inne i hallen?</h2>
+        <p>
+          En bra utgångspunkt är vad ytan ska användas till. Den frågan hjälper
+          till att sortera behovet innan material och konstruktion diskuteras.
+        </p>
+        <p class="hp-halls-usage__fine">Sidorna nedan är planerade ämnesingångar, inte ett bekräftat produktutbud.</p>
+      </div>
+      <div class="hp-halls-usage__items">
+        {useCases.map((item) => (
+          <article class="hp-halls-usecase">
+            <a href={item.href} class="hp-halls-usecase__link">
+              <div class="hp-halls-usecase__image">
+                <Image src={item.image} alt={item.alt} loading="lazy" />
+              </div>
+              <div class="hp-halls-usecase__body">
+                <p class="hp-halls-usecase__context">{item.context}</p>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </div>
+              <span class="hp-halls-usecase__arrow" aria-hidden="true">↗</span>
+            </a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-halls-structure" id="hp-halls-structure" aria-labelledby="hp-halls-structure-title">
+    <div class="hp-draft-rail">
+      <div class="hp-halls-structure__heading">
+        <div>
+          <p class="hp-halls-kicker hp-halls-kicker--light">Nästa fråga</p>
+          <h2 id="hp-halls-structure-title">Hur ska hallen vara uppbyggd?</h2>
+        </div>
+        <p>
+          Tält och plåt beskriver olika utföranden. De är inte samma sak som
+          användningsområdet – och ett utförande kan behöva utredas för flera slags verksamhet.
+        </p>
+      </div>
+      <div class="hp-halls-structure__grid">
+        <article class="hp-halls-structure__option">
+          <p class="hp-halls-structure__type">Utförande</p>
+          <h3>Tälthallar</h3>
+          <p>Orientering om ett möjligt konstruktionsspår och vilka frågor som behöver utredas inför ett val.</p>
+          <a href={base + 'talthallar/'}>Utforska tälthallar <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="hp-halls-structure__option">
+          <p class="hp-halls-structure__type">Utförande</p>
+          <h3>Plåthallar</h3>
+          <p>Orientering om plåt som utförande, skilt från frågan om hallen ska användas för lager, maskiner eller annat.</p>
+          <a href={base + 'plathallar/'}>Utforska plåthallar <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-halls-insulation" id="hp-halls-insulation" aria-labelledby="hp-halls-insulation-title">
+    <div class="hp-draft-rail hp-halls-insulation__grid">
+      <div class="hp-halls-insulation__image">
+        <Image src={maskinhall} alt="Hallbyggnad i demonstrationsmaterial, använd enbart för layouttest." loading="lazy" />
+        <span>Bild för layouttest · ej verifierad referens</span>
+      </div>
+      <div class="hp-halls-insulation__copy">
+        <p class="hp-halls-kicker">En egenskap, inte en egen användning</p>
+        <h2 id="hp-halls-insulation-title">Behöver hallen vara isolerad?</h2>
+        <p>
+          Isolering är en fråga som kan bli aktuell för olika halltyper.
+          Vilka lösningar som passar beror på hur hallen ska användas och behöver undersökas i det enskilda projektet.
+        </p>
+        <a class="hp-halls-secondary" href={base + 'isolerade-hallar/'}>Läs om isolering <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-halls-contact" aria-labelledby="hp-halls-contact-title">
+    <div class="hp-draft-rail hp-halls-contact__grid">
+      <div>
+        <p class="hp-halls-kicker hp-halls-kicker--light">När du vill gå vidare</p>
+        <h2 id="hp-halls-contact-title">Börja med behovet. Resten kan utredas.</h2>
+        <p>Beskriv användning, ungefärligt platsbehov och var hallen är tänkt att stå. Du behöver inte välja konstruktion direkt.</p>
+      </div>
+      <a class="hp-halls-button" href={base + 'kontakt/'}>Se kontaktutkastet <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+  <p class="hp-halls-disclaimer hp-draft-rail">
+    Ursprungligt fulltextutkast saknas. Alla texter och bilder är ett internt arbetsmaterial.
+    Inga halltyper, leveransvillkor eller bildrättigheter har kundverifierats.
+  </p>
+</div>

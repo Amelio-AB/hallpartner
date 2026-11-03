@@ -1,5 +1,7 @@
 # DESIGN_SYSTEM.md
 
+> Status 2026-11-03: Visionskonceptets ursprungliga design. Den aktiva arbetsprofilen finns i src/styles/hallpartner-draft.css (varianten .hp-site) och src/config/hallpartner-footer.mjs. hallpartner-brand.ts beskriver prototypens Direction 02. Återställ inte aktiva färger utifrån den äldre paletten nedan. Se [aktuell struktur](../README.md).
+
 # Hallpartner Vision Site -- Design System
 
 ## Design Vision

@@ -1,0 +1,81 @@
+---
+import HallpartnerDraftLayout from '../../../layouts/HallpartnerDraftLayout.astro';
+import { draftHref, draftPageSpecs, type DraftPageSpec } from '../../../config/hallpartner-draft-pages';
+
+export function getStaticPaths() {
+  return draftPageSpecs.filter((page) => !['start', 'hallar', 'lagerhallar', 'maskinhallar'].includes(page.slug)).map((page) => ({
+    params: { slug: page.slug },
+    props: { page },
+  }));
+}
+
+interface Props {
+  page: DraftPageSpec;
+}
+
+const { page } = Astro.props;
+const related = page.relatedSlugs.map((slug) => draftPageSpecs.find((item) => item.slug === slug)).filter(
+  (item): item is DraftPageSpec => item !== undefined,
+);
+const intendedHero = page.hero === 'fullbleed'
+  ? 'Fullbredds-Hero enligt nytt designbeslut – AMP-004 är ännu inte installerad'
+  : page.hero === 'signature'
+    ? 'Planerad AMP-004 Signature Hero – ej installerad'
+    : 'Planerad AMP-005 Page Intro Hero – ej installerad';
+---
+
+<HallpartnerDraftLayout
+  title={page.label}
+  description={`Intern sidstruktur för ${page.label}. Originaltext och verksamhetsfakta är ännu inte verifierade.`}
+  currentSlug={page.slug}
+>
+  <section class:list={['hp-draft-intro', page.hero === 'intro' && 'hp-draft-intro--light']}>
+    <div class="hp-draft-rail">
+      <p class="hp-draft-eyebrow">Arbetsstruktur · föreslagen URL: {page.intendedPath}</p>
+      <h1>{page.label}</h1>
+      <p class="hp-draft-lead">{page.purpose}</p>
+      <p class="hp-draft-status">{intendedHero}</p>
+    </div>
+  </section>
+
+  <div class="hp-draft-rail hp-draft-content">
+    <div class="hp-draft-note" role="note">
+      <strong>Ingen publiceringsklar sida.</strong> Ursprungligt fulltextutkast saknas. Punkterna nedan är redaktionella instruktioner, inte Hallpartners produkt- eller leveranspåståenden.
+    </div>
+
+    <section aria-labelledby="section-plan">
+      <h2 id="section-plan">Planerade innehållsdelar</h2>
+      <ul class="hp-draft-cards">
+        {page.sectionPrompts.map((section) => (
+          <li>
+            <article class="hp-draft-card">
+              <h3>{section.heading}</h3>
+              <p>{section.editorialNote}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    {related.length > 0 && (
+      <section aria-labelledby="related-pages">
+        <hr class="hp-draft-divider" />
+        <h2 id="related-pages">Relaterade sidor i arbetsplanen</h2>
+        <ul class="hp-draft-cards">
+          {related.map((item) => (
+            <li>
+              <article class="hp-draft-card">
+                <h3>{item.label}</h3>
+                <p>{item.purpose}</p>
+                <a href={draftHref(item.slug)}>Gå till utkastet</a>
+              </article>
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+
+    <hr class="hp-draft-divider" />
+    <a class="hp-draft-cta" href="/prototype/hallpartner/">Till alla planerade sidor</a>
+  </div>
+</HallpartnerDraftLayout>

@@ -1,10 +1,10 @@
 {
-  "name": "hallpartner-vision-site",
+  "name": "hallpartner-site",
   "type": "module",
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=24"
   },
   "scripts": {
     "dev": "astro dev",
@@ -13,10 +13,14 @@
     "astro": "astro",
     "check": "astro check",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "predev": "node scripts/prepare-amp-footer.mjs",
+    "prebuild": "node scripts/prepare-amp-footer.mjs",
+    "test:footer": "node --test tests/hallpartner-amp-footer.test.mjs"
   },
   "dependencies": {
-    "astro": "^7.1.3",
+    "@amelio/web-platform": "github:Amelio-AB/amelio-web-platform#fec9ca01b3c0d4bc9002fa21832a51cf51009749",
+    "astro": "^7.3.3",
     "@astrojs/sitemap": "^3.6.0"
   },
   "devDependencies": {

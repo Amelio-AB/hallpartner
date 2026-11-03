@@ -1,0 +1,18 @@
+/* Hallpartner theme: public AMP-006 custom properties only. */
+.hp-expandable-cards .ecg {
+  --ecg-background: #071A16;
+  --ecg-text: #FFFFFF;
+  --ecg-category: #FFFFFF;
+  --ecg-description: #FFFFFF;
+  --ecg-accent: #B5D9B9;
+  --ecg-overlay: linear-gradient(0deg, rgb(7 26 22 / .96) 0%, rgb(7 26 22 / .78) 48%, rgb(7 26 22 / .24) 100%);
+  --ecg-border: rgb(7 26 22 / .18);
+  --ecg-divider: rgb(181 217 185 / .4);
+  --ecg-focus: #236F31;
+  --ecg-radius: 14px;
+  --ecg-min-height: 410px;
+  --ecg-min-height-tablet: 390px;
+  --ecg-min-height-mobile: 390px;
+  --ecg-font-heading: inherit;
+  --ecg-image-position: center 65%;
+}

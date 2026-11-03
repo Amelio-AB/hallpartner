@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "observedDate": "2026-11-02",
+  "source": "https://hallpartner.se/page-sitemap.xml",
+  "status": "DISCOVERED_NOT_LICENSED_OR_MIGRATED",
+  "sitemapLocOccurrences": 41,
+  "uniqueImages": 32,
+  "items": [
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/stalhallar.jpg",
+      "oldPath": "/wp-content/uploads/2025/12/stalhallar.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/lagerhall-med-enkelplat.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/lagerhall-med-enkelplat.jpg",
+      "occurrences": 2,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/isolerad-hall-med-pvc-tak-768x697.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/isolerad-hall-med-pvc-tak-768x697.jpg",
+      "occurrences": 2,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/logo_basic-kopiainverterad-768x461.png",
+      "oldPath": "/wp-content/uploads/2026/03/logo_basic-kopiainverterad-768x461.png",
+      "occurrences": 2,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2024/03/stalhall-hero-1.webp",
+      "oldPath": "/wp-content/uploads/2024/03/stalhall-hero-1.webp",
+      "occurrences": 5,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2024/03/Hallpartner-2.svg",
+      "oldPath": "/wp-content/uploads/2024/03/Hallpartner-2.svg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/kontakt_foto_Jimmy.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/kontakt_foto_Jimmy.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/kontakt_foto_Peter.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/kontakt_foto_Peter.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Stalstomme-2-768x576.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Stalstomme-2-768x576.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844-768x617.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844-768x617.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Ridhall-med-eneklplat-och-ljusinslapp-768x576.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Ridhall-med-eneklplat-och-ljusinslapp-768x576.jpg",
+      "occurrences": 2,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/228-768x430.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/228-768x430.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Ridhus-e1773849834546-768x616.png",
+      "oldPath": "/wp-content/uploads/2026/03/Ridhus-e1773849834546-768x616.png",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Stalstomme-1-768x576.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Stalstomme-1-768x576.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/maskinhall-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/maskinhall-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/maskinhall-ritning-768x546.webp",
+      "oldPath": "/wp-content/uploads/2025/12/maskinhall-ritning-768x546.webp",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/bygga-maskinhall-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/bygga-maskinhall-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/maskinhall_bygga-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/maskinhall_bygga-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Lagerbyggbad-med-Sandwixh-768x528.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Lagerbyggbad-med-Sandwixh-768x528.jpg",
+      "occurrences": 2,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/lagerbyggnad-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/lagerbyggnad-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/lagerlokal-stalstomme-768x576.jpg",
+      "oldPath": "/wp-content/uploads/2025/12/lagerlokal-stalstomme-768x576.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/lagerhall-fonster-768x589.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/lagerhall-fonster-768x589.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Lagerhall-2-2.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Lagerhall-2-2.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/plathallar-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/plathallar-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Isolerad-lagerbyggnad-med-Sandwich-1-768x1024.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Isolerad-lagerbyggnad-med-Sandwich-1-768x1024.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Lagarhall-med-eneklplat.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Lagarhall-med-eneklplat.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/plathall-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/plathall-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/talthall-768x576.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/talthall-768x576.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/talthallar-768x512.jpg",
+      "oldPath": "/wp-content/uploads/2025/12/talthallar-768x512.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/talthall-768x576.jpeg",
+      "oldPath": "/wp-content/uploads/2025/12/talthall-768x576.jpeg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2025/12/talthall-LED-768x392.jpg",
+      "oldPath": "/wp-content/uploads/2025/12/talthall-LED-768x392.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    },
+    {
+      "oldUrl": "https://hallpartner.se/wp-content/uploads/2026/03/Lagertalt-768x512.jpg",
+      "oldPath": "/wp-content/uploads/2026/03/Lagertalt-768x512.jpg",
+      "occurrences": 1,
+      "rights": "UNVERIFIED",
+      "newUrl": null,
+      "action": "REVIEW"
+    }
+  ]
+}

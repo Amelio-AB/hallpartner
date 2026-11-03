@@ -1,0 +1,179 @@
+name: AMP readiness - Node 24 - no deployment
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/amp-readiness.yml
+      - src/config/hallpartner-brand.ts
+      - tests/amp-brand.test.mjs
+      - package.json
+      - package-lock.json
+
+permissions:
+  contents: read
+
+concurrency:
+  group: amp-readiness-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Existing Astro site and brand contracts on Node 24
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Record exact runtime and revision
+        run: |
+          mkdir -p reports
+          node --version | tee reports/node-version.txt
+          npm --version | tee reports/npm-version.txt
+          git rev-parse HEAD | tee reports/commit.txt
+      - name: Install SHA-locked private AMP dependencies using read-only auth
+        shell: bash
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$AMP_GITHUB_READ_TOKEN" ]; then
+            echo "::error::Private AMP requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
+            exit 1
+          fi
+          # The credential is used only during install; never stored in Git URLs,
+          # npm lockfile, scripts, or build/test environment.
+          cat > "$RUNNER_TEMP/amp-askpass.sh" <<'SH'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "$AMP_GITHUB_READ_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SH
+          chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
+          trap 'rm -f "$RUNNER_TEMP/amp-askpass.sh"' EXIT
+          # Translate the locked SSH URL to HTTPS without persisting credentials/config.
+          export GIT_CONFIG_COUNT=2
+          export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_0=ssh://git@github.com/
+          export GIT_CONFIG_KEY_1=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_1=git@github.com:
+          GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
+      - name: Validate approved AMP package source after install
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
+          const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
+          const pkg=JSON.parse(readFileSync('package.json','utf8'));
+          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
+          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
+             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
+             ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
+             ||lock.packages[''].dependencies['@amelio/web-platform']!==pkg.dependencies['@amelio/web-platform']
+             ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
+            throw Error('AMP private source pin is incorrect');
+          console.log('Approved AMP package v1.4.0 locked source verified.');
+          JS
+      - name: Check Astro and TypeScript
+        run: npm run check
+      - name: Lint
+        run: npm run lint
+      - name: Test Direction 02 color contracts
+        run: node --experimental-strip-types --test tests/amp-brand.test.mjs
+      - name: Build existing site - no deployment
+        run: npm run build
+        env:
+          NODE_ENV: production
+      - name: Preserve build and runtime evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-node24-${{ github.event.pull_request.head.sha }}
+          path: |
+            dist/
+            reports/
+          if-no-files-found: error
+          retention-days: 7
+
+  dependency-audit:
+    name: Current dependency audit - no automatic fixes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install SHA-locked private AMP dependencies using read-only auth
+        shell: bash
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "$AMP_GITHUB_READ_TOKEN" ]; then
+            echo "::error::Private AMP requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
+            exit 1
+          fi
+          # The credential is used only during install; never stored in Git URLs,
+          # npm lockfile, scripts, or build/test environment.
+          cat > "$RUNNER_TEMP/amp-askpass.sh" <<'SH'
+          #!/bin/sh
+          case "$1" in
+            *Username*) printf '%s\n' 'x-access-token' ;;
+            *Password*) printf '%s\n' "$AMP_GITHUB_READ_TOKEN" ;;
+            *) exit 1 ;;
+          esac
+          SH
+          chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
+          trap 'rm -f "$RUNNER_TEMP/amp-askpass.sh"' EXIT
+          # Translate the locked SSH URL to HTTPS without persisting credentials/config.
+          export GIT_CONFIG_COUNT=2
+          export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_0=ssh://git@github.com/
+          export GIT_CONFIG_KEY_1=url.https://github.com/.insteadOf
+          export GIT_CONFIG_VALUE_1=git@github.com:
+          GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
+      - name: Validate approved AMP package source after install
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
+          const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
+          const pkg=JSON.parse(readFileSync('package.json','utf8'));
+          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
+          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
+             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
+             ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
+             ||lock.packages[''].dependencies['@amelio/web-platform']!==pkg.dependencies['@amelio/web-platform']
+             ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
+            throw Error('AMP private source pin is incorrect');
+          console.log('Approved AMP package v1.4.0 locked source verified.');
+          JS
+      - name: Audit all dependencies including development dependencies
+        run: |
+          mkdir -p reports
+          git rev-parse HEAD > reports/commit.txt
+          npm audit --audit-level=high --json > reports/npm-audit.json
+      - name: Audit locked PHP dependencies (no install or SMTP)
+        if: always()
+        run: composer audit --locked --no-dev --working-dir=server/lead --format=json > reports/composer-audit.json
+      - name: Preserve audit even when findings fail the gate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hallpartner-audit-${{ github.event.pull_request.head.sha }}
+          path: reports/
+          if-no-files-found: error
+          retention-days: 7
