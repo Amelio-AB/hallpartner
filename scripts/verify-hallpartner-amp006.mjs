@@ -19,6 +19,9 @@ const profile = join(tmpdir(), 'hp-cdp-' + process.pid);
 const browser = spawn(executable, [
   '--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
   '--disable-background-networking', '--remote-allow-origins=*',
+  // Match the desktop input baseline used by Playwright's headless Chromium.
+  // CDP touch emulation below overrides it for the separate coarse-pointer cases.
+  '--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4',
   '--remote-debugging-port=' + port, '--user-data-dir=' + profile,
   'about:blank',
 ], { stdio: 'ignore' });
@@ -94,12 +97,8 @@ try {
   const viewport = async (width, touch = false) => {
     await call('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: false });
     await call('Emulation.setTouchEmulationEnabled', { enabled: touch, maxTouchPoints: 1 });
-    // Headless Linux can retain a non-hover pointer after touch emulation.
-    // Declare each scenario's input capabilities and verify the real media query.
-    await call('Emulation.setEmulatedMedia', { features: [
-      { name: 'hover', value: touch ? 'none' : 'hover' },
-      { name: 'pointer', value: touch ? 'coarse' : 'fine' },
-    ] });
+    // Assert the browser's actual capabilities; do not mock matchMedia or CSS.
+    // setEmulatedMedia does not override hover/pointer in headless Linux.
     const capabilities = await evaluate('({hover:matchMedia("(hover:hover)").matches,fine:matchMedia("(pointer:fine)").matches})');
     assert.deepEqual(capabilities, { hover: !touch, fine: !touch }, 'Scenario input capabilities');
   };
@@ -232,13 +231,13 @@ try {
   assert.ok((await inspect()).cards.every(c=>c.details==='1'&&c.cta==='1'));
   report.scenarios.push({name:'coarse desktop',status:'PASS'});
   // Reduced motion: zero transitions and no decorative zoom.
-  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'hover',value:'hover'},{name:'pointer',value:'fine'},{name:'prefers-reduced-motion',value:'reduce'}]});
+  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
   await open(url); await move(0);
   const reduced=await evaluate(`(()=>{const a=document.querySelector('#stalhallar-use-cards a');return [...a.querySelectorAll('img,.ecg__details,.ecg__cta'),a.parentElement].map(n=>({duration:getComputedStyle(n).transitionDuration,transform:getComputedStyle(n).transform}))})()`);
   assert.ok(reduced.every(n=>n.duration==='0s'&&n.transform==='none'));
   report.scenarios.push({name:'reduced motion',status:'PASS'});
   // Progressive enhancement: disable JS before loading the real built page.
-  await call('Emulation.setEmulatedMedia',{features:[{name:'hover',value:'hover'},{name:'pointer',value:'fine'}]});
+  await call('Emulation.setEmulatedMedia',{features:[]});
   await call('Emulation.setScriptExecutionDisabled',{value:true}); await open(url);
   const nojs=await inspect(); assert.equal(nojs.enhanced,false);assert.ok(nojs.cards.every(c=>c.details==='1'&&c.cta==='1'));
   report.scenarios.push({name:'no JavaScript',status:'PASS'});
