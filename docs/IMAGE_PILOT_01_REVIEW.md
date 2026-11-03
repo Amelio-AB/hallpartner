@@ -54,6 +54,7 @@ Rot: `visual-review/image-pilot-01/` (Git-ignorerade lokala granskningsfiler).
 - `live-before/`: extern preview före ändring.
 - `before/`: lokalt bygge av exakt startcommit.
 - `content-only/`: innehållsbilder, fortsatt enfärgad mörk sektion på Tälthallar.
+- `after/`: slutlig pilot med innehållsbilder och det separata bakgrundstestet.
 - `review-sheets/`: sammanställningar för visuell granskning.
 - `baseline-dist/`: orört lokalt startbygge för innehålls- och skaljämförelse.
 
@@ -61,6 +62,12 @@ Filnamn: `{home|lagerhall|maskinhall|talthall}-{mobile-320|mobile|tablet-768|des
 Sektionsbilder har sektions-ID i stället för `full`, exempelvis
 `talthall-desktop-talthall-anvandning.png`. JSON-rapporter ligger i samma katalog.
 Samma viewport, höjd och skärmfaktor används i före- och efterbilderna.
+
+Öppna [den lokala jämförelseöversikten](../visual-review/image-pilot-01/index.html)
+och välj skärmbredd. Där finns före/efter för alla fyra sidor samt en separat
+bakgrundsjämförelse. Bilderna går att öppna i originalstorlek.
+Bakgrundsparet finns också som `review-sheets/background-{320|390|768|1280|1440}.png`:
+vänster utan, höger med bakgrundsbild. Bilderna har identisk sektionshöjd.
 
 Det befintliga `scripts/capture-hallpartner-home.mjs` har fått ett valfritt
 `HP_SCREENSHOT_SECTIONS` (kommaseparerade ID:n) samt rapportering av bildattribut.
@@ -79,8 +86,85 @@ Ordinarie browserkontroller är kvar.
 - Visuell granskning av innehållssektioner: 320, 390, 768 och 1440 px. Motiven är
   läsbara, korten bevarade och mobilens ordning naturlig.
 
-Bakgrundstestet görs i en separat efterföljande commit. Slutresultat och
-slutlig verifiering kompletteras efter den jämförelsen.
+## Separat bakgrundstest: resultat
+
+`talthall-LED.jpg` (1024 × 523 px) används dekorativt i
+`/stalhallar/talthall/#talthall-anvandning`. Alt-texten är tom (`alt=""`) och
+bildlagret har `aria-hidden="true"`. Bilden laddas med Astro Image, responsiva
+640/1024 px-varianter och lazy loading. Inga påståenden om projektägare tillkommer.
+
+Den befintliga mörka sektionen ligger kvar under bilden. Ett 80 % mörkt lager
+i samma grafitgröna färg gör texten läsbar även över vita lampor och dukpartier.
+På mobil begränsas bilden till sektionens övre 28 rem och tonar ut till
+enfärgat bakom den längre läsningen. På surfplatta och desktop täcker den
+sektionen utan att ändra dess mått, kort, länkar eller texter.
+
+Bedömning efter granskning i 320, 390, 768 och 1440 px: användbart som lokalt
+alternativ. Motivet ger rumskänsla, men den enfärgade versionen är lugnare.
+Texten är fortfarande tydligt läsbar och det blev inget överlapp. Bakgrunden
+behålls **endast som granskningsförslag**, inte som kundgodkänd design.
+Fotots begränsade upplösning är mindre märkbar under den mörka överlagringen.
+
+## Slutlig verifiering
+
+| Kontroll | Resultat / belägg |
+| --- | --- |
+| Astro/TypeScript | PASS, 75 filer, 0 fel/varningar/hints (`final-check.log`) |
+| ESLint | PASS (`final-lint.log`) |
+| Node-kontraktstester | 41/41 PASS (`node-tests.log`) |
+| Astro build | PASS, 32 statiska sidor (`final-build.log`) |
+| HTML, noindex, canonical, landmarks, sitemap, oförändrade URL:er | PASS (`html-check.log` och `verify-url-migration-draft.mjs`) |
+| Browser för innehållsbilder | 20/20 sid-/breddkombinationer, inklusive mobilmenyn (`content-only/*-REPORT.json`) |
+| Browser efter bakgrundstest | Tälthallar 5/5; övriga tre sidors oförändrade efterbilder återanvänds (`after/`) |
+| Extra kontroll av alla fyra slutliga sidor | 16/16 i 320/390/768/1440 px; oförändrad synlig text och byggd Header/Hero/Footer, inga browserundantag (`acceptance.json`) |
+| Bildladdning och dimensioner | Alla pilotbilder laddar, har `srcset`, `sizes`, lazy loading och dimensioner; höjden är reserverad före avkodning (`acceptance.json`) |
+| Horisontell scroll | Ingen i de kontrollerade bredderna; även bildytornas verkliga gränser kontrollerade |
+| Bakgrundskontrast | Minst **4,76:1** för sektionens textfärger över ett teoretiskt helt vitt bildparti under 80 % overlay; över 4,5:1 även för liten text (`acceptance.json`) |
+| Original och skyddade delar | Alla 29 originalbilder byte-identiska med startcommit. Paketfiler, public, server, config, layouter, workflows och legacy-material oförändrade (`preservation-and-assets.json`) |
+| Git | `git diff --check` PASS. Städgrenen kvar på `ef7a886`, AMP-002 kvar på `5198c3a` |
+
+Den extra browserkontrollen jämför byggd HTML före/efter, eftersom Headerns
+meny- och scrolltillstånd ändras vid körning. Tillfälliga Astro-scopeattribut
+normaliseras vid jämförelsen. Alla befintliga synliga sidtexter är bevarade.
+Kontrollerna motsvarar inte en full skärmläsargranskning eller test på fysisk mobil.
+Ingen Lighthouse-poäng eller fullständig CLS-mätning påstås.
+
+Extern preview granskades före ändring. **Ingen granskning efter deployment är
+gjord, eftersom uppdraget uttryckligen förbjuder deployment.** Slutgranskningen
+gäller det lokala bygget. Noindex och avstängd offertmottagning är kvar.
+
+## Öppna lokalt och granska
+
+Från den verifierade projektmappen:
+
+```powershell
+cd C:\webbprojekt\hallpartner-cleanup-20261103
+npm.cmd run dev -- --host 127.0.0.1 --port 4321
+```
+
+Öppna serverns angivna adress (normalt `http://127.0.0.1:4321/`) och sedan:
+
+- `/` – Ridhus-kortet under halltyperna.
+- `/stalhallar/lagerhall/#varuflode`.
+- `/stalhallar/maskinhall/#korvagar`.
+- `/stalhallar/talthall/#talthall-utforande` och `#talthall-anvandning`.
+
+För samma statiska bygge som skärmbilderna: `npm.cmd run build`, därefter
+`npm.cmd run preview -- --host 127.0.0.1 --port 4321` i stället för dev.
+Granskningsservern som användes under arbetet stoppas efter avslutade kontroller.
+Skärmbildsöversikten `visual-review/image-pilot-01/index.html` går att öppna
+direkt som lokal fil utan server.
+
+Lokala ändringscommits:
+
+- `c34fcca` – de fyra innehållsbilderna, delad bildlayout, granskningsstöd och första rapporten.
+- `0ece57be8eda56b85e6698f3e8fda72f131f1f63` – **enbart bakgrundstestet** på Tälthallar.
+- En efterföljande dokumentationscommit slutför denna rapport.
+
+Om bakgrunden väljs bort i nästa uppdrag kan just `0ece57b` återställas med
+en vanlig revert; övriga bilder behöver inte tas bort. Ingen återställning görs nu.
+Ingen push, merge, Inleed-/Vercel-publicering, GO-LIVE eller konsolidering till
+originalmappen har gjorts. Ingen fil i originalmappens arbetsyta har ändrats.
 
 ## Bildproblem och förbättringar, prioriterat
 
