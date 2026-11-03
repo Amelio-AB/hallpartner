@@ -1,0 +1,114 @@
+# One-time, isolated publication of the already-tested Hallpartner Astro build
+# to the VERIFIED Inleed temporary URL. Does not touch GitHub main, DNS, or live site.
+name: Hallpartner Inleed preview - publish reviewed v1 draft
+on:
+  push:
+    branches:
+      - ops/inleed-preview-cutover-20261103
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: hallpartner-inleed-preview-20261103
+  cancel-in-progress: false
+
+jobs:
+  deploy-reviewed-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: preview
+      url: https://hallpartner-se.preview2.inleed.com/
+    steps:
+      - name: Verify FTP was mapped to preview but NOT live Hallpartner
+        shell: bash
+        run: |
+          set -euo pipefail
+          preview_url='https://hallpartner-se.preview2.inleed.com/hp-preview-probe-20261103-6de487a.txt'
+          live_url='https://hallpartner.se/hp-preview-probe-20261103-6de487a.txt'
+          preview="$(curl --fail --silent --show-error --location --max-time 25 "$preview_url")"
+          test "$preview" = 'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a'
+          live="$(curl --silent --show-error --location --max-time 25 "$live_url" || true)"
+          if [[ "$live" == *'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a'* ]]; then
+            echo 'BLOCKED: target is also visible at hallpartner.se'; exit 1
+          fi
+          echo 'Inleed preview FTP target verified. Safe to continue.'
+      - name: Download exact successful Hallpartner build from PR 5
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 41419966157
+          github-token: ${{ github.token }}
+          name: hallpartner-v1-draft-db0d81082cf8ad4438ec830675e6107801ebacf3
+          path: dist
+      - name: Isolate the public preview from PHP/old demos and prevent indexing
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s dist/index.html
+          test -s dist/stalhallar/index.html
+          test -s dist/offert/index.html
+          grep -Fq 'En hall börjar med ditt behov.' dist/index.html
+          grep -Fq 'data-enabled="false"' dist/offert/index.html
+          grep -Fq 'noindex,nofollow' dist/index.html
+          grep -Fq 'noindex,nofollow' dist/offert/index.html
+          # PHP mail receiver has NOT been approved for deployment.
+          rm -rf dist/api
+          find dist -type f -name '*.php' -delete
+          # Former vision/demo routes are intentionally omitted from the upload.
+          rm -rf dist/prototype dist/projekt dist/roadmap dist/vision dist/workshop
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+          if find dist -type f -name '*.php' | grep -q .; then
+            echo 'BLOCKED: PHP found in static preview payload'; exit 1
+          fi
+          echo 'Validated new Hallpartner home + disabled quote form; legacy demo routes and all PHP omitted.'
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp >/dev/null
+      - name: Publish static preview via encrypted FTPS without server deletion
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for key in FTP_HOST FTP_USERNAME FTP_PASSWORD; do
+            if [[ -z "${!key}" ]]; then echo "Missing $key"; exit 1; fi
+          done
+          lftp <<EOF
+          set cmd:fail-exit yes
+          set ftp:ssl-allow yes
+          set ftp:ssl-force yes
+          set ftp:ssl-protect-data yes
+          set ssl:verify-certificate yes
+          set net:max-retries 2
+          set net:timeout 15
+          open -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST"
+          mirror --reverse --verbose --parallel=4 ./dist/ ./
+          bye
+          EOF
+      - name: Verify new homepage, internal hall pages and noindex on Inleed
+        shell: bash
+        run: |
+          set -euo pipefail
+          url='https://hallpartner-se.preview2.inleed.com'
+          for attempt in 1 2 3; do
+            if curl --fail --silent --show-error --location --max-time 25 --header 'Cache-Control: no-cache' "$url/?checkpoint=20261103-db0d810" > home.html &&
+              grep -Fq 'En hall börjar med ditt behov.' home.html &&
+              grep -Fq 'noindex,nofollow' home.html; then
+              break
+            fi
+            if [ "$attempt" = 3 ]; then echo 'ERROR: new site not visible on preview URL'; exit 1; fi
+            sleep 5
+          done
+          curl --fail --silent --show-error --location --max-time 25 "$url/stalhallar/lagerhall/" > hall.html
+          grep -Fq 'Lagerhall' hall.html
+          curl --fail --silent --show-error --location --max-time 25 "$url/offert/" > offert.html
+          grep -Fq 'data-enabled="false"' offert.html
+          robots="$(curl --fail --silent --show-error --location --max-time 25 "$url/robots.txt")"
+          [[ "$robots" == *'Disallow: /'* ]]
+          curl --fail --silent --show-error --location --max-time 25 --output /dev/null "$url/images/hallpartner-hero-temporary.webp"
+          echo 'PREVIEW PUBLISHED AND VERIFIED: new home, hall page, disabled quote, blocked indexing, and hero image.'
+          echo 'SOURCE: PR 5 commit db0d81082cf8ad4438ec830675e6107801ebacf3 (CI run 41419966157).'
+          echo 'No merge/main/DNS/live-domain changes.'
