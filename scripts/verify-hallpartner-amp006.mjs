@@ -96,7 +96,9 @@ try {
   };
   const viewport = async (width, touch = false) => {
     await call('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: false });
-    await call('Emulation.setTouchEmulationEnabled', { enabled: touch, maxTouchPoints: 1 });
+    // Disabling touch restores host input devices, which are absent on Linux CI.
+    // Run desktop cases first; only enable touch once all desktop cases are done.
+    if (touch) await call('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 1 });
     // Assert the browser's actual capabilities; do not mock matchMedia or CSS.
     // setEmulatedMedia does not override hover/pointer in headless Linux.
     const capabilities = await evaluate('({hover:matchMedia("(hover:hover)").matches,fine:matchMedia("(pointer:fine)").matches})');
@@ -154,8 +156,20 @@ try {
     await writeFile(join(output,name+'.png'),Buffer.from(r.data,'base64'));
     return r.data;
   };
+  // Reduced motion: zero transitions and no decorative zoom.
+  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  await open(url); await move(0);
+  const reduced=await evaluate(`(()=>{const a=document.querySelector('#stalhallar-use-cards a');return [...a.querySelectorAll('img,.ecg__details,.ecg__cta'),a.parentElement].map(n=>({duration:getComputedStyle(n).transitionDuration,transform:getComputedStyle(n).transform}))})()`);
+  assert.ok(reduced.every(n=>n.duration==='0s'&&n.transform==='none'));
+  report.scenarios.push({name:'reduced motion',status:'PASS'});
+  // Progressive enhancement: disable JS before loading the real built page.
+  await call('Emulation.setEmulatedMedia',{features:[]});
+  await call('Emulation.setScriptExecutionDisabled',{value:true}); await open(url);
+  const nojs=await inspect(); assert.equal(nojs.enhanced,false);assert.ok(nojs.cards.every(c=>c.details==='1'&&c.cta==='1'));
+  report.scenarios.push({name:'no JavaScript',status:'PASS'});
+  await call('Emulation.setScriptExecutionDisabled',{value:false});
   const baseline = process.env.HP_BASELINE_URL;
-  for (const width of [320,390,768,1280,1440]) {
+  for (const width of [1280,1440,320,390,768]) {
     await viewport(width, width<=768);
     await open(url);
     await evaluate('document.getElementById("stalhallar-use-cards").scrollIntoView({block:"center"})');
@@ -230,17 +244,6 @@ try {
   await viewport(1280,true); await open(url);
   assert.ok((await inspect()).cards.every(c=>c.details==='1'&&c.cta==='1'));
   report.scenarios.push({name:'coarse desktop',status:'PASS'});
-  // Reduced motion: zero transitions and no decorative zoom.
-  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
-  await open(url); await move(0);
-  const reduced=await evaluate(`(()=>{const a=document.querySelector('#stalhallar-use-cards a');return [...a.querySelectorAll('img,.ecg__details,.ecg__cta'),a.parentElement].map(n=>({duration:getComputedStyle(n).transitionDuration,transform:getComputedStyle(n).transform}))})()`);
-  assert.ok(reduced.every(n=>n.duration==='0s'&&n.transform==='none'));
-  report.scenarios.push({name:'reduced motion',status:'PASS'});
-  // Progressive enhancement: disable JS before loading the real built page.
-  await call('Emulation.setEmulatedMedia',{features:[]});
-  await call('Emulation.setScriptExecutionDisabled',{value:true}); await open(url);
-  const nojs=await inspect(); assert.equal(nojs.enhanced,false);assert.ok(nojs.cards.every(c=>c.details==='1'&&c.cta==='1'));
-  report.scenarios.push({name:'no JavaScript',status:'PASS'});
   assert.deepEqual(report.errors,[]);
   await rm(join(output,'ERROR.txt'),{force:true});
   await writeFile(join(output,'REPORT.json'),JSON.stringify(report,null,2));
