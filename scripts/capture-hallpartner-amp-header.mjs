@@ -212,6 +212,14 @@ try {
       if(scenario.variant==='classic-mega-menu' && [320,390,768,1024,1440].includes(width)){
         await evalJS('window.scrollTo(0,0);window.dispatchEvent(new Event("scroll"));');
         await sleep(170);
+        // The previous keyboard test intentionally returns focus to the opener.
+        // Preserve that visible focus state as separate evidence at 390px,
+        // then blur only for a truthful idle-design screenshot.
+        if(width===390){
+          const focused=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
+          await writeFile(join(output,'amp002-'+label+'-keyboard-focus.png'),Buffer.from(focused.data,'base64'));
+        }
+        await evalJS("if(document.activeElement instanceof HTMLElement) document.activeElement.blur()");
         const layout=await call('Page.getLayoutMetrics');
         const dimensions=layout.cssContentSize||layout.contentSize;
         const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,fromSurface:true,clip:{x:0,y:0,width:Math.ceil(dimensions.width),height:Math.ceil(dimensions.height),scale:1}});
