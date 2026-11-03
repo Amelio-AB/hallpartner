@@ -1,5 +1,7 @@
 # COMPONENTS.md
 
+> Status 2026-11-03: Historisk specifikation för visionskonceptet, inte en lista över dagens komponenter. Nio oanvända komponent-/layoutfiler har tagits bort lokalt och finns kvar i Git-historiken. Se [aktuell struktur](../README.md) och [städrapporten](LOCAL_WORKSPACE_CLEANUP.md).
+
 # Hallpartner Vision Site -- Component Specification
 
 ## Syfte

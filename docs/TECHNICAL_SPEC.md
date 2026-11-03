@@ -13,7 +13,7 @@ utvecklingsprinciperna och kvalitetskraven för projektet.
 
 ## Ramverk
 
-- Astro (senaste stabila version)
+- Astro enligt package-lock.json; Node.js 24 för lokal verifiering
 
 ## Språk
 
@@ -144,10 +144,11 @@ Miljöer:
 Slutlig site/canonical: https://hallpartner.se.
 Preview: https://hallpartner-se.preview2.inleed.com.
 
-Migration phase 1: befintligt lftp-workflow kör endast dry-run mot `./`,
-relativt kontots custom root `/domains/hallpartner.se/public_html/`.
-Verifiera root och granska första dry-run före upload. Ingen serverradering.
-DNS och secrets ändras inte. Se README.md för nästa steg.
+Befintligt deploy-production.yml kan göra riktig FTP-upload; det är inte endast
+dry-run. Workflowet är oförändrat av lokal städning. Se README.md för Node 24,
+privat paketinstallation och arbetsgränser. Ingen deployment, DNS-/FTP-ändring
+eller aktivering ingår i lokal städning.
+
 
 ---
 

@@ -6,9 +6,10 @@ const extraAmpFooterNavs = process.env.HALLPARTNER_FOOTER_MODE !== 'legacy' ? 3 
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { draftPageSpecs } from '../src/config/hallpartner-draft-pages.ts';
 
-const dist = new URL('../dist/', import.meta.url).pathname;
+const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const routes = ['', ...draftPageSpecs.map((page) => page.slug)];
 
 for (const slug of routes) {

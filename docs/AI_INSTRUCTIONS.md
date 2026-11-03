@@ -15,7 +15,8 @@ resultat.
 
 Utveckla Hallpartners riktiga webbplats i Astro. I migration phase 1 bevaras
 befintliga sidor och komponenter: **pending live-site inventory**. Behåll noindex
-och endast FTP dry-run enligt AGENTS.md och README.md. Webbplatsen ska:
+och följ AGENTS.md och README.md. Befintligt deployworkflow kan göra riktig
+FTP-upload; kör det inte som lokal verifiering. Webbplatsen ska:
 
 - Förmedlar en premiumkänsla
 - Är snabb, tillgänglig och responsiv

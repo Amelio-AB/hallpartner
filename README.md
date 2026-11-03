@@ -1,110 +1,105 @@
 # Hallpartner webbplats
 
-Kodbas för Hallpartners riktiga webbplats på **https://hallpartner.se**,
-vidareutvecklad från Amelios visionssajt. Migration phase 1 förbereder
-preview och teknisk grund. Befintliga sidor, komponenter och bilder bevaras.
-Slutligt innehåll och sidstruktur: **pending live-site inventory**.
+Kodbas för Hallpartners nya Astro-webbplats. Senaste utvecklingsgren:
+`feature/hallpartner-v1-skeleton-20261031`, [Draft PR #5](https://github.com/Amelio-AB/hallpartner/pull/5).
+Gamla `main` är inte den senaste webbplatsen. Kontrollera aktuell GitHub-HEAD;
+PR-beskrivningen innehåller äldre historiska SHA-värden.
 
-> Fullständig projektdokumentation finns i [`docs/`](docs/) — läs den innan
-> större ändringar görs. Se även [AGENTS.md](AGENTS.md) för riktlinjer till
-> AI-agenter som arbetar i projektet.
+Lokal konsolidering 2026-11-03 finns på `chore/local-workspace-cleanup-20261103`.
+Se [städrapporten](docs/LOCAL_WORKSPACE_CLEANUP.md) för backup och verifiering.
+Läs [AGENTS.md](AGENTS.md) före ändringar.
 
-## Aktuell live preview
+## Lokal start
 
-Utvecklingsversionen finns på:
+Använd **Node.js 24**. Privat `@amelio/web-platform` är oförändrat låst till
+`a11811bfbf51416e7fe7d58aed4551be77914d65` (1.1.0).
+Git-inloggningen behöver läsåtkomst; använd befintlig Credential Manager.
+Lägg inga tokens i filer, kommandon eller Git-URL:er.
 
-**https://hallpartner-se.preview2.inleed.com/**
-
-Detta är den gemensamma granskningsytan för projektet. AI-agenter ska vid
-arbete med UI, innehåll, navigation eller responsivitet öppna relevant sida
-där och granska resultatet kritiskt. Previewn är inte ett godkänt facit; den
-ska användas för att hitta konkreta problem och förbättringar före fortsatt
-arbete.
-
-## Stack
-
-- [Astro](https://astro.build) (statisk output)
-- TypeScript (strict mode)
-- CSS med Astro-komponenter och CSS custom properties — inget CSS-ramverk
-- [@astrojs/sitemap](https://docs.astro.build/en/guides/integrations-guide/sitemap/) för XML-sitemap
-- Inget UI-ramverk (React/Vue/Svelte) används eller behövs
-
-## Lokala kommandon
-
-| Kommando          | Beskrivning                                        |
-| ----------------- | -------------------------------------------------- |
-| `npm install`     | Installerar beroenden                              |
-| `npm run dev`     | Startar lokal utvecklingsserver (`localhost:4321`) |
-| `npm run build`   | Bygger produktionssajten till `./dist/`            |
-| `npm run preview` | Förhandsgranskar produktionsbygget lokalt          |
-| `npm run check`   | Kör `astro check` (TypeScript- och mallkontroll)   |
-| `npm run lint`    | Kör ESLint                                         |
-| `npm run format`  | Formaterar koden med Prettier                      |
-
-## Struktur
-
-```text
-src/
-  components/   Återanvändbara Astro-komponenter
-  layouts/      BaseLayout och PresentationLayout
-  pages/        Filbaserad routing (se docs/SITEMAP.md)
-  data/         Typad innehållsdata (navigation, copy, projekt och roadmap)
-  types/        Delade TypeScript-typer
-  styles/       Designsystem: tokens, typografi, utilities, global CSS
-public/
-  images/, logos/, icons/, videos/   Mediamappar med README om vad som behövs
-  robots.txt    Noindex-konfiguration (se nedan)
-docs/           Projektdokumentation (brief, designsystem, sidspecifikation m.m.)
+```powershell
+cd C:\webbprojekt\hallpartner-cleanup-20261103
+node --version
+npm.cmd ci --ignore-scripts --no-audit --no-fund
+npm.cmd run dev
 ```
 
-## Deployment — migration phase 1
+`npm.cmd` fungerar även när PowerShell blockerar `npm.ps1`.
+Öppna serverns utskrivna URL, normalt **http://localhost:4321/**.
+Det är den nya startsidan; `/prototype/` innehåller separata referenssidor.
+Kör inte pull eller installation i den gamla smutsiga mappen som genväg.
 
-Astro bygger statiskt till dist/. Site är https://hallpartner.se:
-BaseLayout skapar canonical från Astro.site, och sitemap använder samma domän.
-Det påverkar metadata och XML, inte previewhosting eller DNS. /workshop/
-är fortsatt undantagen från sitemap; övrig befintlig struktur bevaras.
+| Kommando | Syfte |
+| --- | --- |
+| `npm.cmd run dev` | Lokal utveckling; genererar AMP-Footer först |
+| `npm.cmd run build` | Statiskt bygge till `dist/`, ingen uppladdning |
+| `npm.cmd run preview` | Visa statiskt bygge lokalt |
+| `npm.cmd run check` | Astro och TypeScript |
+| `npm.cmd run lint` | ESLint |
+| `node --experimental-strip-types --test tests/*.test.mjs` | Alla Node-kontraktstester |
+| `php tests/lead-receiver.test.php` | Lokal PHP-validering utan SMTP |
+| `node --experimental-strip-types scripts/verify-hallpartner-draft.mjs` | Byggd HTML, länkar, noindex och sitemap |
+| `node scripts/verify-url-migration-draft.mjs` | URL-karta mot färdigt bygge |
+| `npm.cmd run format` | Prettier; undvik onödig helrepoformatering |
 
-.github/workflows/deploy-production.yml behåller befintligt lftp-flöde och
-gör riktig upload vid push till main eller workflow_dispatch.
-Previewmiljöns URL är https://hallpartner-se.preview2.inleed.com.
-Permissions är contents: read. Bygget valideras innan artifact sparas,
-och nedladdad dist/index.html kontrolleras igen före FTP.
-Credentials hämtas från repository secrets FTP_HOST, FTP_USERNAME,
-FTP_PASSWORD; värden ska inte ändras eller skrivas ut.
+PHP behöver en separat lokal runtime. Fulla teststeg finns i
+`.github/workflows/hallpartner-draft.yml`.
+[Visuell granskning](docs/LOCAL_VISUAL_REVIEW.md) beskriver mobil/desktop.
 
-FTP-kontots angivna custom root är /domains/hallpartner.se/public_html/.
-Remote target är därför ./, relativt inloggningsroten:
+## Aktiv webbplats och historiskt material
 
-```text
-mirror --reverse --verbose --parallel=4 ./dist/ ./
-```
+| Område | Användning |
+| --- | --- |
+| `src/pages/index.astro` | Aktiv startsida på `/` |
+| `src/pages/stalhallar/` | Hallöversikt och sex hallundersidor |
+| `src/pages/kontakt/`, `om-oss/`, `sa-gar-det-till/`, `offert/`, `404.astro` | Besöksrutter under utveckling; formulär avstängda |
+| `src/layouts/HallpartnerSiteLayout.astro` | Besökarsidornas ingång till det delade skalet |
+| `src/layouts/HallpartnerDraftLayout.astro` | Aktiv Header och AMP-003 Footer i site-läge; äldre Footer i prototypläge |
+| `src/components/prototype/HallpartnerHomePrototype.astro` | Aktiv startsida/Hero **och** prototyp; namnet betyder inte oanvänd kod |
+| `src/components/ContactForm.astro` | Avstängt kontaktformulär |
+| `src/styles/hallpartner-*.css` | Sid- och skalstilar, delvis gemensamma för prototyper och besökarsidor |
+| `src/config/` | Footer, offertguide, prototypdata, Direction 02 och headergranskning |
+| `src/pages/prototype/` | Visuella referenser och AMP-granskning som används i tester |
+| `src/pages/projekt/`, `vision/`, `roadmap/`, `workshop/` | Äldre presentation; direktadresser finns kvar, utanför sitemap |
+| `BaseLayout.astro`, äldre komponenter, `src/data/`, `src/types/`, generell CSS | Beroenden till den bevarade presentationen |
+| `src/assets/images/`, `public/` | Använda bilder och bevarat originalmaterial; rättigheter kräver separat granskning |
+| `server/lead/`, `public/api/lead.php` | Inaktiv PHP-mottagare; privata filer/vendor får inte publiceras med webbplatsen |
+| `scripts/`, `tests/` | AMP-generering, kontrakt, HTML-/URL-kontroller och Chrome-granskning |
+| `.github/workflows/` | CI och befintliga driftflöden, oförändrade av städningen |
 
-Ingen `--delete` används. FTP-target `./` är verifierat mot Hallpartners
-document root och deploymenten är live i previewmiljön.
-DNS för hallpartner.se pekar fortsatt mot befintlig WordPress och ändras inte här.
-Arkivbranchen archive/vision-site-2026-10-02 ska lämnas orörd.
-
-## Noindex-status
-
-Preview och utvecklingsbygget ska fortsatt vara noindex. SeoHead, BaseLayout
-och PresentationLayout har noindex = true som standard. Sidornas metatagg
-är noindex,nofollow. robots.txt tillåter hämtning så att metataggen kan läsas;
-Allow är alltså inte ett indexeringsgodkännande. Sitemap pekar på slutlig domän.
-Indexering får aktiveras först vid en separat godkänd lansering.
-
-## Nästa steg — pending live-site inventory
-
-- Inventera nuvarande live-sajt innan nya routes, sitemap eller innehåll beslutas.
-- Bedöm vilka presentationsdelar som ska återanvändas, skrivas om eller tas bort.
-- Samla originalbilder i src/assets/images/legacy/ med ursprungliga filnamn;
-  inventera källor och rättigheter innan optimering och användning.
-- Granska live preview efter UI-ändringar och använd den som obligatorisk visuell kontrollpunkt.
-- Planera senare lansering: metadata, sitemap, indexering och DNS separat.
-- Granska befintliga beroenden före publicering. npm audit vid phase 1 rapporterar
-  10 sårbarheter (1 moderate, 8 high, 1 critical), inklusive Astro
-  GHSA-26w7-cxv4-gfx2. Ingen automatisk audit fix eller versionsändring gjordes.
+Astros standardstruktur behålls. Aktiv Header, Hero, Footer, kundtexter och rutter
+har inte ändrats av städningen. AMP-paketets kod och revision är oförändrade.
 
 ## Dokumentation
 
-Se [`docs/`](docs/) för projektbrief, sitemap, innehåll, designsystem,
-sidspecifikation, komponentspecifikation och teknisk spec.
+Utgå från [AGENTS.md](AGENTS.md), [städrapporten](docs/LOCAL_WORKSPACE_CLEANUP.md),
+[Footer-integrationen](docs/AMP_003_FOOTER_INTEGRATION.md),
+[headergranskningen](docs/AMP_002_HEADER_REVIEW.md),
+[lead-mottagaren](docs/LEAD_RECEIVER_INTEGRATION.md),
+[SMTP-checkpointen](docs/checkpoints/2026-11-02-smtp-pending.md) och
+[kalkylatorbeslutet](docs/checkpoints/2026-11-02-calculator-paused.md).
+
+[URL-inventeringen](docs/migration/URL_INVENTORY_2026-11-02.md) och
+[äldre rutter](docs/404_AND_LEGACY_ROUTES_REVIEW.md) är underlag utan aktiva redirects.
+`PROJECT_BRIEF.md`, `PAGE_SPEC.md`, `CONTENT.md`, `SITEMAP.md`,
+`COMPONENTS.md` och `DESIGN_SYSTEM.md` i `docs/` beskriver äldre visionsmaterial;
+de är inte en aktuell karta över implementerade sidor.
+Daterade migreringsrapporter är historik, inte bevis för dagens HEAD.
+
+## Preview och gränser
+
+Extern preview: **https://hallpartner-se.preview2.inleed.com/**.
+Den är en granskningsyta, inte ett facit eller bevis för att aktuell Draft-HEAD
+är publicerad. Granska berörda sidor före UI-ändringar och efter separat godkänd deployment.
+
+Alla sidor behåller `noindex,nofollow`. Canonical/sitemap använder
+`https://hallpartner.se`; det ändrar inte DNS eller hosting.
+Historiska rutter, prototyper, 404 och offertguiden är undantagna från sitemap.
+
+`deploy-production.yml` kan göra **riktig FTP-upload** vid push till `main`
+eller manuell körning. Remote target är `./`, utan `--delete`.
+Kör inte workflowet för lokal verifiering. Dess äldre Node-/installationskonfiguration
+hanteras i ett separat uppdrag.
+
+Lokal städning omfattar ingen push, merge, deployment, GO-LIVE, DNS-/FTP-ändring,
+ändring av secrets, formuläraktivering eller SMTP.
+Arkivbranchen `archive/vision-site-2026-10-02` lämnas orörd.

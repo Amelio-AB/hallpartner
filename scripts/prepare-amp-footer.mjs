@@ -1,7 +1,7 @@
 /**
- * Opt-in static AMP-003 adapter. Invoked by npm predev/prebuild.
+ * Static AMP-003 adapter. Invoked by npm predev/prebuild.
  * Uses the approved @amelio/web-platform public exports; never copies platform
- * source into the customer repository. Default CI/build preserves legacy footer.
+ * source into the customer repository. AMP-003 is the default; legacy is opt-in.
  */
 import { readFile, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';

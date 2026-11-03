@@ -2,3 +2,15 @@ dist/
 .astro/
 node_modules/
 package-lock.json
+
+# Generated artifacts and local/private configuration
+.generated/
+public/generated/
+visual-review/
+server/lead/vendor/
+server/lead/private-rates/
+server/lead/rates/
+server/lead/config.local.php
+.env
+.env.*
+.npmrc
