@@ -159,14 +159,18 @@ try {
           const toneColor= root.dataset.surface!=='transparent' || (tone==='light' ? color==='rgb(20, 45, 54)' : color==='rgb(255, 255, 255)');
           button.click();
           const opened=dialog.open&&button.getAttribute('aria-expanded')==='true'&&document.body.style.overflow==='hidden';
-          const rightEdge=Math.abs(dialog.getBoundingClientRect().right-innerWidth)<=2;
+          const animatedDrawer=dialog.classList.contains('hm__mobile-dialog--animated');
           const iconClose=!!dialog.querySelector('.hm__mobile-close--icon[aria-label="Stäng meny"]');
           const details=dialog.querySelector('details');
           details.querySelector('summary').click();
           const detailsOpened=details.open;
           const linkVisible=!!details.querySelector('a[href="/stalhallar/lagerhall/"]');
-          return {opened,detailsOpened,linkVisible,hitTarget,noBrandOverlap,threeStrokes,isIcon,initialAria,toneColor,rightEdge,iconClose};
+          return {opened,detailsOpened,linkVisible,hitTarget,noBrandOverlap,threeStrokes,isIcon,initialAria,toneColor,animatedDrawer,iconClose};
         }.toString()+')()');
+        // The right-anchored drawer deliberately translates during its 200ms entry.
+        // Measure final bounds only after the transition, not mid-animation.
+        await sleep(270);
+        interaction.rightEdge=await evalJS("Math.abs(document.querySelector('dialog.hm__mobile-dialog').getBoundingClientRect().right-innerWidth)<=2");
         if(scenario.variant==='classic-mega-menu' && [320,390,768,1024].includes(width)) {
           const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
           await writeFile(join(output,'amp002-'+label+'-dialog-open.png'),Buffer.from(shot.data,'base64'));
