@@ -94,6 +94,14 @@ try {
   const viewport = async (width, touch = false) => {
     await call('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: false });
     await call('Emulation.setTouchEmulationEnabled', { enabled: touch, maxTouchPoints: 1 });
+    // Headless Linux can retain a non-hover pointer after touch emulation.
+    // Declare each scenario's input capabilities and verify the real media query.
+    await call('Emulation.setEmulatedMedia', { features: [
+      { name: 'hover', value: touch ? 'none' : 'hover' },
+      { name: 'pointer', value: touch ? 'coarse' : 'fine' },
+    ] });
+    const capabilities = await evaluate('({hover:matchMedia("(hover:hover)").matches,fine:matchMedia("(pointer:fine)").matches})');
+    assert.deepEqual(capabilities, { hover: !touch, fine: !touch }, 'Scenario input capabilities');
   };
   const key = async (key, code, value) => {
     await call('Input.dispatchKeyEvent', { type: 'keyDown', key, code, windowsVirtualKeyCode: value });
@@ -159,7 +167,7 @@ try {
     for(const c of idle.cards){assert.ok(c.category&&c.fits,JSON.stringify({width,c}));assert.ok(c.contrast>=4.5,JSON.stringify({width,contrast:c.contrast}));assert.equal(c.image.length,1);assert.ok(c.image[0].loaded&&c.image[0].alt&&c.image[0].srcset&&c.image[0].sizes);}
     await shot(width+'-normal');
     if(width>900){
-      assert.ok(idle.cards.every(c=>Math.abs(c.width-idle.cards[0].width)<1&&c.details==='0'));
+      assert.ok(idle.cards.every(c=>Math.abs(c.width-idle.cards[0].width)<1&&c.details==='0'), JSON.stringify({width,idle}));
       for(let index=0;index<3;index++){
         await move(index);
         const expanded=await inspect(); const active=expanded.cards[index];
@@ -224,13 +232,13 @@ try {
   assert.ok((await inspect()).cards.every(c=>c.details==='1'&&c.cta==='1'));
   report.scenarios.push({name:'coarse desktop',status:'PASS'});
   // Reduced motion: zero transitions and no decorative zoom.
-  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'prefers-reduced-motion',value:'reduce'}]});
+  await viewport(1440); await call('Emulation.setEmulatedMedia',{features:[{name:'hover',value:'hover'},{name:'pointer',value:'fine'},{name:'prefers-reduced-motion',value:'reduce'}]});
   await open(url); await move(0);
   const reduced=await evaluate(`(()=>{const a=document.querySelector('#stalhallar-use-cards a');return [...a.querySelectorAll('img,.ecg__details,.ecg__cta'),a.parentElement].map(n=>({duration:getComputedStyle(n).transitionDuration,transform:getComputedStyle(n).transform}))})()`);
   assert.ok(reduced.every(n=>n.duration==='0s'&&n.transform==='none'));
   report.scenarios.push({name:'reduced motion',status:'PASS'});
   // Progressive enhancement: disable JS before loading the real built page.
-  await call('Emulation.setEmulatedMedia',{features:[]});
+  await call('Emulation.setEmulatedMedia',{features:[{name:'hover',value:'hover'},{name:'pointer',value:'fine'}]});
   await call('Emulation.setScriptExecutionDisabled',{value:true}); await open(url);
   const nojs=await inspect(); assert.equal(nojs.enhanced,false);assert.ok(nojs.cards.every(c=>c.details==='1'&&c.cta==='1'));
   report.scenarios.push({name:'no JavaScript',status:'PASS'});
