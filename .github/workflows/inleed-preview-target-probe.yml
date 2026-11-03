@@ -1,0 +1,74 @@
+# Isolated, non-destructive target proof for the Inleed preview.
+# This workflow intentionally does not build, deploy, or merge the website.
+name: Hallpartner Inleed preview - verify FTP maps to preview URL
+on:
+  push:
+    branches:
+      - ops/inleed-preview-cutover-20261103
+
+permissions:
+  contents: read
+
+concurrency:
+  group: hallpartner-inleed-preview-20261103
+  cancel-in-progress: false
+
+jobs:
+  verify-preview-target:
+    name: One-file FTPS probe only
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    environment:
+      name: preview
+      url: https://hallpartner-se.preview2.inleed.com/
+    steps:
+      - name: Verify existing credentials are configured
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for key in FTP_HOST FTP_USERNAME FTP_PASSWORD; do
+            if [[ -z "${!key}" ]]; then echo "Missing required preview FTP credential: $key"; exit 1; fi
+          done
+          echo "Preview FTP credentials exist (values not displayed)."
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp >/dev/null
+      - name: Upload only a harmless probe via encrypted FTPS
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          printf '%s\n' 'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a' > hp-preview-probe-20261103-6de487a.txt
+          lftp <<EOF
+          set cmd:fail-exit yes
+          set ftp:ssl-allow yes
+          set ftp:ssl-force yes
+          set ftp:ssl-protect-data yes
+          set ssl:verify-certificate yes
+          set net:max-retries 2
+          set net:timeout 12
+          open -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST"
+          put hp-preview-probe-20261103-6de487a.txt -o hp-preview-probe-20261103-6de487a.txt
+          bye
+          EOF
+      - name: Confirm probe is visible ONLY at the intended Inleed preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          preview_url="https://hallpartner-se.preview2.inleed.com/hp-preview-probe-20261103-6de487a.txt"
+          live_url="https://hallpartner.se/hp-preview-probe-20261103-6de487a.txt"
+          preview="$(curl --fail --silent --show-error --location --max-time 25 "$preview_url")"
+          if [[ "$preview" != 'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a' ]]; then
+            echo 'BLOCKED: FTP target does not match expected Inleed preview.'; exit 1
+          fi
+          live="$(curl --silent --show-error --location --max-time 25 "$live_url" || true)"
+          if [[ "$live" == *'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a'* ]]; then
+            echo 'BLOCKED: FTP target may also be visible on the active hallpartner.se domain.'; exit 1
+          fi
+          echo 'SAFE TARGET CONFIRMED: FTP root serves Inleed preview, not current hallpartner.se.'
