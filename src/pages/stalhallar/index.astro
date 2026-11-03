@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import hallPoster from '../../assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg';
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-stalhallar.css';
 
@@ -99,7 +101,19 @@ const questions = [
       <span aria-current="page">Stålhallar</span>
     </nav>
 
-    <section class="hp-stal__hero" aria-labelledby="stalhallar-title">
+    <section class="hp-stal__hero hp-stal__hero--media" id="stalhallar-intro" aria-labelledby="stalhallar-title">
+      <!-- Static pilot fallback: the actual Vimeo source file is unavailable.
+           This existing photograph is not a frame from that video. -->
+      <Image
+        src={hallPoster}
+        class="hp-stal__hero-poster"
+        alt=""
+        aria-hidden="true"
+        widths={[480, 768, 1024, 1536]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
       <div class="hp-draft-rail hp-stal__hero-grid">
         <div class="hp-stal__hero-copy">
           <p class="hp-stal__eyebrow">Hallar efter dina behov</p>

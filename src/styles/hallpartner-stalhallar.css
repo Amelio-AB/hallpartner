@@ -33,6 +33,17 @@
   padding-block: clamp(3.5rem, 6vw, 7rem);
   background: var(--hp-offwhite);
 }
+/* Image pilot 02: a static fallback while the original Hero video is missing.
+ * Scoped to this page; the existing introduction and global Header stay intact. */
+.hp-stal__hero--media { position: relative; isolation: isolate; background: var(--hp-graphite); color: #F4F4F0; }
+.hp-stal__hero-poster { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+.hp-stal__hero--media::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgb(7 26 22 / .9), rgb(7 26 22 / .78)); }
+.hp-stal__hero--media .hp-stal__eyebrow,
+.hp-stal__hero.hp-stal__hero--media h1 em { color: #B3D8B8; }
+.hp-stal__hero--media .hp-stal__lead { color: #E4EAE4; }
+.hp-stal__hero--media .hp-stal__text-link { color: #F4F4F0 !important; }
+.hp-stal__hero--media .hp-stal__guide { box-shadow: 0 0 0 1px rgb(255 255 255 / .18); }
+.hp-stal__hero--media a:focus-visible { outline: 3px solid #FFFFFF; outline-offset: 5px; }
 .hp-stal__hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(270px, .75fr);
@@ -242,6 +253,9 @@
 .hp-stal__final .hp-stal__eyebrow { color: #A7D0AE; }
 .hp-stal__final .hp-stal__button { flex: 0 0 auto; }
 @media (max-width: 980px) {
+  /* The poster fades out before the lower guide on stacked layouts. */
+  .hp-stal__hero--media .hp-stal__hero-poster { height: 38rem; }
+  .hp-stal__hero--media::after { background: linear-gradient(rgb(7 26 22 / .82), rgb(7 26 22 / .85) 26rem, var(--hp-graphite) 38rem); }
   .hp-stal__hero-grid { grid-template-columns: minmax(0, 1fr); }
   .hp-stal__guide { max-width: 42rem; }
   .hp-stal__other-uses, .hp-stal__final-inner { align-items: flex-start; flex-direction: column; }
