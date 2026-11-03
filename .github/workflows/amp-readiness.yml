@@ -2,7 +2,7 @@ name: AMP readiness - Node 24 - no deployment
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, integration/hallpartner-main-20261103]
     paths:
       - .github/workflows/amp-readiness.yml
       - src/config/hallpartner-brand.ts

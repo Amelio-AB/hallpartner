@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+      - integration/hallpartner-main-20261103
       - feature/amp-integration-readiness-2026-10-31
     paths:
       - '.github/workflows/hallpartner-draft.yml'
