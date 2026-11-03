@@ -122,7 +122,7 @@ jobs:
           PHP_SERVER=$!
           trap 'kill "$PHP_SERVER" 2>/dev/null || true' EXIT
           ready=0
-          for i in $(seq 1 35); do
+          for ((attempt=0; attempt<35; attempt++)); do
             if curl -s --max-time 1 -o /dev/null http://127.0.0.1:9439/api/lead.php; then ready=1; break; fi
             sleep 0.25
           done
@@ -147,7 +147,7 @@ jobs:
           trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
           URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
           READY=0
-          for i in $(seq 1 30); do
+          for ((attempt=0; attempt<30; attempt++)); do
             if curl -fsS "$URL" >/dev/null; then READY=1; break; fi
             sleep 0.5
           done
