@@ -40,8 +40,8 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
       </div>
       <div class="hp-contact-form__field hp-contact-form__field--wide">
         <label for="hp-form-message">Vad gäller din fråga? *</label>
-        <textarea id="hp-form-message" name="contact.message" rows="5" minlength="10" maxlength="4000" required></textarea>
-        <p class="hp-contact-form__hint">Beskriv gärna vad du planerar. Skicka inga känsliga personuppgifter.</p>
+        <textarea id="hp-form-message" name="contact.message" rows="5" minlength="10" maxlength="4000" aria-describedby="hp-form-message-hint" required></textarea>
+        <p class="hp-contact-form__hint" id="hp-form-message-hint">Beskriv gärna vad du planerar. Skicka inga känsliga personuppgifter.</p>
       </div>
       <div class="hp-contact-form__website" aria-hidden="true">
         <label for="hp-form-website">Lämna fältet tomt</label>
@@ -56,6 +56,8 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
 </section>
 
 <script>
+  import { clearContactFieldErrors, showContactFieldErrors } from '../lib/contact-field-errors';
+
   const form = document.querySelector<HTMLFormElement>('#hp-contact-form');
   const message = document.querySelector<HTMLElement>('#hp-form-status');
   const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
@@ -63,6 +65,7 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
     button.disabled = false;
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
+      clearContactFieldErrors(form);
       if (!form.reportValidity()) return;
       button.disabled = true;
       message.dataset.state = '';
@@ -92,9 +95,7 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
         } else if (response.status === 422 && body?.status === 'validation-error') {
           message.dataset.state = 'error';
           message.textContent = 'Kontrollera uppgifterna i formuläret.';
-          const first = Object.keys(body.fields ?? {})[0];
-          const field = first ? form.elements.namedItem(first) : null;
-          if (field instanceof HTMLElement) field.focus();
+          showContactFieldErrors(form, body?.fields);
         } else if (response.status === 503 && body?.status === 'failed') {
           message.dataset.state = 'error';
           message.textContent = 'Mottagningen är inte tillgänglig. Meddelandet skickades inte. Använd telefon eller mejl ovan.';
