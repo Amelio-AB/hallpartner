@@ -189,10 +189,13 @@ try {
         if(Object.values(interaction).some(x=>x!==true))throw Error(label+' mobile dialog/Escape failed: '+JSON.stringify(interaction));
         // A real keyboard activation and X-button closing must also preserve focus.
         await evalJS("document.querySelector('button.hm__mobile-toggle').focus()");
-        await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
-        await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+        await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',unmodifiedText:'\r',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+        await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
         const keyboardOpen=await evalJS("document.querySelector('dialog.hm__mobile-dialog').open");
-        if(!keyboardOpen)throw Error(label+' keyboard Enter did not open the AMP dialog');
+        if(!keyboardOpen){
+          const debug=await evalJS("({focus:document.activeElement?.className,open:document.querySelector('dialog.hm__mobile-dialog').open,aria:document.querySelector('button.hm__mobile-toggle')?.getAttribute('aria-expanded')})");
+          throw Error(label+' keyboard Enter did not open the AMP dialog: '+JSON.stringify(debug));
+        }
         await evalJS("document.querySelector('.hm__mobile-close--icon').click()");
         await sleep(320);
         const closeByX=await evalJS("!document.querySelector('dialog.hm__mobile-dialog').open && document.activeElement===document.querySelector('button.hm__mobile-toggle') && document.body.style.overflow!=='hidden'");
