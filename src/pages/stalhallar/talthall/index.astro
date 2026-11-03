@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import tentPhoto from '../../../assets/images/legacy/talthall-1536x1152.jpg';
+import tentUsesPhoto from '../../../assets/images/legacy/talthall-LED.jpg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 import '../../../styles/hallpartner-hall-variants.css';
@@ -139,7 +140,16 @@ const faq = [
       </div>
     </section>
 
-    <section class="hp-detail__section hp-detail__section--dark" id="talthall-anvandning" aria-labelledby="tent-uses-heading">
+    <section class="hp-detail__section hp-detail__section--dark hp-tent-uses" id="talthall-anvandning" aria-labelledby="tent-uses-heading">
+      <div class="hp-tent-uses__backdrop" aria-hidden="true">
+        <Image
+          src={tentUsesPhoto}
+          alt=""
+          widths={[640, 1024]}
+          sizes="100vw"
+          loading="lazy"
+        />
+      </div>
       <div class="hp-draft-rail">
         <div class="hp-detail__heading-row hp-detail__heading-row--light">
           <div>
@@ -247,3 +257,20 @@ const faq = [
     </section>
   </div>
 </HallpartnerSiteLayout>
+
+<style>
+  /* Local image pilot: the original solid section remains the fallback.
+   * An 80% graphite overlay protects text even over the photograph's lamps. */
+  .hp-tent-uses { position: relative; isolation: isolate; }
+  .hp-tent-uses__backdrop { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .hp-tent-uses__backdrop img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+  .hp-tent-uses__backdrop::after { content: ''; position: absolute; inset: 0; background: rgb(19 40 34 / .8); }
+
+  @media (max-width: 740px) {
+    /* Keep the roof recognisable in a tall mobile section; leave long copy calm. */
+    .hp-tent-uses__backdrop { bottom: auto; height: 28rem; }
+    .hp-tent-uses__backdrop::after {
+      background: linear-gradient(rgb(19 40 34 / .8) 0%, rgb(19 40 34 / .8) 65%, var(--hp-graphite) 100%);
+    }
+  }
+</style>
