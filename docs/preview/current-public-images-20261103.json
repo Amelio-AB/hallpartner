@@ -1,0 +1,90 @@
+{
+  "checkedAt": "2026-11-03T21:24:05.079Z",
+  "scope": "Images referenced by the 13 public-page HTML documents and their local stylesheets; not a complete server directory inventory",
+  "images": [
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/favicon.svg",
+      "pages": [
+        "/",
+        "/404.html",
+        "/kontakt/",
+        "/offert/",
+        "/om-oss/",
+        "/sa-gar-det-till/",
+        "/stalhallar/",
+        "/stalhallar/lagerhall/",
+        "/stalhallar/maskinhall/",
+        "/stalhallar/plathall/",
+        "/stalhallar/isolerad-hall/",
+        "/stalhallar/ridhus/",
+        "/stalhallar/talthall/"
+      ],
+      "status": 200,
+      "bytes": 247,
+      "sha256": "a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/images/logo_text_white.png",
+      "pages": [
+        "/",
+        "/404.html",
+        "/kontakt/",
+        "/offert/",
+        "/om-oss/",
+        "/sa-gar-det-till/",
+        "/stalhallar/",
+        "/stalhallar/lagerhall/",
+        "/stalhallar/maskinhall/",
+        "/stalhallar/plathall/",
+        "/stalhallar/isolerad-hall/",
+        "/stalhallar/ridhus/",
+        "/stalhallar/talthall/"
+      ],
+      "status": 200,
+      "bytes": 368395,
+      "sha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/images/hallpartner-hero-temporary.webp",
+      "pages": [
+        "/"
+      ],
+      "status": 200,
+      "bytes": 161370,
+      "sha256": "ab48603ac5bca0c19b1e6baa2db1cf547e5961b9f0f40b618c001f3e2c532537",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/lagerhall.GPeeZOoY_Z1MjiPC.webp",
+      "pages": [
+        "/"
+      ],
+      "status": 200,
+      "bytes": 40812,
+      "sha256": "b1d23510cb847a172f62f7ee41c38edaef09ebb56527d98c1b4f30ec49f87bed",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/maskinhall.CY7PyZ0H_2pyQtm.webp",
+      "pages": [
+        "/"
+      ],
+      "status": 200,
+      "bytes": 94370,
+      "sha256": "1d6afc21c7ae7dd4cc57e75e30c2cfa7e8c6af75668974cfeb90cdca6bede1b7",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_Zpu0oi.webp",
+      "pages": [
+        "/"
+      ],
+      "status": 200,
+      "bytes": 131882,
+      "sha256": "878acc13b42c00661f10065d4be5259e714dd74d24bde781d1b321574d2a6888",
+      "rights": "unverified"
+    }
+  ]
+}

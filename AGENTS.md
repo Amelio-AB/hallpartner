@@ -45,7 +45,12 @@ beskriver visionskonceptet, inte beslutad produktionsstruktur.
 
 Preview: https://hallpartner-se.preview2.inleed.com. Previewmiljön är live och
 ska användas som visuell kontrollpunkt under utvecklingen. Behåll noindex.
-GitHub Actions deployar till FTP-kontots root `./` utan `--delete`.
+Den nya FTPS-processen förbereds i en separat stackad PR. Publiceringsworkflow
+316932905 ska vara manuellt avstängt fram till separat godkänd aktivering.
+Efter aktivering publiceras endast verifierat statiskt innehåll från senaste
+main till den markörverifierade previewroten `./`, utan serverradering.
+Se [publiceringsprocessen](docs/preview/README.md); bildrättigheter och målspärrar
+måste vara godkända. Kundens framtida Inleed-konto ingår aldrig i automatiken.
 DNS för hallpartner.se ska inte ändras i utvecklingsarbetet. Ändra inte
 secrets eller arkivbranchen `archive/vision-site-2026-10-02`.
 
