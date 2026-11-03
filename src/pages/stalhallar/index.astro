@@ -1,6 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import hallPoster from '../../assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg';
+import ImageGallery from '../../components/ImageGallery.astro';
+import exterior from '../../assets/images/legacy/plathall-1536x1152.jpeg';
+import interior from '../../assets/images/legacy/bygga-maskinhall.jpeg';
+import frame from '../../assets/images/legacy/Stalstomme-1-1536x1152.jpg';
+import fabric from '../../assets/images/legacy/talthall-1536x1152.jpg';
+import riding from '../../assets/images/legacy/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.jpg';
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-stalhallar.css';
 
@@ -10,6 +16,14 @@ import '../../styles/hallpartner-stalhallar.css';
  * wizard and AMP-005 are not installed here; actual delivery facts are pending.
  */
 const contactHref = '/kontakt/';
+// Motif descriptions only: none of these is a verified Hallpartner reference.
+const galleryImages = [
+  { src: exterior, title: 'Plåtklädd exteriör', caption: 'Portar och fasad på en hallbyggnad.', alt: 'Grå plåtklädd hall med stor stängd port och dörr på gaveln.' },
+  { src: interior, title: 'Utrymme för maskiner', caption: 'Maskin och lastbil under samma tak.', alt: 'Stor maskin och lastbil i en rymlig hallbyggnad.' },
+  { src: frame, title: 'Stommen under montage', caption: 'Stålstomme innan väggar och tak är färdiga.', alt: 'Stålstomme med takbalkar och delvis monterad vägg.' },
+  { src: fabric, title: 'Dukklätt utförande', caption: 'Öppning och åtkomst i en vit tälthall.', alt: 'Vit tälthall med öppning och synlig truck.' },
+  { src: riding, title: 'Interiör för ridning', caption: 'Ridbana med dagsljus och belysning.', alt: 'Ridhus med upplyst ridbana och ryttare.', position: 'center 65%' },
+] as const;
 const useCases = [
   {
     context: 'Lager och logistik',
@@ -202,6 +216,13 @@ const questions = [
         </div>
       </div>
     </section>
+
+    <ImageGallery
+      id="hallar-i-bild"
+      heading="Från stomme till utrymme."
+      description="Se exempel på exteriörer, interiörer och olika utföranden. Bilderna hjälper dig att jämföra vad som kan vara relevant för din användning."
+      images={galleryImages}
+    />
 
     <section class="hp-stal__section hp-stal__choices" id="utforanden" aria-labelledby="choices-heading">
       <div class="hp-draft-rail">
