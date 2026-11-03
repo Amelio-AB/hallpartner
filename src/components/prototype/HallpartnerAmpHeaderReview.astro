@@ -81,7 +81,8 @@ const reviewBase = '/prototype/amp/header/';
         <div>
           <a href={reviewBase} aria-current={variant === 'classic-dropdown' && mode === 'hero' ? 'page' : undefined}>Dropdown + bild-Hero</a>
           <a href={reviewBase + 'mega/'} aria-current={variant === 'classic-mega-menu' ? 'page' : undefined}>Megameny + bild-Hero</a>
-          <a href={reviewBase + 'solid/'} aria-current={mode === 'solid' ? 'page' : undefined}>Täckt Header (undersida)</a>
+          <a href={reviewBase + 'solid/'} aria-current={mode === 'solid' ? 'page' : undefined}>Megameny + täckt Header</a>
+          <a href={reviewBase + 'mega/?tone=light'}>Megameny + ljust Hero-tonläge (kontrasttest)</a>
           <a href="/">Till godkänd startsida</a>
         </div>
       </nav>
@@ -105,6 +106,7 @@ const reviewBase = '/prototype/amp/header/';
         try {
           const instance = mountHeaderMenu(mountTarget, {
             variant,
+            mobileToggleAppearance: 'icon',
             brand: ampHeaderBrand,
             items: ampHeaderItems,
             cta: ampHeaderCTA,
@@ -112,7 +114,8 @@ const reviewBase = '/prototype/amp/header/';
             theme: ampHeaderTheme,
             overlayHero: Boolean(hero),
             heroElement: hero,
-            heroTone: 'dark',
+            // Light is a visual contrast stress test on the same actual Hallpartner photo.
+            heroTone: new URLSearchParams(window.location.search).get('tone') === 'light' ? 'light' : 'dark',
             scroll: { hideDistance: 24, revealDistance: 48, heroPrehideDistance: 160 },
           });
           fallback.hidden = true;

@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - feature/amp-integration-readiness-2026-10-31
+      - feature/hallpartner-v1-skeleton-20261031
     paths:
       - '.github/workflows/hallpartner-draft.yml'
       - 'astro.config.mjs'
@@ -100,19 +101,33 @@ jobs:
           esac
           SH
           chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
+          # First compute the lockfile with real authenticated npm, not a hand-edited Git integrity.
+          GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          node --input-type=module <<'JS'
+          import { readFileSync } from 'node:fs';
+          const l=JSON.parse(readFileSync('package-lock.json','utf8'));
+          const p=l.packages['node_modules/@amelio/web-platform'];
+          console.log('AMP002_LOCK_PACKAGE_ENTRY='+JSON.stringify(p));
+          console.log('AMP002_LOCK_ROOT_DEP='+JSON.stringify(l.packages[''].dependencies['@amelio/web-platform']));
+          if(p.version!=='1.4.0'||!p.resolved?.endsWith('#fec9ca01b3c0d4bc9002fa21832a51cf51009749')) throw Error('Unexpected private source resolution');
+          JS
+          if ! git diff --exit-code -- package-lock.json; then
+            echo "::error::Commit the real npm-resolved package-lock.json before accepting this PR."
+            exit 1
+          fi
           GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
-      - name: Validate approved AMP-003 package source after install
+      - name: Validate approved platform source after install
         run: |
           node --input-type=module <<'JS'
           import { readFileSync } from 'node:fs';
           const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
           const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
-          const sha='a11811bfbf51416e7fe7d58aed4551be77914d65';
-          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.1.0'
-             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.1.0'
+          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
+          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
+             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
              ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
             throw Error('AMP-003 private release pin is incorrect');
-          console.log('Approved AMP-003 v1.1.0 locked source verified.');
+          console.log('Approved AMP private source 1.4.0 locked SHA verified.');
           JS
       - name: Astro and TypeScript
         run: npm run check
@@ -183,6 +198,8 @@ jobs:
             echo "CDP visual preview failed to start" > visual-review/validated-ERROR.txt
             exit 1
           fi
+          # Validate AMP-002 first; only then capture the broader site's regression screenshots.
+          timeout 180s node scripts/capture-hallpartner-amp-header.mjs
           timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/" HP_SCREENSHOT_PREFIX="site-home" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/hallar/" HP_SCREENSHOT_PREFIX="hallar" timeout 90s node scripts/capture-hallpartner-home.mjs
@@ -200,7 +217,6 @@ jobs:
           HP_PREVIEW_URL="http://127.0.0.1:4321/404.html" HP_SCREENSHOT_PREFIX="site-not-found" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          timeout 180s node scripts/capture-hallpartner-amp-header.mjs
 
       - name: Preserve validated visual review artifacts
         if: always()

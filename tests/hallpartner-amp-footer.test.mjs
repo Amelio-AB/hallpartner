@@ -3,13 +3,13 @@ import test from 'node:test';
 import { readFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
-import { AMP003_APPROVED_VERSION, hallpartnerFooterConfig as config } from '../src/config/hallpartner-footer.mjs';
+import { AMP_PLATFORM_SOURCE_VERSION, hallpartnerFooterConfig as config } from '../src/config/hallpartner-footer.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const allLinks = config.groups.flatMap((group) => group.links);
 
 test('AMP-003 config is one compact shared footer, not an extra global CTA', () => {
-  assert.equal(AMP003_APPROVED_VERSION, '1.1.0');
+  assert.equal(AMP_PLATFORM_SOURCE_VERSION, '1.4.0');
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
   assert.equal(config.groups.length, 2);
@@ -46,7 +46,7 @@ test('AMP-003 is the visitor default, prototypes retain legacy Footer, and missi
   assert.match(layout, /<footer class="hp-draft-footer">/);
   assert.match(prep, /await import\('@amelio\/web-platform\/footer'\)/);
   assert.match(prep, /import\.meta\.resolve\('@amelio\/web-platform\/footer\/style\.css'\)/);
-  assert.match(prep, /manifest\.version !== AMP003_APPROVED_VERSION/);
+  assert.match(prep, /manifest\.version !== AMP_PLATFORM_SOURCE_VERSION/);
   assert.match(prep, /throw new Error\('AMP-003 is not installed/);
   assert.match(prep, /process\.env\.HALLPARTNER_FOOTER_MODE \|\| 'amp-003'/);
 });

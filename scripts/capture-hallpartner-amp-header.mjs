@@ -15,9 +15,12 @@ const chrome = process.env.HP_CHROME || 'google-chrome';
 const scenarios = [
   { name:'dropdown-hero', path:'/prototype/amp/header/', hero:true, variant:'classic-dropdown' },
   { name:'mega-hero', path:'/prototype/amp/header/mega/', hero:true, variant:'classic-mega-menu' },
-  { name:'dropdown-solid', path:'/prototype/amp/header/solid/', hero:false, variant:'classic-dropdown' },
+  // Deliberately use Hallpartner's actual dark photo for the light-tone stress case.
+  // A technical pass here is NOT proof of sufficient real-image contrast.
+  { name:'mega-hero-light', path:'/prototype/amp/header/mega/?tone=light', hero:true, variant:'classic-mega-menu', tone:'light' },
+  { name:'mega-solid', path:'/prototype/amp/header/solid/', hero:false, variant:'classic-mega-menu' },
 ];
-const viewports=[320,390,768,1280,1440];
+const viewports=[320,390,768,1024,1280,1440];
 const port=9500+(process.pid%400);
 const browser=spawn(chrome,[
   '--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
@@ -71,7 +74,7 @@ try {
       let ready=false;
       for(let n=0;n<100;n++){
         try{
-          ready=await evalJS('document.readyState==="complete" && document.body?.dataset.ampReady==="true" && location.pathname==='+JSON.stringify(scenario.path));
+          ready=await evalJS('document.readyState==="complete" && document.body?.dataset.ampReady==="true" && location.pathname==='+JSON.stringify(scenario.path.split('?')[0]));
         }catch{}
         if(ready)break;
         await sleep(110);
@@ -104,6 +107,7 @@ try {
             imagesLoaded:[...root.querySelectorAll('img.hm__logo')].every(img=>img.complete&&img.naturalWidth>0),
             hasHallsMenu:!!root.querySelector('.hm__desktop .hm__disclosure'),
             noindex:document.querySelector('meta[name="robots"]')?.content==='noindex,nofollow',
+            tone:root?.dataset.heroTone,
           };
         })();
       }.toString()+')()');
@@ -122,6 +126,7 @@ try {
         solidHeadingClear:scenario.hero||initial.solidHeadingClear,
         imagesLoaded:initial.imagesLoaded,
         hasHallsMenu:initial.hasHallsMenu,noindex:initial.noindex,
+        tone:initial.tone===(scenario.tone||'dark'),
       }))if(!condition)throw Error(label+' invalid '+key+': '+JSON.stringify(initial));
       let interaction;
       if(width>1024){
@@ -141,17 +146,39 @@ try {
           const root=document.querySelector('header.hm');
           const button=root.querySelector('button.hm__mobile-toggle');
           const dialog=root.querySelector('dialog.hm__mobile-dialog');
+          const logo=root.querySelector('.hm__mobile-bar .hm__brand');
+          const buttonRect=button.getBoundingClientRect();
+          const logoRect=logo.getBoundingClientRect();
+          const hitTarget=buttonRect.width>=44&&buttonRect.height>=44;
+          const noBrandOverlap=buttonRect.left>=logoRect.right-1&&buttonRect.right<=innerWidth+1;
+          const threeStrokes=button.querySelectorAll('.hm__toggle-line').length===3;
+          const isIcon=button.classList.contains('hm__mobile-toggle--icon')&&button.textContent.trim()==='';
+          const initialAria=button.getAttribute('aria-label')==='Öppna meny'&&button.getAttribute('aria-controls')===dialog.id;
+          const tone=root.dataset.heroTone;
+          const color=getComputedStyle(button).color;
+          const toneColor= root.dataset.surface!=='transparent' || (tone==='light' ? color==='rgb(20, 45, 54)' : color==='rgb(255, 255, 255)');
           button.click();
           const opened=dialog.open&&button.getAttribute('aria-expanded')==='true'&&document.body.style.overflow==='hidden';
+          const animatedDrawer=dialog.classList.contains('hm__mobile-dialog--animated');
+          const iconClose=!!dialog.querySelector('.hm__mobile-close--icon[aria-label="Stäng meny"]');
           const details=dialog.querySelector('details');
           details.querySelector('summary').click();
           const detailsOpened=details.open;
           const linkVisible=!!details.querySelector('a[href="/stalhallar/lagerhall/"]');
-          return {opened,detailsOpened,linkVisible};
+          return {opened,detailsOpened,linkVisible,hitTarget,noBrandOverlap,threeStrokes,isIcon,initialAria,toneColor,animatedDrawer,iconClose};
         }.toString()+')()');
+        // The right-anchored drawer deliberately translates during its 200ms entry.
+        // Measure final bounds only after the transition, not mid-animation.
+        await sleep(270);
+        interaction.rightEdge=await evalJS("Math.abs(document.querySelector('dialog.hm__mobile-dialog').getBoundingClientRect().right-innerWidth)<=2");
+        if(scenario.variant==='classic-mega-menu' && [320,390,768,1024].includes(width)) {
+          const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
+          await writeFile(join(output,'amp002-'+label+'-dialog-open.png'),Buffer.from(shot.data,'base64'));
+        }
         await call('Input.dispatchKeyEvent',{type:'rawKeyDown',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
         await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Escape',code:'Escape',windowsVirtualKeyCode:27});
-        await sleep(100);
+        // Icon appearance intentionally has a 200ms close transition.
+        await sleep(320);
         const closed=await evalJS('('+function(){
           const root=document.querySelector('header.hm');
           const button=root.querySelector('button.hm__mobile-toggle');
@@ -160,6 +187,20 @@ try {
         }.toString()+')()');
         interaction={...interaction,...closed};
         if(Object.values(interaction).some(x=>x!==true))throw Error(label+' mobile dialog/Escape failed: '+JSON.stringify(interaction));
+        // A real keyboard activation and X-button closing must also preserve focus.
+        await evalJS("document.querySelector('button.hm__mobile-toggle').focus()");
+        await call('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',unmodifiedText:'\r',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+        await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
+        const keyboardOpen=await evalJS("document.querySelector('dialog.hm__mobile-dialog').open");
+        if(!keyboardOpen){
+          const debug=await evalJS("({focus:document.activeElement?.className,open:document.querySelector('dialog.hm__mobile-dialog').open,aria:document.querySelector('button.hm__mobile-toggle')?.getAttribute('aria-expanded')})");
+          throw Error(label+' keyboard Enter did not open the AMP dialog: '+JSON.stringify(debug));
+        }
+        await evalJS("document.querySelector('.hm__mobile-close--icon').click()");
+        await sleep(320);
+        const closeByX=await evalJS("!document.querySelector('dialog.hm__mobile-dialog').open && document.activeElement===document.querySelector('button.hm__mobile-toggle') && document.body.style.overflow!=='hidden'");
+        if(!closeByX)throw Error(label+' X-button close/focus/scroll cleanup failed');
+        interaction.keyboardOpen=keyboardOpen;interaction.closeByX=closeByX;
       }
       let solidAfterScroll=null;
       if(scenario.hero){
@@ -168,9 +209,17 @@ try {
         solidAfterScroll=await evalJS('document.querySelector("header.hm").dataset.surface==="solid"');
         if(!solidAfterScroll)throw Error(label+' Header did not become solid after hero');
       }
-      if(width===390||width===1440){
+      if(scenario.variant==='classic-mega-menu' && [320,390,768,1024,1440].includes(width)){
         await evalJS('window.scrollTo(0,0);window.dispatchEvent(new Event("scroll"));');
         await sleep(170);
+        // The previous keyboard test intentionally returns focus to the opener.
+        // Preserve that visible focus state as separate evidence at 390px,
+        // then blur only for a truthful idle-design screenshot.
+        if(width===390){
+          const focused=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
+          await writeFile(join(output,'amp002-'+label+'-keyboard-focus.png'),Buffer.from(focused.data,'base64'));
+        }
+        await evalJS("if(document.activeElement instanceof HTMLElement) document.activeElement.blur()");
         const layout=await call('Page.getLayoutMetrics');
         const dimensions=layout.cssContentSize||layout.contentSize;
         const shot=await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:true,fromSurface:true,clip:{x:0,y:0,width:Math.ceil(dimensions.width),height:Math.ceil(dimensions.height),scale:1}});

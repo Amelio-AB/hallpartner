@@ -3,7 +3,8 @@
  * The platform package, not this site, provides HTML escaping and responsive behavior.
  * Former WordPress contact details are provisional until customer verification.
  */
-export const AMP003_APPROVED_VERSION = '1.1.0';
+// Package root version: AMP-003 product contract remains approved independently.
+export const AMP_PLATFORM_SOURCE_VERSION = '1.4.0';
 
 export const hallpartnerFooterConfig = {
   variant: 'compact',

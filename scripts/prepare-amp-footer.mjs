@@ -6,7 +6,7 @@
 import { readFile, mkdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { AMP003_APPROVED_VERSION, hallpartnerFooterConfig } from '../src/config/hallpartner-footer.mjs';
+import { AMP_PLATFORM_SOURCE_VERSION, hallpartnerFooterConfig } from '../src/config/hallpartner-footer.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const htmlPath = join(root, '.generated', 'amp-003-footer.html');
@@ -36,8 +36,8 @@ if (mode === 'legacy') {
   } catch (error) {
     throw new Error('AMP-003 is not installed. Use an authenticated, pinned private package before enabling this mode.', { cause: error });
   }
-  if (manifest.name !== '@amelio/web-platform' || manifest.version !== AMP003_APPROVED_VERSION) {
-    throw new Error('AMP-003 needs approved @amelio/web-platform ' + AMP003_APPROVED_VERSION + '; installed: ' + manifest.name + '@' + manifest.version);
+  if (manifest.name !== '@amelio/web-platform' || manifest.version !== AMP_PLATFORM_SOURCE_VERSION) {
+    throw new Error('AMP-003 needs approved @amelio/web-platform package ' + AMP_PLATFORM_SOURCE_VERSION + '; installed: ' + manifest.name + '@' + manifest.version);
   }
 
   // The renderer produces validated, escaped HTML using the public contract.
