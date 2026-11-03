@@ -14,6 +14,8 @@ const url = process.env.HP_PREVIEW_URL || 'http://127.0.0.1:4321/prototype/hallp
 const output = resolve(process.env.HP_SCREENSHOT_DIR || 'visual-review');
 const expectedPath = new URL(url).pathname;
 const prefix = process.env.HP_SCREENSHOT_PREFIX || 'validated';
+const sectionIds = (process.env.HP_SCREENSHOT_SECTIONS || '').split(',').filter(Boolean);
+if (sectionIds.some(id => !/^[a-z0-9-]+$/i.test(id))) throw new Error('Invalid section ID');
 if (!/^[a-z0-9-]+$/i.test(prefix)) throw new Error('Invalid screenshot prefix');
 const port = 9300 + process.pid % 300;
 const profile = join(tmpdir(), 'hp-cdp-' + process.pid);
@@ -101,13 +103,14 @@ try {
     if (!ready) throw new Error(viewport.name + ' document never became ready');
 
     const metrics = await evaluate('(async function(){' +
+      'const imageAttributes=[...document.images].map(img=>({alt:img.alt,loading:img.loading,width:img.width,height:img.height,srcset:img.srcset,sizes:img.sizes}));' +
       'for(const img of document.images) img.loading = "eager";' +
       'await Promise.all([...document.images].map(img=>img.decode().catch(()=>null)));' +
       'await document.fonts.ready;' +
       'window.scrollTo(0,document.body.scrollHeight);' +
       'await new Promise(r=>setTimeout(r,300));' +
       'window.scrollTo(0,0);' +
-      'return {footerCount:document.querySelectorAll("footer").length,' +
+      'return {imageAttributes,footerCount:document.querySelectorAll("footer").length,' +
       'ampFooter:!!document.querySelector("footer.af--compact"),' +
       'h1Count:document.querySelectorAll("h1").length,' +
       'navCount:document.querySelectorAll("nav").length,' +
@@ -187,6 +190,25 @@ try {
     });
     const filename = prefix + '-' + viewport.name + '-full.png';
     await writeFile(join(output, filename), Buffer.from(shot.data, 'base64'));
+
+    // Optional section crops retain actual CSS pixels for before/after review.
+    // The full-page screenshots and existing acceptance checks stay unchanged.
+    metrics.sections = [];
+    for (const id of sectionIds) {
+      const bounds = await evaluate('(() => {' +
+        'const node=document.getElementById(' + JSON.stringify(id) + ');' +
+        'if(!node)return null;const r=node.getBoundingClientRect();' +
+        'return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height};' +
+        '})()');
+      if (!bounds) throw new Error('Missing review section: ' + id);
+      const sectionFilename = prefix + '-' + viewport.name + '-' + id + '.png';
+      const sectionShot = await call('Page.captureScreenshot', {
+        format: 'png', captureBeyondViewport: true, fromSurface: true,
+        clip: { ...bounds, scale: 1 },
+      });
+      await writeFile(join(output, sectionFilename), Buffer.from(sectionShot.data, 'base64'));
+      metrics.sections.push({ id, filename: sectionFilename, ...bounds });
+    }
 
     // Real DOM check: a visually interactive preview must NOT allow a live
     // submission when neither customer recipient nor private backend is ready.

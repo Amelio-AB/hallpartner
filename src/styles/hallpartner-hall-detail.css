@@ -49,6 +49,12 @@
 .hp-detail__note { display: flex; align-items: baseline; gap: .65rem 1.2rem; flex-wrap: wrap; margin-top: 2rem; padding: 1.3rem 1.6rem; border-left: 3px solid var(--hp-cta); background: #E6ECE4; }
 .hp-detail__note span { flex: 1 1 20rem; line-height: 1.65; }
 .hp-detail__split { display: grid; grid-template-columns: minmax(0,.88fr) minmax(0,1.12fr); align-items: start; gap: clamp(2.25rem,6vw,6rem); }
+/* Content photographs keep their original proportions and the existing rail.
+ * The storage source is only 590px wide; do not enlarge it on tablets. */
+.hp-detail__media-row { display: grid; grid-template-columns: minmax(0,.88fr) minmax(0,1.12fr); align-items: center; gap: clamp(2.25rem,6vw,6rem); }
+.hp-detail__content-image { display: block; width: 100%; height: auto; max-width: 100%; }
+.hp-detail--storage .hp-detail__content-image { max-width: 590px; justify-self: center; }
+.hp-detail__media-row .hp-detail__stack { margin-top: 2rem; }
 .hp-detail__section-intro > p:not(.hp-detail__eyebrow) { max-width: 33rem; color: #3B5442; line-height: 1.72; margin-top: 1.4rem; }
 .hp-detail__section-intro .hp-detail__text-link { margin-top: 1.5rem; }
 .hp-detail__stack-item { padding-block: 1.4rem; border-bottom: 1px solid #BAC7BB; }
@@ -100,7 +106,7 @@
 .hp-detail--machine .hp-detail__hero-aside dd { color: #D2DFD5; }
 .hp-detail--machine .hp-detail__hero .hp-detail__text-link { color: #F4F4F0 !important; }
 @media (max-width: 980px) {
-  .hp-detail__hero-grid, .hp-detail__split { grid-template-columns: minmax(0,1fr); gap: 2.25rem; }
+  .hp-detail__hero-grid, .hp-detail__split, .hp-detail__media-row { grid-template-columns: minmax(0,1fr); gap: 2.25rem; }
   .hp-detail__hero-aside { max-width: 42rem; }
   .hp-detail__end-inner { align-items: flex-start; flex-direction: column; }
   .hp-detail__end .hp-detail__button { flex: 0 1 auto; }

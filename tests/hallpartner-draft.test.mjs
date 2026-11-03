@@ -285,7 +285,13 @@ test('Ridhus and Tälthallar provide distinct needs-first visitor content on nat
     if (item.slug === 'talthall') {
       assert.ok(source.includes('Nej, det kan inte förutsättas.'), 'building permit question must not assert an exemption');
     }
-    assert.doesNotMatch(source, /<img(?:\s|>)|<Image(?:\s|>)/i, 'do not use unverified photography on new route');
+    // Image pilot 01 explicitly permits local legacy photos below the tent Hero.
+    // The Ridhus route and both existing Heroes remain outside that pilot.
+    const imageRestrictedContent = item.slug === 'talthall'
+      ? source.match(/<section class="hp-detail__hero"[\s\S]*?<\/section>/)?.[0]
+      : source;
+    assert.ok(imageRestrictedContent, 'existing Hero must remain present');
+    assert.doesNotMatch(imageRestrictedContent, /<img(?:\s|>)|<Image(?:\s|>)/i, 'no photos outside the agreed pilot sections');
     titles.push(source.match(/title="([^"]+)"/)?.[1] ?? '');
     descriptions.push(source.match(/description="([^"]+)"/)?.[1] ?? '');
   }

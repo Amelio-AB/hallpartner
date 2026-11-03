@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import tentPhoto from '../../../assets/images/legacy/talthall-1536x1152.jpg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 import '../../../styles/hallpartner-hall-variants.css';
@@ -108,15 +110,23 @@ const faq = [
 
     <section class="hp-detail__section hp-detail__section--paper" id="talthall-utforande" aria-labelledby="tent-design-heading">
       <div class="hp-draft-rail">
-        <div class="hp-detail__heading-row">
-          <div>
+        <div class="hp-detail__heading-row hp-detail__media-row">
+          <div class="hp-detail__section-intro">
             <p class="hp-detail__eyebrow">Förstå lösningen</p>
             <h2 id="tent-design-heading">Vad behöver en tälthall klara?</h2>
+            <p>
+              Duk som beklädnad beskriver inte hela byggnaden. Systemets
+              uppbyggnad och användningen behöver bedömas tillsammans.
+            </p>
           </div>
-          <p>
-            Duk som beklädnad beskriver inte hela byggnaden. Systemets
-            uppbyggnad och användningen behöver bedömas tillsammans.
-          </p>
+          <Image
+            src={tentPhoto}
+            alt="Vit tälthall med öppning och synlig truck."
+            class="hp-detail__content-image"
+            widths={[320, 480, 640, 960, 1280]}
+            sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 980px) calc(100vw - 2.4rem), (max-width: 1260px) 48vw, 610px"
+            loading="lazy"
+          />
         </div>
         <div class="hp-detail__cards">
           {constructionQuestions.map((item) => (

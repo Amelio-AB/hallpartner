@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import storagePhoto from '../../../assets/images/legacy/lagerhall-med-enkelplat.jpg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 
@@ -111,26 +113,36 @@ const faq = [
     </section>
 
     <section id="varuflode" class="hp-detail__section hp-detail__section--soft" aria-labelledby="storage-flow-title">
-      <div class="hp-draft-rail hp-detail__split">
-        <div class="hp-detail__section-intro">
-          <p class="hp-detail__eyebrow">Från port till förvaring</p>
-          <h2 id="storage-flow-title">Ett lager måste fungera när det används.</h2>
-          <p>
-            Tänk dig en vanlig leverans. Var stannar fordonet? Hur tas godset
-            in i hallen? Vilka ytor behöver vara fria när arbetet pågår?
-          </p>
-          <a class="hp-detail__text-link" href="/stalhallar/maskinhall/">
-            Behöver du också plats för maskiner? <span aria-hidden="true">→</span>
-          </a>
+      <div class="hp-draft-rail hp-detail__split hp-detail__media-row">
+        <div>
+          <div class="hp-detail__section-intro">
+            <p class="hp-detail__eyebrow">Från port till förvaring</p>
+            <h2 id="storage-flow-title">Ett lager måste fungera när det används.</h2>
+            <p>
+              Tänk dig en vanlig leverans. Var stannar fordonet? Hur tas godset
+              in i hallen? Vilka ytor behöver vara fria när arbetet pågår?
+            </p>
+            <a class="hp-detail__text-link" href="/stalhallar/maskinhall/">
+              Behöver du också plats för maskiner? <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div class="hp-detail__stack">
+            {flow.map((item) => (
+              <article class="hp-detail__stack-item">
+                <h3>{item.title}</h3>
+                <p>{item.detail}</p>
+              </article>
+            ))}
+          </div>
         </div>
-        <div class="hp-detail__stack">
-          {flow.map((item) => (
-            <article class="hp-detail__stack-item">
-              <h3>{item.title}</h3>
-              <p>{item.detail}</p>
-            </article>
-          ))}
-        </div>
+        <Image
+          src={storagePhoto}
+          alt="Plåtklädd lagerhall med stor öppen port."
+          class="hp-detail__content-image"
+          widths={[320, 480, 590]}
+          sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 980px) 590px, (max-width: 1260px) 48vw, 590px"
+          loading="lazy"
+        />
       </div>
     </section>
 

@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+import machinePhoto from '../../../assets/images/legacy/bygga-maskinhall.jpeg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 
@@ -102,12 +104,20 @@ const questions = [
 
     <section id="korvagar" class="hp-detail__section hp-detail__section--soft" aria-labelledby="machine-movement-title">
       <div class="hp-draft-rail">
-        <div class="hp-detail__heading-row">
-          <div>
+        <div class="hp-detail__heading-row hp-detail__media-row">
+          <div class="hp-detail__section-intro">
             <p class="hp-detail__eyebrow">Följ en vanlig arbetsdag</p>
             <h2 id="machine-movement-title">Rita upp hur maskinerna rör sig.</h2>
+            <p>En enkel skiss av användningen kan vara mer värdefull i början än en detaljerad lösning som ännu inte är dimensionerad.</p>
           </div>
-          <p>En enkel skiss av användningen kan vara mer värdefull i början än en detaljerad lösning som ännu inte är dimensionerad.</p>
+          <Image
+            src={machinePhoto}
+            alt="Stor maskin och lastbil i en rymlig hallbyggnad."
+            class="hp-detail__content-image"
+            widths={[320, 480, 640, 800, 1024]}
+            sizes="(max-width: 600px) calc(100vw - 2rem), (max-width: 980px) calc(100vw - 2.4rem), (max-width: 1260px) 48vw, 610px"
+            loading="lazy"
+          />
         </div>
         <ol class="hp-detail__movement">
           {movement.map((item) => (

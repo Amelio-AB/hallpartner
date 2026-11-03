@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import lagerhall from '../../assets/images/lagerhall.jpg';
 import maskinhall from '../../assets/images/maskinhall.jpeg';
-import talthall from '../../assets/images/talthall.jpg';
+import ridhus from '../../assets/images/legacy/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.jpg';
 import '../../styles/hallpartner-home.css';
 
 export interface Props { variant?: 'prototype' | 'site'; }
@@ -114,7 +114,14 @@ const existingPages = {
         <article class="hp-home-type">
           <a class="hp-home-type__link" href={isSite ? existingPages.ridhus : '/prototype/hallpartner/ridhus/'} aria-label="Läs om ridhus">
             <div class="hp-home-type__image">
-              <Image src={talthall} alt="Hallbyggnad som illustrerar möjlig hallkonstruktion. Inte ett verifierat Hallpartner-projekt." loading="eager" />
+              <Image
+                src={ridhus}
+                alt="Ridhus med upplyst ridbana och ryttare."
+                widths={[320, 480, 768, 1000]}
+                sizes="(max-width: 560px) calc(100vw - 2rem), (max-width: 800px) calc(100vw - 2.4rem), (max-width: 1260px) 32vw, 393px"
+                loading="lazy"
+                style="object-position: center 65%;"
+              />
 
             </div>
             <div class="hp-home-type__body">
