@@ -1,0 +1,72 @@
+---
+import '@amelio/web-platform/header-menu/style.css';
+import '../styles/hallpartner-amp-header.css';
+import { ampHeaderItems, ampHeaderCTA } from '../config/hallpartner-amp-header';
+
+interface Props { overlayHero?: boolean; }
+const { overlayHero = false } = Astro.props;
+---
+
+<div id="hp-amp-header-target" aria-live="off"></div>
+<!-- Retained until AMP mounts successfully; usable with JavaScript disabled. -->
+<header id="hp-amp-header-fallback"
+  class:list={['hp-draft-header', { 'hp-draft-header--overlay': overlayHero }]}>
+  <div class="hp-draft-rail hp-draft-header__inner">
+    <a class="hp-draft-brand" href="/" aria-label="Hallpartner – startsida">
+      <img class="hp-site-logo" src="/images/logo_text_white.png"
+        alt="Hallpartner – Hallar till alla" width="1536" height="274" decoding="async" />
+    </a>
+    <nav class="hp-draft-nav" aria-label="Huvudnavigation">
+      {ampHeaderItems.map((item) => (
+        <a href={item.href} aria-current={Astro.url.pathname === item.href ? 'page' : undefined}>{item.label}</a>
+      ))}
+      <a class="hp-draft-nav__cta" href={ampHeaderCTA.href}>{ampHeaderCTA.label}</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+  import { mountHeaderMenu } from '@amelio/web-platform/header-menu';
+  import { ampHeaderItems, ampHeaderBrand, ampHeaderCTA, ampHeaderTheme } from '../config/hallpartner-amp-header';
+
+  const mountTarget = document.getElementById('hp-amp-header-target');
+  const fallback = document.getElementById('hp-amp-header-fallback');
+  const hero = document.querySelector<HTMLElement>('.hp-home-hero[data-hero]');
+
+  if (mountTarget && fallback) {
+    try {
+      // AMP-002 owns the menu, icon, focus, dialog, scroll lock and disclosure state.
+      const instance = mountHeaderMenu(mountTarget, {
+        variant: 'classic-mega-menu',
+        mobileToggleAppearance: 'icon',
+        brand: ampHeaderBrand,
+        items: ampHeaderItems,
+        cta: ampHeaderCTA,
+        currentPath: window.location.pathname,
+        theme: ampHeaderTheme,
+        overlayHero: Boolean(hero),
+        heroElement: hero,
+        heroTone: 'dark',
+        scroll: { hideDistance: 24, revealDistance: 48, heroPrehideDistance: 160 },
+      });
+      fallback.hidden = true;
+      document.body.dataset.ampReady = 'true';
+      const header = mountTarget.querySelector<HTMLElement>('header.hm');
+      const syncHeight = () => {
+        if (header) document.body.style.setProperty('--hp-header-height', `${header.getBoundingClientRect().height}px`);
+      };
+      syncHeight();
+      const observer = new ResizeObserver(syncHeight);
+      if (header) observer.observe(header);
+      window.addEventListener('pagehide', (event) => {
+        // Keep the live instance when the browser places this page in its back/forward cache.
+        if (!event.persisted) { observer.disconnect(); instance.destroy(); }
+      });
+    } catch (error) {
+      console.error('AMP-002 could not mount; server navigation retained.', error);
+      mountTarget.replaceChildren();
+      fallback.hidden = false;
+      document.body.dataset.ampReady = 'false';
+    }
+  }
+</script>

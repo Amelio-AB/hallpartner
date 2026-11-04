@@ -1,15 +1,11 @@
-import type { HeaderMenuConfig, HeaderVariant } from '@amelio/web-platform/header-menu';
+import type { HeaderMenuConfig } from '@amelio/web-platform/header-menu';
 
-/** Hallpartner-owned data for the isolated AMP-002 comparison; not the live site Header. */
+/** Hallpartner-owned navigation and theme for the shared visitor Header. */
 export const ampHeaderItems: HeaderMenuConfig['items'] = [
   { label: 'Startsida', href: '/' },
   {
-    label: 'Hallar',
-    href: '/stalhallar/',
-    menuIntro: {
-      heading: 'Utforska våra halltyper',
-      description: 'Välj efter användningsområde eller byggnadens utförande.',
-    },
+    label: 'Hallar', href: '/stalhallar/',
+    menuIntro: { heading: 'Utforska våra halltyper', description: 'Välj efter användningsområde eller byggnadens utförande.' },
     groups: [
       { heading: 'Användningsområden', links: [
         { label: 'Lagerhallar', href: '/stalhallar/lagerhall/' },
@@ -27,25 +23,14 @@ export const ampHeaderItems: HeaderMenuConfig['items'] = [
   { label: 'Inför ditt projekt', href: '/sa-gar-det-till/' },
   { label: 'Om Hallpartner', href: '/om-oss/' },
 ];
-
 export const ampHeaderBrand: HeaderMenuConfig['brand'] = {
-  name: 'Hallpartner',
-  href: '/',
-  logoSrc: '/images/logo_text_white.png',
-  logoHeroSrc: '/images/logo_text_white.png',
+  name: 'Hallpartner', href: '/', logoSrc: '/images/logo_text_white.png', logoHeroSrc: '/images/logo_text_white.png',
 };
-export const ampHeaderCTA: NonNullable<HeaderMenuConfig['cta']> = {
-  label: 'Kontakt', href: '/kontakt/',
-};
+export const ampHeaderCTA: NonNullable<HeaderMenuConfig['cta']> = { label: 'Kontakt', href: '/kontakt/' };
 export const ampHeaderTheme: NonNullable<HeaderMenuConfig['theme']> = {
   colors: {
-    headerBg: '#071A16',
-    headerText: '#F4F4F0',
-    submenuBg: '#EBEBE8',
-    submenuText: '#202427',
-    accent: '#287B39',
-    ctaText: '#FFFFFF',
+    headerBg: '#071A16', headerText: '#F4F4F0', submenuBg: '#EBEBE8',
+    submenuText: '#202427', accent: '#287B39', ctaText: '#FFFFFF',
   },
   font: 'Inter, system-ui, sans-serif',
 };
-export const ampReviewVariants: readonly HeaderVariant[] = ['classic-dropdown','classic-mega-menu'];

@@ -5,11 +5,7 @@ import maskinhall from '../../assets/images/maskinhall.jpeg';
 import ridhus from '../../assets/images/legacy/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.jpg';
 import '../../styles/hallpartner-home.css';
 
-export interface Props { variant?: 'prototype' | 'site'; }
-const { variant = 'prototype' } = Astro.props;
-const isSite = variant === 'site';
-// Hall category links use native noindex Astro drafts. Contact still uses the
-// existing WordPress page until a receiving backend is verified.
+// Native visitor routes. Image sources and visual composition are unchanged.
 const existingPages = {
   lagerhallar: '/stalhallar/lagerhall/',
   maskinhallar: '/stalhallar/maskinhall/',
@@ -17,7 +13,6 @@ const existingPages = {
   isolerade: '/stalhallar/isolerad-hall/',
   kontakt: '/kontakt/',
 } as const;
-
 ---
 
 <div class="hp-home">
@@ -42,18 +37,15 @@ const existingPages = {
           Här får du en överblick över olika halltyper och vad som är bra att tänka igenom.
         </p>
         <div class="hp-home-actions">
-          <a class="hp-home-button hp-home-button--primary" href={isSite ? '#halltyper' : '/prototype/hallpartner/hallar/'}>
+          <a class="hp-home-button hp-home-button--primary" href="#halltyper">
             Utforska halltyper
-            <span aria-hidden="true">{isSite ? '→' : '↗'}</span>
+            <span aria-hidden="true">→</span>
           </a>
           <a class="hp-home-textlink" href="#att-tanka-pa">
             Vad behöver jag veta?
             <span aria-hidden="true">↓</span>
           </a>
         </div>
-        {!isSite && (
-        <p class="hp-home-hero__caption">AI-genererad konceptbild, inte ett utfört Hallpartner-projekt. Sortiment och texter inväntar kundverifiering.</p>
-        )}
       </div>
     </div>
     <div class="hp-home-hero__edge" aria-hidden="true"></div>
@@ -82,37 +74,35 @@ const existingPages = {
       </div>
       <div class="hp-home-type-grid">
         <article class="hp-home-type">
-          <a class="hp-home-type__link" href={isSite ? existingPages.lagerhallar : '/prototype/hallpartner/lagerhallar/'} aria-label="Läs om lagerhallar">
+          <a class="hp-home-type__link" href={existingPages.lagerhallar} aria-label="Läs om lagerhallar">
             <div class="hp-home-type__image">
               <Image src={lagerhall} alt="Hallbyggnad som illustrerar temat lager." loading="eager" />
-
             </div>
             <div class="hp-home-type__body">
               <div>
                 <h3>Lagerhallar</h3>
                 <p>För dig som planerar plats för förvaring, varuflöden och åtkomst.</p>
               </div>
-              <span class="hp-home-type__arrow" aria-hidden="true">{isSite ? '→' : '↗'}</span>
+              <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
           </a>
         </article>
         <article class="hp-home-type">
-          <a class="hp-home-type__link" href={isSite ? existingPages.maskinhallar : '/prototype/hallpartner/maskinhallar/'} aria-label="Läs om maskinhallar">
+          <a class="hp-home-type__link" href={existingPages.maskinhallar} aria-label="Läs om maskinhallar">
             <div class="hp-home-type__image">
               <Image src={maskinhall} alt="Hallbyggnad som illustrerar temat maskiner." loading="eager" />
-
             </div>
             <div class="hp-home-type__body">
               <div>
                 <h3>Maskinhallar</h3>
                 <p>För verksamheter som behöver ta hänsyn till maskinernas storlek och hur de används.</p>
               </div>
-              <span class="hp-home-type__arrow" aria-hidden="true">{isSite ? '→' : '↗'}</span>
+              <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
           </a>
         </article>
         <article class="hp-home-type">
-          <a class="hp-home-type__link" href={isSite ? existingPages.ridhus : '/prototype/hallpartner/ridhus/'} aria-label="Läs om ridhus">
+          <a class="hp-home-type__link" href={existingPages.ridhus} aria-label="Läs om ridhus">
             <div class="hp-home-type__image">
               <Image
                 src={ridhus}
@@ -122,21 +112,20 @@ const existingPages = {
                 loading="lazy"
                 style="object-position: center 65%;"
               />
-
             </div>
             <div class="hp-home-type__body">
               <div>
                 <h3>Ridhus</h3>
                 <p>För dig som vill undersöka planering av en hall för ridverksamhet.</p>
               </div>
-              <span class="hp-home-type__arrow" aria-hidden="true">{isSite ? '→' : '↗'}</span>
+              <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
           </a>
         </article>
       </div>
       <div class="hp-home-types__bottom">
-        <p>{isSite ? 'Läs mer om användningsområden och olika hallsystem.' : 'Detta är ämnesingångar i ett utkast, inte ett verifierat produktsortiment.'}</p>
-        <a href={isSite ? '/stalhallar/' : '/prototype/hallpartner/hallar/'}>Se hela hallöversikten <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
+        <p>Läs mer om användningsområden och olika hallsystem.</p>
+        <a href="/stalhallar/">Se hela hallöversikten <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -156,7 +145,7 @@ const existingPages = {
           Det är därför bra att skilja på vad hallen ska användas till,
           hur den kan byggas och vilka egenskaper som behöver undersökas.
         </p>
-        <a href={isSite ? existingPages.isolerade : '/prototype/hallpartner/isolerade-hallar/'}>Läs om isolering som egenskap <span aria-hidden="true">{isSite ? '→' : '↗'}</span></a>
+        <a href={existingPages.isolerade}>Läs om isolering som egenskap <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -170,15 +159,12 @@ const existingPages = {
       </div>
       <ul class="hp-home-planning__list">
         <li>
-
           <div><h3>Vad ska rymmas?</h3><p>Beskriv verksamheten och vad ytan främst ska användas till.</p></div>
         </li>
         <li>
-
           <div><h3>Hur ska hallen användas?</h3><p>Fundera på exempelvis infart, dagliga rörelser och behov av åtkomst.</p></div>
         </li>
         <li>
-
           <div><h3>Var är hallen tänkt att stå?</h3><p>Plats och förutsättningar behöver undersökas innan tekniska beslut kan fattas.</p></div>
         </li>
       </ul>
@@ -190,17 +176,11 @@ const existingPages = {
       <div>
         <p class="hp-home-kicker hp-home-kicker--dark">Nästa steg</p>
         <h2 id="hp-home-final-title">Har du ett hallprojekt i tankarna?</h2>
-        <p>{isSite ? 'Berätta vad du planerar och vilka förutsättningar du känner till. Du kan börja med en enkel beskrivning.' : 'Se vårt kontaktutkast och vilka uppgifter som kan vara bra att ha med. Formuläret är ännu inte anslutet.'}</p>
+        <p>Berätta vad du planerar och vilka förutsättningar du känner till. Du kan börja med en enkel beskrivning.</p>
       </div>
-      <a class="hp-home-button hp-home-button--primary" href={isSite ? existingPages.kontakt : '/prototype/hallpartner/kontakt/'}>
-        {isSite ? 'Kontakta oss' : 'Till kontaktsidan'} <span aria-hidden="true">{isSite ? '→' : '↗'}</span>
+      <a class="hp-home-button hp-home-button--primary" href={existingPages.kontakt}>
+        Kontakta oss <span aria-hidden="true">→</span>
       </a>
     </div>
-    {!isSite && (
-    <p class="hp-draft-rail hp-home-final__disclaimer">
-      Ursprungligt fulltextutkast saknas. Alla texter och bilder på denna sida är arbetsmaterial,
-      inte kundgodkända verksamhetsuppgifter eller verifierade referensprojekt.
-    </p>
-    )}
   </section>
 </div>

@@ -1,0 +1,17 @@
+/* Site adapter for the approved AMP-002 component. Menu behavior belongs to AMP. */
+.hp-amp-site-header #hp-amp-header-fallback[hidden] { display:none !important; }
+.hp-amp-site-header #hp-amp-header-fallback:not([hidden]) { z-index:110; }
+.hp-amp-site-header #hp-amp-header-fallback:not([hidden]) .hp-draft-nav { flex-wrap:wrap; }
+.hp-amp-site-header .hm { --hm-font: Inter, system-ui, sans-serif; }
+.hp-amp-site-header .hm__logo { max-width:min(11.5rem,100%); height:auto; }
+.hp-amp-site-header .hm--classic-mega-menu .hm__desktop,
+.hp-amp-site-header .hm--classic-mega-menu .hm__mobile-bar { max-width:1268px; margin-inline:auto; }
+.hp-amp-site-header .hm--classic-mega-menu .hm__desktop { padding-inline:24px; }
+.hp-amp-site-header .hm .hm__brand { max-width:12rem; }
+.hp-amp-site-header[data-header-mode="solid"][data-amp-ready="true"] .hp-draft-main { padding-top:var(--hp-header-height,4.875rem); }
+@media (max-width:64rem) {
+  .hp-amp-site-header .hm__mobile-bar { padding-inline:1.15rem; }
+  .hp-amp-site-header[data-header-mode="solid"][data-amp-ready="true"] .hp-draft-main { padding-top:var(--hp-header-height,4.35rem); }
+}
+@media (max-width:420px) { .hp-amp-site-header .hm__mobile-bar .hm__logo { max-width:9.5rem; } }
+@media (prefers-reduced-motion:reduce) { .hp-amp-site-header * { scroll-behavior:auto; } }

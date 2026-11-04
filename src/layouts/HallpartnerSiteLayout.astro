@@ -1,15 +1,72 @@
 ---
-import HallpartnerDraftLayout from './HallpartnerDraftLayout.astro';
+import '../styles/hallpartner-draft.css';
+import '../styles/hallpartner-amp-footer.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 export interface Props {
   title: string;
   description: string;
   omitCanonical?: boolean;
 }
 const { title, description, omitCanonical = false } = Astro.props;
+const isHome = Astro.url.pathname === '/';
+const canonical = !omitCanonical && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+const useAmpFooter = process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
+const ampFooterHtml = useAmpFooter
+  ? readFileSync(join(process.cwd(), '.generated', 'amp-003-footer.html'), 'utf8')
+  : '';
 ---
 
-<!-- Temporary shared shell retains the existing tested header behavior.
-     Replace with real AMP integration once package access is verified. -->
-<HallpartnerDraftLayout title={title} description={description} variant="site" omitCanonical={omitCanonical}>
-  <slot />
-</HallpartnerDraftLayout>
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>{title} | Hallpartner</title>
+    <meta name="description" content={description} />
+    {canonical && (
+      <>
+        <link rel="canonical" href={canonical} />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Hallpartner" />
+        <meta property="og:title" content={`${title} | Hallpartner`} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonical} />
+      </>
+    )}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {useAmpFooter && <link rel="stylesheet" href="/generated/amp-003-footer.css" />}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+  </head>
+  <body class="hp-draft hp-site hp-amp-site-header" data-header-mode={isHome ? 'hero' : 'solid'}>
+    <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
+    <SiteHeader overlayHero={isHome} />
+    <main id="main-content" class="hp-draft-main" tabindex="-1">
+      <slot />
+    </main>
+    {useAmpFooter ? (
+      <Fragment set:html={ampFooterHtml} />
+    ) : (
+      <footer class="hp-draft-footer">
+        <div class="hp-draft-rail hp-draft-footer__inner">
+          <div>
+            <p class="hp-draft-footer__brand">Hallpartner</p>
+            <p class="hp-draft-footer__note">Utforska olika halltyper och börja med hur hallen ska användas.</p>
+          </div>
+          <div class="hp-draft-footer__links">
+            <a href="/stalhallar/">Hallar</a>
+            <a href="/sa-gar-det-till/">Så går det till</a>
+            <a href="/om-oss/">Om Hallpartner</a>
+            <a href="/kontakt/">Kontakt</a>
+          </div>
+        </div>
+      </footer>
+    )}
+  </body>
+</html>
