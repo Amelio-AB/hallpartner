@@ -65,7 +65,7 @@ export const hallpartnerQuoteConfig = {
       ],
       fields: [
         {
-          id: 'dimensions.confidence', kind: 'select', required: true,
+          id: 'dimensions.confidence', kind: 'select',
           label: 'Vet du ungefär hur stor hallen ska vara?',
           help: { title: 'Ungefärliga mått fungerar', text: 'Bredd och längd är bara ett första underlag. Välj hjälp om du vill resonera om måtten med Hallpartner.' },
           options: [

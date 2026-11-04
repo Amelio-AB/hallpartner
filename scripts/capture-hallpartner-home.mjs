@@ -230,8 +230,15 @@ try {
         form.requestSubmit();
         const certainty=host.querySelector('select[name="dimensions.confidence"]');
         if(!certainty)return {onDimensions:false};
-        certainty.value='approximate';
-        certainty.dispatchEvent(new Event('input',{bubbles:true}));
+        const optional=certainty.required===false&&certainty.value==='';
+        form.requestSubmit();
+        const skippedToDesign=!!host.querySelector('select[name="design.insulation"]');
+        host.querySelector('.qf-actions button:not([type="submit"])')?.click();
+        const returned=!!host.querySelector('select[name="dimensions.confidence"]');
+        const updatedCertainty=host.querySelector('select[name="dimensions.confidence"]');
+        if(!updatedCertainty)return {returned:false};
+        updatedCertainty.value='approximate';
+        updatedCertainty.dispatchEvent(new Event('input',{bubbles:true}));
         const group=host.querySelector('button.qf-group-toggle');
         const collapsed=group?.getAttribute('aria-expanded')==='false';
         group?.click();
@@ -242,7 +249,7 @@ try {
         const closed=group?.getAttribute('aria-expanded')==='false';
         group?.click();
         return {
-          onDimensions:!!certainty,collapsed,expanded,closed,
+          onDimensions:!!certainty,optional,skippedToDesign,returned,collapsed,expanded,closed,
           retained:host.querySelector('input[name="dimensions.side_height"]')?.value==='5',
           groupOpen:group?.getAttribute('aria-expanded')==='true'
         };

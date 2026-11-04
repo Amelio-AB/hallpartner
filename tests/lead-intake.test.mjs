@@ -146,9 +146,10 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
 
 
 
-test('optional hall interest is independent of intended use and keeps five required fields',()=>{
+test('optional hall interest is independent of intended use and only four fields are required',()=>{
  const required=hallpartnerQuoteConfig.steps.flatMap(step=>step.fields.filter(field=>field.required).map(field=>field.id));
- assert.deepEqual(required,['project.use','project.description','dimensions.confidence','contact.name','contact.email']);
+ assert.deepEqual(required,['project.use','project.description','contact.name','contact.email']);
+ assert.deepEqual(hallpartnerQuoteAttachmentsReviewConfig.steps.flatMap(step=>step.fields.filter(field=>field.required).map(field=>field.id)),required,'file review has same four required answers');
  const project=hallpartnerQuoteConfig.steps[0];
  const preference=project.fields.find(field=>field.id==='project.hall_interest');
  assert.ok(preference&&preference.kind==='select'&&!preference.required);
@@ -163,6 +164,32 @@ test('optional hall interest is independent of intended use and keeps five requi
  assert.equal(flow.snapshot().active['project.use'],'riding','use is independent of interest');
  assert.equal(flow.snapshot().active['project.hall_interest'],'talthall','hall interest is retained');
  assert.equal(flow.next(),true);
+ flow.dispose();
+});
+
+test('optional measurement certainty can be skipped without blocking the full six-step review',()=>{
+ const flow=createQuoteFlow(hallpartnerQuoteConfig,async()=>({status:'failed'}));
+ flow.set('project.use','storage');
+ flow.set('project.description','Syntetiskt test av offertförfrågan med okända mått.');
+ assert.equal(flow.next(),true);
+ assert.equal(flow.snapshot().active['dimensions.confidence'],'');
+ assert.equal(flow.next(),true,'an answer about measurement confidence is no longer required');
+ assert.equal(flow.snapshot().stepIndex,2);
+ assert.equal(flow.back(),true);
+ assert.equal(flow.set('dimensions.width','18,5'),true,'width remains available when certainty is blank');
+ assert.equal(flow.set('dimensions.length','32'),true,'length remains available when certainty is blank');
+ assert.equal(flow.snapshot().active['dimensions.width'],'18,5');
+ assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true);
+ flow.set('contact.name','Synthetic Person');
+ flow.set('contact.email','test@example.invalid');
+ assert.equal(flow.next(),true);
+ assert.equal(flow.snapshot().reviewing,true);
+ assert.equal(flow.snapshot().stepIndex,5);
+ assert.equal(flow.snapshot().active['dimensions.confidence'],'');
+ assert.equal(flow.snapshot().active['dimensions.width'],'18,5');
+ assert.ok(!Object.hasOwn(flow.snapshot().errors,'dimensions.confidence'));
  flow.dispose();
 });
 
