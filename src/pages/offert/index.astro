@@ -4,59 +4,76 @@ import '../../styles/hallpartner-info.css';
 import '../../styles/hallpartner-leads.css';
 import '@amelio/web-platform/quote-flow/style.css';
 
-// Only enable after SMTP receipt, approved recipient and privacy notice are tested.
-const ready = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
+// Explicitly locked for the V2 question schema: PHP /api/lead.php accepts
+// ONLY the previous V1 field allowlist. No environment flag may enable this
+// review candidate until a separately validated backend has been released.
+const ready = false;
+const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === 'true';
 ---
 
 <HallpartnerSiteLayout
   title="Begär offert"
-  description="Beskriv vad din hall ska användas till, ungefärliga mått och byggort. En första förfrågan till Hallpartner – ingen automatisk prisberäkning."
+  description="Beskriv behov, ungefärliga mått och projektläge i Hallpartners offertguide. Ingen automatisk prisberäkning eller beställning."
 >
   <div class="hp-quote-shell">
     <nav class="hp-draft-rail hp-info__crumbs" aria-label="Brödsmulor">
       <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Offert</span>
     </nav>
     <div class="hp-draft-rail hp-quote-shell__lead">
-      <p class="hp-info__eyebrow">Hallpartner / Offertförfrågan</p>
-      <h1>Beskriv din hallförfrågan.</h1>
-      <p>Beskriv vad hallen ska användas till, byggorten och ungefärliga mått. Du behöver inte känna till alla tekniska val. Guiden samlar underlag för en offertförfrågan – den visar inget automatiskt pris och innebär ingen beställning.</p>
+      <p class="hp-quote-shell__eyebrow">Offertförfrågan</p>
+      <h1>Berätta om hallen du planerar</h1>
+      <p>Beskriv vad hallen ska användas till och ungefär hur stor den behöver vara. Du behöver inte kunna alla tekniska detaljer – vi börjar med ditt behov.</p>
     </div>
     <p class:list={['hp-leads-note', 'hp-quote-shell__notice', { 'hp-leads-note--review': !ready }]} id="hp-offert-notice">
-      {ready
-        ? 'Beskriv projektet i guiden för att skicka en förfrågan till Hallpartner.'
-        : 'Arbetsversion: du kan prova guiden, men inskickning är ännu inte aktiverad. Kontakta Hallpartner via telefon eller mejl tills mottagningen har verifierats.'}
+      {filesReview
+        ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
+        : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
     </p>
-    <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)}
+    <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)} data-files-review={String(filesReview)}
       aria-describedby="hp-offert-notice"></div>
     <noscript><p class="hp-draft-rail">Guiden behöver JavaScript. <a href="/kontakt/">Kontakta Hallpartner här.</a></p></noscript>
-    <p class="hp-draft-rail">Vill du börja med ett samtal? <a href="/kontakt/">Se kontaktuppgifter</a>.</p>
+    <p class="hp-draft-rail hp-quote-shell__fallback">Vill du börja med ett samtal? <a href="/kontakt/">Se kontaktuppgifter</a>.</p>
   </div>
 </HallpartnerSiteLayout>
 
 <script>
-  import { mountQuoteFlow, createJsonAdapter } from '@amelio/web-platform/quote-flow';
-  import type { Adapter } from '@amelio/web-platform/quote-flow';
+  import { mountQuoteFlow } from '@amelio/web-platform/quote-flow';
+  import type { Adapter, UploadIntegration } from '@amelio/web-platform/quote-flow';
   import { hallpartnerQuoteConfig } from '../../config/hallpartner-quote';
+  import { hallpartnerQuoteAttachmentsReviewConfig } from '../../config/hallpartner-quote-attachments-review';
   const host = document.querySelector<HTMLElement>('#hp-offert-guide');
   if (host) {
-    const enabled = host.dataset.enabled === 'true';
+    const reviewFiles = host.dataset.filesReview === 'true';
+    // Fail closed on every submission route; there is no active quote receiver.
     const blocked: Adapter = async () => ({ status: 'failed' });
-    const instance = mountQuoteFlow(host, hallpartnerQuoteConfig,
-      enabled ? createJsonAdapter('/api/lead.php') : blocked, { timeoutMs: 15000 });
-    if (!enabled) {
-      const protect = () => {
-        for (const button of host.querySelectorAll<HTMLButtonElement>('button[type="submit"]')) {
-          if (button.textContent?.includes('Skicka förfrågan')) {
-            button.disabled = true;
-            button.title = 'Arbetsversion. Inskickning är inte aktiverad.';
-          }
+    const reviewOnlyUploads: UploadIntegration = {
+      async upload() { throw new Error('Filuppladdningen är inte aktiverad.'); },
+      async submit() { return { status: 'failed' }; }
+    };
+    const instance = mountQuoteFlow(host,
+      reviewFiles ? hallpartnerQuoteAttachmentsReviewConfig : hallpartnerQuoteConfig,
+      blocked,
+      reviewFiles ? { timeoutMs: 15000, uploads: reviewOnlyUploads } : { timeoutMs: 15000 });
+    const protect = () => {
+      for (const button of host.querySelectorAll<HTMLButtonElement>('button[type="submit"]')) {
+        if (button.textContent?.includes('Skicka förfrågan')) {
+          button.disabled = true;
+          button.title = 'Arbetsversion. Inskickning är inte aktiverad.';
         }
-      };
-      const observer = new MutationObserver(protect);
-      observer.observe(host, {childList: true, subtree: true});
+      }
+    };
+    // A capture-phase guard also blocks submit events invoked before the
+    // MutationObserver runs. This avoids relying on disabled-button timing.
+    host.addEventListener('submit', event => {
+      const finalButton = host.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (!finalButton?.textContent?.includes('Skicka förfrågan')) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
       protect();
-      window.addEventListener('pagehide', () => observer.disconnect(), {once:true});
-    }
-    window.addEventListener('pagehide', () => instance.destroy(), {once:true});
+    }, { capture: true });
+    const observer = new MutationObserver(protect);
+    observer.observe(host, { childList: true, subtree: true });
+    protect();
+    window.addEventListener('pagehide', () => { observer.disconnect(); instance.destroy(); }, { once: true });
   }
 </script>

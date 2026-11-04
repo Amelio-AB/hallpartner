@@ -1,6 +1,6 @@
 # Hallpartner – komplett specifikation för dynamiskt offertflöde
 
-> **Status:** Arbetsunderlag / source of truth för framtida implementation i nya Astro-baserade hallpartner.se.  
+> **Statusrättelse 2026-11-04:** Detta är ett **historiskt frågeunderlag** från 2 oktober, inte längre godkänd källa för antalet visuella steg eller kundens sortiment. Uttryck som ”beslutad” och ”source of truth” nedan avser den äldre arbetsversionen. Den aktuella V2-kandidaten har **fem frågesteg + AMP-001:s automatiska slutgranskning** och dokumenteras i [HALLPARTNER_OFFERTGUIDE_V2.md](content/HALLPARTNER_OFFERTGUIDE_V2.md). Frågorna till Peter och Jimmy är ännu inte besvarade i det inventerade beslutsunderlaget. Behåll historiken för spårbarhet, men använd inte tio rubriker som tio UI-steg.\n\n> **Status:** Arbetsunderlag / source of truth för framtida implementation i nya Astro-baserade hallpartner.se.  
 > **Syfte:** Samla Hallpartners beslutade offertflöde, frågor, villkor, datamodell och UX-principer i ett dokument.  
 > **Viktigt:** Dokumentet beskriver affärsflödet. Exakt UI-copy kan finslipas innan implementation. Där tidigare beslut bara anger ett fält eller ett begrepp och inte en exakt frågetext markeras detta som arbetsformulering.
 

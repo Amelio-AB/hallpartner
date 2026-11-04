@@ -3,8 +3,8 @@
  * The platform package, not this site, provides HTML escaping and responsive behavior.
  * Former WordPress contact details are provisional until customer verification.
  */
-// This is the approved platform package version, not the Footer product version.
-export const AMP003_APPROVED_VERSION = '1.4.0';
+// This is the current verified private platform package version (AMP-003 API unchanged), not the Footer product version.
+export const AMP003_APPROVED_VERSION = '1.5.0';
 
 export const hallpartnerFooterConfig = {
   variant: 'compact',

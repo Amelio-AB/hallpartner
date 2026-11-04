@@ -22,3 +22,550 @@
 .hp-contact-form__status[data-state="success"] { color:#1A672C; }
 .hp-contact-form__website { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
 @media (max-width:650px) { .hp-contact-form { grid-template-columns:1fr; } }
+
+
+/* Offertguide – Hallpartners visuella tolkning av referensbilderna.
+   Uses the REAL visitor-site Inter font and hp-site CTA, not the reference client's serif.
+   Only /offert/ is affected. AMP-001 markup, logic, contact form and backend are untouched.
+   Muted surfaces are fixed colors: no contrast changes against varying page backgrounds. */
+.hp-quote-shell {
+  --hp-quote-paper: #EBEBE8;
+  --hp-quote-card: #F1F4F0;
+  --hp-quote-card-border: #CDD7CD;
+  --hp-quote-checked: #E7F1E6;
+  --hp-quote-checked-border: #287B39;
+  --hp-quote-muted-green: #E2EAE1;
+  --hp-quote-line: #C5CFC6;
+  --hp-quote-heading: #071A16;
+  background: var(--hp-quote-paper);
+  color: var(--hp-quote-heading);
+  padding-block: 1.15rem clamp(3rem, 5vw, 5.5rem);
+}
+.hp-quote-shell__lead {
+  max-width: 58rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: clamp(1.5rem, 4vw, 3.25rem) clamp(1.2rem, 3vw, 2.3rem);
+  text-align: center;
+}
+.hp-quote-shell__lead .hp-quote-shell__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin: 0 0 1.25rem;
+  padding: .46rem 1.05rem;
+  border-radius: 999px;
+  background: var(--hp-quote-muted-green);
+  color: #28523B;
+  font-size: .73rem;
+  font-weight: 750;
+  line-height: 1.3;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.hp-quote-shell__lead h1 {
+  max-width: 20ch;
+  margin: 0 0 1rem;
+  color: var(--hp-quote-heading);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: clamp(2.3rem, 4.3vw, 4rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -.052em;
+  text-wrap: balance;
+}
+.hp-quote-shell__lead > p:last-child {
+  max-width: 43rem;
+  margin: 0 auto;
+  color: #435A4C;
+  font-size: clamp(1rem, 1.3vw, 1.14rem);
+  line-height: 1.66;
+}
+.hp-quote-shell__notice {
+  width: min(calc(100% - 2.4rem), 58rem);
+  max-width: 58rem;
+  margin-block: 0 clamp(1.75rem, 3vw, 2.3rem);
+  padding: .72rem 1.05rem;
+  border-inline-start-width: 3px;
+  border-radius: 5px;
+  font-size: .84rem;
+  line-height: 1.58;
+}
+.hp-quote-shell__fallback {
+  padding-top: 1.4rem;
+  font-size: .94rem;
+  text-align: center;
+}
+.hp-quote-shell__fallback a {
+  color: var(--hp-link-on-light, #236F31);
+  text-underline-offset: .24em;
+}
+
+/* The site has its own h1 and intro. Hide the redundant AMP visual heading;
+   its configuration title remains as the form's aria-label. */
+.hp-quote-shell .qf {
+  --quote-background: transparent;
+  --quote-surface: #FFFFFF;
+  --quote-surface-muted: #F3F6F2;
+  --quote-text: #071A16;
+  --quote-muted: #455A4B;
+  --quote-primary: var(--hp-cta, #287B39);
+  --quote-primary-hover: var(--hp-cta-hover, #1D6529);
+  --quote-primary-muted: #E7F1E6;
+  --quote-accent: #287B39;
+  --quote-border: #CAD4CA;
+  --quote-error: #9F3026;
+  --quote-radius-sm: 6px;
+  --quote-radius-md: 8px;
+  --quote-radius-lg: 10px;
+  --quote-font-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --quote-font-heading: var(--quote-font-body);
+  max-width: 67rem;
+  margin-inline: auto;
+  padding: 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  overflow-wrap: normal;
+}
+.hp-quote-shell .qf .qf-intro { display: none; }
+
+/* Desktop: numbered route with labels. Mobile: six short segments + current step. */
+.hp-quote-shell .qf .qf-progress {
+  max-width: 62rem;
+  margin: 0 auto clamp(1.4rem, 3vw, 2.1rem);
+}
+.hp-quote-shell .qf .qf-progress-list {
+  display: flex;
+  gap: .2rem;
+}
+.hp-quote-shell .qf .qf-progress-item {
+  gap: .42rem;
+  min-width: 0;
+  color: #4F6556;
+  font-size: .82rem;
+  line-height: 1.35;
+  font-weight: 540;
+}
+.hp-quote-shell .qf .qf-progress-item:not(:last-child)::before {
+  top: 1.03rem;
+  left: calc(50% + 1.45rem);
+  width: calc(100% - 2.9rem);
+  height: 1px;
+  background: #B5C2B7;
+}
+.hp-quote-shell .qf .qf-progress-number {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-color: #B5C5B7;
+  background: #F8FAF7;
+  color: #244F34;
+  font-size: .88rem;
+  font-weight: 700;
+}
+.hp-quote-shell .qf .qf-progress-item.is-active {
+  color: #153A24;
+  font-weight: 720;
+}
+.hp-quote-shell .qf .qf-progress-item.is-active .qf-progress-number {
+  background: var(--quote-primary);
+  border-color: var(--quote-primary);
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px var(--hp-quote-muted-green);
+}
+.hp-quote-shell .qf .qf-progress-item.is-complete .qf-progress-number {
+  background: #DAECDC;
+  border-color: #8FB49B;
+  color: #205A30;
+}
+.hp-quote-shell .qf .qf-progress-state {
+  color: #41674B;
+  font-size: .7rem;
+  font-weight: 600;
+}
+
+/* A calm, white form surface with a quieter panel hierarchy. */
+.hp-quote-shell .qf .qf-panel {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: clamp(1.3rem, 4vw, 3rem);
+  border: 1px solid #DEE4DD;
+  border-radius: 11px;
+  background: #FFFFFF;
+  box-shadow: 0 2px 10px rgb(7 26 22 / 3%), 0 12px 32px rgb(7 26 22 / 7%);
+}
+.hp-quote-shell .qf .qf-step-heading {
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  max-width: 46rem;
+}
+.hp-quote-shell .qf .qf-kicker {
+  margin-bottom: .62rem;
+  color: #2E633C;
+  font-size: .76rem;
+  line-height: 1.4;
+  font-weight: 760;
+  letter-spacing: .105em;
+}
+.hp-quote-shell .qf .qf-step-heading h3 {
+  margin: 0 0 .62rem;
+  color: #0B2318;
+  font-family: var(--quote-font-heading);
+  font-size: clamp(1.75rem, 2.8vw, 2.45rem);
+  line-height: 1.22;
+  font-weight: 690;
+  letter-spacing: -.042em;
+  text-wrap: balance;
+}
+.hp-quote-shell .qf .qf-step-heading > p:last-child:not(.qf-kicker) {
+  color: var(--quote-muted);
+  font-size: .99rem;
+  line-height: 1.65;
+}
+
+/* Two-column fields like the reference: grouped extras always get their own row.
+   Textareas and choice cards stay full width. One column below 740px. */
+.hp-quote-shell .qf .qf-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 1.35rem 1.25rem;
+}
+.hp-quote-shell .qf .qf-fields > :is(.qf-field, .qf-field-slot, .qf-field-group) {
+  min-width: 0;
+  max-width: 100%;
+}
+.hp-quote-shell .qf .qf-fields > .qf-field-group,
+.hp-quote-shell .qf .qf-fields > .qf-card-field,
+.hp-quote-shell .qf .qf-fields > .qf-field:has(textarea),
+.hp-quote-shell .qf .qf-fields > .qf-field-slot:has(textarea),
+.hp-quote-shell .qf .qf-fields > .qf-field-slot:has(.qf-card-field),
+.hp-quote-shell .qf .qf-fields > .qf-field-slot:has([name="dimensions.confidence"]),
+.hp-quote-shell .qf .qf-fields > .qf-field-slot:has([name="site.city"]) {
+  grid-column: 1 / -1;
+}
+.hp-quote-shell .qf .qf-field :is(label, legend) {
+  margin-bottom: .52rem;
+  color: #102F1F;
+  font-size: .94rem;
+  line-height: 1.48;
+  font-weight: 660;
+}
+.hp-quote-shell .qf .qf-label-row {
+  gap: .35rem .5rem;
+  margin-bottom: .3rem;
+}
+.hp-quote-shell .qf .qf-label-row label { margin: 0; }
+.hp-quote-shell .qf .qf-hint {
+  margin: .48rem 0 0;
+  color: #5B6C5D;
+  font-size: .85rem;
+  line-height: 1.5;
+}
+.hp-quote-shell .qf :is(input:not([type=radio]), select, textarea) {
+  width: 100%;
+  min-height: 3.55rem;
+  padding: .83rem .98rem;
+  border: 1px solid #BFCBBF;
+  border-radius: 7px;
+  background: #FFFFFF;
+  color: #102C1F;
+  font-family: var(--quote-font-body);
+  font-size: 1rem;
+  line-height: 1.45;
+}
+.hp-quote-shell .qf textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+.hp-quote-shell .qf :is(input:not([type=radio]), select, textarea):focus-visible {
+  border-color: var(--quote-primary);
+  outline: 3px solid #287B39;
+  outline-offset: 2px;
+}
+.hp-quote-shell .qf [aria-invalid="true"] {
+  border-color: var(--quote-error);
+}
+
+/* Selectable cards are intentionally more spacious than later inputs.
+   Fixed pale-green surfaces echo the primary color without losing contrast. */
+.hp-quote-shell .qf .qf-cards {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.hp-quote-shell .qf .qf-card {
+  min-width: 0;
+  min-height: 7.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .85rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--hp-quote-card-border);
+  border-radius: 9px;
+  background: var(--hp-quote-card);
+  box-shadow: none;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+.hp-quote-shell .qf .qf-card:hover {
+  border-color: #739E7D;
+  background: #EAF0E8;
+}
+.hp-quote-shell .qf .qf-card:has(input:checked) {
+  border-color: var(--hp-quote-checked-border);
+  background: var(--hp-quote-checked);
+  box-shadow: inset 0 0 0 1px var(--hp-quote-checked-border);
+}
+.hp-quote-shell .qf .qf-card:has(input:focus-visible) {
+  outline: 3px solid #287B39;
+  outline-offset: 3px;
+}
+.hp-quote-shell .qf .qf-card-copy {
+  min-width: 0;
+  gap: .35rem;
+}
+.hp-quote-shell .qf .qf-card-copy strong {
+  color: #132D1E;
+  font-family: var(--quote-font-heading);
+  font-size: clamp(1.07rem, 1.45vw, 1.25rem);
+  font-weight: 690;
+  line-height: 1.28;
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: manual;
+}
+.hp-quote-shell .qf .qf-card-copy > span {
+  color: #465D4D;
+  font-size: .89rem;
+  line-height: 1.5;
+}
+.hp-quote-shell .qf .qf-card-marker {
+  flex: 0 0 1.35rem;
+  display: grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  border: 1px solid #AABCAE;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #FFFFFF;
+  font-size: 0;
+  opacity: 1;
+}
+.hp-quote-shell .qf .qf-card:has(input:checked) .qf-card-marker {
+  border-color: var(--quote-primary);
+  background: var(--quote-primary);
+}
+.hp-quote-shell .qf .qf-card:has(input:checked) .qf-card-marker::after {
+  content: '✓';
+  font-size: .82rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.hp-quote-shell .qf .qf-cards > .qf-card:nth-last-child(1):nth-child(odd) {
+  grid-column: 1 / -1;
+  min-height: 5.8rem;
+}
+
+/* Optional sections open naturally. The collapsed state must retain answers. */
+.hp-quote-shell .qf .qf-field-group {
+  padding: clamp(.95rem, 2vw, 1.35rem);
+  border: 1px solid #D3DED4;
+  border-radius: 8px;
+  background: #F6F8F5;
+}
+.hp-quote-shell .qf .qf-group-toggle {
+  min-height: 2.8rem;
+  width: 100%;
+  padding: .45rem 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #1F5E32;
+  font-size: .96rem;
+  font-weight: 710;
+  line-height: 1.4;
+  text-align: left;
+}
+.hp-quote-shell .qf .qf-group-toggle:hover:not(:disabled) {
+  background: transparent;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.hp-quote-shell .qf .qf-group-toggle::after {
+  color: #287B39;
+  font-size: 1.25rem;
+}
+.hp-quote-shell .qf .qf-group-description {
+  margin: .35rem 0 0;
+  color: #58695B;
+  font-size: .86rem;
+}
+.hp-quote-shell .qf .qf-group-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.1rem 1.2rem;
+  margin-top: 1.15rem;
+}
+.hp-quote-shell .qf .qf-group-body > .qf-field:has(textarea) {
+  grid-column: 1 / -1;
+}
+.hp-quote-shell .qf .qf-help-trigger {
+  width: 1.75rem;
+  height: 1.75rem;
+  min-height: 1.75rem;
+  margin-inline-start: .12rem;
+  border-color: #A4BEA7;
+  background: #EAF2E9;
+  color: #205B31;
+  font-size: .9rem;
+  font-weight: 700;
+}
+.hp-quote-shell .qf .qf-help-dialog {
+  border: 1px solid #BBCDBE;
+  border-radius: 10px;
+  box-shadow: 0 26px 74px rgb(7 26 22 / 24%);
+}
+.hp-quote-shell .qf .qf-help-dialog h3 {
+  margin-bottom: .85rem;
+  font-size: clamp(1.38rem, 2vw, 1.8rem);
+  letter-spacing: -.035em;
+}
+.hp-quote-shell .qf .qf-help-dialog button {
+  border-color: var(--quote-primary);
+  background: var(--quote-primary);
+  color: #FFFFFF;
+}
+.hp-quote-shell .qf .qf-dropzone { background: #F7FAF6; border-color: #B4C8B5; }
+
+/* Navigation remains inside the form's semantic boundary. Clear separation
+   and consistent button hierarchy are safer than CSS moving it outside. */
+.hp-quote-shell .qf .qf-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .9rem;
+  margin-top: clamp(1.65rem, 3.2vw, 2.35rem);
+  padding-top: 1.35rem;
+  border-top: 1px solid #DFE6DE;
+}
+.hp-quote-shell .qf .qf-actions button {
+  min-height: 3.35rem;
+  padding: .83rem 1.45rem;
+  border: 1px solid #92A795;
+  border-radius: 7px;
+  background: #FFFFFF;
+  color: #1F4B30;
+  font-size: .96rem;
+  font-weight: 710;
+}
+.hp-quote-shell .qf .qf-actions button:hover:not(:disabled) {
+  background: #EFF5EF;
+  border-color: #5A9165;
+}
+.hp-quote-shell .qf .qf-actions button[type="submit"] {
+  min-width: 10rem;
+  margin-left: auto;
+  border-color: var(--quote-primary);
+  background: var(--quote-primary);
+  color: #FFFFFF;
+}
+.hp-quote-shell .qf .qf-actions button[type="submit"]:hover:not(:disabled) {
+  border-color: var(--quote-primary-hover);
+  background: var(--quote-primary-hover);
+}
+.hp-quote-shell .qf .qf-actions button:disabled {
+  opacity: .62;
+  cursor: not-allowed;
+}
+.hp-quote-shell .qf .qf-summary-section h4 {
+  font-size: 1.18rem;
+  font-weight: 710;
+}
+.hp-quote-shell .qf .qf-summary-section dl { gap: 1rem; }
+.hp-quote-shell .qf .qf-summary-section :is(dt, dd) { overflow-wrap: anywhere; }
+.hp-quote-shell .qf .qf-summary-section button { margin-top: 1rem; font-size: .9rem; }
+
+/* Six labeled circles are too narrow on phones/tablets.
+   Keep the accessible list, replace its visuals with six compact segments. */
+@media (max-width: 820px) {
+  .hp-quote-shell .qf .qf-progress-list {
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: .35rem;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+  .hp-quote-shell .qf .qf-progress-item {
+    display: block;
+    min-width: 0;
+  }
+  .hp-quote-shell .qf .qf-progress-item:not(:last-child)::before { display: none; }
+  .hp-quote-shell .qf .qf-progress-number {
+    width: 100%;
+    height: .45rem;
+    border: 0;
+    border-radius: 999px;
+    background: #CCD6CC;
+    font-size: 0;
+  }
+  .hp-quote-shell .qf .qf-progress-item.is-active .qf-progress-number,
+  .hp-quote-shell .qf .qf-progress-item.is-complete .qf-progress-number {
+    background: var(--quote-primary);
+    box-shadow: none;
+  }
+  .hp-quote-shell .qf .qf-progress-label,
+  .hp-quote-shell .qf .qf-progress-state {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .hp-quote-shell .qf .qf-progress-mobile {
+    display: block;
+    margin-top: .4rem;
+    padding: .5rem 0 0;
+    border: 0;
+    background: transparent;
+    color: #28523B;
+    font-size: .9rem;
+    font-weight: 690;
+  }
+}
+@media (max-width: 739px) {
+  .hp-quote-shell__lead { padding-block: 1.25rem 1.4rem; }
+  .hp-quote-shell__lead h1 { max-width: 19ch; font-size: clamp(2.05rem, 8vw, 2.75rem); }
+  .hp-quote-shell__lead > p:last-child { font-size: .96rem; }
+  .hp-quote-shell .qf .qf-fields,
+  .hp-quote-shell .qf .qf-group-body { grid-template-columns: minmax(0, 1fr); }
+  .hp-quote-shell .qf .qf-fields > :is(.qf-field, .qf-field-slot, .qf-field-group) {
+    grid-column: 1 / -1;
+  }
+  .hp-quote-shell .qf .qf-cards { grid-template-columns: minmax(0, 1fr); }
+  .hp-quote-shell .qf .qf-cards > .qf-card:nth-last-child(1):nth-child(odd) { grid-column: auto; }
+  .hp-quote-shell .qf .qf-panel { padding: clamp(1.1rem, 4vw, 1.6rem); }
+  .hp-quote-shell .qf .qf-card { min-height: 5.4rem; padding: 1rem 1.1rem; }
+}
+@media (max-width: 400px) {
+  .hp-quote-shell__lead .hp-quote-shell__eyebrow { margin-bottom: 1rem; }
+  .hp-quote-shell__lead h1 { font-size: clamp(1.95rem, 8.3vw, 2.2rem); }
+  .hp-quote-shell__notice { width: min(calc(100% - 2rem), 58rem); }
+  .hp-quote-shell .qf .qf-step-heading h3 { font-size: 1.65rem; }
+  .hp-quote-shell .qf .qf-card-copy strong { font-size: 1.06rem; }
+  .hp-quote-shell .qf .qf-actions { flex-wrap: nowrap; gap: .55rem; }
+  .hp-quote-shell .qf .qf-actions button {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: .6rem;
+  }
+  .hp-quote-shell .qf .qf-actions button[type="submit"] { min-width: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-quote-shell .qf .qf-card { transition: none; }
+}

@@ -130,6 +130,18 @@ jobs:
           node scripts/preview/payload.mjs prepare "$COMMIT"
           node scripts/preview/payload.mjs verify
           node scripts/preview/payload.mjs rights
+      - name: Chrome regression on the actual upload payload
+        run: node scripts/preview/browser.mjs
+      - name: Archive quote browser review before remote FTPS checks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quote-browser-review-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: |
+            reports/preview/chrome/offert-index-html.log
+            reports/preview/chrome/pages/offert-index-html-*
+          if-no-files-found: warn
+          retention-days: 7
       - name: Install FTPS client for read-only PR target proof
         if: github.event_name == 'pull_request'
         run: sudo apt-get install -y -qq lftp >/dev/null
@@ -147,8 +159,6 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: node scripts/preview/remote.mjs check-retained
-      - name: Chrome regression on the actual upload payload
-        run: node scripts/preview/browser.mjs
       - name: Save verified payload
         uses: actions/upload-artifact@v4
         with:

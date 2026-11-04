@@ -1,5 +1,24 @@
 # AGENTS.md
 
+## AMP-001 1.5.0 – aktiv offertguidekandidat (2026-11-04)
+
+Verifierad privat plattformskälla 1.5.0:
+`4ee0a081c3d799cd30e3075247fdb98473aa49f6`.
+**Draft-PR #22** innehåller en arbetskandidat med **fem frågesteg och ett automatiskt granskningssteg**.
+Läs [`docs/content/HALLPARTNER_OFFERTGUIDE_V2.md`](docs/content/HALLPARTNER_OFFERTGUIDE_V2.md)
+för fältnycklar, frågeformuleringar, villkor och öppna kundbeslut.
+[`docs/AMP_001_150_HALLPARTNER.md`](docs/AMP_001_150_HALLPARTNER.md) är en historisk
+checkpoint från fyrastegsläget.
+
+**Alla offertinskick är hårt avstängda i denna kandidat**, även när
+`PUBLIC_HP_LEADS_ENABLED=true`. Nuvarande PHP-`/api/lead.php` accepterar bara
+det gamla V1-kontraktets allowlist och får aldrig ta emot V2-frågor eller filer.
+Opt-in `PUBLIC_HP_QUOTE_FILES_REVIEW=true` visar frivilligt filfält i steg 4
+endast för lokal granskning; ingen överföring sker.
+Ändra inte privat SMTP, PHP-mottagare, kundens WordPress eller DNS.
+**PR #22 förblir Draft utan merge eller publicering** tills ägargranskning.
+Previewn publiceras endast från `main` via separat workflow.
+
 # Hallpartner webbplats -- AI Agent Guide
 
 > Detta dokument är den primära instruktionen för alla AI-agenter som
@@ -83,15 +102,16 @@ DNS, namnservrar och e-postinställningar får inte ändras.
 Inleed har bekräftat att previewadressen skriver om domänreferenser.
 Kontrollera serveroriginal exakt via FTPS och HTTPS endast mot den snävt
 verifierade transformeringen. Kräv inte en ny miljö för det förväntade
-beteendet och normalisera inte bort andra skillnader. Den befintliga
-publiceringskodens rättning och verkliga första publicering återstår tills
-de bevisats i aktuella körningar.
+beteendet och normalisera inte bort andra skillnader. Historiska publiceringsrapporter visar att en första publicering senare lyckades,
+men de bevisar inte vilken commit previewn visar just nu. Kontrollera aktuella
+GitHub Actions, publicerad markör och faktiska serverfiler innan slutsatser dras.
 
 Behåll noindex och robots-spärr. Mål och den registrerade bildanvändningen
 är redan beslutade; kontrollera bindning och hashregister utan att begära
-samma allmänna bildtillstånd igen. Publiceringsworkflow **316932905** ska
-förbli avstängt tills exakt aktivering/första publicering är godkänd.
-Kontrollera workflowets verkliga status, inte kommentarer eller äldre rapporter.
+samma allmänna bildtillstånd igen. Publiceringsworkflow **316932905** är det befintliga utvecklingspreview-flödet
+som kan publicera verifierade pushar till `main`. Kontrollera alltid aktuell
+workflowstatus och utfall i GitHub Actions; äldre kommentarer om manuell
+avstängning är inte tillförlitliga. **PR-körningar får bara validera**.
 Gamla ops-flöden får inte konkurrera med den godkända publiceringen.
 
 Efter godkännande publiceras endast verifierat statiskt innehåll från senaste

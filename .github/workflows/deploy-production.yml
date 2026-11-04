@@ -1,4 +1,6 @@
-# Keep workflow ID 316932905 disabled_manually until the separately approved activation.
+# Workflow ID 316932905: development-preview publishing from main only.
+# Historical manual-disable comments are obsolete; check real GitHub Actions state.
+# PRs validate only; publishing still requires the existing verification gates.
 # Development preview only. No production/customer hosting target is configurable.
 name: Hallpartner Inleed development preview
 'on':

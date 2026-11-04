@@ -9,7 +9,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const allLinks = config.groups.flatMap(group => group.links);
 
 test('AMP-003 remains one compact shared footer without invented legal features', () => {
-  assert.equal(AMP003_APPROVED_VERSION, '1.4.0');
+  assert.equal(AMP003_APPROVED_VERSION, '1.5.0');
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
   assert.equal(config.groups.length, 2);

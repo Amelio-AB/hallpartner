@@ -176,18 +176,150 @@ try {
       const form=document.querySelector('#hp-contact-form');
       return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
     }),width+': inactive contact');
-    if(expectedPath==='/offert/')allTrue(await run(async function(){
-      const host=document.querySelector('#hp-offert-guide'),form=host?.querySelector('form.qf-panel');
-      if(!host||!form)return {mounted:false};
-      host.querySelector('input[name="project.use"][value="storage"]')?.click();
-      const fill=(selector,value)=>{const field=host.querySelector(selector);if(field){field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));}};
-      fill('textarea[name="project.description"]','Synthetic example enquiry for a warehouse hall.');form.requestSubmit();
-      fill('select[name="dimensions.confidence"]','need_help');form.requestSubmit();form.requestSubmit();
-      fill('input[name="contact.name"]','Test Person');fill('input[name="contact.email"]','test@example.invalid');form.requestSubmit();await Promise.resolve();
-      const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
-      return {mounted:!!host.querySelector('.qf'),inactive:host.dataset.enabled==='false',review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),disabled:send?.disabled===true,notice:!!document.querySelector('.hp-leads-note--review')};
-    }),width+': quote review must never send');
-    await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur()');
+
+    if(expectedPath==='/offert/') {
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide');
+        const trigger=host?.querySelector('button.qf-help-trigger');
+        const steps=[...host.querySelectorAll('.qf-progress-item')];
+        const cards=[...host.querySelectorAll('.qf-card')];
+        trigger?.focus();trigger?.click();
+        const dialog=host?.querySelector('dialog.qf-help-dialog[open]');
+        const progress=host.querySelector('.qf-progress');
+        return {
+          mounted:!!host?.querySelector('.qf'),
+          disabled:host?.dataset.enabled==='false',
+          helpOpen:!!dialog?.open,
+          helpTitle:!!dialog?.querySelector('h3')?.textContent,
+          helpText:!!dialog?.querySelector('p')?.textContent,
+          sixSteps:steps.length===6,
+          hallpartnerFont:getComputedStyle(host.querySelector('.qf')).fontFamily.includes('Inter'),
+          tintedCards:cards.length===5&&getComputedStyle(cards[0]).backgroundColor==='rgb(241, 244, 240)',
+          noDuplicateTitle:getComputedStyle(host.querySelector('.qf-intro')).display==='none'&&
+            document.querySelector('.hp-quote-shell__lead h1')?.textContent.trim()==='Berätta om hallen du planerar',
+          progressFits:progress?.getBoundingClientRect().right<=innerWidth+1,
+          cardsFit:cards.length===5&&cards.every(card=>{
+            const r=card.getBoundingClientRect(),copy=card.querySelector('.qf-card-copy strong')?.getBoundingClientRect();
+            return r.width>=180&&r.left>=-1&&r.right<=innerWidth+1&&!!copy&&copy.right<=r.right+1;
+          })
+        };
+      }),width+': AMP-001 six steps, cards and info popup');
+      if(width===390||width===1280)await capture(prefix+'-'+width+'-amp001-help.png');
+      await key('Escape');await sleep(80);
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide');
+        return {
+          escaped:!host?.querySelector('dialog.qf-help-dialog[open]'),
+          focusReturned:document.activeElement===host?.querySelector('button.qf-help-trigger')
+        };
+      }),width+': AMP-001 Escape and focus');
+      if([320,390,768,1024,1440].includes(width)) {
+        // Focus restoration from the help dialog may scroll the viewport.
+        // Pin the fixed header at document top before full-page evidence.
+        await evaluate('window.scrollTo(0,0)');
+        await sleep(70);
+        const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
+        await capture(prefix+'-'+width+'-amp001-step1.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
+        host.querySelector('input[name="project.use"][value="storage"]')?.click();
+        const field=host.querySelector('textarea[name="project.description"]');
+        const descriptionOptional=field?.required===false&&field?.value==='';
+        form.requestSubmit();
+        const certainty=host.querySelector('select[name="dimensions.confidence"]');
+        if(!certainty)return {onDimensions:false};
+        const blankDescriptionAccepted=!!certainty;
+        const optional=certainty.required===false&&certainty.value==='';
+        form.requestSubmit();
+        const skippedToDesign=!!host.querySelector('select[name="design.insulation"]');
+        host.querySelector('.qf-actions button:not([type="submit"])')?.click();
+        const returned=!!host.querySelector('select[name="dimensions.confidence"]');
+        const updatedCertainty=host.querySelector('select[name="dimensions.confidence"]');
+        if(!updatedCertainty)return {returned:false};
+        updatedCertainty.value='approximate';
+        updatedCertainty.dispatchEvent(new Event('input',{bubbles:true}));
+        const group=host.querySelector('button.qf-group-toggle');
+        const collapsed=group?.getAttribute('aria-expanded')==='false';
+        group?.click();
+        const expanded=group?.getAttribute('aria-expanded')==='true';
+        const height=host.querySelector('input[name="dimensions.side_height"]');
+        if(height){height.value='5';height.dispatchEvent(new Event('input',{bubbles:true}));}
+        group?.click();
+        const closed=group?.getAttribute('aria-expanded')==='false';
+        group?.click();
+        return {
+          onDimensions:!!certainty,descriptionOptional,blankDescriptionAccepted,optional,skippedToDesign,returned,collapsed,expanded,closed,
+          retained:host.querySelector('input[name="dimensions.side_height"]')?.value==='5',
+          groupOpen:group?.getAttribute('aria-expanded')==='true'
+        };
+      }),width+': AMP-001 collapsible fields');
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide'),grid=host.querySelector('.qf-fields');
+        const columns=getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+        const a=host.querySelector('[name="dimensions.width"]')?.getBoundingClientRect();
+        const b=host.querySelector('[name="dimensions.length"]')?.getBoundingClientRect();
+        return {
+          columns:innerWidth>=740?columns===2:columns===1,
+          pairedMeasures:!!a&&!!b&&(innerWidth>=740
+            ? Math.abs(a.top-b.top)<=2&&a.left<b.left
+            : a.top<b.top&&Math.abs(a.left-b.left)<=2),
+          noOverflow:document.documentElement.scrollWidth<=innerWidth+1
+        };
+      }),width+': two-column form fields and mobile stacking');
+      if([390,768,1440].includes(width)) {
+        await evaluate('window.scrollTo(0,0)');
+        await sleep(70);
+        const metrics=await call('Page.getLayoutMetrics'),size=metrics.cssContentSize||metrics.contentSize;
+        await capture(prefix+'-'+width+'-amp001-step2.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
+      if(width===390||width===1280){
+        const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
+        await capture(prefix+'-'+width+'-amp001-groups.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
+      allTrue(await run(async function(){
+        const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
+        const fill=(selector,value)=>{
+          const field=host.querySelector(selector);
+          if(field){field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));}
+        };
+        fill('select[name="dimensions.confidence"]','need_help');
+        const irrelevant=!host.querySelector('input[name="dimensions.side_height"]');
+        form.requestSubmit();
+        const design=!!host.querySelector('select[name="design.insulation"]');
+        fill('select[name="openings.ports"]','yes');
+        fill('textarea[name="openings.port_needs"]','Synthetic example: wide port');
+        fill('select[name="openings.ports"]','no');
+        const irrelevantPort=!host.querySelector('textarea[name="openings.port_needs"]');
+        form.requestSubmit();
+        const planning=!!host.querySelector('select[name="planning.stage"]');
+        fill('select[name="documents.available"]','yes');
+        fill('textarea[name="documents.description"]','Synthetic document description');
+        fill('select[name="documents.available"]','later');
+        const irrelevantDocument=!host.querySelector('textarea[name="documents.description"]');
+        form.requestSubmit();
+        const customer=!!host.querySelector('input[name="contact.name"]');
+        fill('input[name="contact.name"]','Test Person');
+        fill('input[name="contact.email"]','test@example.invalid');
+        form.requestSubmit();
+        // The disabled state is updated in a MutationObserver microtask.
+        await Promise.resolve();
+        const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
+        const summary=[...host.querySelectorAll('.qf-summary-section')];
+        return {
+          inactive:host.dataset.enabled==='false',
+          irrelevant,design,irrelevantPort,planning,irrelevantDocument,customer,
+          review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),
+          sixSteps:host.querySelectorAll('.qf-progress-item').length===6,
+          fiveSections:summary.length===5,
+          disabled:send?.disabled===true,
+          notice:!!document.querySelector('.hp-leads-note--review')
+        };
+      }),width+': all five question steps, final review and no-send gate');
+    }
+
+    await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur();window.scrollTo(0,0)');
+    await sleep(70);
     const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
     const filename=prefix+'-'+width+'-full.png';
     await capture(filename,{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
