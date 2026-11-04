@@ -18,6 +18,7 @@ for (const job of [validation.jobs.validate,deploy.jobs.publish]) {
 }
 assert(!readFileSync('.github/workflows/deploy-production.yml','utf8').includes('run-id:'), 'Old fixed artifact forbidden');
 const maintenance = validation.jobs.maintenance;
+assert(validation.jobs.validate.if === "inputs.operation != 'private-backup' && inputs.operation != 'approved-cleanup'", 'Reusable validation must still run for manual publication without maintenance inputs');
 assert(validation.on.workflow_dispatch.inputs.operation.options.join(',') === 'validate,private-backup,approved-cleanup', 'Unexpected manual maintenance operation');
 assert(maintenance.if.includes("github.event_name == 'workflow_dispatch'") && maintenance.if.includes("github.ref == 'refs/heads/main'"), 'Maintenance must be manual and main-only');
 assert(maintenance.concurrency.group === deploy.concurrency.group && maintenance.concurrency['cancel-in-progress'] === false, 'Maintenance must share the existing transfer lock');
