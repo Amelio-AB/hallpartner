@@ -23,7 +23,11 @@ async function run(name, script, env) {
   const chunks = []; child.stdout.on('data', c => chunks.push(c)); child.stderr.on('data', c => chunks.push(c));
   const timer = setTimeout(() => child.kill('SIGTERM'), 240000);
   const code = await new Promise((done,reject) => { child.on('error',reject); child.on('exit',done); }); clearTimeout(timer);
-  writeFileSync(output + '/' + name + '.log', Buffer.concat(chunks)); assert(code === 0, 'Chrome regression failed: ' + name); console.log(name + ': PASS');
+  const log=Buffer.concat(chunks);
+  writeFileSync(output + '/' + name + '.log', log);
+  // Browser scripts contain no credentials; surface the actual assertion on failure.
+  if(code !== 0) console.error(log.toString().slice(-12000));
+  assert(code === 0, 'Chrome regression failed: ' + name); console.log(name + ': PASS');
 }
 try {
   for (const page of PAGES) {
@@ -34,5 +38,5 @@ try {
   await run('amp006','scripts/verify-hallpartner-amp006.mjs',{HP_PREVIEW_URL:origin + '/stalhallar/',HP_SCREENSHOT_DIR:output + '/amp006'});
   await run('gallery','scripts/verify-hallpartner-gallery.mjs',{HP_PREVIEW_URL:origin + '/stalhallar/',HP_SCREENSHOT_DIR:output + '/gallery'});
   assert(apiRequests.length === 0, 'Payload attempted an API request');
-  writeFileSync(output + '/result.json', JSON.stringify({ pages:PAGES.length, widths:[320,390,768,1280,1440], apiRequests, status:'passed' },null,2));
+  writeFileSync(output + '/result.json', JSON.stringify({ pages:PAGES.length, widths:[320,390,768,1024,1280,1440], apiRequests, status:'passed' },null,2));
 } finally { await new Promise(done => server.close(done)); }

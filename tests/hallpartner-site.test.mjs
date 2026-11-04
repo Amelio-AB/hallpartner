@@ -29,7 +29,7 @@ test('only the thirteen intended visitor pages can become Astro routes', () => {
     assert.match(page, /HallpartnerSiteLayout/);
     assert.doesNotMatch(page, /components\/prototype|href=["']\/prototype\//);
   }
-  for (const path of ['src/pages/prototype','src/pages/projekt','src/pages/roadmap','src/pages/vision','src/pages/workshop','src/components/prototype']) assert.equal(existsSync(join(root,path)),false,path);
+  for (const path of ['src/pages/prototype','src/pages/demo','src/pages/projekt','src/pages/roadmap','src/pages/vision','src/pages/workshop','src/components/prototype']) assert.equal(existsSync(join(root,path)),false,path);
 });
 test('the accepted home composition is now a site component with native links', () => {
   assert.match(read('src/pages/index.astro'), /components\/home\/HallpartnerHome\.astro/);
@@ -76,7 +76,11 @@ for (const [slug,title,anchors] of hallDetails) test('distinct visitor hall cont
   assert.ok(page.includes(title)); assert.equal((page.match(/<h1(?:\s|>)/g)||[]).length,1);
   for (const id of anchors) assert.ok(page.includes('id="'+id+'"'),id);
   assert.match(page,/href="\/stalhallar\/"/);
-  assert.doesNotMatch(page,/egna montörer|leveransgaranti|nordens bästa|garanterad leverans|bygglovsfri|frånpris/i);
+  assert.doesNotMatch(page,/egna montörer|leveransgaranti|nordens bästa|garanterad leverans|tälthallar (?:är|blir) bygglovsfria|standardgaranti|frånpris:/i);
+  if(slug==='talthall') {
+    assert.ok(page.includes('Är en tälthall alltid bygglovsfri?'));
+    assert.ok(page.includes('Nej, det kan inte förutsättas.'));
+  }
 });
 test('overview keeps every hall destination and the approved image-card integration', () => {
   const page=read('src/pages/stalhallar/index.astro');
@@ -85,11 +89,22 @@ test('overview keeps every hall destination and the approved image-card integrat
   assert.match(page,/ExpandableImageCards/);
   assert.ok(existsSync(join(root,'src/components/ImageGallery.astro')));
 });
-test('contact and quote remain disabled; calculator and fabricated references are not introduced', () => {
-  for (const path of ['src/pages/kontakt/index.astro','src/pages/offert/index.astro']) {
-    const page=read(path); assert.match(page,/false/); assert.doesNotMatch(page,/andreas@amelio\.se|tel:\+46735054763/);
-  }
+test('contact guard stays in its component and cannot report false success', () => {
+  const contact=read('src/pages/kontakt/index.astro');
+  const component=read('src/components/ContactForm.astro');
+  assert.match(contact,/ContactForm/);
+  assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
+  assert.match(component,/type="submit" disabled/);
+  assert.match(component,/response.status === 200 && body\?\.status === 'success'/);
+  assert.match(component,/response.status === 503 && body\?\.status === 'failed'/);
+  assert.ok(component.includes('role="status"'));
+  assert.ok(contact.includes("href={'mailto:' + contactEmail}"));
+});
+test('visitor pages introduce neither developer contacts nor calculator or fabricated reference routes', () => {
+  for (const path of ['src/pages/kontakt/index.astro','src/pages/offert/index.astro']) assert.doesNotMatch(read(path),/andreas@amelio\.se|tel:\+46735054763/);
   for (const path of ['src/pages/rakna-pris','src/pages/referenser']) assert.equal(existsSync(join(root,path)),false);
   const about=read('src/pages/om-oss/index.astro');
   for (const name of ['Jimmy Gustafsson','Peter Fridland']) assert.ok(about.includes(name));
+  assert.doesNotMatch(about,/egna montörer|20 års erfarenhet|lång erfarenhet|ansvarar för våra montage|levererar över hela Norden|garanti på arbete|kostnadsfri offert|hallprojekt i\s+\d{4}/i);
+  assert.doesNotMatch(about,/<img(?:\s|>)|<Image(?:\s|>)/i);
 });
