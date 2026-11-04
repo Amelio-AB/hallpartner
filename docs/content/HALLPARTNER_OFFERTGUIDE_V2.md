@@ -5,6 +5,12 @@
 **Implementation:** `src/config/hallpartner-quote.ts`, AMP-001 1.5.0, PR [#22](https://github.com/Amelio-AB/hallpartner/pull/22).  
 **Mål:** Fem frågesteg plus **ett automatiskt slutgranskningssteg**. Inte sex konfigurerade frågesteg.
 
+## Beslut 2026-11-04 – visuell design godkänd av projektägaren
+
+**Godkänt:** Den visuella Hallpartner-anpassningen på PR #22 med Inter, befintliga gröna färgroller, nedtonade valkort, responsiv tvåkolumnslayout för fält och kompakt sexstegsindikator. Godkännandet gäller designriktningen i commit `de93fe309ec45ef7059a92eab3c6b40ce2e1342d`; färgnyanser, toning och transparens är justerbara vid framtida finputsning och ska inte blockera det fortsatta arbetet.
+
+**Inte godkänt genom detta beslut:** Exakt frågeinnehåll, vilka frågor som är obligatoriska, verklig filuppladdning, servermottagning, aktivering eller merge/publicering. Frågorna kräver separat beslut med Hallpartner. PR #22 förblir Draft tills återstående grindar har passerats.
+
 ## 1. Underlag och källkritik
 
 | Källa | Vad den styr / inte styr | Bedömning |
@@ -174,4 +180,5 @@ ska först få visuell ägargranskning och innebär **inte** kundgodkända offer
 - [ ] Ändra måttsäkerhet/grundstatus/portbehov/underlag; kontrollera rensning av villkorade data och korrekt sammanfattning.
 - [ ] Testa både vanlig sexstegsguide utan filfält och opt-in sexstegsguide med lokalt filfält.
 - [ ] Kontrollera att **inga** nätverksanrop för inskickning eller filuppladdning sker.
-- [ ] Projektägaren godkänner först layout och frågefördelning. Hallpartner bekräftar därefter affärsfrågorna.
+- [x] Projektägaren godkände formulärets visuella design 2026-11-04 (layout, typografi och färgriktning).
+- [ ] Frågefördelning, obligatoriska uppgifter och affärsfakta behöver godkännas separat av Hallpartner.
