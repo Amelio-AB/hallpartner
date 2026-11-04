@@ -18,6 +18,9 @@ export const hallpartnerQuoteConfig = {
     {
       id: 'project', title: 'Behov',
       description: 'Börja med vad hallen ska användas till. Konstruktionen behöver inte vara bestämd.',
+      groups: [
+        { id: 'project.extra', title: 'Har du en viss halltyp i åtanke?', description: 'Frivilligt. Du kan ange den halltyp du tittat på, eller låta Hallpartner ge förslag.', initiallyCollapsed: true }
+      ],
       fields: [
         {
           id: 'project.use', kind: 'select', presentation: 'cards', required: true,
@@ -36,6 +39,20 @@ export const hallpartnerQuoteConfig = {
           label: 'Berätta kort om projektet',
           hint: 'Minst tio tecken. Vad ska få plats, eller vad vill du kunna göra i hallen?',
           validate: value => value.trim().length < 10 ? 'Beskriv behovet med minst tio tecken.' : undefined
+        },
+        {
+          id: 'project.hall_interest', group: 'project.extra', kind: 'select',
+          label: 'Vilken av våra hallkategorier tänker du på?',
+          hint: 'Det här är ett önskemål, inte ett tekniskt val. Till exempel kan en lagerhall också vara isolerad.',
+          options: [
+            { value: 'lagerhall', label: 'Lagerhall' },
+            { value: 'maskinhall', label: 'Maskinhall' },
+            { value: 'plathall', label: 'Plåthall' },
+            { value: 'talthall', label: 'Tälthall' },
+            { value: 'ridhus', label: 'Ridhus' },
+            { value: 'isolerad-hall', label: 'Isolerad hall' },
+            { value: 'unknown', label: 'Jag vill ha hjälp att välja' }
+          ]
         }
       ]
     },
@@ -49,12 +66,12 @@ export const hallpartnerQuoteConfig = {
       fields: [
         {
           id: 'dimensions.confidence', kind: 'select', required: true,
-          label: 'Hur säkra är dina mått?',
+          label: 'Vet du ungefär hur stor hallen ska vara?',
           help: { title: 'Ungefärliga mått fungerar', text: 'Bredd och längd är bara ett första underlag. Välj hjälp om du vill resonera om måtten med Hallpartner.' },
           options: [
-            { value: 'exact', label: 'Jag vet måtten' },
+            { value: 'exact', label: 'Ja, jag vet måtten' },
             { value: 'approximate', label: 'Jag har ungefärliga mått' },
-            { value: 'need_help', label: 'Jag behöver hjälp' }
+            { value: 'need_help', label: 'Jag behöver hjälp med storleken' }
           ]
         },
         {
@@ -72,7 +89,7 @@ export const hallpartnerQuoteConfig = {
           when: a => a['dimensions.confidence'] !== 'need_help',
           validate: v => !/^\d{1,2}([,.]\d{1,2})?$/.test(v.trim()) || Number(v.replace(',', '.')) <= 0 ? 'Ange ett positivt tal i meter.' : undefined
         },
-        { id: 'site.city', kind: 'text', label: 'Var planeras hallen?', hint: 'Ort eller ungefärligt område. Frivilligt.' },
+        { id: 'site.city', kind: 'text', label: 'I vilken ort eller vilket område vill du bygga?', hint: 'Det räcker med ungefärlig plats. Frivilligt.' },
         {
           id: 'site.postal_code', group: 'site.extra', kind: 'text', label: 'Postnummer',
           autocomplete: 'postal-code', hint: 'Frivilligt.',
@@ -131,7 +148,7 @@ export const hallpartnerQuoteConfig = {
           ]
         },
         {
-          id: 'openings.port_needs', kind: 'textarea', label: 'Beskriv portbehovet',
+          id: 'openings.port_needs', kind: 'textarea', label: 'Beskriv gärna hur portarna ska användas',
           hint: 'Till exempel ungefärligt antal, maskiner som ska passera och eventuella mått. Frivilligt.',
           when: a => a['openings.ports'] === 'yes'
         },
@@ -145,17 +162,17 @@ export const hallpartnerQuoteConfig = {
         {
           id: 'design.envelope_wishes', group: 'design.extra', kind: 'textarea',
           label: 'Önskemål om väggar, tak eller färg',
-          hint: 'Lämna gärna önskemål. Vi lovar inga specifika material eller utföranden i detta skede.'
+          hint: 'Till exempel önskad färg eller ett material du har funderat på. Du behöver inte välja en teknisk lösning.'
         },
         {
           id: 'design.installation_wishes', group: 'design.extra', kind: 'textarea',
           label: 'Övriga funktioner eller tillval att diskutera',
-          hint: 'Exempelvis belysning, värme eller ventilation – inte en bekräftelse på vad Hallpartner levererar.'
+          hint: 'Till exempel behov av belysning, värme eller ventilation. Detta är önskemål att diskutera, inte beställda tillval.'
         },
         {
           id: 'delivery.wishes', group: 'design.extra', kind: 'textarea',
-          label: 'Vilken hjälp önskar du med leveransen?',
-          hint: 'Beskriv om du vill diskutera exempelvis montage eller grundarbete. Omfattningen bestäms senare.'
+          label: 'Vad vill du ha hjälp med utöver själva hallen?',
+          hint: 'Till exempel montage eller grundarbete. Hallpartner kan återkomma om vilka delar som går att erbjuda.'
         }
       ]
     },
@@ -177,7 +194,7 @@ export const hallpartnerQuoteConfig = {
           ]
         },
         {
-          id: 'planning.timeline', kind: 'select', label: 'När hoppas du komma igång?',
+          id: 'planning.timeline', kind: 'select', label: 'När skulle du vilja att bygget startar?',
           options: [
             { value: 'soon', label: 'Så snart som möjligt' },
             { value: 'within_3', label: 'Inom 3 månader' },
@@ -189,7 +206,7 @@ export const hallpartnerQuoteConfig = {
         },
         {
           id: 'documents.available', kind: 'select', label: 'Har du ritningar, skisser eller bilder?',
-          help: { title: 'Underlag är alltid frivilligt', text: 'Du kan beskriva projektet utan ritningar. I den här arbetsversionen skickas inga filer, även om filvalet är synligt i ett separat granskningsläge.' },
+          help: { title: 'Underlag är frivilligt', text: 'Har du skisser eller ritningar är de bra att nämna. Du kan komplettera i kontakt med Hallpartner senare. Denna arbetsversion skickar inga filer.' },
           options: [
             { value: 'yes', label: 'Ja' }, { value: 'some', label: 'Något underlag' },
             { value: 'later', label: 'Inte ännu' }, { value: 'no', label: 'Nej' }
@@ -197,7 +214,7 @@ export const hallpartnerQuoteConfig = {
         },
         {
           id: 'documents.description', kind: 'textarea', label: 'Vilket underlag finns?',
-          hint: 'Till exempel en skiss, måttritning eller bilder från platsen. Frivilligt.',
+          hint: 'Beskriv kort, till exempel planritning, skiss eller bilder från byggplatsen. Frivilligt.',
           when: a => ['yes', 'some'].includes(a['documents.available'] ?? '')
         },
         {
@@ -247,7 +264,10 @@ export const hallpartnerQuoteConfig = {
             { value: 'email', label: 'E-post' },
             { value: 'phone', label: 'Telefon' },
             { value: 'either', label: 'Spelar ingen roll' }
-          ]
+          ],
+          validate: (value, answers) => value === 'phone' && !answers['contact.phone']?.trim()
+            ? 'Ange ett telefonnummer ovan om du vill bli uppringd, eller välj e-post.'
+            : undefined
         }
       ]
     }
