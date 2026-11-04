@@ -1,0 +1,49 @@
+{
+  "testedCodeCommit": "4d39a09b3671c96051ad5a58e007b557bdf7adc0",
+  "evidenceRun": "https://github.com/Amelio-AB/hallpartner/actions/runs/41791114322",
+  "otherSuccessfulRuns": [
+    "https://github.com/Amelio-AB/hallpartner/actions/runs/41791114284",
+    "https://github.com/Amelio-AB/hallpartner/actions/runs/41791114318"
+  ],
+  "npmVulnerabilities": {
+    "info": 0,
+    "low": 0,
+    "moderate": 9,
+    "high": 0,
+    "critical": 0,
+    "total": 9
+  },
+  "composerAudit": {
+    "advisories": [],
+    "abandoned": [],
+    "filter": []
+  },
+  "imageApprovals": {
+    "approved": 51,
+    "total": 51
+  },
+  "chrome": {
+    "pages": 13,
+    "widths": [
+      320,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "apiRequests": [],
+    "status": "passed"
+  },
+  "ftps": {
+    "files": 63,
+    "directories": 25,
+    "fingerprints": 63,
+    "httpsMatchingFiles": 44,
+    "httpsDifferentFiles": 18,
+    "forbiddenFiles": 12,
+    "writeOperations": 0
+  },
+  "localNodeTestsAtSnapshot": 54,
+  "localNodeVersion": "24.19.0",
+  "note": "Dated snapshot. The later pre-upload delivery gate and final HEAD have new PR checks; see PR #15 description. No publication."
+}

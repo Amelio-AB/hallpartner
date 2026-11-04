@@ -3,7 +3,7 @@
 Status 2026-11-04: PR #12, #13 och #14 är mergade. Godkänd bas är
 `0c27b4a8e20efd3b8dca2498e5c2005df68f423b`. Bildgodkännanden är nu
 registrerade. **NO-GO för aktivering och publicering:** serverns gamla filer,
-kontots isolering och äldre ops-flöden återstår. Workflow **316932905 är
+kontots isolering, HTTP-domänomskrivning och äldre ops-flöden återstår. Workflow **316932905 är
 fortfarande disabled_manually**. Denna PR ändrar inte webbplatsens bilder,
 design, innehåll, komponenter eller beroendeversioner.
 
@@ -95,6 +95,15 @@ sökvägar och ändrad fil-/kataloglista under läsningen stoppar kontrollen.
 Listkontrollen är inte ett atomiskt serverlås och upptäcker inte varje
 samtidig ändring av bytes i en oförändrad sökväg.
 
+## Ny blockerare: HTTP-domänomskrivning
+
+44 filer matchar mellan FTPS och HTTPS, men 18 HTML/XML-svar gör det inte.
+Alla 18 skillnader förklaras exakt av ersättning av produktionsorigin med
+previeworigin. Mekanismen måste verifieras med Inleed. Publiceringen får nu
+en förkontroll som stoppar sådana avvikelser före första skrivningen. Den
+strikta efterkontrollen förblir oförändrad; inga bytes normaliseras.
+Se [diagnosen](http-ftps-comparison-20261104.json) och serverplanen.
+
 ## Överföringens spärrar och begränsningar
 
 Explicit FTPS på port 21 kräver TLS >=1.2, skyddade kontroll-/datakanaler,
@@ -128,7 +137,7 @@ Både lyckad workflowstatus och hp-preview-deploy.json måste verifieras.
 ## Rekommenderad ordning – ingen åtgärd utförs automatiskt
 
 1. Granska denna Draft-PR och slutlig HEAD/CI. Låt workflow 316932905 vara avstängt.
-2. Kontoägaren/Inleed verifierar domänisolering och väljer ren previewrot eller exakt godkänd hantering av gamla filer. Serverkonfiguration får inte ändras utan separat godkännande.
+2. Kontoägaren/Inleed utreder HTTP-omskrivningen och verifierar domänisolering och väljer ren previewrot eller exakt godkänd hantering av gamla filer. Serverkonfiguration får inte ändras utan separat godkännande.
 3. Före varje eventuell filändring: ta full relevant privat backup, verifiera hash, kontrollera färsk lista och få Andreas separata godkännande av den filvisa planen. Ingen radering är godkänd av denna PR.
 4. Registrera därefter verifierad målbindning och eventuell tillåten retention i en granskad commit. Kör alla tester och färsk läsande serverkontroll igen. Okända filer ska fortsatt blockera.
 5. Inaktivera de två äldre ops-flödena efter godkännande; kontrollera att inga gamla körningar pågår/köar. Granska main-skydd och preview-behörigheter: main är nu oskyddad och preview-environment saknar reviewers. Automatik kan annars inte i sig garantera att alla main-ändringar är mänskligt godkända.
