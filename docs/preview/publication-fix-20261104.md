@@ -160,6 +160,13 @@ GitHub-artifacts. Efter lokal dekryptering verifieras varje fil på disk mot
 FTPS-hash och storlek, inklusive skyddsfilen; fil-/katalogmanifest sparas privat.
 Transportartefacten tas sedan bort från GitHub. Backupen ligger kvar lokalt.
 
+Andreas har separat och uttryckligen godkänt GitHub-repot Amelio-AB/hallpartner
+som tillfällig destination för denna krypterade engångsöverföring av just de
+63 inventerade filerna. Överföringen stoppas före kryptering/artifact om
+filantal, sökvägar, SHA-256, storlek eller målbindning ändrats. Publik nyckel
+verifieras mot sin lokala privata motsvarighet; inga privata nycklar, lösenord
+eller okrypterade serverbytes får finnas i loggar/artifacts.
+
 `approved-cleanup` anropas först efter denna verifiering, med backupmanifestets
 inventeringshash som indata. Den nya sidans paket byggs och verifieras innan
 kontrollen av borttagningslistan. Skriptet kräver exakt de 13 godkända sökvägarna,

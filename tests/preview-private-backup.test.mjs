@@ -4,13 +4,24 @@ import { generateKeyPairSync } from 'node:crypto';
 import { mkdtempSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { PREVIEW, sha256 } from '../scripts/preview/policy.mjs';
-import { encryptBackup, decryptBackup, restoreBackup, inventoryDigest } from '../scripts/preview/private-backup.mjs';
+import { encryptBackup, decryptBackup, restoreBackup, inventoryDigest, assertBackupScope } from '../scripts/preview/private-backup.mjs';
 import { removalPlan, APPROVED_REMOVALS } from '../scripts/preview/approved-cleanup.mjs';
 
 const keys = generateKeyPairSync('rsa',{modulusLength:3072,publicKeyEncoding:{type:'spki',format:'pem'},privateKeyEncoding:{type:'pkcs8',format:'pem'}});
 const original = Buffer.from('private original\r\n\u00e5');
 const proof = {bindingSha256:'a'.repeat(64),checkedAt:'2026-11-04T00:00:00Z',fileFingerprints:[{path:'cgi-bin/.htaccess',bytes:original.length,sha256:sha256(original)}],remoteDirectories:['cgi-bin']};
 const source = {commit:'b'.repeat(40),runId:'123'};
+
+test('encrypted transfer refuses extra, missing, changed or differently bound server originals', () => {
+  const files=Array.from({length:63},(_,i)=>({path:'file-'+i,sha256:'a'.repeat(64),bytes:10}));
+  const approved={target:PREVIEW,bindingSha256:'b'.repeat(64),files};
+  const current={bindingSha256:approved.bindingSha256,fileFingerprints:files};
+  assertBackupScope(current,approved);
+  for(const altered of [files.slice(1),[...files,{path:'new-secret',sha256:'c'.repeat(64),bytes:5}],files.map((f,i)=>i===0?{...f,sha256:'c'.repeat(64)}:f)]) {
+    assert.throws(()=>assertBackupScope({...current,fileFingerprints:altered},approved));
+  }
+  assert.throws(()=>assertBackupScope({...current,bindingSha256:'d'.repeat(64)},approved));
+});
 
 test('backup transport contains ciphertext only and preserves exact raw bytes after private restore', () => {
   const envelope = encryptBackup(proof,()=>original,keys.publicKey,source);

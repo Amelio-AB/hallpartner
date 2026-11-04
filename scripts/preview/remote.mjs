@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { PREVIEW, PRODUCTION, PROBE, PROBE_FILE, BLOCKED, safePath, sha256, json, assert } from './policy.mjs';
 import { verifyPayload, rightsStatus } from './payload.mjs';
 import { fingerprint, assertOriginal, compareDelivery, assertChecks } from './delivery.mjs';
-import { encryptBackup } from './private-backup.mjs';
+import { encryptBackup, assertBackupScope } from './private-backup.mjs';
 
 const REPORT = 'reports/preview';
 const MARKER = 'hp-preview-deploy.json';
@@ -122,6 +122,7 @@ export async function checkTarget(creds = credentials(), backupRecipient) {
     assertDelivery(result);
     if (backupRecipient) {
       assertPublishContext(process.env, process.env.GITHUB_SHA);
+      assertBackupScope(result, json('docs/preview/server-file-decisions-20261104.json'));
       await latest(process.env.GITHUB_SHA);
       const archive = encryptBackup(result, path => readFileSync(temp + '/inventory-' + remoteFiles.indexOf(path)), backupRecipient,
         {commit:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID});
