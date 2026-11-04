@@ -15,8 +15,9 @@ test('AMP-001 genuine public contract accepts the compact Hallpartner draft',()=
  const flow=createQuoteFlow(hallpartnerQuoteConfig,async()=>{calls++;return{status:'success'}});
  const ids=hallpartnerQuoteConfig.steps.flatMap(step=>step.fields.map(f=>f.id));
  assert.equal(new Set(ids).size,ids.length);
- assert.equal(hallpartnerQuoteConfig.id,'hallpartner-offert-v1');
- assert.equal(hallpartnerQuoteConfig.steps.length,4);
+ assert.equal(hallpartnerQuoteConfig.id,'hallpartner-offert-v2-review');
+ assert.deepEqual(hallpartnerQuoteConfig.steps.map(s=>s.id),['project','dimensions','design','planning','customer']);
+ assert.equal(hallpartnerQuoteConfig.steps.length,5);
  assert.equal(flow.next(),false,'required first question blocks empty step');
  assert.equal(flow.set('project.use','storage'),true);
  assert.equal(flow.set('project.description','This synthetic enquiry is long enough.'),true);
@@ -25,26 +26,29 @@ test('AMP-001 genuine public contract accepts the compact Hallpartner draft',()=
  assert.equal(flow.set('dimensions.width','20'),false,'irrelevant dimension must not be editable');
  assert.equal(flow.next(),true);
  assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true);
  assert.equal(flow.set('contact.name','Test Person'),true);
  assert.equal(flow.set('contact.email','test@example.invalid'),true);
  assert.equal(flow.next(),true);
  assert.equal(calls,0,'no sending until explicit final submit');
+ assert.equal(flow.snapshot().stepIndex,5,'five questions plus automatic control');
  flow.dispose();
 });
 
-test('quote UI and contact UI cannot send from an unconfigured Draft build',()=>{
+test('V2 quote is always blocked while contact keeps its previous release gate',()=>{
  const quote=read('src/pages/offert/index.astro');
  const contact=read('src/components/ContactForm.astro');
- for(const s of [quote,contact]) {
-   assert.match(s,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
-   assert.ok(s.includes("data-enabled={String("),'form must be gated in rendered HTML');
- }
- assert.ok(quote.includes("enabled ? createJsonAdapter('/api/lead.php') : blocked"));
+ assert.match(quote,/const ready = false;/);
+ assert.match(quote,/data-enabled=\{String\(ready\)\}/);
+ assert.doesNotMatch(quote,/createJsonAdapter|fetch\(\s*['"]\/api\/lead\.php/);
+ assert.match(quote,/const blocked: Adapter = async/);
  assert.ok(quote.includes('button.disabled = true'));
+ assert.match(contact,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
+ assert.ok(contact.includes('data-enabled={String('));
  assert.ok(contact.includes('type="submit" disabled'));
  assert.ok(contact.includes("response.status === 200 && body?.status === 'success'"));
  assert.ok(contact.includes("response.status === 503 && body?.status === 'failed'"));
- assert.ok(contact.includes('allowRetry = false'),'uncertain result must not cause blind retry');
+ assert.ok(contact.includes('allowRetry = false'));
  assert.ok(existsSync(join(root,'public/api/lead.php')));
 });
 
@@ -63,7 +67,7 @@ test('PHP public bootstrap never carries recipient credentials or bundled privat
 
 test('AMP-001 1.5.0 optional help and collapsible groups preserve V1 answers', () => {
  const all = hallpartnerQuoteConfig.steps.flatMap(step => step.fields);
- assert.ok(all.filter(field => field.help).length >= 3);
+ assert.ok(all.filter(field => field.help).length >= 5);
  for (const step of hallpartnerQuoteConfig.steps) {
    for (const field of step.fields) if (field.group) {
      assert.ok(step.groups?.some(group => group.id === field.group), field.id);
@@ -81,11 +85,30 @@ test('AMP-001 1.5.0 optional help and collapsible groups preserve V1 answers', (
  assert.equal(flow.next(),true);
  flow.set('dimensions.confidence','approximate');
  flow.set('dimensions.side_height','5');
- flow.set('dimensions.confidence','need_help');
- assert.ok(!Object.hasOwn(flow.snapshot().active,'dimensions.side_height'));
- assert.equal(flow.next(),true);
  flow.set('site.city','Karlstad');
  flow.set('site.postal_code','654 32');
+ flow.set('site.decided','yes');
+ flow.set('site.address','Synthetic Testvägen 1');
+ flow.set('foundation.status','existing');
+ flow.set('foundation.notes','Existing slab');
+ flow.set('dimensions.confidence','need_help');
+ assert.ok(!Object.hasOwn(flow.snapshot().active,'dimensions.side_height'));
+ flow.set('site.decided','no');
+ assert.ok(!Object.hasOwn(flow.snapshot().active,'site.address'));
+ flow.set('foundation.status','none');
+ assert.ok(!Object.hasOwn(flow.snapshot().active,'foundation.notes'));
+ assert.equal(flow.snapshot().active['site.city'],'Karlstad');
+ assert.equal(flow.snapshot().active['site.postal_code'],'654 32');
+ assert.equal(flow.next(),true);
+ flow.set('openings.ports','yes');
+ flow.set('openings.port_needs','Synthetic port need');
+ flow.set('openings.ports','no');
+ assert.ok(!Object.hasOwn(flow.snapshot().active,'openings.port_needs'));
+ assert.equal(flow.next(),true);
+ flow.set('documents.available','yes');
+ flow.set('documents.description','Synthetic drawing');
+ flow.set('documents.available','later');
+ assert.ok(!Object.hasOwn(flow.snapshot().active,'documents.description'));
  assert.equal(flow.next(),true);
  flow.set('contact.name','Synthetic Person');
  flow.set('contact.email','test@example.invalid');
@@ -103,7 +126,10 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
     async submit(){return {status:'failed'};}
  } });
  assert.equal(hallpartnerQuoteAttachmentsReviewConfig.id,'hallpartner-offert-files-review-v2');
- const filesField=hallpartnerQuoteAttachmentsReviewConfig.steps.at(-1).fields[0];
+ assert.equal(hallpartnerQuoteAttachmentsReviewConfig.steps.length,5);
+ assert.equal(hallpartnerQuoteAttachmentsReviewConfig.steps[3].id,'planning');
+ assert.equal(hallpartnerQuoteAttachmentsReviewConfig.steps.at(-1).id,'customer');
+ const filesField=hallpartnerQuoteAttachmentsReviewConfig.steps[3].fields.at(-1);
  assert.equal(filesField.kind,'files');
  assert.deepEqual(filesField.files.allowedFormats,['jpg','png','webp','pdf','docx']);
  assert.equal(filesField.files.maxFiles,10);
@@ -114,6 +140,12 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
  assert.match(page,/PUBLIC_HP_QUOTE_FILES_REVIEW === 'true'/);
  assert.match(page,/!ready && import\.meta\.env/);
  assert.match(page,/async upload\(\) \{ throw new Error/);
- assert.match(page,/enabled \? createJsonAdapter\('\/api\/lead\.php'\) : blocked/);
+ assert.match(page,/const ready = false;/);
  assert.match(read('server/lead/validator.php'),/\$input\['contractVersion'\] \?\? null\) !== 1/);
+});
+
+
+test('V2 field specification is tracked as a non-approved proposal',()=>{
+ const spec=read('docs/content/HALLPARTNER_OFFERTGUIDE_V2.md');
+ for(const token of ['Kundbekräftat','Arbetsförslag','Öppet beslut','documents.attachments','fem frågesteg']) assert.ok(spec.includes(token),token);
 });
