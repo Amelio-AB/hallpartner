@@ -140,21 +140,13 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: node scripts/preview/remote.mjs check-target
-      - name: Temporary read-only retained-file diagnosis
+      - name: Read-only retained-file preflight in one FTPS session
         if: github.event_name == 'pull_request'
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: node scripts/preview/retained-diagnostic.mjs
-      - name: Save safe retained-file diagnostics
-        if: always() && github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: retained-diagnostic-${{ steps.revision.outputs.commit }}
-          path: reports/preview/retained-*.json
-          if-no-files-found: warn
-          retention-days: 7
+        run: node scripts/preview/remote.mjs check-retained
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
       - name: Save verified payload

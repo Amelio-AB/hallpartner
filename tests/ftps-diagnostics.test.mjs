@@ -22,6 +22,8 @@ test('FTPS diagnostics identify the active file without returning credentials or
     return true;
   });
   assert.equal(ftpsFailure({status:null,error:{code:'ETIMEDOUT'},stderr:''},commands,-1).timeout,true);
+  assert.equal(ftpsFailure({status:1,stdout:'Fatal error: max-retries exceeded'},commands,0).retryLimit,true);
+  assert.equal(ftpsFailure({status:1,stdout:'Connection closed'},commands,0).connectionFailure,true);
   const missing=ftpsFailure({status:1,stderr:'550 No such file'},commands,0);
   assert.equal(missing.unavailableFile,true);assert.equal(missing.path,'a.css');
   const tls=ftpsFailure({status:1,stderr:'Certificate verification failed'},commands,-1);

@@ -41,12 +41,14 @@ export function lftpScript(commands, creds) {
 }
 export function ftpsFailure(result, commands, lastStep) {
   // Classify in memory. Never return stderr, URLs, credentials or server text.
-  const diagnostic = String(result.stderr ?? '');
+  const diagnostic = String(result.stderr ?? '') + '\n' + String(result.stdout ?? '');
   const command = commands[lastStep] ?? '';
   const match = /^(get|put|rm|find) ([A-Za-z0-9_./-]+)(?: |$)/.exec(command);
   return { operation:match?.[1] ?? 'connect-or-setup', path:match?.[2] ?? null,
     exitCode:Number.isInteger(result.status) ? result.status : null,
     timeout:result.error?.code === 'ETIMEDOUT' || /timed? out|timeout/i.test(diagnostic),
+    retryLimit:/max-retries|maximum.*retr(?:y|ies)|retry limit/i.test(diagnostic),
+    connectionFailure:/connection (?:refused|closed|reset)|not connected|network is unreachable/i.test(diagnostic),
     connectionLimit:/too many (?:connections|users)|connection limit|maximum.*connections|limit.*connections/i.test(diagnostic),
     tlsFailure:/certificate|TLS.*(?:fail|error)|SSL.*(?:fail|error)/i.test(diagnostic),
     unavailableFile:/no such file|not found|failed to open file/i.test(diagnostic),
@@ -54,6 +56,7 @@ export function ftpsFailure(result, commands, lastStep) {
     responseCodes:[...new Set(diagnostic.match(/\b(?:421|425|426|450|451|452|530|550|553)\b/g) ?? [])] };
 }
 export function ftps(commands, creds, cwd, run = spawnSync) {
+  const started = Date.now();
   const prefix = 'HP_FTPS_STEP_' + randomUUID().replaceAll('-', '') + '_';
   const traced = commands.flatMap((command,index) => ['echo ' + prefix + index, command]);
   const result = run('lftp', ['--norc'], { input: lftpScript(traced, creds), encoding: 'utf8', cwd,
@@ -62,6 +65,7 @@ export function ftps(commands, creds, cwd, run = spawnSync) {
   const steps = [...String(result.stdout ?? '').matchAll(marker)];
   if (result.status !== 0 || result.error) {
     const details = ftpsFailure(result, commands, steps.length ? Number(steps.at(-1)[1]) : -1);
+    details.elapsedMs = Date.now() - started;
     const error = new Error('FTPS operation failed; no success claimed. Safe diagnostics: ' + JSON.stringify(details));
     error.safeDetails = details; throw error;
   }
@@ -323,6 +327,16 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   else if (process.argv[2] === 'private-backup') {
     assert(process.env.HP_BACKUP_RECIPIENT?.startsWith('-----BEGIN PUBLIC KEY-----'), 'Missing public backup recipient');
     await checkTarget(credentials(), process.env.HP_BACKUP_RECIPIENT);
+  }
+  else if (process.argv[2] === 'check-retained') {
+    assert(process.env.GITHUB_EVENT_NAME === 'pull_request', 'Retained preflight is read-only PR validation');
+    const creds = credentials(); const proof = json(REPORT+'/target-proof.json');
+    const policy = json('config/preview-release.json');
+    assert(proof.bindingSha256 === creds.binding && policy.targetBindingSha256 === creds.binding, 'Retained preflight binding mismatch');
+    const paths = [...policy.retainedFiles,...policy.serverFiles].map(file=>file.path).filter(path=>proof.remoteFiles.includes(path));
+    const extras = retainedFiles(paths,{files:[]},policy);
+    const temp = mkdtempSync(tmpdir()+'/hp-retained-preflight-');
+    try { verifyRetainedFiles(extras,creds,temp); } finally { rmSync(temp,{recursive:true,force:true}); }
   }
   else if (process.argv[2] === 'publish') await publish();
   else throw new Error('Use check-target or publish');
