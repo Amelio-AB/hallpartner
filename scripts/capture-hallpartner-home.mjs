@@ -20,7 +20,7 @@ const browser = spawn(process.env.HP_CHROME || 'google-chrome', [
   '--disable-background-networking','--no-first-run','--no-default-browser-check',
   '--remote-allow-origins=*','--remote-debugging-port='+port,'--user-data-dir='+profile,'about:blank',
 ], { stdio:['ignore','ignore','pipe'] });
-let startupError; let diagnostics=''; let socket;
+let startupError; let diagnostics=''; let socket; let captureFailure;
 browser.on('error',error=>{startupError=error;});
 browser.stderr.on('data',chunk=>{diagnostics=(diagnostics+chunk).slice(-65536);});
 await mkdir(output,{recursive:true});
@@ -76,6 +76,7 @@ try {
     const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true,...(clip?{captureBeyondViewport:true,clip}:{})});
     await writeFile(join(output,filename),Buffer.from(shot.data,'base64'));
   };
+  captureFailure=()=>capture(prefix+'-FAILURE.png');
   await call('Runtime.enable'); await call('Page.enable');
   for(const width of [320,390,768,1024,1280,1440]) {
     const viewport={width,height:width<800?844:900};
@@ -97,9 +98,12 @@ try {
       const root=document.querySelector('header.hm');
       const header=root.getBoundingClientRect();
       const bar=root.querySelector(innerWidth<=1024?'.hm__mobile-bar':'.hm__desktop');
-      const logo=bar.querySelector('img.hm__logo');
+      // AMP renders separate solid/hero variants and hides one. Measure the visible one.
+      const logos=[...bar.querySelectorAll('img.hm__logo')].filter(image=>image.getBoundingClientRect().height>0);
+      const logo=logos[0];
+      if(!logo) throw Error('No visible AMP logo in active header bar');
       const logoBox=logo.getBoundingClientRect();
-      const sibling=bar.querySelector(innerWidth<=1024?'.hm__mobile-toggle':'.hm__nav');
+      const sibling=bar.querySelector(innerWidth<=1024?'.hm__mobile-toggle':'.hm__desktop-nav');
       const hero=document.querySelector('.hp-home-hero');
       const heading=document.querySelector('h1').getBoundingClientRect();
       return {
@@ -114,9 +118,11 @@ try {
         images:[...document.images].every(image=>image.complete&&image.naturalWidth>0),
         surface:root.dataset.surface,
         headingClear:!!hero || heading.top>=header.bottom-2,
-        logo:{loaded:logo.naturalWidth===1536&&logo.naturalHeight===274,source:logo.currentSrc.includes('/images/logo_text_white.png'),ratio:Math.abs(logoBox.width/logoBox.height-1536/274)<.05,inViewport:logoBox.left>=-1&&logoBox.right<=innerWidth+1,visible:logoBox.height>=22&&logoBox.height<=65,noOverlap:!sibling||logoBox.right<=sibling.getBoundingClientRect().left+2},
+        logo:{oneVisible:logos.length===1,loaded:logo.naturalWidth===1536&&logo.naturalHeight===274,source:logo.currentSrc.includes('/images/logo_text_white.png'),ratio:Math.abs(logoBox.width/logoBox.height-1536/274)<.05,inViewport:logoBox.left>=-1&&logoBox.right<=innerWidth+1,visible:logoBox.height>=22&&logoBox.height<=65,noOverlap:!!sibling&&logoBox.right<=sibling.getBoundingClientRect().left+2},
       };
     });
+    const entry={viewport,metrics,status:'in-progress'};
+    report.push(entry);
     assert.equal(metrics.h1,1);assert.equal(metrics.header,1);assert.equal(metrics.visibleHeaders,1);assert.equal(metrics.footer,1);
     assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
     for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear']) assert.ok(metrics[field],width+': '+field);
@@ -174,6 +180,7 @@ try {
           document.querySelector('a[href="'+hash+'"]').click();await new Promise(done=>setTimeout(done,350));
           anchors.push(document.querySelector(hash).getBoundingClientRect().top>=header.getBoundingClientRect().bottom-2);
         }
+        history.replaceState(null,'',location.pathname+location.search);
         window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));await new Promise(done=>setTimeout(done,300));
         return {initial,fullWidth,cover,imageLoaded,solid,returned,planning,anchors:anchors.every(Boolean),skip:document.querySelector('#main-content').tabIndex===-1};
       });
@@ -206,18 +213,18 @@ try {
       const bounds=await evaluate('(()=>{const node=document.getElementById('+JSON.stringify(id)+');if(!node)return null;const r=node.getBoundingClientRect();return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height,scale:1};})()');
       assert.ok(bounds,'Missing section '+id);await capture(prefix+'-'+width+'-'+id+'.png',bounds);
     }
-    // Navigation must still exist with JS disabled, including after an AMP load failure.
+    // Force a document reload, not a same-document hash navigation, with JavaScript disabled.
     await call('Emulation.setScriptExecutionDisabled',{value:true});
-    await call('Page.navigate',{url});
+    await call('Page.reload',{ignoreCache:true});
     let fallbackReady=false;
     for(let attempt=0;attempt<80;attempt++) {
-      try {fallbackReady=await evaluate('document.readyState==="complete" && location.pathname==='+JSON.stringify(expectedPath)+' && !!document.querySelector("#hp-amp-header-fallback nav a")');} catch { /* Waiting for navigation. */ }
+      try {fallbackReady=await evaluate('document.readyState==="complete" && location.pathname==='+JSON.stringify(expectedPath)+' && !!document.querySelector("#hp-amp-header-fallback nav a") && !document.querySelector("header.hm")');} catch { /* Waiting for navigation. */ }
       if(fallbackReady) break;await sleep(100);
     }
     assert.ok(fallbackReady,width+': no-JS navigation missing');
     allTrue(await run(function(){const fallback=document.querySelector('#hp-amp-header-fallback');return {visible:!fallback.hidden&&getComputedStyle(fallback).display!=='none',nativeContact:!!fallback.querySelector('a[href="/kontakt/"]'),nativeHalls:!!fallback.querySelector('a[href="/stalhallar/"]'),noOverflow:document.documentElement.scrollWidth<=innerWidth+1};}),width+': no-JS fallback');
     await call('Emulation.setScriptExecutionDisabled',{value:false});
-    report.push({viewport,filename,...metrics,noJavaScript:'passed'});
+    Object.assign(entry,{filename,noJavaScript:'passed',status:'passed'});
   }
   assert.equal(browserErrors.length,0,'Browser errors: '+browserErrors.join('\n'));
   await writeFile(join(output,prefix+'-REPORT.json'),JSON.stringify({route:expectedPath,pages:report,status:'passed'},null,2));
@@ -225,6 +232,7 @@ try {
 } catch(error) {
   await writeFile(join(output,prefix+'-ERROR.txt'),String(error));
   await writeFile(join(output,prefix+'-PARTIAL.json'),JSON.stringify(report,null,2));
+  if(captureFailure) { try { await captureFailure(); } catch { /* Preserve the original assertion. */ } }
   console.error(error);process.exitCode=1;
 } finally {
   await writeFile(join(output,prefix+'-chrome-stderr.log'),diagnostics);
