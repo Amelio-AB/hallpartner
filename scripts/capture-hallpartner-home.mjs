@@ -210,6 +210,10 @@ try {
         };
       }),width+': AMP-001 Escape and focus');
       if([320,390,768,1024,1440].includes(width)) {
+        // Focus restoration from the help dialog may scroll the viewport.
+        // Pin the fixed header at document top before full-page evidence.
+        await evaluate('window.scrollTo(0,0)');
+        await sleep(70);
         const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
         await capture(prefix+'-'+width+'-amp001-step1.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
       }
@@ -284,7 +288,8 @@ try {
       }),width+': all five question steps, final review and no-send gate');
     }
 
-    await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur()');
+    await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur();window.scrollTo(0,0)');
+    await sleep(70);
     const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
     const filename=prefix+'-'+width+'-full.png';
     await capture(filename,{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
