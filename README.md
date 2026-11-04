@@ -13,6 +13,10 @@ Git-status innan du byter gren, hämtar ändringar eller installerar paket.
 Säkerhetskopior utanför arbetsmappen ska bevaras, inte blandas ihop med
 aktiva arbetsytor.
 
+## Aktuell offertguide på Draft-PR #22
+
+På den öppna Draft-grenen är `/offert/` en sexstegsarbetskandidat med **fem frågesteg plus automatisk granskning**. Alla verkliga offertinskick och filuppladdningar är avstängda. Läs [specifikationen för frågorna och öppna kundbeslut](docs/content/HALLPARTNER_OFFERTGUIDE_V2.md). Publicerad `main`-preview ska inte antas visa arbetsgrenen.
+
 ## Lokal start
 
 Använd **Node.js 24**. Privat `@amelio/web-platform` är låst till
@@ -123,9 +127,10 @@ publiceringskoden behöver skilja exakt FTPS-original från den specifikt
 verifierade HTTPS-omskrivningen. Mål och registrerade bilder är redan
 beslutade; nya allmänna tillstånd eller en ny miljö behövs inte.
 
-Workflow `deploy-production.yml` (ID 316932905) ska förbli avstängt tills
-exakt första aktivering/publicering är godkänd. Kontrollera verklig status.
-En godkänd build eller merge är inte bevis för en publicerad version.
+Workflow `deploy-production.yml` (ID 316932905) är det befintliga
+publiceringsflödet för utvecklingspreview från `main`. Kontrollera verklig
+workflowstatus och att publicerad commit faktiskt överensstämmer med `main`;
+PR-körningar får inte publicera. En godkänd build är inget publiceringsbevis.
 [Publiceringsprocessen](docs/preview/README.md) innehåller historiska
 inventeringar som måste kontrolleras igen före skrivning.
 
