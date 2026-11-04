@@ -17,4 +17,14 @@ for (const job of [validation.jobs.validate,deploy.jobs.publish]) {
   assert(job.steps.find(s=>s.uses==='actions/checkout@v6')?.with['persist-credentials']===false, 'Persisted Git credentials forbidden');
 }
 assert(!readFileSync('.github/workflows/deploy-production.yml','utf8').includes('run-id:'), 'Old fixed artifact forbidden');
+const maintenance = validation.jobs.maintenance;
+assert(validation.on.workflow_dispatch.inputs.operation.options.join(',') === 'validate,private-backup,approved-cleanup', 'Unexpected manual maintenance operation');
+assert(maintenance.if.includes("github.event_name == 'workflow_dispatch'") && maintenance.if.includes("github.ref == 'refs/heads/main'"), 'Maintenance must be manual and main-only');
+assert(maintenance.concurrency.group === deploy.concurrency.group && maintenance.concurrency['cancel-in-progress'] === false, 'Maintenance must share the existing transfer lock');
+assert(maintenance.permissions.contents === 'read' && maintenance.permissions.actions === 'read', 'Maintenance cannot change GitHub code or secrets');
+const transport = maintenance.steps.find(s=>s.with?.name === 'private-preview-backup-${{ github.run_id }}');
+assert(transport?.with.path === 'reports/private-preview-backup.envelope.json' && transport.with['retention-days'] === 1, 'Only encrypted temporary backup transport may be uploaded');
+assert(!deploy.jobs.publish.steps.some(s=>/approved-cleanup|private-backup/.test(s.run ?? '')), 'Automatic publication must never run maintenance');
+const liveBrowser = deploy.jobs.publish.steps.find(s=>s.name === 'Verify actual preview interactions in Chrome after publication');
+assert(liveBrowser?.run.includes('https://hallpartner-se.preview2.inleed.com/stalhallar/') && liveBrowser.run.includes('verify-hallpartner-amp006.mjs') && liveBrowser.run.includes('verify-hallpartner-gallery.mjs'), 'Missing real preview browser verification');
 console.log('Workflow structure/permissions/triggers/contracts: PASS');

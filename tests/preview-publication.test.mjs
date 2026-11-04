@@ -53,12 +53,12 @@ test('post-upload verification reads every FTPS original and rejects tampering b
     writeFileSync(cwd+'/original-0', raw); writeFileSync(cwd+'/original-1', css);
   };
   const get = async url => ({url,status:200,body:new URL(url).pathname === '/' ? expectedHttpBytes('index.html',raw) : css});
-  assert.equal((await verifyPublished(manifest, {}, get, transfer)).length, 2);
+  assert.equal((await verifyPublished(manifest, {}, get, transfer, false)).length, 2);
   await assert.rejects(() => verifyPublished(manifest, {}, get, (commands,creds,cwd) => {
     transfer(commands,creds,cwd);writeFileSync(cwd+'/original-0',expectedHttpBytes('index.html',raw));
-  }), /FTPS original/);
-  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:200,body:Buffer.from('wrong file')}),transfer), /HTTPS differs/);
-  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:404,body:raw}),transfer));
+  }, false), /FTPS original/);
+  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:200,body:Buffer.from('wrong file')}),transfer,false), /HTTPS differs/);
+  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:404,body:raw}),transfer,false));
 });
 test('read-only inventory records protected paths without permitting command injection or traversal', () => {
   assert.deepEqual(remoteInventory('./\n./cgi-bin/\n./cgi-bin/.htaccess\n./index.html\n'), {
@@ -141,9 +141,9 @@ test('a changed production HTML hash cannot skip the concrete marker separation 
   const requested = [];
   await assert.rejects(() => verifyProduction([{url:'https://hallpartner.se/',sha256:sha256('before')}], 'hp-preview-deploy-test.json', async url => {
     requested.push(url); return {status:url.includes('hp-preview-')?404:200,body:Buffer.from('dynamic after')};
-  }), /dynamic WordPress bytes alone/);
+  }, false), /dynamic WordPress bytes alone/);
   assert.equal(requested.filter(url=>url.includes('hp-preview-')).length,6);
-  await assert.rejects(() => verifyProduction([], 'hp-preview-deploy-test.json', async()=>({status:200,body:Buffer.from(PROBE)})), /Production marker/);
+  await assert.rejects(() => verifyProduction([], 'hp-preview-deploy-test.json', async()=>({status:200,body:Buffer.from(PROBE)}), false), /Production marker/);
 });
 test('payload verification rejects empty or forged file inventory', () => {
   assert.throws(()=>verifyPayload('not-present',{commit:'a'.repeat(40),files:[],images:[]}));

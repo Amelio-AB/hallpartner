@@ -60,7 +60,7 @@ omskrivna HTTP-snapshots räcker inte. Actions-kontrollens temporära original
 städas på runnern och är ingen backup. Rå serverfiler får inte läggas i
 Actions-artifacts för att ersätta privat backup.
 
-Automatiken raderar inga filer. Okända extra filer blockerar. Gamla tillåtna
+Den automatiska publiceraren raderar inga filer. Okända extra filer blockerar. Gamla tillåtna
 resurser kräver individuell hashbunden retention; borttagna HTML-sidor är
 aldrig automatiskt godkända via tidigare inventory. Bildrättigheter gäller
 registrerade bytes, inte varje äldre serverbild.
@@ -69,6 +69,14 @@ registrerade bytes, inte varje äldre serverbild.
 hash, `reviewedBy` och `evidence`. Funktionen måste granskas privat innan
 posten fylls i. Filen laddas aldrig upp/raderas av kedjan. Inget generellt
 undantag för dotfiler finns. Demos/README kräver ett exakt raderingsbeslut.
+
+Andreas har nu godkänt den [exakta filplanen](publication-fix-20261104.md):
+13 namngivna borttagningar efter verifierad privat råbackup, 26 hashbundna
+tillfälliga retentionposter och oförändrad skyddsfil/målmarkör. Befintligt
+valideringsworkflow har manuella main-lägen för krypterad backuptransport och
+denna engångsstädning; de ingår aldrig i automatisk publicering. Privat nyckel
+och dekrypterad råbackup stannar lokalt. Endast chiffertext går till en tillfällig
+artifact som tas bort efter verifierad lokal återställning.
 
 ## Validering och aktivering
 
@@ -94,6 +102,11 @@ behålls. Inaktivering stoppar inte redan startade jobb.
 5. Följ körningen till slutstatus. Verifiera FTPS, HTTPS, commit/run-markör,
    AMP-002 på desktop/mobil, AMP-006/galleri på `/stalhallar/`, noindex och
    inaktiva formulär. Rapportera publicerad SHA separat från merge-SHA.
+
+Publiceringsjobbet kör även riktig Chrome mot den kundsynliga startsidan och
+`/stalhallar/` efter uppladdningen: responsiv AMP-002, AMP-006 och galleri.
+Skärmbilder och testresultat sparas separat under `live-browser` i körningens
+publiceringsbevis. Dessa ska inte förväxlas med kandidatens tidigare bilder.
 
 FTPS är inte atomiskt: resurser överförs före HTML, startsidan sist. Avbrott
 kan ge delvis uppdaterat innehåll; ingen destruktiv automatisk rollback sker.
