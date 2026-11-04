@@ -7,6 +7,12 @@ import { PREVIEW, sha256, assert } from './policy.mjs';
 export function inventoryDigest(files) {
   return sha256(JSON.stringify(files.map(({path,sha256,bytes}) => ({path,sha256,bytes})).sort((a,b) => a.path.localeCompare(b.path, 'en'))));
 }
+export function assertBackupScope(proof, approved) {
+  assert(approved.target === PREVIEW && approved.bindingSha256 === proof.bindingSha256 &&
+    approved.files.length === 63 && proof.fileFingerprints.length === 63 &&
+    inventoryDigest(proof.fileFingerprints) === inventoryDigest(approved.files),
+  'Backup transfer is restricted to the exact 63 approved server originals');
+}
 function outsideWorkingDirectory(path) {
   const rel = relative(resolve('.'), resolve(path));
   return isAbsolute(path) && (rel === '..' || rel.startsWith('..' + sep) || isAbsolute(rel));
