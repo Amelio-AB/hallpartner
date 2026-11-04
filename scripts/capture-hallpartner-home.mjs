@@ -243,7 +243,7 @@ try {
         const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
         await capture(prefix+'-'+width+'-amp001-groups.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
       }
-      allTrue(await run(function(){
+      allTrue(await run(async function(){
         const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
         const fill=(selector,value)=>{
           const field=host.querySelector(selector);
@@ -268,6 +268,8 @@ try {
         fill('input[name="contact.name"]','Test Person');
         fill('input[name="contact.email"]','test@example.invalid');
         form.requestSubmit();
+        // The disabled state is updated in a MutationObserver microtask.
+        await Promise.resolve();
         const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
         const summary=[...host.querySelectorAll('.qf-summary-section')];
         return {
