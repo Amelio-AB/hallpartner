@@ -65,16 +65,41 @@ export async function publicProof(get = request) {
   assert(r.status === 200 && r.body.toString().trim() === PROBE, 'Preview target marker mismatch');
   for (const host of PRODUCTION) await assertAbsent(host, PROBE_FILE, get);
 }
+// Inventory may include forbidden publication paths (for example .htaccess),
+// but none may escape the login root or inject an lftp command/option.
+export function remoteInventory(listing) {
+  const remoteFiles = []; const remoteDirectories = [];
+  for (const line of listing.split(/\r?\n/).filter(Boolean)) {
+    if (line === '.' || line === './') continue;
+    const directory = line.endsWith('/');
+    const path = line.replace(/^\.\//, '').replace(/\/$/, '');
+    assert(/^[A-Za-z0-9_.][A-Za-z0-9_./-]*$/.test(path) &&
+      !path.split('/').some(p => !p || p === '.' || p === '..'), 'Unsafe remote inventory path');
+    (directory ? remoteDirectories : remoteFiles).push(path);
+  }
+  assert(new Set([...remoteFiles, ...remoteDirectories]).size === remoteFiles.length + remoteDirectories.length, 'Duplicate remote inventory path');
+  return { remoteFiles: remoteFiles.sort(), remoteDirectories: remoteDirectories.sort() };
+}
 export async function checkTarget(creds = credentials()) {
   await publicProof();
   const temp = mkdtempSync(tmpdir() + '/hp-preview-read-');
   try {
     ftps(['get ' + PROBE_FILE + ' -o probe.txt'], creds, temp);
     assert(readFileSync(temp + '/probe.txt', 'utf8').trim() === PROBE, 'FTPS login root does not match public preview marker');
-    const listing = ftps(['find .'], creds, temp).split(/\r?\n/).filter(Boolean);
-    const remoteFiles = listing.filter(x => !x.endsWith('/')).map(x => x.replace(/^\.\//, '')).sort();
+    const listing = ftps(['find .'], creds, temp);
+    const { remoteFiles, remoteDirectories } = remoteInventory(listing);
     assert(remoteFiles.includes(PROBE_FILE), 'Unrecognized FTPS directory listing');
-    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', bindingSha256: creds.binding, remoteFiles,
+    // Read only. Raw files, including server configuration, stay in the temporary
+    // runner directory and are never included in uploaded evidence artifacts.
+    ftps(remoteFiles.map((path, index) => 'get ' + path + ' -o inventory-' + index), creds, temp);
+    const fileFingerprints = remoteFiles.map((path, index) => {
+      const body = readFileSync(temp + '/inventory-' + index);
+      return { path, sha256: sha256(body), bytes: body.length };
+    });
+    const after = remoteInventory(ftps(['find .'], creds, temp));
+    assert(JSON.stringify(after) === JSON.stringify({ remoteFiles, remoteDirectories }), 'Remote inventory changed during read-only inspection');
+    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', bindingSha256: creds.binding, remoteFiles, remoteDirectories, fileFingerprints,
+      writeOperations: 0,
       forbiddenFiles: remoteFiles.filter(p => BLOCKED.test(p)) };
     mkdirSync(REPORT, { recursive: true }); writeFileSync(REPORT + '/target-proof.json', JSON.stringify(result, null, 2) + '\n');
     console.log('Read-only proof passed: FTPS login root marker matches preview and is absent from both production hosts.');

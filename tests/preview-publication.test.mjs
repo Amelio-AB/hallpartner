@@ -5,9 +5,17 @@ import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot } from '../scripts/preview/remote.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, remoteInventory } from '../scripts/preview/remote.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
+test('read-only inventory records protected paths without permitting command injection or traversal', () => {
+  assert.deepEqual(remoteInventory('./\n./cgi-bin/\n./cgi-bin/.htaccess\n./index.html\n'), {
+    remoteFiles: ['cgi-bin/.htaccess', 'index.html'], remoteDirectories: ['cgi-bin'],
+  });
+  for (const path of ['../outside', './a/../outside', '/absolute', '-o', 'a;put x', 'a b', 'a"b', 'a\\b', './a//b', './x\n./x']) {
+    assert.throws(() => remoteInventory(path));
+  }
+});
 test('public allowlist excludes internal pages and server code', () => {
   assert.equal(PAGES.length,13);
   for (const path of ['../index.html','/index.html','a//x','.env','api/lead.php','server/key.json','prototype/index.html','x.php5','x.PHTML','x.log','x.map','docs/a.html','x;put-secret']) assert.throws(()=>safePath(path));
