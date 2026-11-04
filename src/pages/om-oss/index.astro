@@ -2,22 +2,7 @@
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
 
-// Names and role labels reflect Hallpartner's previously published Om oss page,
-// as indexed in 2026. Peter/Jimmy must verify current roles and publication
-// before launch. Earlier personal biographies / tenure / responsibility claims
-// are deliberately not inherited here. Photos await F12 image rights.
-const people = [
-  {
-    name: 'Jimmy Gustafsson',
-    role: 'Säljare och projektledare för hallar',
-    initials: 'JG',
-  },
-  {
-    name: 'Peter Fridland',
-    role: 'Säljare och projektledare för hallar',
-    initials: 'PF',
-  },
-] as const;
+import { hallpartnerPeople } from '../../config/hallpartner-people';
 
 const topics = [
   {
@@ -98,19 +83,23 @@ const topics = [
             <h2 id="about-team-title">Möt personerna bakom Hallpartner.</h2>
           </div>
           <p>
-            Här får du veta vilka du kan komma i kontakt med.
-            Vi kompletterar med porträtt och mer information när
-            presentationen och bildmaterialet är godkända.
+            Lär känna personerna du möter när du kontaktar Hallpartner.
+            Här berättar vi hur Peter och Jimmy arbetar med hallförfrågningar.
           </p>
         </div>
-        <div class="hp-info__people">
-          {people.map((person) => (
-            <article class="hp-info__person">
-              <div class="hp-info__person-monogram" aria-hidden="true">{person.initials}</div>
+        <div class="hp-info__people hp-info__people--about">
+          {hallpartnerPeople.map((person) => (
+            <article class="hp-info__person hp-info__person--about" id={person.id} aria-labelledby={person.id + '-namn'}>
+              <div class="hp-info__person-photo">
+                <img src={person.portrait} alt={`Porträtt av ${person.name}`} width="886" height="887" loading="lazy" decoding="async" />
+              </div>
               <div class="hp-info__person-content">
                 <p class="hp-info__person-label">Hallpartner</p>
-                <h3>{person.name}</h3>
-                <p>{person.role}</p>
+                <h3 id={person.id + '-namn'}>{person.name}</h3>
+                <p class="hp-info__person-role">{person.role}</p>
+                <p>{person.intro}</p>
+                <p>{person.detail}</p>
+                <a class="hp-info__person-more" href="/kontakt/#personer">Kontakta {person.firstName} <span aria-hidden="true">→</span></a>
               </div>
             </article>
           ))}

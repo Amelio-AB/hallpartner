@@ -612,6 +612,30 @@
       "origin": "existing-hallpartner-wordmark",
       "approvalBasis": "Customer confirmation; publication and normal image optimization",
       "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/people/jimmy-gustafsson.png",
+      "sourceSha256": "2de5de9678802bd4aef5953b6320d0b91dc0ea30cc2bbdeb2aec501e6ebd521d",
+      "outputSha256": "2de5de9678802bd4aef5953b6320d0b91dc0ea30cc2bbdeb2aec501e6ebd521d",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/checkpoints/2026-11-04-people-ui-update.md",
+      "approvedOn": "2026-11-04",
+      "origin": "user-supplied-person-portrait",
+      "approvalBasis": "User requested publication of supplied portrait on Hallpartner development preview",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/people/peter-fridland.png",
+      "sourceSha256": "002e8cb87521b70bc4d24f9d2fc8f6d9be50b2f8b853b2f22f9b41dc1ef4d1c8",
+      "outputSha256": "002e8cb87521b70bc4d24f9d2fc8f6d9be50b2f8b853b2f22f9b41dc1ef4d1c8",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/checkpoints/2026-11-04-people-ui-update.md",
+      "approvedOn": "2026-11-04",
+      "origin": "user-supplied-person-portrait",
+      "approvalBasis": "User requested publication of supplied portrait on Hallpartner development preview",
+      "externalLicenseEvidence": null
     }
   ]
 }

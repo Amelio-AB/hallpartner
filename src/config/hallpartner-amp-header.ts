@@ -26,7 +26,7 @@ export const ampHeaderItems: HeaderMenuConfig['items'] = [
 export const ampHeaderBrand: HeaderMenuConfig['brand'] = {
   name: 'Hallpartner', href: '/', logoSrc: '/images/logo_text_white.png', logoHeroSrc: '/images/logo_text_white.png',
 };
-export const ampHeaderCTA: NonNullable<HeaderMenuConfig['cta']> = { label: 'Kontakt', href: '/kontakt/' };
+export const ampHeaderCTA: NonNullable<HeaderMenuConfig['cta']> = { label: 'Be om offert', href: '/offert/' };
 export const ampHeaderTheme: NonNullable<HeaderMenuConfig['theme']> = {
   colors: {
     headerBg: '#071A16', headerText: '#F4F4F0', submenuBg: '#EBEBE8',
