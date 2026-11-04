@@ -25,6 +25,32 @@
 
 **Begrepp:** ”Kundbekräftat” kräver uttrycklig bekräftelse från Hallpartner, inte att en fråga förekommer i ett äldre förslag. I tabellerna nedan betyder **Arbetsförslag** att vi bedömer frågan rimlig för första kontakten, inte att Hallpartner erbjudit det den beskriver.
 
+## Prioriterad innehållsgranskning 2026-11-04
+
+**Den visuella designen är godkänd – frågeinnehållet är det inte.** Denna innehållsiteration har
+justerat de befintliga frågornas språk och lagt till ett **frivilligt** intresseval bland webbplatsens sex
+hallkategorier. Den har **inte** ändrat datanycklar som redan används, antalet visuella steg,
+kraven på kontakt/grundbeskrivning eller påstått att sortimentet är kundgodkänt.
+
+### Kritisk bedömning: vad vi faktiskt behöver veta tidigt
+
+| Bedömd nytta för första säljsamtalet | Uppgifter i arbetskandidaten | Fortsättning |
+| --- | --- | --- |
+| Hög | Vad kunden behöver hallen till, kort projektbeskrivning, kontaktuppgifter | Behåll i huvudflödet, kontrollera miniminivån med Hallpartner |
+| Hög men ännu oklart som obligatoriskt | Ort/område, storleksuppfattning, ungefärlig tidsplan | Behåll synligt men frivilligt tills säljprocessen är bekräftad |
+| Möjlig hjälp för rätt lösning | Önskad hallkategori (frivillig), isoleringsbehov, behov av portar | Fråga om behov eller preferens, inte tekniskt produktval |
+| Lägre nytta i första kontakten | Takvinkel, paneltjocklek, RAL, grundtyp, portmått per enhet, omfattande installationer | Håll borta från första obligatoriska flödet; använd senare vid behov |
+| Kräver separat beslut/infrastruktur | Inkommande filer, mottagaradress, personuppgiftsrutiner och aktiverad inskickning | Fortsatt avstängt. UI-piloten ger inte ett produktionsgodkännande |
+
+**Risk att bevaka:** Det finns fem obligatoriska fält i denna arbetsversion
+(`project.use`, `project.description`, `dimensions.confidence`, `contact.name`, `contact.email`).
+Framför allt `dimensions.confidence` bör ifrågasättas: om en besökare redan beskrivit sitt behov kan en
+obligatorisk bedömning av måttsäkerheten vara onödig friktion. Ingen ändring görs av obligatoriskt-status
+innan Hallpartner bekräftar vilka uppgifter som verkligen behövs före första återkopplingen.
+
+**Nästa externa beslut:** Använd den korta [beslutslistan för Peter och Jimmy](HALLPARTNER_OFFERTGUIDE_KUNDBESLUT.md)
+i stället för att skicka om hela den historiska listan med 36 verksamhetsfrågor.
+
 ## 2. Fältinventering – aktuell V2-kandidat
 
 ### Steg 1 – Behov
@@ -32,19 +58,21 @@
 | Datanyckel | Fråga / svar | Krav, villkor, UI | Beslutsstatus |
 | --- | --- | --- | --- |
 | `project.use` | **Vad ska du främst använda hallen till?** Lager eller förvaring (`storage`), maskiner eller verkstad (`machinery`), ridverksamhet (`riding`), annat behov (`other`), behöver rådgivning (`unknown`). | **Obligatorisk**; valkort; informationsknapp. Utgår från användning, inte en sammanblandad produktfamilj. | Arbetsförslag; valen finns även i äldre fyrastegsguide. |
-| `project.description` | **Berätta kort om projektet**. Fri text om användningen och vad som ska få plats. | **Obligatorisk**, minst 10 tecken i frontend; kort hjälptext. | Arbetsförslag; befintlig validator kräver 10 tecken. |
+| `project.description` | **Berätta kort om projektet**. Fri text om användningen och vad som ska få plats. | **Obligatorisk**, minst 10 tecken i frontend; kort hjälptext. | Arbetsförslag; tidigare V1-validator kräver 10 tecken men V2-servermottagning är ännu inte byggd. |
 
-**Varför inte halltyp som första obligatoriska val?** Historiken blandar produkt/användning (lager/ridhus) med konstruktion (tält) och isolering. Projektägaren och frågeunderlaget pekar på samma modellrisk. Kundens önskemål kan först beskrivas fritt; senare kan ett verkligt sortiment styra separata val.
+| `project.hall_interest` | **Vilken av våra hallkategorier tänker du på?** Lagerhall, maskinhall, plåthall, tälthall, ridhus, isolerad hall eller vill ha hjälp att välja. | **Frivillig**, dold under **Har du en viss halltyp i åtanke?** i steg 1. Valet anger vad kunden tittat på – inte en teknisk specifikation. | Arbetsförslag baserat på webbplatsens sex kategorisidor; **inte kundbekräftad produktmodell**. |
+
+**Varför halltyp som frivilligt intresse, inte obligatorisk konstruktion?** Historiken blandar användning (lager/ridhus) med konstruktion (tält) och egenskap (isolering). De sex alternativen återger **webbplatsens navigationskategorier**, inte sex ömsesidigt uteslutande byggsystem. `project.use` och `project.hall_interest` är därför oberoende. Exempel: ridverksamhet + tälthall är tillåtet som önskemål; Hallpartner måste senare rekommendera lämpligt utförande.
 
 ### Steg 2 – Mått och plats
 
 | Datanyckel | Fråga / svar | Krav, villkor, UI | Beslutsstatus |
 | --- | --- | --- | --- |
-| `dimensions.confidence` | **Hur säkra är dina mått?** Vet (`exact`), ungefärliga (`approximate`), behöver hjälp (`need_help`). | **Obligatorisk**; informationsknapp. | Arbetsförslag; bevarar tidigare logik. |
+| `dimensions.confidence` | **Vet du ungefär hur stor hallen ska vara?** Ja, vet måtten (`exact`), ungefärliga mått (`approximate`), behöver hjälp med storleken (`need_help`). | **Obligatorisk**; informationsknapp. | Arbetsförslag; bevarar tidigare logik. |
 | `dimensions.width` | **Bredd i meter**. Positivt tal med decimalpunkt eller kommatecken. | Frivillig; bara när måttsvar ≠ `need_help`; validering av positiva mått. | Arbetsförslag. |
 | `dimensions.length` | **Längd i meter**. Samma format. | Frivillig; samma villkor. | Arbetsförslag. |
 | `dimensions.side_height` | **Sidohöjd i meter**. Positivt tal. | Frivillig; dold bakom **Fler mått**; visas inte vid `need_help`; informationsknapp. | Arbetsförslag. |
-| `site.city` | **Var planeras hallen?** Ort eller område. | Frivillig, synlig i normalflödet. | Arbetsförslag; geografi behövs ofta för bedömning men är inte kundbekräftat som krav. |
+| `site.city` | **I vilken ort eller vilket område vill du bygga?** Ort eller område. | Frivillig, synlig i normalflödet. | Arbetsförslag; geografi behövs ofta för bedömning men är inte kundbekräftat som krav. |
 | `site.postal_code` | **Postnummer**. Svenska fem siffror. | Frivillig, i grupp **Fler uppgifter om byggplatsen**. | Arbetsförslag; tidigare nyckel. |
 | `site.decided` | **Är den exakta byggplatsen bestämd?** Ja/nej/vet inte. | Frivillig, samma grupp. | Arbetsförslag baserat på historisk fråga. |
 | `site.address` | **Adress eller fastighetsbeteckning**. Fri text. | Frivillig; visas endast om `site.decided=yes`; samma grupp. | Arbetsförslag; ingen platsuppgift måste lämnas i granskningsläget. |
@@ -59,11 +87,11 @@
 | --- | --- | --- | --- |
 | `design.insulation` | **Behöver hallen vara isolerad?** Troligen ja/nej, Hallpartner rekommenderar, vet inte. | Frivillig, synlig; informationsknapp. | Arbetsförslag om behov – **inte** godkända panelalternativ eller material. |
 | `openings.ports` | **Behöver hallen en eller flera portar?** Ja/nej/osäker. | Frivillig, synlig. | Arbetsförslag. |
-| `openings.port_needs` | **Beskriv portbehovet.** Ungefärligt antal, mått, trafik eller maskiner. | Frivillig; endast om `openings.ports=yes`. Tillfällig fritext för behov; **inte** en ersättning för separata portobjekt. | Arbetsförslag; detaljerad portmodell kräver plattformsarbete och kundbeslut. |
+| `openings.port_needs` | **Beskriv gärna hur portarna ska användas.** Ungefärligt antal, mått, trafik eller maskiner. | Frivillig; endast om `openings.ports=yes`. Tillfällig fritext för behov; **inte** en ersättning för separata portobjekt. | Arbetsförslag; detaljerad portmodell kräver plattformsarbete och kundbeslut. |
 | `openings.windows` | **Behövs fönster eller ljusinsläpp?** Ja/nej/behöver diskuteras. | Frivillig; grupp **Fler önskemål**. | Arbetsförslag. |
 | `design.envelope_wishes` | **Önskemål om väggar, tak eller färg.** Fri text. | Frivillig; samma grupp. | Arbetsförslag. Inga material-/RAL-/takvinkelalternativ hårdkodas. |
 | `design.installation_wishes` | **Övriga funktioner eller tillval att diskutera.** Fri text. | Frivillig; samma grupp. Inga utfästelser om utbud. | Arbetsförslag; fråga 31 måste besvaras innan verkliga tillval får väljas. |
-| `delivery.wishes` | **Vilken hjälp önskar du med leveransen?** Fri text om exempelvis montage eller grund. | Frivillig; samma grupp. | Arbetsförslag, ingen produkt- eller leveransnivå bekräftad. |
+| `delivery.wishes` | **Vad vill du ha hjälp med utöver själva hallen?** Fri text om exempelvis montage eller grund. | Frivillig; samma grupp. | Arbetsförslag, ingen produkt- eller leveransnivå bekräftad. |
 
 **Öppet tekniskt behov:** AMP-001 1.5.0 stöder inte upprepningsbara portposter eller flervalsfält. Implementera inte ”antal portar + ett gemensamt mått” som en falsk komplett modell. En separat plattforms- och mottagarversion krävs om Hallpartner bekräftar detaljerad portkonfigurering före första kontakt.
 
@@ -72,7 +100,7 @@
 | Datanyckel | Fråga / svar | Krav, villkor, UI | Beslutsstatus |
 | --- | --- | --- | --- |
 | `planning.stage` | **Hur långt har projektet kommit?** Undersöker (`ideas`), planering (`planning`), bygglov/projektering (`permit`), redo för nästa steg (`ready`), vet inte (`unknown`). | Frivillig, synlig. | Arbetsförslag; möjlig kvalificering enligt fråga 32. |
-| `planning.timeline` | **När hoppas du komma igång?** Snarast, inom 3 månader, 3–6, 6–12, senare, vet inte. | Frivillig, synlig. | Arbetsförslag; uppskattning från kund, inte Hallpartners leveranslöfte. |
+| `planning.timeline` | **När skulle du vilja att bygget startar?** Snarast, inom 3 månader, 3–6, 6–12, senare, vet inte. | Frivillig, synlig. | Arbetsförslag; uppskattning från kund, inte Hallpartners leveranslöfte. |
 | `documents.available` | **Har du ritningar, skisser eller bilder?** Ja, något, inte ännu, nej. | Frivillig, synlig, informationsknapp. | Arbetsförslag; inga filer krävs. |
 | `documents.description` | **Vilket underlag finns?** Fri text. | Frivillig; bara vid ja/något. | Arbetsförslag. |
 | `planning.permit_status` | **Hur ser det ut med bygglovet?** Inte undersökt, undersöks, ansökan pågår, beviljat, vet inte. | Frivillig; grupp **Fler projektuppgifter**; informationsknapp. **Ingen juridisk bedömning** görs. | Arbetsförslag. |
@@ -90,7 +118,7 @@
 | `contact.phone` | **Telefon**. | Frivillig, mönstervaliderad, autocomplete tel. | Arbetsförslag. |
 | `contact.company` | **Företag**. | Frivillig, grupp **Fler kontaktuppgifter**, autocomplete organization. | Arbetsförslag. |
 | `contact.role` | **Vilken roll har du i projektet?** Beställare/slutkund, entreprenör, konsult/projektör, annan roll. | Frivillig, samma grupp. | Arbetsförslag; fråga 35 är obesvarad. Ingen automatisk gren för separat slutkund ännu. |
-| `contact.preference` | **Hur vill du helst bli kontaktad?** E-post, telefon, spelar ingen roll. | Frivillig, samma grupp. | Arbetsförslag. Kräver affärsbeslut före publik inskickning. |
+| `contact.preference` | **Hur vill du helst bli kontaktad?** E-post, telefon, spelar ingen roll. | Frivillig, samma grupp. **Telefon** kräver ifyllt och giltigt `contact.phone`; annars visas fel innan kontrollsteget. | Arbetsförslag. Kräver affärsbeslut före publik inskickning. |
 
 **Obligatoriska fält i denna kandidat:** `project.use`, `project.description`, `dimensions.confidence`, `contact.name`, `contact.email`. Detta är **inte** Hallpartners godkända slutliga kravlista. Valen behöver bekräftas mot fråga 14, 15 och 34. Minsta möjliga krav kan vara ännu bättre för konverteringen.
 
@@ -102,7 +130,7 @@
 
 | Historiskt område | V2-kandidat / beslut | Vad som inte tappas bort |
 | --- | --- | --- |
-| 1. Halltyp | Steg 1: `project.use` + beskrivning. | Frågan om konstruktionsfamilj/isolering är öppen; isoleringsbehov finns i steg 3. |
+| 1. Halltyp | Steg 1: `project.use` + beskrivning + frivillig `project.hall_interest`. | Hallkategorierna beskriver kundens intresse, inte definitiv konstruktion; isoleringsbehov finns i steg 3. |
 | 2. Mått och byggplats | Steg 2: osäkerhetsnivå, mått, ort, frivilligt postnummer/adress. | Specialmått, höjd över havet och automatisk area ligger kvar som senare tekniska behov. |
 | 3. Grund och mark | Steg 2, frivillig utfällning med grundstatus och kommentar. | Marktyp, grävning, återfyllning, ritning och fundamentval behöver avgränsas med Hallpartner; inte ignoreras. |
 | 4. Väggar och tak | Steg 3: isoleringsbehov samt frivillig fritext. | Paneltjocklek, material, färg/RAL och takvinkel ska inte vara kundval utan verifierat sortiment och regler. |
