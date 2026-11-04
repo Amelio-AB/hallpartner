@@ -1,0 +1,109 @@
+{
+  "checkedAt": "2026-11-04T07:08:52.522Z",
+  "main": "0c27b4a8e20efd3b8dca2498e5c2005df68f423b",
+  "changesMade": [],
+  "workflows": [
+    {
+      "id": 402582185,
+      "name": "AMP readiness - Node 24 - no deployment",
+      "path": ".github/workflows/amp-readiness.yml",
+      "state": "active",
+      "presentOnMain": true,
+      "historicalSourceRef": "HEAD"
+    },
+    {
+      "id": 404185833,
+      "name": "TEMP AMP-003 pinned lockfile verification (no deploy)",
+      "path": ".github/workflows/amp003-lockfile-probe.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": null
+    },
+    {
+      "id": 344518941,
+      "name": "CI",
+      "path": ".github/workflows/ci.yml",
+      "state": "active",
+      "presentOnMain": true,
+      "historicalSourceRef": "HEAD"
+    },
+    {
+      "id": 316932905,
+      "name": "Hallpartner Inleed development preview",
+      "path": ".github/workflows/deploy-production.yml",
+      "state": "disabled_manually",
+      "presentOnMain": true,
+      "historicalSourceRef": "HEAD"
+    },
+    {
+      "id": 402596196,
+      "name": "Hallpartner v1 draft validation (no deployment)",
+      "path": ".github/workflows/hallpartner-draft.yml",
+      "state": "active",
+      "presentOnMain": true,
+      "historicalSourceRef": "HEAD"
+    },
+    {
+      "id": 404340263,
+      "name": "Hallpartner lead intake audit (no send, no deploy)",
+      "path": ".github/workflows/hallpartner-intake-audit.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": "refs/remotes/origin/audit/lead-validation-utf8-20261102"
+    },
+    {
+      "id": 404296867,
+      "name": "Hallpartner private PHPMailer vendor package (no deploy)",
+      "path": ".github/workflows/hallpartner-phpmailer-vendor.yml",
+      "state": "active",
+      "presentOnMain": true,
+      "historicalSourceRef": "HEAD"
+    },
+    {
+      "id": 405335800,
+      "name": "Hallpartner Inleed preview - publish reviewed v1 draft",
+      "path": ".github/workflows/inleed-preview-release.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": "origin/ops/inleed-preview-cutover-20261103"
+    },
+    {
+      "id": 405334470,
+      "name": "Hallpartner Inleed preview - verify FTP maps to preview URL",
+      "path": ".github/workflows/inleed-preview-target-probe.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": "origin/ops/inleed-preview-cutover-20261103"
+    },
+    {
+      "id": 404228549,
+      "name": "TEMP Hallpartner legacy public URL survey (read-only)",
+      "path": ".github/workflows/legacy-url-survey.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": null
+    },
+    {
+      "id": 406233513,
+      "name": "Preview candidate - validation only",
+      "path": ".github/workflows/preview-validation.yml",
+      "state": "active",
+      "presentOnMain": true,
+      "historicalSourceRef": null
+    },
+    {
+      "id": 373291025,
+      "name": "Validate architecture foundation",
+      "path": ".github/workflows/validate-foundation.yml",
+      "state": "active",
+      "presentOnMain": false,
+      "historicalSourceRef": "refs/remotes/origin/feature/architecture-foundation-v0.1"
+    }
+  ],
+  "mainProtected": false,
+  "previewProtectionRules": [],
+  "oldOpsMustBeDisabledBeforeActivation": [
+    405335800,
+    405334470
+  ]
+}
