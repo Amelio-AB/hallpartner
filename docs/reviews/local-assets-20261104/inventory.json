@@ -1,0 +1,300 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-04",
+  "baseCommit": "22cd2ad0d29b1e5485f0cae5bfdf53b758996880",
+  "originalHead": "746b8f7317fba81fcd8ecf34f1779a36f9f064c8",
+  "originalIndexSha256": "f5433356dbb886344d9659caad28a3b4eeefa028f24c355da43850d93420312e",
+  "files": [
+    {
+      "path": "package-lock.json",
+      "sha256": "ff3a3399b475f68489bb265922b1e3c6e7fc02af3e313c7a6c6ed29421357e87",
+      "backupSha256": "ff3a3399b475f68489bb265922b1e3c6e7fc02af3e313c7a6c6ed29421357e87",
+      "bytes": 255417,
+      "includedInThisPr": false,
+      "recommendation": "exclude-obsolete-lockfile"
+    },
+    {
+      "path": "package.json",
+      "sha256": "913e6bfbdb70c43c7d7ec3ca79c64e1673fffb9f7f356c7bca5bd75f91280ebb",
+      "backupSha256": "913e6bfbdb70c43c7d7ec3ca79c64e1673fffb9f7f356c7bca5bd75f91280ebb",
+      "bytes": 839,
+      "includedInThisPr": false,
+      "recommendation": "exclude-obsolete-manifest"
+    },
+    {
+      "path": "docs/00_Handlingsplan_salja_fler_hallar.docx",
+      "sha256": "4300cec8d4ba15b0ddb6eb42eb14efc16a2a2cb74952a922ba0c3f5a6764cb25",
+      "backupSha256": "4300cec8d4ba15b0ddb6eb42eb14efc16a2a2cb74952a922ba0c3f5a6764cb25",
+      "bytes": 41745,
+      "includedInThisPr": false,
+      "recommendation": "retain-external-historical-workshop-document"
+    },
+    {
+      "path": "docs/Hallpartner_Beslutsunderlag_Peter_Jimmy.docx",
+      "sha256": "b5a74458a0a68d1f3e84a50bdefcfb433dd0647027354e82fad129ea6e5587c4",
+      "backupSha256": "b5a74458a0a68d1f3e84a50bdefcfb433dd0647027354e82fad129ea6e5587c4",
+      "bytes": 46224,
+      "includedInThisPr": false,
+      "recommendation": "retain-external-unanswered-customer-questionnaire"
+    },
+    {
+      "path": "public/images/logo_black.png",
+      "sha256": "b3e92d4ad0cc81feff4eb13edd0c86055dba12d5a498dc419c491efbb41e699f",
+      "backupSha256": "b3e92d4ad0cc81feff4eb13edd0c86055dba12d5a498dc419c491efbb41e699f",
+      "bytes": 263778,
+      "includedInThisPr": false,
+      "recommendation": "candidate-after-brand-and-rights-approval"
+    },
+    {
+      "path": "public/images/logo_white.png",
+      "sha256": "0a579d3b1a328a165492e03c190b9787f4d7f4d36473761ddc384d734a2aadc0",
+      "backupSha256": "0a579d3b1a328a165492e03c190b9787f4d7f4d36473761ddc384d734a2aadc0",
+      "bytes": 1167022,
+      "includedInThisPr": false,
+      "recommendation": "candidate-after-brand-and-rights-approval"
+    },
+    {
+      "path": "src/assets/images/legacy/hallpartner-logotype-light-1536x922.png",
+      "sha256": "fc4784979bc31366c10ba0e94567e0ded914a5fd747a5ee88c2184f540138b80",
+      "backupSha256": "fc4784979bc31366c10ba0e94567e0ded914a5fd747a5ee88c2184f540138b80",
+      "bytes": 99490,
+      "includedInThisPr": false,
+      "recommendation": "retain-source-archive-not-web-delivery"
+    },
+    {
+      "path": "src/pages/prototype/amp/signature.astro",
+      "sha256": "8a6935f32c3c5dacb2f99dcafce7978f0a7560af092ace35367f7b644fc1dddc",
+      "backupSha256": "8a6935f32c3c5dacb2f99dcafce7978f0a7560af092ace35367f7b644fc1dddc",
+      "bytes": 9990,
+      "includedInThisPr": false,
+      "recommendation": "retain-prototype-for-separate-approved-integration"
+    }
+  ],
+  "packageVersions": {
+    "astro": {
+      "local": "7.1.3",
+      "main": "7.3.3"
+    },
+    "sharp": {
+      "local": "0.35.3",
+      "main": "0.35.5"
+    },
+    "@amelio/web-platform": {
+      "local": "1.2.0",
+      "main": "1.4.0"
+    },
+    "vite": {
+      "local": "8.1.5",
+      "main": "8.3.5"
+    },
+    "esbuild": {
+      "local": "0.28.1",
+      "main": "0.28.1"
+    },
+    "minimatch": {
+      "local": "3.1.5",
+      "main": "3.1.5"
+    }
+  },
+  "changedLockEntries": 126,
+  "images": [
+    {
+      "path": "public/images/logo_black.png",
+      "bytes": 263778,
+      "sha256": "b3e92d4ad0cc81feff4eb13edd0c86055dba12d5a498dc419c491efbb41e699f",
+      "width": 1618,
+      "height": 972,
+      "format": "png",
+      "channels": 4,
+      "hasAlpha": true,
+      "transparent": 1289312,
+      "partial": 273905,
+      "opaque": 9479,
+      "nontransparentBounds": {
+        "minX": 40,
+        "minY": 37,
+        "maxX": 1581,
+        "maxY": 902
+      },
+      "decodedRgbaSha256": "8ad5d9bf7d8f51e572a95e333afdb6715a18c2c24763f63933719eb78a6315f2",
+      "exactTrackedDuplicates": [],
+      "metadataKeys": [
+        "format",
+        "mediaType",
+        "size",
+        "width",
+        "height",
+        "space",
+        "channels",
+        "depth",
+        "density",
+        "isProgressive",
+        "isPalette",
+        "bitsPerSample",
+        "hasProfile",
+        "hasAlpha",
+        "autoOrient"
+      ]
+    },
+    {
+      "path": "public/images/logo_white.png",
+      "bytes": 1167022,
+      "sha256": "0a579d3b1a328a165492e03c190b9787f4d7f4d36473761ddc384d734a2aadc0",
+      "width": 1536,
+      "height": 1024,
+      "format": "png",
+      "channels": 4,
+      "hasAlpha": true,
+      "transparent": 1157871,
+      "partial": 414993,
+      "opaque": 0,
+      "nontransparentBounds": {
+        "minX": 29,
+        "minY": 21,
+        "maxX": 1502,
+        "maxY": 967
+      },
+      "decodedRgbaSha256": "9d76a76c7baf044102d36299c2eccb7d4d8fc88323ac49d589d5cf93aede5511",
+      "exactTrackedDuplicates": [],
+      "metadataKeys": [
+        "format",
+        "mediaType",
+        "size",
+        "width",
+        "height",
+        "space",
+        "channels",
+        "depth",
+        "density",
+        "isProgressive",
+        "isPalette",
+        "bitsPerSample",
+        "hasProfile",
+        "hasAlpha",
+        "autoOrient"
+      ]
+    },
+    {
+      "path": "src/assets/images/legacy/hallpartner-logotype-light-1536x922.png",
+      "bytes": 99490,
+      "sha256": "fc4784979bc31366c10ba0e94567e0ded914a5fd747a5ee88c2184f540138b80",
+      "width": 1150,
+      "height": 688,
+      "format": "png",
+      "channels": 4,
+      "hasAlpha": true,
+      "transparent": 0,
+      "partial": 0,
+      "opaque": 791200,
+      "nontransparentBounds": {
+        "minX": 0,
+        "minY": 0,
+        "maxX": 1149,
+        "maxY": 687
+      },
+      "decodedRgbaSha256": "bd9def489276ca6dda97640eacb21ef041d1eb839e9c5c265e4c916c23a9531b",
+      "exactTrackedDuplicates": [],
+      "metadataKeys": [
+        "format",
+        "mediaType",
+        "size",
+        "width",
+        "height",
+        "space",
+        "channels",
+        "depth",
+        "density",
+        "isProgressive",
+        "isPalette",
+        "bitsPerSample",
+        "hasProfile",
+        "hasAlpha",
+        "autoOrient"
+      ]
+    },
+    {
+      "path": "public/images/hallpartner-logo.png",
+      "bytes": 37524,
+      "sha256": "b8ee0c27a701c6426b4a1945b64accf1e23b0c8718699b3406d55fdf7c6995f6",
+      "width": 2955,
+      "height": 375,
+      "format": "png",
+      "channels": 4,
+      "hasAlpha": true,
+      "transparent": 917493,
+      "partial": 16726,
+      "opaque": 173906,
+      "nontransparentBounds": {
+        "minX": 80,
+        "minY": 60,
+        "maxX": 2874,
+        "maxY": 314
+      },
+      "decodedRgbaSha256": "b259279c44bdde9a51605a2700ef303f7aab3efd962f05b5426c528f23e9c4b0",
+      "exactTrackedDuplicates": [
+        "public/images/hallpartner-logo.png"
+      ],
+      "metadataKeys": [
+        "format",
+        "mediaType",
+        "size",
+        "width",
+        "height",
+        "space",
+        "channels",
+        "depth",
+        "density",
+        "isProgressive",
+        "isPalette",
+        "bitsPerSample",
+        "hasProfile",
+        "hasAlpha",
+        "autoOrient"
+      ]
+    },
+    {
+      "path": "public/images/logo_text_white.png",
+      "bytes": 368395,
+      "sha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "width": 1536,
+      "height": 274,
+      "format": "png",
+      "channels": 4,
+      "hasAlpha": true,
+      "transparent": 233282,
+      "partial": 187582,
+      "opaque": 0,
+      "nontransparentBounds": {
+        "minX": 29,
+        "minY": 0,
+        "maxX": 1502,
+        "maxY": 273
+      },
+      "decodedRgbaSha256": "22142fc5cb482438920ca06adce6be5766e8b1fc4b345fb6600cf483a0919529",
+      "exactTrackedDuplicates": [
+        "public/images/logo_text_white.png"
+      ],
+      "metadataKeys": [
+        "format",
+        "mediaType",
+        "size",
+        "width",
+        "height",
+        "space",
+        "channels",
+        "depth",
+        "density",
+        "isProgressive",
+        "isPalette",
+        "bitsPerSample",
+        "hasProfile",
+        "hasAlpha",
+        "autoOrient",
+        "icc",
+        "xmpAsString",
+        "xmp"
+      ]
+    }
+  ],
+  "initialBaseCommit": "47068c9a9855e0d1c11edc5e6cad68b886b3ca37"
+}
