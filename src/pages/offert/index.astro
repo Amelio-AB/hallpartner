@@ -62,6 +62,15 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
         }
       }
     };
+    // A capture-phase guard also blocks submit events invoked before the
+    // MutationObserver runs. This avoids relying on disabled-button timing.
+    host.addEventListener('submit', event => {
+      const finalButton = host.querySelector<HTMLButtonElement>('button[type="submit"]');
+      if (!finalButton?.textContent?.includes('Skicka förfrågan')) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      protect();
+    }, { capture: true });
     const observer = new MutationObserver(protect);
     observer.observe(host, { childList: true, subtree: true });
     protect();
