@@ -145,6 +145,48 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
 });
 
 
+
+test('optional hall interest is independent of intended use and keeps five required fields',()=>{
+ const required=hallpartnerQuoteConfig.steps.flatMap(step=>step.fields.filter(field=>field.required).map(field=>field.id));
+ assert.deepEqual(required,['project.use','project.description','dimensions.confidence','contact.name','contact.email']);
+ const project=hallpartnerQuoteConfig.steps[0];
+ const preference=project.fields.find(field=>field.id==='project.hall_interest');
+ assert.ok(preference&&preference.kind==='select'&&!preference.required);
+ assert.equal(preference.group,'project.extra');
+ assert.ok(preference.options.some(option=>option.value==='talthall'));
+ const flow=createQuoteFlow(hallpartnerQuoteConfig,async()=>({status:'failed'}));
+ flow.set('project.use','riding');
+ flow.set('project.description','Syntetisk önskan om väderskyddad ridyta.');
+ assert.equal(flow.next(),true,'hall interest is optional');
+ assert.equal(flow.back(),true);
+ assert.equal(flow.set('project.hall_interest','talthall'),true);
+ assert.equal(flow.snapshot().active['project.use'],'riding','use is independent of interest');
+ assert.equal(flow.snapshot().active['project.hall_interest'],'talthall','hall interest is retained');
+ assert.equal(flow.next(),true);
+ flow.dispose();
+});
+
+test('phone as contact preference requires a phone number, email does not',()=>{
+ const flow=createQuoteFlow(hallpartnerQuoteConfig,async()=>({status:'failed'}));
+ flow.set('project.use','storage');
+ flow.set('project.description','Syntetisk förfrågan om hall för förvaring.');
+ assert.equal(flow.next(),true);
+ flow.set('dimensions.confidence','need_help');
+ assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true);
+ flow.set('contact.name','Synthetic Contact');
+ flow.set('contact.email','test@example.invalid');
+ flow.set('contact.preference','phone');
+ assert.equal(flow.next(),false,'cannot request call without a number');
+ assert.ok(flow.snapshot().errors['contact.preference']?.includes('telefonnummer'));
+ flow.set('contact.phone','070 123 45 67');
+ assert.equal(flow.next(),true,'provided phone clears invalid contact preference');
+ assert.equal(flow.snapshot().reviewing,true);
+ flow.dispose();
+});
+
+
 test('V2 field specification is tracked as a non-approved proposal',()=>{
  const spec=read('docs/content/HALLPARTNER_OFFERTGUIDE_V2.md');
  for(const token of ['Kundbekräftat','Arbetsförslag','Öppet beslut','documents.attachments','fem frågesteg']) assert.ok(spec.includes(token),token);
