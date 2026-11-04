@@ -176,3 +176,37 @@ använder inga wildcards. Efteråt verifieras att alla andra original och samtli
 kataloger är oförändrade, att de 13 filerna ger 404/410 och att produktionens
 markörkontroller fortfarande passerar. Den vanliga publiceraren anropar aldrig
 detta underhållsläge och har fortfarande ingen raderingsfunktion.
+
+## Genomförd backup och städning, 2026-11-04
+
+PR #17 och #18 är mergade. Backupkörning `41828702158` läste exakt 63
+godkända original och 25 kataloger från main `d7353b70242d5693b26d8b6ddf945277c2368e06`.
+Alla original verifierades efter lokal dekryptering mot färska FTPS-hashar,
+storlekar och den godkända inventeringen. Privat manifest finns under den
+befintliga skyddade backupplatsen i `ftps-originals-20261104/backup-manifest.json`.
+Inventeringshash: `ab1887e41b39bb37713b5c06471809566cc595425deaa0c19fd5588cc2e939b3`.
+ACL ger endast lokal användare och SYSTEM åtkomst. Krypterad transportartifact
+`13321346907` raderades från GitHub efter verifieringen; endast hashbevis kvarstår.
+
+Städkörning `41829398022` tog bort exakt de 13 godkända filerna. Färsk
+FTPS-efterkontroll verifierar att samtliga 50 övriga original och 25 kataloger
+är oförändrade. Samtliga 13 borttagna sökvägar ger 404/410 även vid separat
+kontroll. Ingen ny städkörning behövs eller ska göras för dessa filer.
+
+Jobbet stoppade i den efterföljande produktionskontrollen: WordPress-HTML
+varierade på `www`-värden, medan robots var identisk och previewmarkörerna
+saknades på båda produktionsvärdarna. Läsande utredning visar att jämförda
+HTML-svar endast skiljer sig i det numeriska `wpa_field_value` i honeypot-
+pluginets base64-kodade `wpa_field_info`. Inga WordPress-ändringar har gjorts.
+
+Produktionsjämförelsen tillåter nu endast detta observerade nummer, i exakt
+observerat scriptblock och objektformat, på produktionens `/` och `/stalhallar/`.
+Fältnamnet `rssxxv1801`, inställningen `wpa_add_test`, alla andra bytes,
+statuskoder och markörernas frånvaro kontrolleras fortsatt. Råhashar och
+jämförelsehashar rapporteras separat; regeln gäller aldrig preview, robots,
+andra värdar eller andra sökvägar. Ändrat innehåll, inställning, fältnamn,
+extra fält och dubblerat scriptblock fångas av negativa tester.
+
+Oberoende efterkontroll 2026-11-04T12:36:42.959Z bekräftar filstädningen och
+produktionssepareringen. Ursprungligt misslyckat jobb och dess råhashavvikelse
+bevaras som bevis; det skrivs inte om till en lyckad Actions-körning.

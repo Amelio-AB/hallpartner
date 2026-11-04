@@ -7,6 +7,7 @@ import { PREVIEW, PRODUCTION, PROBE, PROBE_FILE, BLOCKED, safePath, sha256, json
 import { verifyPayload, rightsStatus } from './payload.mjs';
 import { fingerprint, assertOriginal, compareDelivery, assertChecks } from './delivery.mjs';
 import { encryptBackup, assertBackupScope } from './private-backup.mjs';
+import { productionFingerprint } from './production-fingerprint.mjs';
 
 const REPORT = 'reports/preview';
 const MARKER = 'hp-preview-deploy.json';
@@ -157,8 +158,9 @@ export async function productionSnapshot(get = request) {
   const snapshot = [];
   for (const origin of PRODUCTION) for (const path of ['/', '/robots.txt', '/stalhallar/']) {
     const url = origin + path; const a = await get(url); const b = await get(url);
-    assert(a.status === 200 && b.status === 200 && sha256(a.body) === sha256(b.body), 'Production baseline is unavailable/variable; investigate before upload (not evidence of production modification): ' + url);
-    snapshot.push({ url, sha256: sha256(a.body) });
+    const first = productionFingerprint(url, a.body); const second = productionFingerprint(url, b.body);
+    assert(a.status === 200 && b.status === 200 && first.rule === second.rule && first.comparisonSha256 === second.comparisonSha256, 'Production baseline is unavailable/variable; investigate before upload (not evidence of production modification): ' + url);
+    snapshot.push({ url, sha256:first.rawSha256, comparisonSha256:first.comparisonSha256, rule:first.rule, repeatedRawSha256:second.rawSha256 });
   }
   return snapshot;
 }
@@ -166,7 +168,11 @@ export async function verifyProduction(snapshot, marker, get = request, reportDi
   const checks = [];
   for (const row of snapshot) {
     const r = await get(row.url);
-    checks.push({ url: row.url, status:r.status, beforeSha256:row.sha256, afterSha256:sha256(r.body), matches:r.status === 200 && sha256(r.body) === row.sha256 });
+    const observed = productionFingerprint(row.url, r.body);
+    checks.push({ url: row.url, status:r.status, beforeSha256:row.sha256, afterSha256:observed.rawSha256,
+      rawMatches:observed.rawSha256 === row.sha256, rule:observed.rule,
+      beforeComparisonSha256:row.comparisonSha256 ?? row.sha256, afterComparisonSha256:observed.comparisonSha256,
+      matches:r.status === 200 && observed.rule === (row.rule ?? 'raw') && observed.comparisonSha256 === (row.comparisonSha256 ?? row.sha256) });
   }
   if (reportDirectory) {
     mkdirSync(reportDirectory, { recursive:true });
