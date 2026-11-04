@@ -1,320 +1,233 @@
-/**
- * Headless Chrome DevTools visual checks without third-party dependencies.
- * Screenshots are captured after every image has decoded.
- * For internal QA only. No deploy, credentials, or production side effects.
- */
+/** Chrome checks on real visitor routes. No publication or form delivery. */
+import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 
-const executable = process.env.HP_CHROME || 'google-chrome';
-const url = process.env.HP_PREVIEW_URL || 'http://127.0.0.1:4321/prototype/hallpartner/start/';
-const output = resolve(process.env.HP_SCREENSHOT_DIR || 'visual-review');
-const expectedPath = new URL(url).pathname;
-const prefix = process.env.HP_SCREENSHOT_PREFIX || 'validated';
-const sectionIds = (process.env.HP_SCREENSHOT_SECTIONS || '').split(',').filter(Boolean);
-if (sectionIds.some(id => !/^[a-z0-9-]+$/i.test(id))) throw new Error('Invalid section ID');
-if (!/^[a-z0-9-]+$/i.test(prefix)) throw new Error('Invalid screenshot prefix');
-const port = 9300 + process.pid % 300;
-const profile = join(tmpdir(), 'hp-cdp-' + process.pid);
-const browser = spawn(executable, [
-  '--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
-  '--disable-background-networking', '--no-first-run', '--no-default-browser-check',
-  '--remote-allow-origins=*',
-  '--remote-debugging-port=' + port, '--user-data-dir=' + profile,
-  'about:blank',
-], { stdio: ['ignore', 'ignore', 'pipe'] });
-let startupError;
-let chromeDiagnostics = '';
-browser.on('error', error => { startupError = error; });
-browser.stderr.on('data', chunk => {
-  // Bound diagnostics while retaining the most recent startup failure.
-  chromeDiagnostics = (chromeDiagnostics + chunk.toString()).slice(-65536);
-});
-
-await mkdir(output, { recursive: true });
-let socket;
+const url=process.env.HP_PREVIEW_URL||'http://127.0.0.1:4321/';
+const expectedPath=new URL(url).pathname;
+const output=resolve(process.env.HP_SCREENSHOT_DIR||'visual-review');
+const prefix=process.env.HP_SCREENSHOT_PREFIX||'validated';
+const sections=(process.env.HP_SCREENSHOT_SECTIONS||'').split(',').filter(Boolean);
+assert.match(prefix,/^[a-z0-9-]+$/i);
+for(const id of sections)assert.match(id,/^[a-z0-9-]+$/i);
+const port=9300+process.pid%300;
+const profile=await mkdtemp(join(tmpdir(),'hp-site-cdp-'));
+const browser=spawn(process.env.HP_CHROME||'google-chrome',[
+  '--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
+  '--disable-background-networking','--no-first-run','--no-default-browser-check',
+  '--remote-allow-origins=*','--remote-debugging-port='+port,'--user-data-dir='+profile,'about:blank',
+],{stdio:['ignore','ignore','pipe']});
+let startupError, socket, captureFailure;
+let diagnostics='';
+browser.on('error',error=>{startupError=error;});
+browser.stderr.on('data',chunk=>{diagnostics=(diagnostics+chunk).slice(-65536);});
+await mkdir(output,{recursive:true});
+const report=[];
 try {
   let target;
-  const startupDeadline = Date.now() + 30000;
-  while (Date.now() < startupDeadline) {
-    if (startupError) throw startupError;
-    if (browser.exitCode !== null || browser.signalCode !== null) {
-      throw new Error('Chrome exited before exposing its debugging target: ' + (browser.exitCode ?? browser.signalCode));
-    }
+  for(let attempt=0;attempt<160;attempt++) {
+    if(startupError)throw startupError;
+    if(browser.exitCode!==null||browser.signalCode!==null)throw Error('Chrome exited before startup');
     try {
-      const response = await fetch('http://127.0.0.1:' + port + '/json', { signal: AbortSignal.timeout(1500) });
-      if (response.ok) {
-        const pages = await response.json();
-        target = pages.find((page) => page.type === 'page' && page.webSocketDebuggerUrl);
-      }
-    } catch {
-      // Chrome has not exposed its debugging port yet.
-    }
-    if (target) break;
+      const response=await fetch('http://127.0.0.1:'+port+'/json',{signal:AbortSignal.timeout(1000)});
+      if(response.ok)target=(await response.json()).find(page=>page.type==='page'&&page.webSocketDebuggerUrl);
+    }catch{/* Chrome may not have opened its debugging port yet. */}
+    if(target)break;
     await sleep(150);
   }
-  if (!target) throw new Error('Chrome debugging target unavailable');
-  socket = new WebSocket(target.webSocketDebuggerUrl);
-  await new Promise((done, fail) => {
-    const timer = setTimeout(() => fail(new Error('WebSocket open timeout')), 8000);
-    socket.addEventListener('open', () => { clearTimeout(timer); done(); }, { once: true });
-    socket.addEventListener('error', (event) => { clearTimeout(timer); fail(event); }, { once: true });
+  assert.ok(target,'Chrome debugging target unavailable');
+  socket=new WebSocket(target.webSocketDebuggerUrl);
+  await new Promise((done,fail)=>{
+    const timer=setTimeout(()=>fail(Error('WebSocket startup timeout')),8000);
+    socket.addEventListener('open',()=>{clearTimeout(timer);done();},{once:true});
+    socket.addEventListener('error',event=>{clearTimeout(timer);fail(event);},{once:true});
   });
-  let sequence = 0;
-  const promises = new Map();
-  socket.addEventListener('message', (event) => {
-    const packet = JSON.parse(event.data);
-    if (!packet.id || !promises.has(packet.id)) return;
-    const entry = promises.get(packet.id);
-    promises.delete(packet.id);
-    clearTimeout(entry.timer);
-    if (packet.error) entry.reject(new Error(packet.error.message));
-    else entry.resolve(packet.result);
+  let sequence=0;
+  const pending=new Map(),browserErrors=[];
+  socket.addEventListener('message',event=>{
+    const packet=JSON.parse(event.data);
+    if(packet.method==='Runtime.exceptionThrown')browserErrors.push(packet.params.exceptionDetails.text);
+    if(packet.method==='Runtime.consoleAPICalled'&&packet.params.type==='error')browserErrors.push(packet.params.args.map(arg=>arg.value||arg.description||'').join(' '));
+    if(!packet.id||!pending.has(packet.id))return;
+    const entry=pending.get(packet.id);pending.delete(packet.id);clearTimeout(entry.timer);
+    if(packet.error)entry.reject(Error(packet.error.message));else entry.resolve(packet.result);
   });
-  const call = (method, params = {}) => new Promise((done, fail) => {
-    const id = ++sequence;
-    const timer = setTimeout(() => { promises.delete(id); fail(new Error(method + ' timed out')); }, 20000);
-    promises.set(id, { resolve: done, reject: fail, timer });
-    socket.send(JSON.stringify({ id, method, params }));
+  const call=(method,params={})=>new Promise((done,fail)=>{
+    const id=++sequence;
+    const timer=setTimeout(()=>{pending.delete(id);fail(Error(method+' timeout'));},20000);
+    pending.set(id,{resolve:done,reject:fail,timer});socket.send(JSON.stringify({id,method,params}));
   });
-  const evaluate = async (expression, awaitPromise = false) => {
-    const result = await call('Runtime.evaluate', { expression, awaitPromise, returnByValue: true });
-    if (result.exceptionDetails) throw new Error('Browser evaluation failed: ' + JSON.stringify(result.exceptionDetails));
+  const evaluate=async(expression,awaitPromise=false)=>{
+    const result=await call('Runtime.evaluate',{expression,awaitPromise,returnByValue:true});
+    if(result.exceptionDetails)throw Error('Browser evaluation: '+JSON.stringify(result.exceptionDetails));
     return result.result?.value;
   };
-  await call('Runtime.enable');
-  await call('Page.enable');
-
-  const report = [];
-  // Cover narrow mobile, common mobile, tablet and desktop breakpoints.
-  // These are real rendered Chrome viewports, not stylesheet-only checks.
-  for (const viewport of [
-    { name: 'mobile-320', width: 320, height: 720 },
-    { name: 'mobile', width: 390, height: 844 },
-    { name: 'tablet-768', width: 768, height: 1024 },
-    { name: 'desktop-1280', width: 1280, height: 800 },
-    { name: 'desktop', width: 1440, height: 900 },
-  ]) {
-    await call('Emulation.setDeviceMetricsOverride', {
-      width: viewport.width, height: viewport.height,
-      deviceScaleFactor: 1, mobile: false,
+  const run=fn=>evaluate('('+fn.toString()+')()',true);
+  const key=async name=>{
+    const code=name==='Escape'?27:13;
+    // Native Enter text is required for default activation of a focused HTML button.
+    await call('Input.dispatchKeyEvent',{
+      type:name==='Enter'?'keyDown':'rawKeyDown',key:name,code:name,
+      windowsVirtualKeyCode:code,nativeVirtualKeyCode:code,
+      ...(name==='Enter'?{text:'\r',unmodifiedText:'\r'}:{}),
     });
-    await call('Page.navigate', { url });
-    let ready = false;
-    for (let attempt = 0; attempt < 100; attempt++) {
-      try {
-        ready = await evaluate('document.readyState === "complete" && location.pathname === ' + JSON.stringify(expectedPath)) === true;
-      } catch {
-        // A navigation can reset the execution context temporarily.
-      }
-      if (ready) break;
+    await call('Input.dispatchKeyEvent',{type:'keyUp',key:name,code:name,windowsVirtualKeyCode:code,nativeVirtualKeyCode:code});
+  };
+  const allTrue=(result,label)=>assert.ok(result&&Object.values(result).every(value=>value===true),label+': '+JSON.stringify(result));
+  const capture=async(filename,clip)=>{
+    const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true,...(clip?{captureBeyondViewport:true,clip}:{})});
+    await writeFile(join(output,filename),Buffer.from(shot.data,'base64'));
+  };
+  captureFailure=()=>capture(prefix+'-FAILURE.png');
+  await call('Runtime.enable');await call('Page.enable');
+  for(const width of [320,390,768,1024,1280,1440]) {
+    const viewport={width,height:width<800?844:900};
+    await call('Emulation.setDeviceMetricsOverride',{...viewport,deviceScaleFactor:1,mobile:false});
+    await call('Page.navigate',{url});
+    let ready=false;
+    for(let attempt=0;attempt<120;attempt++) {
+      try{ready=await evaluate('document.readyState==="complete" && document.body?.dataset.ampReady==="true" && location.pathname==='+JSON.stringify(expectedPath));}catch{/* Navigation resets its execution context. */}
+      if(ready)break;
       await sleep(100);
     }
-    if (!ready) throw new Error(viewport.name + ' document never became ready');
-
-    const metrics = await evaluate('(async function(){' +
-      'const imageAttributes=[...document.images].map(img=>({alt:img.alt,loading:img.loading,width:img.width,height:img.height,srcset:img.srcset,sizes:img.sizes}));' +
-      'for(const img of document.images) img.loading = "eager";' +
-      'await Promise.all([...document.images].map(img=>img.decode().catch(()=>null)));' +
-      'await document.fonts.ready;' +
-      'window.scrollTo(0,document.body.scrollHeight);' +
-      'await new Promise(r=>setTimeout(r,300));' +
-      'window.scrollTo(0,0);' +
-      'return {imageAttributes,footerCount:document.querySelectorAll("footer").length,' +
-      'ampFooter:!!document.querySelector("footer.af--compact"),' +
-      'h1Count:document.querySelectorAll("h1").length,' +
-      'navCount:document.querySelectorAll("nav").length,' +
-      'overflow:document.documentElement.scrollWidth>window.innerWidth,' +
-      'images:[...document.images].map(img=>({loaded:img.complete&&img.naturalWidth>0,src:img.currentSrc||img.src}))};' +
-      '})()', true);
-
-    if (expectedPath.endsWith('/start/')) {
-      metrics.heroState = await evaluate("(async function(){\n const hero=document.querySelector('.hp-home-hero[data-hero]');\n const header=document.querySelector('.hp-draft-header');\n const image=document.querySelector('.hp-home-hero__background');\n if(!hero||!header||!image)return {error:'Missing hero/header/image'};\n await new Promise(resolve=>setTimeout(resolve,240));\n const imageRect=image.getBoundingClientRect(),heroRect=hero.getBoundingClientRect();\n const initial={headerOverlay:header.classList.contains('hp-draft-header--overlay'),transparent:!header.classList.contains('hp-draft-header--solid')&&getComputedStyle(header).backgroundColor==='rgba(0, 0, 0, 0)',headerOverHero:Math.abs(header.getBoundingClientRect().top-heroRect.top)<3,fullWidth:Math.abs(heroRect.width-document.documentElement.clientWidth)<3,cover:getComputedStyle(image).objectFit==='cover'&&Math.abs(imageRect.width-heroRect.width)<3,imageLoaded:image.complete&&image.naturalWidth===1916&&image.currentSrc.includes('/images/hallpartner-hero-temporary.webp')};\n const questionWidths=[...document.querySelectorAll('.hp-home-planning__list li > div')].map(node=>Math.round(node.getBoundingClientRect().width));\n window.scrollTo(0,Math.ceil(heroRect.height+160));window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const solidOnExit=header.classList.contains('hp-draft-header--solid');\n window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));\n await new Promise(resolve=>setTimeout(resolve,240));\n const transparentOnReturn=!header.classList.contains('hp-draft-header--solid');\n return {...initial,solidOnExit,transparentOnReturn,minQuestionWidth:Math.min(...questionWidths)};\n})()", true);
-    }
-
-    // A valid hash alone is insufficient: the fixed header must not cover the target heading.
-    // This exercises the actual Hero CTA and overview links in a rendered browser.
-    if (expectedPath.endsWith('/start/')) {
-      metrics.anchorClearance = await evaluate("(async function(){\n" +
-        "const header=document.querySelector('.hp-draft-header');\n" +
-        "const main=document.getElementById('main-content');\n" +
-        "const checks=[];\n" +
-        "for(const hash of ['#halltyper','#att-tanka-pa']){\n" +
-        "const link=document.querySelector('a[href=\"'+hash+'\"]');\n" +
-        "const target=document.querySelector(hash);\n" +
-        "if(!link||!target)return {error:'Missing CTA or anchor: '+hash};\n" +
-        "link.click();await new Promise(done=>setTimeout(done,180));\n" +
-        "const top=target.getBoundingClientRect().top, headerBottom=header.getBoundingClientRect().bottom;\n" +
-        "checks.push({hash,top:Math.round(top),headerBottom:Math.round(headerBottom),cleared:top>=headerBottom-1});\n" +
-        "}\n" +
-        "window.scrollTo(0,0);await new Promise(done=>setTimeout(done,180));\n" +
-        "return {checks,skipFocusable:main?.tabIndex===-1};\n" +
-        "})()", true);
-    }
-
-    if (expectedPath === '/') {
-      metrics.siteLogo = await evaluate('(()=>{' +
-        'const image=document.querySelector(".hp-site .hp-draft-brand img.hp-site-logo");' +
-        'const wrapper=document.querySelector(".hp-draft-header__inner");' +
-        'const sibling=window.innerWidth<=800?document.querySelector("[data-hp-nav-toggle]"):document.querySelector("#hp-proto-nav");' +
-        'if(!image||!wrapper||!sibling)return {error:"Missing logo/header/navigation"};' +
-        'const logo=image.getBoundingClientRect(), header=wrapper.getBoundingClientRect(), neighbor=sibling.getBoundingClientRect();' +
-        'return {loaded:image.complete&&image.naturalWidth===1536&&image.naturalHeight===274,' +
-        'alt:image.alt==="Hallpartner – Hallar till alla",' +
-        'src:image.currentSrc.includes("/images/logo_text_white.png"),' +
-        'ratio:Math.abs(logo.width/logo.height-1536/274)<0.05,' +
-        'insideHeader:logo.top>=header.top-2&&logo.bottom<=header.bottom+2,' +
-        'insideViewport:logo.left>=-1&&logo.right<=innerWidth+1,' +
-        'noNavOverlap:logo.right<=neighbor.left+2,' +
-        'visible:logo.height>=22&&logo.height<=65};' +
-        '})()');
-    }
-
-    if (viewport.width <= 800) {
-      metrics.menu = await evaluate('(()=>{' +
-        'const toggle=document.querySelector("[data-hp-nav-toggle]");' +
-        'const nav=document.querySelector("#hp-proto-nav");' +
-        'if(!toggle||!nav)return {error:"Missing mobile controls"};' +
-        'const before=toggle.getAttribute("aria-expanded");' +
-        'toggle.click();' +
-        'const opened=toggle.getAttribute("aria-expanded");' +
-        'const visible=getComputedStyle(nav).display!=="none";' +
-        'const solidWhenOpen=document.querySelector(".hp-home-hero")?document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
-        'document.dispatchEvent(new KeyboardEvent("keydown",{key:"Escape",bubbles:true}));' +
-        'const transparentAfterEscape=document.querySelector(".hp-home-hero")?!document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
-        'const closedByEscape=toggle.getAttribute("aria-expanded");' +
-        'toggle.click();' +
-        'const reopened=toggle.getAttribute("aria-expanded");' +
-        'document.querySelector("main")?.dispatchEvent(new PointerEvent("pointerdown",{bubbles:true,pointerType:"touch"}));' +
-        'const closedAfterOutside=toggle.getAttribute("aria-expanded");' +
-        'const transparentAfterOutside=document.querySelector(".hp-home-hero")?!document.querySelector(".hp-draft-header")?.classList.contains("hp-draft-header--solid"):null;' +
-        'return {before,opened,visible,closed:closedByEscape,solidWhenOpen,transparentAfterEscape,reopened,closedAfterOutside,transparentAfterOutside};' +
-        '})()');
-    }
-
-    const layout = await call('Page.getLayoutMetrics');
-    const dimensions = layout.cssContentSize || layout.contentSize;
-    const shot = await call('Page.captureScreenshot', {
-      format: 'png', captureBeyondViewport: true, fromSurface: true,
-      clip: { x: 0, y: 0, width: Math.ceil(dimensions.width), height: Math.ceil(dimensions.height), scale: 1 },
+    assert.ok(ready,'AMP-002 did not mount on '+expectedPath+' at '+width);
+    const metrics=await run(async function(){
+      for(const image of document.images)image.loading='eager';
+      await Promise.all([...document.images].map(image=>image.decode().catch(()=>null)));
+      await document.fonts.ready;window.scrollTo(0,0);await new Promise(done=>setTimeout(done,250));
+      const root=document.querySelector('header.hm'),header=root.getBoundingClientRect();
+      const bar=root.querySelector(innerWidth<=1024?'.hm__mobile-bar':'.hm__desktop');
+      // AMP hides one of its solid/hero logo variants. Measure the visible logo only.
+      const logos=[...bar.querySelectorAll('img.hm__logo')].filter(image=>image.getBoundingClientRect().height>0);
+      const logo=logos[0];if(!logo)throw Error('No visible AMP logo in active header bar');
+      const box=logo.getBoundingClientRect();
+      const sibling=bar.querySelector(innerWidth<=1024?'.hm__mobile-toggle':'.hm__desktop-nav');
+      return {
+        h1:document.querySelectorAll('h1').length,header:document.querySelectorAll('header.hm').length,
+        // The quote wizard has a valid nested header inside main, not a second site header.
+        visibleHeaders:[...document.querySelectorAll('header')].filter(node=>!node.closest('main')&&getComputedStyle(node).display!=='none').length,
+        footer:document.querySelectorAll('footer').length,ampFooter:!!document.querySelector('footer.af--compact'),
+        noindex:document.querySelector('meta[name="robots"]')?.content==='noindex,nofollow',
+        fallbackHidden:document.querySelector('#hp-amp-header-fallback')?.hidden===true,
+        noOverflow:document.documentElement.scrollWidth<=innerWidth+1,
+        images:[...document.images].every(image=>image.complete&&image.naturalWidth>0),surface:root.dataset.surface,
+        headingClear:!!document.querySelector('.hp-home-hero')||document.querySelector('h1').getBoundingClientRect().top>=header.bottom-2,
+        logo:{oneVisible:logos.length===1,loaded:logo.naturalWidth===1536&&logo.naturalHeight===274,source:logo.currentSrc.includes('/images/logo_text_white.png'),ratio:Math.abs(box.width/box.height-1536/274)<.05,inViewport:box.left>=-1&&box.right<=innerWidth+1,visible:box.height>=22&&box.height<=65,noOverlap:!!sibling&&box.right<=sibling.getBoundingClientRect().left+2},
+      };
     });
-    const filename = prefix + '-' + viewport.name + '-full.png';
-    await writeFile(join(output, filename), Buffer.from(shot.data, 'base64'));
-
-    // Optional section crops retain actual CSS pixels for before/after review.
-    // The full-page screenshots and existing acceptance checks stay unchanged.
-    metrics.sections = [];
-    for (const id of sectionIds) {
-      const bounds = await evaluate('(() => {' +
-        'const node=document.getElementById(' + JSON.stringify(id) + ');' +
-        'if(!node)return null;const r=node.getBoundingClientRect();' +
-        'return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height};' +
-        '})()');
-      if (!bounds) throw new Error('Missing review section: ' + id);
-      const sectionFilename = prefix + '-' + viewport.name + '-' + id + '.png';
-      const sectionShot = await call('Page.captureScreenshot', {
-        format: 'png', captureBeyondViewport: true, fromSurface: true,
-        clip: { ...bounds, scale: 1 },
+    const entry={viewport,metrics,status:'in-progress'};report.push(entry);
+    assert.equal(metrics.h1,1);assert.equal(metrics.header,1);assert.equal(metrics.visibleHeaders,1);assert.equal(metrics.footer,1);
+    assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
+    for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear'])assert.ok(metrics[field],width+': '+field);
+    assert.equal(metrics.surface,expectedPath==='/'?'transparent':'solid');allTrue(metrics.logo,width+': logo');
+    if(width<=1024) {
+      metrics.menu=await run(function(){
+        const root=document.querySelector('header.hm'),button=root.querySelector('button.hm__mobile-toggle');
+        const dialog=root.querySelector('dialog.hm__mobile-dialog'),rect=button.getBoundingClientRect();
+        const initial=button.getAttribute('aria-expanded')==='false'&&button.getAttribute('aria-label')==='Öppna meny'&&button.getAttribute('aria-controls')===dialog.id;
+        button.click();const details=dialog.querySelector('details');details.querySelector('summary').click();
+        return {initial,hitTarget:rect.width>=44&&rect.height>=44,icon:button.classList.contains('hm__mobile-toggle--icon')&&button.querySelectorAll('.hm__toggle-line').length===3&&button.textContent.trim()==='',opened:dialog.open&&button.getAttribute('aria-expanded')==='true',scrollLock:document.body.style.overflow==='hidden',halls:details.open&&!!details.querySelector('a[href="/stalhallar/lagerhall/"]'),closeIcon:!!dialog.querySelector('.hm__mobile-close--icon[aria-label="Stäng meny"]')};
       });
-      await writeFile(join(output, sectionFilename), Buffer.from(sectionShot.data, 'base64'));
-      metrics.sections.push({ id, filename: sectionFilename, ...bounds });
+      await sleep(300);
+      metrics.menu.rightEdge=await evaluate('Math.abs(document.querySelector("dialog.hm__mobile-dialog").getBoundingClientRect().right-innerWidth)<=2');
+      allTrue(metrics.menu,width+': mobile opening');await capture(prefix+'-'+width+'-menu-open.png');
+      await key('Escape');await sleep(350);
+      allTrue(await run(function(){const button=document.querySelector('button.hm__mobile-toggle');return {closed:!document.querySelector('dialog.hm__mobile-dialog').open,aria:button.getAttribute('aria-expanded')==='false',focus:document.activeElement===button,scroll:document.body.style.overflow!=='hidden'};}),width+': Escape');
+      await key('Enter');await sleep(300);
+      assert.ok(await evaluate('document.querySelector("dialog.hm__mobile-dialog").open'),width+': keyboard Enter');
+      await evaluate('document.querySelector(".hm__mobile-close--icon").click()');await sleep(350);
+      allTrue(await run(function(){return {closed:!document.querySelector('dialog.hm__mobile-dialog').open,focus:document.activeElement===document.querySelector('button.hm__mobile-toggle'),scroll:document.body.style.overflow!=='hidden'};}),width+': close icon');
+    } else {
+      metrics.menu=await run(function(){
+        const root=document.querySelector('header.hm'),button=root.querySelector('.hm__desktop .hm__disclosure');button.click();
+        const expanded=button.getAttribute('aria-expanded')==='true';
+        const links=[...root.querySelector('.hm__desktop .hm__submenu').querySelectorAll('a[href]')].map(link=>link.getAttribute('href'));
+        document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));
+        return {expanded,links:['lagerhall','maskinhall','ridhus','plathall','isolerad-hall','talthall'].every(slug=>links.includes('/stalhallar/'+slug+'/')),closed:button.getAttribute('aria-expanded')==='false',focus:document.activeElement===button};
+      });allTrue(metrics.menu,width+': desktop disclosure');
     }
-
-    // Real DOM check: a visually interactive preview must NOT allow a live
-    // submission when neither customer recipient nor private backend is ready.
-    if (expectedPath === '/kontakt/') {
-      metrics.contactIntake = await evaluate('(() => {' +
-        'const form=document.querySelector("#hp-contact-form");' +
-        'const button=form?.querySelector("button[type=submit]");' +
-        'return {found:!!form,enabled:form?.dataset.enabled,buttonDisabled:button?.disabled,' +
-        'hasStatus:!!form?.querySelector("[role=status]"),notice:!!document.querySelector(".hp-leads-note--review")};' +
-        '})()');
-      if (!metrics.contactIntake.found || metrics.contactIntake.enabled !== 'false' ||
-          !metrics.contactIntake.buttonDisabled || !metrics.contactIntake.hasStatus ||
-          !metrics.contactIntake.notice) {
-        throw new Error('Contact receiving must stay disabled: ' + JSON.stringify(metrics.contactIntake));
-      }
+    if(expectedPath==='/') {
+      metrics.hero=await run(async function(){
+        const hero=document.querySelector('.hp-home-hero'),image=hero.querySelector('.hp-home-hero__background');
+        const header=document.querySelector('header.hm'),box=hero.getBoundingClientRect();
+        const initial=header.dataset.surface==='transparent'&&Math.abs(box.top)<3;
+        const fullWidth=Math.abs(box.width-document.documentElement.clientWidth)<3;
+        const cover=getComputedStyle(image).objectFit==='cover'&&Math.abs(image.getBoundingClientRect().width-box.width)<3;
+        const imageLoaded=image.complete&&image.naturalWidth===1916&&image.currentSrc.includes('/images/hallpartner-hero-temporary.webp');
+        window.scrollTo(0,Math.ceil(box.height+180));window.dispatchEvent(new Event('scroll'));await new Promise(done=>setTimeout(done,300));
+        const solid=header.dataset.surface==='solid';
+        window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));await new Promise(done=>setTimeout(done,300));
+        const returned=header.dataset.surface==='transparent';
+        const planning=[...document.querySelectorAll('.hp-home-planning__list li > div')].every(node=>node.getBoundingClientRect().width>=180);
+        const anchors=[];
+        for(const hash of ['#halltyper','#att-tanka-pa']) {
+          document.querySelector('a[href="'+hash+'"]').click();await new Promise(done=>setTimeout(done,350));
+          anchors.push(document.querySelector(hash).getBoundingClientRect().top>=header.getBoundingClientRect().bottom-2);
+        }
+        history.replaceState(null,'',location.pathname+location.search);
+        window.scrollTo(0,0);window.dispatchEvent(new Event('scroll'));await new Promise(done=>setTimeout(done,300));
+        return {initial,fullWidth,cover,imageLoaded,solid,returned,planning,anchors:anchors.every(Boolean),skip:document.querySelector('#main-content').tabIndex===-1};
+      });allTrue(metrics.hero,width+': hero and anchors');
     }
-    if (expectedPath === '/offert/') {
-      metrics.quoteIntake = await evaluate("(async function(){" +
-        "const host=document.querySelector('#hp-offert-guide');" +
-        "const form=host?.querySelector('form.qf-panel');" +
-        "if(!host||!form)return {error:'AMP-001 not mounted'};" +
-        "const use=host.querySelector('input[name=\"project.use\"][value=\"storage\"]');" +
-        "use?.click();" +
-        "const desc=host.querySelector('textarea[name=\"project.description\"]');" +
-        "if(desc){desc.value='Synthetic example enquiry for a warehouse hall.';desc.dispatchEvent(new Event('input',{bubbles:true}));}" +
-        "form.requestSubmit();" +
-        "const confidence=host.querySelector('select[name=\"dimensions.confidence\"]');" +
-        "if(confidence){confidence.value='need_help';confidence.dispatchEvent(new Event('input',{bubbles:true}));}" +
-        "form.requestSubmit();" +
-        "form.requestSubmit();" +
-        "const name=host.querySelector('input[name=\"contact.name\"]');" +
-        "if(name){name.value='Test Person';name.dispatchEvent(new Event('input',{bubbles:true}));}" +
-        "const email=host.querySelector('input[name=\"contact.email\"]');" +
-        "if(email){email.value='test@example.invalid';email.dispatchEvent(new Event('input',{bubbles:true}));}" +
-        "form.requestSubmit();" +
-        "await Promise.resolve();" +
-        "const send=[...host.querySelectorAll('button[type=submit]')].find(b=>b.textContent.includes('Skicka förfrågan'));" +
-        "return {mounted:!!host.querySelector('.qf'),enabled:host.dataset.enabled," +
-        "reachedReview:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar')," +
-        "sendDisabled:send?.disabled,reviewNotice:!!document.querySelector('.hp-leads-note--review')};" +
-        "})()", true);
-      if (!metrics.quoteIntake.mounted || metrics.quoteIntake.enabled !== 'false' ||
-          !metrics.quoteIntake.reachedReview || !metrics.quoteIntake.sendDisabled ||
-          !metrics.quoteIntake.reviewNotice) {
-        throw new Error('AMP-001 quote must reach review without sending: ' + JSON.stringify(metrics.quoteIntake));
-      }
+    if(expectedPath==='/kontakt/')allTrue(await run(function(){
+      const form=document.querySelector('#hp-contact-form');
+      return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
+    }),width+': inactive contact');
+    if(expectedPath==='/offert/')allTrue(await run(async function(){
+      const host=document.querySelector('#hp-offert-guide'),form=host?.querySelector('form.qf-panel');
+      if(!host||!form)return {mounted:false};
+      host.querySelector('input[name="project.use"][value="storage"]')?.click();
+      const fill=(selector,value)=>{const field=host.querySelector(selector);if(field){field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));}};
+      fill('textarea[name="project.description"]','Synthetic example enquiry for a warehouse hall.');form.requestSubmit();
+      fill('select[name="dimensions.confidence"]','need_help');form.requestSubmit();form.requestSubmit();
+      fill('input[name="contact.name"]','Test Person');fill('input[name="contact.email"]','test@example.invalid');form.requestSubmit();await Promise.resolve();
+      const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
+      return {mounted:!!host.querySelector('.qf'),inactive:host.dataset.enabled==='false',review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),disabled:send?.disabled===true,notice:!!document.querySelector('.hp-leads-note--review')};
+    }),width+': quote review must never send');
+    await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur()');
+    const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
+    const filename=prefix+'-'+width+'-full.png';
+    await capture(filename,{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+    for(const id of sections) {
+      const bounds=await evaluate('(()=>{const node=document.getElementById('+JSON.stringify(id)+');if(!node)return null;const r=node.getBoundingClientRect();return {x:r.left+scrollX,y:r.top+scrollY,width:r.width,height:r.height,scale:1};})()');
+      assert.ok(bounds,'Missing section '+id);await capture(prefix+'-'+width+'-'+id+'.png',bounds);
     }
-
-    report.push({ viewport, filename, ...metrics });
+    // A real reload is necessary: removing an anchor alone does not reload the document.
+    await call('Emulation.setScriptExecutionDisabled',{value:true});await call('Page.reload',{ignoreCache:true});
+    let fallbackReady=false;
+    for(let attempt=0;attempt<80;attempt++) {
+      try{fallbackReady=await evaluate('document.readyState==="complete" && location.pathname==='+JSON.stringify(expectedPath)+' && !!document.querySelector("#hp-amp-header-fallback nav a") && !document.querySelector("header.hm")');}catch{/* Await navigation. */}
+      if(fallbackReady)break;await sleep(100);
+    }
+    assert.ok(fallbackReady,width+': no-JS navigation missing');
+    allTrue(await run(function(){const fallback=document.querySelector('#hp-amp-header-fallback');return {visible:!fallback.hidden&&getComputedStyle(fallback).display!=='none',nativeContact:!!fallback.querySelector('a[href="/kontakt/"]'),nativeHalls:!!fallback.querySelector('a[href="/stalhallar/"]'),noOverflow:document.documentElement.scrollWidth<=innerWidth+1};}),width+': no-JS fallback');
+    await call('Emulation.setScriptExecutionDisabled',{value:false});
+    Object.assign(entry,{filename,noJavaScript:'passed',status:'passed'});
   }
-  await writeFile(join(output, prefix + '-REPORT.json'), JSON.stringify(report, null, 2));
-  console.log(JSON.stringify(report, null, 2));
-  for (const page of report) {
-    const isInfoPage = expectedPath.startsWith('/stalhallar/') || expectedPath === '/kontakt/' || expectedPath === '/sa-gar-det-till/' || expectedPath === '/om-oss/';
-    const isOfferPage = expectedPath === '/offert/';
-    const isVisitorPage = expectedPath === '/' || isInfoPage || isOfferPage || expectedPath === '/404.html';
-    const ampExpected = isVisitorPage && process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
-    const expectedNavs = (isInfoPage || isOfferPage ? 3 : 1) + (ampExpected ? 3 : 0);
-    if (page.h1Count !== 1 || page.navCount !== expectedNavs || page.footerCount !== 1 || page.ampFooter !== ampExpected || page.overflow || page.images.some(i => !i.loaded)) {
-      throw new Error('Invalid rendered page on ' + page.viewport.name);
+  assert.equal(browserErrors.length,0,'Browser errors: '+browserErrors.join('\n'));
+  await writeFile(join(output,prefix+'-REPORT.json'),JSON.stringify({route:expectedPath,pages:report,status:'passed'},null,2));
+  console.log('PASS '+expectedPath+': AMP-002, images, inactive forms and no-JS navigation at six widths.');
+}catch(error){
+  await writeFile(join(output,prefix+'-ERROR.txt'),String(error));
+  await writeFile(join(output,prefix+'-PARTIAL.json'),JSON.stringify(report,null,2));
+  if(captureFailure){try{await captureFailure();}catch{/* Preserve original assertion. */}}
+  console.error(error);process.exitCode=1;
+}finally{
+  await writeFile(join(output,prefix+'-chrome-stderr.log'),diagnostics);
+  if(socket?.readyState===WebSocket.OPEN)socket.close();
+  if(browser.exitCode===null&&browser.signalCode===null){
+    browser.kill('SIGTERM');await Promise.race([new Promise(done=>browser.once('exit',done)),sleep(2000)]);
+  }
+  if(browser.exitCode!==null||browser.signalCode!==null){
+    // Chrome cache subprocesses can finish writing just after the parent exits.
+    // Only this generated OS-temp profile is eligible for cleanup, never project files.
+    try{await rm(profile,{recursive:true,force:true,maxRetries:10,retryDelay:250});}
+    catch(error){
+      console.warn('Temporary Chrome profile cleanup incomplete: '+error.code);
+      await writeFile(join(output,prefix+'-cleanup-warning.txt'),'Generated temporary profile retained: '+profile+'\n'+String(error));
     }
   }
-  for (const page of report.filter(page => page.siteLogo)) {
-    const logo = page.siteLogo;
-    if (logo.error || !logo.loaded || !logo.alt || !logo.src || !logo.ratio || !logo.insideHeader || !logo.insideViewport || !logo.noNavOverlap || !logo.visible) {
-      throw new Error('Hallpartner logo layout failed at ' + page.viewport.width + 'px: ' + JSON.stringify(logo));
-    }
-  }
-  const homePages = report.filter(page => page.heroState);
-  for (const page of homePages) {
-    const h = page.heroState;
-    if (h.error || !h.headerOverlay || !h.transparent || !h.headerOverHero || !h.fullWidth || !h.cover || !h.imageLoaded || !h.solidOnExit || !h.transparentOnReturn || h.minQuestionWidth < 180) {
-      throw new Error('Home hero/header/list layout failed on ' + page.viewport.name + ': ' + JSON.stringify(h));
-    }
-  }
-  for (const page of homePages) {
-    const a = page.anchorClearance;
-    if (!a || a.error || !a.skipFocusable || a.checks.length !== 2 || a.checks.some(check => !check.cleared)) {
-      throw new Error('Hero CTA anchor is obscured by fixed header on ' + page.viewport.name + ': ' + JSON.stringify(a));
-    }
-  }
-  for (const page of report.filter(page => page.viewport.width <= 800)) {
-    const mobile = page.menu;
-    if (!mobile || mobile.before !== 'false' || mobile.opened !== 'true' || !mobile.visible || mobile.closed !== 'false' || mobile.reopened !== 'true' || mobile.closedAfterOutside !== 'false' || (homePages.length && (!mobile.solidWhenOpen || !mobile.transparentAfterEscape || !mobile.transparentAfterOutside))) {
-      throw new Error('Mobile toggle / Escape / outside-tap interaction failed at ' + page.viewport.width + 'px: ' + JSON.stringify(mobile));
-    }
-  }
-} catch (error) {
-  await writeFile(join(output, prefix + '-ERROR.txt'), String(error));
-  console.error('Visual QA failed:', error);
-  process.exitCode = 1;
-} finally {
-  await writeFile(join(output, prefix + '-chrome-stderr.log'), chromeDiagnostics);
-  if (socket && socket.readyState === WebSocket.OPEN) socket.close();
-  browser.kill('SIGTERM');
 }

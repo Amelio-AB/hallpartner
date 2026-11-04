@@ -1,18 +1,32 @@
 # Hallpartner webbplats
 
-Kodbas för Hallpartners statiska Astro-webbplats. **main är ordinarie utvecklingsbas efter godkänd integration av [PR #12](https://github.com/Amelio-AB/hallpartner/pull/12).** Fram till dess är integrationsgrenen aktuell webbplats; gamla main får inte publiceras.
+Kodbas för Hallpartners statiska Astro-webbplats. `main` är ordinarie
+utvecklingsbas. Bildpiloterna och AMP-006 ingår redan genom PR #12;
+de ska inte kopieras in eller mergas igen från gamla arbetsgrenar.
+Denna konsolidering kopplar AMP-002 till de riktiga sidorna och tar bort
+de publika prototyp-/presentationsrutterna.
 
-Automatisk Inleed-preview förbereds i en separat stackad Draft-PR. Workflowet är fortfarande manuellt avstängt. Se [publiceringsprocessen och aktiveringsordningen](docs/preview/README.md). Originalmapp, lokala filer och backup lämnas orörda. Läs [AGENTS.md](AGENTS.md) före ändringar.
+**En ordinarie lokal arbetsmapp: `C:\webbprojekt\hallpartner`.**
+Skapa inte nya cleanup-/review-mappar, kloner eller worktrees för vanligt
+utvecklingsarbete. Läs [AGENTS.md](AGENTS.md) och kontrollera aktuell
+Git-status innan du byter gren, hämtar ändringar eller installerar paket.
+Säkerhetskopior utanför arbetsmappen ska bevaras, inte blandas ihop med
+aktiva arbetsytor.
 
 ## Lokal start
 
-Använd **Node.js 24**. Privat `@amelio/web-platform` är oförändrat låst till
+Använd **Node.js 24**. Privat `@amelio/web-platform` är låst till
 `fec9ca01b3c0d4bc9002fa21832a51cf51009749` (1.4.0).
 Git-inloggningen behöver läsåtkomst; använd befintlig Credential Manager.
 Lägg inga tokens i filer, kommandon eller Git-URL:er.
 
+Kontrollera först att rätt repo/branch är öppnad och att eventuellt lokalt
+arbete är identifierat. Följande installerar och startar den utcheckade
+versionen; det gör ingen pull, merge, radering eller publicering:
+
 ```powershell
-cd C:\webbprojekt\hallpartner-cleanup-20261103
+cd C:\webbprojekt\hallpartner
+git status --short --branch
 node --version
 npm.cmd ci --ignore-scripts --no-audit --no-fund
 npm.cmd run dev
@@ -20,8 +34,7 @@ npm.cmd run dev
 
 `npm.cmd` fungerar även när PowerShell blockerar `npm.ps1`.
 Öppna serverns utskrivna URL, normalt **http://localhost:4321/**.
-Det är den nya startsidan; `/prototype/` innehåller separata referenssidor.
-Kör inte pull eller installation i den gamla smutsiga mappen som genväg.
+Det är den riktiga startsidan. Inga separata publika prototypsidor behövs.
 
 | Kommando | Syfte |
 | --- | --- |
@@ -32,64 +45,91 @@ Kör inte pull eller installation i den gamla smutsiga mappen som genväg.
 | `npm.cmd run lint` | ESLint |
 | `node --experimental-strip-types --test tests/*.test.mjs` | Alla Node-kontraktstester |
 | `php tests/lead-receiver.test.php` | Lokal PHP-validering utan SMTP |
-| `node --experimental-strip-types scripts/verify-hallpartner-draft.mjs` | Byggd HTML, länkar, noindex och sitemap |
+| `node scripts/verify-hallpartner-draft.mjs` | Tretton riktiga HTML-sidor, länkar, noindex och sitemap |
 | `node scripts/verify-url-migration-draft.mjs` | URL-karta mot färdigt bygge |
 | `npm.cmd run format` | Prettier; undvik onödig helrepoformatering |
 
-PHP behöver en separat lokal runtime. Fulla teststeg finns i
-`.github/workflows/hallpartner-draft.yml`.
-[Visuell granskning](docs/LOCAL_VISUAL_REVIEW.md) beskriver mobil/desktop.
+PHP behöver en separat lokal runtime. Full kandidatvalidering finns i
+`.github/workflows/preview-validation.yml`. Det äldre filnamnet
+`hallpartner-draft.yml` innehåller endast den kompletterande kontrollen
+av uttrycklig Footer-rollback; det bygger inte någon prototypwebbplats.
 
-## Aktiv webbplats och historiskt material
+## Aktiv webbplats
 
 | Område | Användning |
 | --- | --- |
-| `src/pages/index.astro` | Aktiv startsida på `/` |
+| `src/pages/index.astro` | Startsida på `/` |
 | `src/pages/stalhallar/` | Hallöversikt och sex hallundersidor |
-| `src/pages/kontakt/`, `om-oss/`, `sa-gar-det-till/`, `offert/`, `404.astro` | Besöksrutter under utveckling; formulär avstängda |
-| `src/layouts/HallpartnerSiteLayout.astro` | Besökarsidornas ingång till det delade skalet |
-| `src/layouts/HallpartnerDraftLayout.astro` | Aktiv Header och AMP-003 Footer i site-läge; äldre Footer i prototypläge |
-| `src/components/prototype/HallpartnerHomePrototype.astro` | Aktiv startsida/Hero **och** prototyp; namnet betyder inte oanvänd kod |
+| `src/pages/kontakt/`, `om-oss/`, `sa-gar-det-till/`, `offert/`, `404.astro` | Övriga avsedda besökarsidor; formulär avstängda |
+| `src/layouts/HallpartnerSiteLayout.astro` | Gemensamt HTML-skal med metadata, Header och AMP-003 Footer |
+| `src/components/SiteHeader.astro` | Riktig AMP-002 och serverrenderad reservnavigation |
+| `src/components/home/HallpartnerHome.astro` | Startsida/Hero, flyttad ur den gamla prototypmappen |
+| `src/components/ExpandableImageCards.astro`, `ImageGallery.astro` | Godkända bildkort och galleri |
 | `src/components/ContactForm.astro` | Avstängt kontaktformulär |
-| `src/styles/hallpartner-*.css` | Sid- och skalstilar, delvis gemensamma för prototyper och besökarsidor |
-| `src/config/` | Footer, offertguide, prototypdata, Direction 02 och headergranskning |
-| `src/pages/prototype/` | Visuella referenser och AMP-granskning som används i tester |
-| `src/pages/projekt/`, `vision/`, `roadmap/`, `workshop/` | Äldre presentation; direktadresser finns kvar, utanför sitemap |
-| `BaseLayout.astro`, äldre komponenter, `src/data/`, `src/types/`, generell CSS | Beroenden till den bevarade presentationen |
-| `src/assets/images/`, `public/` | Använda bilder och bevarat originalmaterial; rättigheter kräver separat granskning |
-| `server/lead/`, `public/api/lead.php` | Inaktiv PHP-mottagare; privata filer/vendor får inte publiceras med webbplatsen |
-| `scripts/`, `tests/` | AMP-generering, kontrakt, HTML-/URL-kontroller och Chrome-granskning |
-| `.github/workflows/` | CI och befintliga driftflöden, oförändrade av städningen |
+| `src/styles/hallpartner-*.css` | Den använda webbplatsens sid- och komponentstilar |
+| `src/config/` | Header, Footer, offertguide och varumärkesinställningar |
+| `src/assets/images/`, `public/images/` | Använda bilder och bevarat källmaterial |
+| `server/lead/`, `public/api/lead.php` | Inaktiv PHP-mottagare; ingår inte i statiskt publiceringspaket |
+| `scripts/`, `tests/` | Paketgenerering, kontrakt och Chrome-granskning av riktiga sidor |
+| `config/preview-*.json`, `scripts/preview/` | Commitbundet publiceringspaket, bildgodkännanden och målspärrar |
 
-Astros standardstruktur behålls. Aktiv Header, Hero, Footer, kundtexter och rutter
-har inte ändrats av städningen. AMP-paketets kod och revision är oförändrade.
+Alla tretton avsedda HTML-filer definieras i `scripts/preview/policy.mjs`.
+Tester stoppar bygget om andra HTML-rutter tillkommer. `/prototype/`,
+`/projekt/`, `/roadmap/`, `/vision/` och `/workshop/` byggs inte längre.
 
-## Dokumentation
+Bilder, galleri, AMP-006 och paketversioner bevaras av konsolideringen.
+CSS-klassnamn med `hp-draft` används fortfarande av den godkända designen;
+de är inte separata demosidor och ska inte raderas utifrån namnet.
+Git-historik och historiska dokument är bevarade.
 
-Utgå från [AGENTS.md](AGENTS.md), [städrapporten](docs/LOCAL_WORKSPACE_CLEANUP.md),
+## Aktuell dokumentation och historik
+
+Börja med [AGENTS.md](AGENTS.md) och
+[konsolideringscheckpointen](docs/checkpoints/2026-11-04-site-consolidation.md).
+Där finns den filvisa borttagnings-/flyttlistan och gränsen mot lokal
+städning och serverfiler. Kontrollera aktuell PR/HEAD och Actions; dokumentet
+påstår inte att en viss version redan är mergad eller publicerad.
+
 [Footer-integrationen](docs/AMP_003_FOOTER_INTEGRATION.md),
-[headergranskningen](docs/AMP_002_HEADER_REVIEW.md),
 [lead-mottagaren](docs/LEAD_RECEIVER_INTEGRATION.md),
 [SMTP-checkpointen](docs/checkpoints/2026-11-02-smtp-pending.md) och
-[kalkylatorbeslutet](docs/checkpoints/2026-11-02-calculator-paused.md).
+[kalkylatorbeslutet](docs/checkpoints/2026-11-02-calculator-paused.md)
+är relevanta underlag. Kalkylatorn är fortsatt pausad.
 
-[URL-inventeringen](docs/migration/URL_INVENTORY_2026-11-02.md) och
-[äldre rutter](docs/404_AND_LEGACY_ROUTES_REVIEW.md) är underlag utan aktiva redirects.
-`PROJECT_BRIEF.md`, `PAGE_SPEC.md`, `CONTENT.md`, `SITEMAP.md`,
-`COMPONENTS.md` och `DESIGN_SYSTEM.md` i `docs/` beskriver äldre visionsmaterial;
-de är inte en aktuell karta över implementerade sidor.
-Daterade migreringsrapporter är historik, inte bevis för dagens HEAD.
+`docs/AMP_002_HEADER_REVIEW.md`, `docs/LOCAL_VISUAL_REVIEW.md`,
+`docs/LOCAL_WORKSPACE_CLEANUP.md` och tidigare integrationsrapporter
+beskriver äldre steg. Deras instruktioner om cleanup-mappar och offentliga
+prototypvyer gäller inte längre. De bevaras som historik, inte som dagens
+arbetsorder eller bevis för lokal Git-status.
+
+[URL-inventeringen](docs/migration/URL_INVENTORY_2026-11-02.md) är underlag
+utan aktiva redirects. Äldre visionsspecifikationer är inte en aktuell
+karta över implementerade sidor. Leverantörsbilder och AI-koncept får inte
+presenteras som utförda Hallpartner-referensprojekt.
 
 ## Preview och gränser
 
-Extern preview: **https://hallpartner-se.preview2.inleed.com/**.
-Den är en granskningsyta, inte ett facit eller bevis för att aktuell Draft-HEAD
-är publicerad. Granska berörda sidor före UI-ändringar och efter separat godkänd deployment.
+Beslutad utvecklingsadress: **https://hallpartner-se.preview2.inleed.com/**
+på Amelios befintliga Inleed-konto. Inga nya stagingdomäner eller DNS-ändringar
+ingår. Kundens befintliga WordPress ligger enligt Andreas på annat webbhotell.
+Kundens framtida separata Inleed-konto ingår inte i utvecklingsautomatiken.
 
-Alla sidor behåller `noindex,nofollow`. Canonical/sitemap använder
-`https://hallpartner.se`; det ändrar inte DNS eller hosting.
-Historiska rutter, prototyper, 404 och offertguiden är undantagna från sitemap.
+Alla besökarsidor behåller `noindex,nofollow`. Det statiska
+publiceringspaketet blockerar crawling i robots.txt och innehåller ingen
+sitemap, PHP-mottagare, intern Markdown eller prototypsida.
 
-`deploy-production.yml` är ersatt med en verifierad FTPS-process för utvecklingspreviewn. Workflow-ID 316932905 ska förbli `disabled_manually` tills Andreas separat godkänt första aktiveringen efter båda mergarna. PHP och interna demos utesluts ur uppladdningspaketet; bildrättigheter, FTPS-mål och gamla serverfiler måste vara godkända. Inga filer raderas automatiskt.
+Inleeds domänomskrivning i previewn är bekräftad. Den befintliga
+publiceringskoden behöver skilja exakt FTPS-original från den specifikt
+verifierade HTTPS-omskrivningen. Mål och registrerade bilder är redan
+beslutade; nya allmänna tillstånd eller en ny miljö behövs inte.
 
-`hallpartner.se` och kundens framtida separata Inleed-konto är aldrig publiceringsmål för detta workflow. Se [driftinstruktionen](docs/preview/README.md) för kontrollmarkör, incidentstopp och kvarvarande blockerare.
+Workflow `deploy-production.yml` (ID 316932905) ska förbli avstängt tills
+exakt första aktivering/publicering är godkänd. Kontrollera verklig status.
+En godkänd build eller merge är inte bevis för en publicerad version.
+[Publiceringsprocessen](docs/preview/README.md) innehåller historiska
+inventeringar som måste kontrolleras igen före skrivning.
+
+Att ta bort en källroute avpublicerar inte en gammal FTP-kopia. Sådan
+städning kräver färsk filinventering, privat råbackup och exakt godkänd
+raderingslista. Skyddsfiler som `.htaccess` är inte demos. Inga serverfiler
+raderas automatiskt och ingen lokal mapp får tas bort med generell force.

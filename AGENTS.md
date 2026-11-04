@@ -8,6 +8,40 @@
 
 ---
 
+## Ordinarie arbetsyta och webbplats (2026-11-04)
+
+Ordinarie lokal arbetsmapp är `C:\webbprojekt\hallpartner`. Använd en
+feature-branch i denna mapp; skapa inte fler cleanup-/review-mappar,
+kloner eller worktrees för vanligt utvecklingsarbete. Backup utanför den
+aktiva mappen är tillåten och ska inte förväxlas med en konkurrerande arbetsyta.
+Kontrollera först faktisk lokal HEAD, Git-status och eventuell worktree-koppling.
+Äldre rapporter är inte bevis för dagens läge. Använd aldrig generell
+`reset --hard`, `git clean` eller rekursiv radering för att dölja okänt arbete.
+
+Den konsoliderade besökarkoden använder:
+
+- `src/layouts/HallpartnerSiteLayout.astro` som gemensamt sid-skal.
+- `src/components/SiteHeader.astro` som adapter till riktig AMP-002,
+  `classic-mega-menu` med ikonhamburgare och serverrenderad reservnavigation.
+- `src/components/home/HallpartnerHome.astro` som startsidans innehåll.
+
+Bildpiloterna, galleri, AMP-006 och använda bilder bevaras. Skapa inte nya
+publika prototype-/demo-/review-rutter; testa de riktiga besökarsidorna.
+`src/pages` får endast bygga de tretton avsedda HTML-sidorna i
+`scripts/preview/policy.mjs`. Återinför inte pensionerade `/prototype/`,
+`/projekt/`, `/roadmap/`, `/vision/` eller `/workshop/` från gamla PR:er.
+Namn som `hp-draft` i befintlig CSS är kompatibilitetsnamn för den använda
+designen, inte tillstånd att skapa en parallell webbplats. Historiska
+rapporter, använda komponenter, tester och Git-historik ska bevaras.
+
+Se [konsolideringscheckpointen](docs/checkpoints/2026-11-04-site-consolidation.md)
+för exakt flytt-/borttagningslista och återstående gränser. Den dokumenterar
+kodändringen, inte ett påstående om lokal städning, merge eller publicering.
+Kontrollera PR/HEAD och aktuella tester innan arbete fortsätter; en grön
+byggkontroll är inte bevis för att previewn visar samma commit.
+
+---
+
 ## Aktuellt scope: inga kundpriser eller köp i v1 (2026-11-02)
 
 Peter har meddelat att Hallpartner fortfarande förhandlar med en leverantör
@@ -26,33 +60,51 @@ att **den nya webbplatsen ska fortsätta byggas utan extern konfigurator**.
 - Beslutet dokumenteras också i
   [checkpointen](docs/checkpoints/2026-11-02-calculator-paused.md) och i
   [projektbeslutsregistret i dokumentations-PR #2](https://github.com/Amelio-AB/hallpartner/pull/2)
-  (HPD-010). Dokumentations-PR #2 är ännu inte mergad till denna gren.
+  (HPD-010). Kontrollera PR:ens aktuella status innan äldre dokument används.
 
 Detta är ett **scopebeslut, inte en godkänd produktlansering**; rör inte
 noindex, DNS, FTP, credentials eller main på grund av ändringen.
 
 ---
 
-# Projektets syfte
+# Projektets syfte och publiceringsmål
 
-Repot är kodbasen för Hallpartners riktiga webbplats på https://hallpartner.se.
-Migration phase 1 förbereder preview och teknisk grund. Fokus ligger på
-kvalitet, förtroende och långsiktig affärsnytta.
+Repot är kodbasen för Hallpartners nya Astro-webbplats. Äldre sid- och
+innehållsspecifikationer beskriver delvis visionskonceptet, inte beslutad
+produktionsstruktur. Använd aktuell kod, beslut och verifierat kundunderlag.
 
-Befintliga sidor, komponenter och bilder bevaras tills live-sajten inventerats:
-**pending live-site inventory**. Äldre sid- och innehållsspecifikationer
-beskriver visionskonceptet, inte beslutad produktionsstruktur.
+Beslutad utvecklingsadress är https://hallpartner-se.preview2.inleed.com/,
+på **Amelios befintliga Inleed-konto**. Kundens nuvarande WordPress ligger
+enligt Andreas på ett annat webbhotell. Att Amelios katalog heter
+`domains/hallpartner.se/public_html` gör den inte till WordPress-servern.
+Skapa ingen ny stagingdomän, inget nytt konto och ingen ny publiceringsrot.
+DNS, namnservrar och e-postinställningar får inte ändras.
 
-Preview: https://hallpartner-se.preview2.inleed.com. Previewmiljön är live och
-ska användas som visuell kontrollpunkt under utvecklingen. Behåll noindex.
-Den nya FTPS-processen förbereds i en separat stackad PR. Publiceringsworkflow
-316932905 ska vara manuellt avstängt fram till separat godkänd aktivering.
-Efter aktivering publiceras endast verifierat statiskt innehåll från senaste
-main till den markörverifierade previewroten `./`, utan serverradering.
-Se [publiceringsprocessen](docs/preview/README.md); bildrättigheter och målspärrar
-måste vara godkända. Kundens framtida Inleed-konto ingår aldrig i automatiken.
-DNS för hallpartner.se ska inte ändras i utvecklingsarbetet. Ändra inte
-secrets eller arkivbranchen `archive/vision-site-2026-10-02`.
+Inleed har bekräftat att previewadressen skriver om domänreferenser.
+Kontrollera serveroriginal exakt via FTPS och HTTPS endast mot den snävt
+verifierade transformeringen. Kräv inte en ny miljö för det förväntade
+beteendet och normalisera inte bort andra skillnader. Den befintliga
+publiceringskodens rättning och verkliga första publicering återstår tills
+de bevisats i aktuella körningar.
+
+Behåll noindex och robots-spärr. Mål och den registrerade bildanvändningen
+är redan beslutade; kontrollera bindning och hashregister utan att begära
+samma allmänna bildtillstånd igen. Publiceringsworkflow **316932905** ska
+förbli avstängt tills exakt aktivering/första publicering är godkänd.
+Kontrollera workflowets verkliga status, inte kommentarer eller äldre rapporter.
+Gamla ops-flöden får inte konkurrera med den godkända publiceringen.
+
+Efter godkännande publiceras endast verifierat statiskt innehåll från senaste
+main till den markörverifierade previewroten `./`. Automatiken får inte
+radera serverfiler. Befintliga publika demos måste avpubliceras med en exakt
+granskad filplan och verifierad privat råbackup; en borttagen källroute
+raderar inte en tidigare FTP-kopia. Skydds- och konfigurationsfiler som
+`.htaccess` och `cgi-bin` får inte behandlas som demofiler.
+
+Se [publiceringsprocessen](docs/preview/README.md) och aktuell överlämning.
+Äldre krav där på ny rot eller oidentifierad domänomskrivning är historiska,
+inte nya beslut. Kundens framtida Inleed-konto ingår aldrig i automatiken.
+Ändra inte secrets eller arkivbranchen `archive/vision-site-2026-10-02`.
 
 ---
 
@@ -60,15 +112,16 @@ secrets eller arkivbranchen `archive/vision-site-2026-10-02`.
 
 När beslut behöver fattas gäller följande ordning:
 
-1.  AGENTS.md
-2.  PROJECT_BRIEF.md
-3.  DESIGN_SYSTEM.md
-4.  PAGE_SPEC.md
-5.  COMPONENTS.md
-6.  TECHNICAL_SPEC.md
-7.  CONTENT.md
+1. AGENTS.md
+2. PROJECT_BRIEF.md
+3. DESIGN_SYSTEM.md
+4. PAGE_SPEC.md
+5. COMPONENTS.md
+6. TECHNICAL_SPEC.md
+7. CONTENT.md
 
-Vid konflikter har dokument högre upp alltid företräde.
+Vid konflikter har dokument högre upp företräde. Aktuella uttryckliga
+kundbeslut och faktisk kod-/miljöverifiering får inte ersättas av en äldre rapport.
 
 ---
 
@@ -128,13 +181,15 @@ Undvik visuellt brus och onödig komplexitet.
 
 # Live preview -- obligatorisk kontrollpunkt
 
-Den aktuella utvecklingsversionen finns på:
+Den beslutade granskningsadressen är:
 
 https://hallpartner-se.preview2.inleed.com/
 
-AI-agenter som arbetar med design, innehåll, layout, navigation, responsivitet
-eller komponenter ska använda previewn som en faktisk granskningsyta, inte bara
-läsa koden.
+Identifiera först den faktiskt publicerade versionen. Previewn kan ligga
+äldre än main; dess tillgänglighet eller en grön CI innebär inte senaste kod.
+AI-agenter som arbetar med design, innehåll, layout, navigation,
+responsivitet eller komponenter ska använda previewn som faktisk
+kontrollpunkt när rätt version har publicerats, inte bara läsa koden.
 
 Previewn är INTE ett godkänt facit. Granska den kritiskt. Identifiera konkret:
 
@@ -145,8 +200,8 @@ Previewn är INTE ett godkänt facit. Granska den kritiskt. Identifiera konkret:
 - förbättringar som ger tydlig nytta före kosmetiska detaljer
 
 Utgå inte från att befintlig design är rätt bara för att den redan är byggd.
-När en uppgift påverkar UI ska relevant sida granskas i preview före större
-ändringar och igen efter deployment.
+När publicering är avstängd ska den testade kandidaten granskas lokalt eller
+i CI. Redovisa detta som kandidatgranskning, aldrig som publiceringsbevis.
 
 ---
 
@@ -154,13 +209,15 @@ När en uppgift påverkar UI ska relevant sida granskas i preview före större
 
 Innan kod skrivs:
 
-1.  Läs relevant dokumentation.
-2.  Granska relevant sida i live preview när uppgiften påverkar UI/innehåll.
-3.  Identifiera befintliga komponenter.
-4.  Bedöm påverkan på design och arkitektur.
-5.  Implementera.
-6.  Testa lokalt och granska resultatet i preview efter deployment.
-7.  Uppdatera dokumentation vid behov.
+1. Läs relevant dokumentation och kontrollera aktuell status.
+2. Granska relevant sida i rätt version när uppgiften påverkar UI/innehåll.
+3. Identifiera befintliga komponenter.
+4. Bedöm påverkan på design och arkitektur.
+5. Implementera i befintlig arbetsmapp på en avgränsad branch.
+6. Testa kandidaten och granska resultatet i preview efter godkänd deployment.
+7. Uppdatera dokumentation vid behov.
+
+Skilj i rapporten mellan ändrat, testat, mergat, publicerat och lokalt verifierat.
 
 ---
 
@@ -182,7 +239,8 @@ En uppgift är klar när:
 
 Undvik att:
 
-- Duplicera komponenter.
+- Duplicera komponenter eller skapa parallella webbplatsmappar.
+- Radera använd kod utifrån ett filnamn som prototype, demo eller legacy.
 - Skapa stora monolitiska filer.
 - Bryta designsystemet.
 - Lägga till onödiga bibliotek.
@@ -194,6 +252,7 @@ Undvik att:
 
 - [ ] Projektet bygger utan fel
 - [ ] ESLint passerar
+- [ ] Relevanta Node-/PHP- och webbläsartester passerar
 - [ ] Responsivitet kontrollerad
 - [ ] Tillgänglighet verifierad
 - [ ] Metadata uppdaterad
@@ -221,4 +280,4 @@ Arkitekturen ska vara redo för:
 Målet är en hållbar webbplats som kan utvecklas tillsammans med
 Hallpartners verksamhet.
 
-Version 1.0
+Version 1.1 – konsoliderad besökarkod och en ordinarie arbetsmapp.

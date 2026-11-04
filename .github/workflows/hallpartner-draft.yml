@@ -1,36 +1,18 @@
-name: Hallpartner v1 draft validation (no deployment)
-
-on:
+# Full visitor/payload/browser validation now lives in preview-validation.yml.
+# Preserve the additional explicit Footer rollback check without rebuilding prototypes.
+name: Hallpartner Footer rollback validation (no deployment)
+'on':
   pull_request:
-    branches:
-      - main
-      - integration/hallpartner-main-20261103
-      - feature/amp-integration-readiness-2026-10-31
-    paths:
-      - '.github/workflows/hallpartner-draft.yml'
-      - 'astro.config.mjs'
-      - 'tsconfig.json'
-      - 'eslint.config.js'
-      - 'package.json'
-      - 'package-lock.json'
-      - 'src/**'
-      - 'public/**'
-      - 'server/lead/**'
-      - 'scripts/**'
-      - 'tests/**'
-      - 'docs/migration/**'
-
+    branches: [main, integration/hallpartner-main-20261103]
 permissions:
   contents: read
-
 concurrency:
-  group: hallpartner-v1-draft-${{ github.event.pull_request.number }}
+  group: hallpartner-footer-rollback-${{ github.event.pull_request.number }}
   cancel-in-progress: true
-
 jobs:
-  draft-validation:
+  footer-rollback:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v6
         with:
@@ -40,163 +22,14 @@ jobs:
         with:
           node-version: '24'
           cache: npm
-      - name: Record revision
-        run: |
-          node --version
-          npm --version
-          git rev-parse HEAD
-      - name: Install SHA-locked private AMP dependencies using read-only auth
-        shell: bash
+      - name: Install and verify the locked private AMP package
         env:
           AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
-        run: |
-          set -euo pipefail
-          if [ -z "$AMP_GITHUB_READ_TOKEN" ]; then
-            echo "::error::Private AMP requires AMELIO_PLATFORM_READ_TOKEN to read the private source; build intentionally blocked."
-            exit 1
-          fi
-          # The credential is used only during install; never stored in Git URLs,
-          # npm lockfile, scripts, or build/test environment.
-          cat > "$RUNNER_TEMP/amp-askpass.sh" <<'SH'
-          #!/bin/sh
-          case "$1" in
-            *Username*) printf '%s\n' 'x-access-token' ;;
-            *Password*) printf '%s\n' "$AMP_GITHUB_READ_TOKEN" ;;
-            *) exit 1 ;;
-          esac
-          SH
-          chmod 700 "$RUNNER_TEMP/amp-askpass.sh"
-          trap 'rm -f "$RUNNER_TEMP/amp-askpass.sh"' EXIT
-          # Translate the locked SSH URL to HTTPS without persisting credentials/config.
-          export GIT_CONFIG_COUNT=2
-          export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
-          export GIT_CONFIG_VALUE_0=ssh://git@github.com/
-          export GIT_CONFIG_KEY_1=url.https://github.com/.insteadOf
-          export GIT_CONFIG_VALUE_1=git@github.com:
-          GIT_ASKPASS="$RUNNER_TEMP/amp-askpass.sh" GIT_TERMINAL_PROMPT=0 npm ci --ignore-scripts --no-audit --no-fund
-      - name: Validate approved AMP package source after install
-        run: |
-          node --input-type=module <<'JS'
-          import { readFileSync } from 'node:fs';
-          const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
-          const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
-          const pkg=JSON.parse(readFileSync('package.json','utf8'));
-          const sha='fec9ca01b3c0d4bc9002fa21832a51cf51009749';
-          if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.4.0'
-             ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.4.0'
-             ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
-             ||lock.packages[''].dependencies['@amelio/web-platform']!==pkg.dependencies['@amelio/web-platform']
-             ||!lock.packages['node_modules/@amelio/web-platform']?.resolved?.endsWith('#'+sha))
-            throw Error('AMP private source pin is incorrect');
-          console.log('Approved AMP package v1.4.0 locked source verified.');
-          JS
-      - name: Astro and TypeScript
-        run: npm run check
-      - name: ESLint
-        run: npm run lint
-      - name: All Node contracts (including Footer and disabled forms)
-        run: node --test tests/*.test.mjs
-      - name: PHP intake syntax and independent receiver validation
-        run: |
-          php -v
-          php -l public/api/lead.php
-          php -l server/lead/validator.php
-          php -l server/lead/receiver.php
-          php -l server/lead/config.example.php
-          php -l server/lead/smtp-smoke.php
-          git check-ignore -q server/lead/config.local.php
-          if php server/lead/smtp-smoke.php >/dev/null 2>&1; then
-            echo "::error::SMTP test must require explicit --send-test"
-            exit 1
-          fi
-          php tests/lead-receiver.test.php
-      - name: Build static Astro site (no upload)
-        run: npm run build
-        env:
-          NODE_ENV: production
-      - name: Prove PHP receiver fails closed without private config
-        shell: bash
-        run: |
-          set -euo pipefail
-          php -S 127.0.0.1:9439 -t dist > "$RUNNER_TEMP/hp-php-server.log" 2>&1 &
-          PHP_SERVER=$!
-          trap 'kill "$PHP_SERVER" 2>/dev/null || true' EXIT
-          ready=0
-          for ((attempt=0; attempt<35; attempt++)); do
-            if curl -s --max-time 1 -o /dev/null http://127.0.0.1:9439/api/lead.php; then ready=1; break; fi
-            sleep 0.25
-          done
-          test "$ready" -eq 1
-          code=$(curl -sS --max-time 8 -o "$RUNNER_TEMP/hp-lead-response.json" -w '%{http_code}' \
-            -X POST -H 'Content-Type: application/json' -H 'Origin: https://hallpartner.se' \
-            --data '{"contractVersion":1,"technicalId":"quote-flow","configurationId":"hallpartner-contact-v1","answers":{"contact.name":"Synthetic","contact.email":"test@example.invalid","contact.message":"Not a real enquiry."}}' \
-            http://127.0.0.1:9439/api/lead.php)
-          test "$code" = "503"
-          node -e "const fs=require('node:fs');const d=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));if(d.status!=='failed')process.exit(1)" "$RUNNER_TEMP/hp-lead-response.json"
-      - name: Verify noindex, landmarks and sitemap exclusions in dist
-        run: node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
-      - name: Verify same-path URL mapping in generated noindex Astro HTML
-        run: node scripts/verify-url-migration-draft.mjs
-      - name: Verify full-page visuals, images and mobile menu with Chrome
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p visual-review
-          ./node_modules/.bin/astro preview --host 127.0.0.1 --port 4321 > visual-review/cdp-preview-server.log 2>&1 &
-          PREVIEW_PID=$!
-          trap 'kill "$PREVIEW_PID" 2>/dev/null || true' EXIT
-          URL="http://127.0.0.1:4321/prototype/hallpartner/start/"
-          READY=0
-          for ((attempt=0; attempt<30; attempt++)); do
-            if curl -fsS "$URL" >/dev/null; then READY=1; break; fi
-            sleep 0.5
-          done
-          if [ "$READY" -ne 1 ]; then
-            echo "CDP visual preview failed to start" > visual-review/validated-ERROR.txt
-            exit 1
-          fi
-          timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/" HP_SCREENSHOT_PREFIX="site-home" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/hallar/" HP_SCREENSHOT_PREFIX="hallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_PREFIX="site-stalhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/lagerhall/" HP_SCREENSHOT_PREFIX="site-lagerhall" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/maskinhall/" HP_SCREENSHOT_PREFIX="site-maskinhall" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/plathall/" HP_SCREENSHOT_PREFIX="site-plathall" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/isolerad-hall/" HP_SCREENSHOT_PREFIX="site-isolerad-hall" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/ridhus/" HP_SCREENSHOT_PREFIX="site-ridhus" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/talthall/" HP_SCREENSHOT_PREFIX="site-talthall" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/kontakt/" HP_SCREENSHOT_PREFIX="site-kontakt" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/offert/" HP_SCREENSHOT_PREFIX="site-offert" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/sa-gar-det-till/" HP_SCREENSHOT_PREFIX="site-process" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/om-oss/" HP_SCREENSHOT_PREFIX="site-om-oss" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/404.html" HP_SCREENSHOT_PREFIX="site-not-found" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/lagerhallar/" HP_SCREENSHOT_PREFIX="lagerhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/prototype/hallpartner/maskinhallar/" HP_SCREENSHOT_PREFIX="maskinhallar" timeout 90s node scripts/capture-hallpartner-home.mjs
-          timeout 180s node scripts/capture-hallpartner-amp-header.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_DIR="visual-review/amp006" timeout 240s node scripts/verify-hallpartner-amp006.mjs
-          HP_PREVIEW_URL="http://127.0.0.1:4321/stalhallar/" HP_SCREENSHOT_DIR="visual-review/gallery" timeout 240s node scripts/verify-hallpartner-gallery.mjs
-
-      - name: Preserve validated visual review artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hallpartner-home-visual-${{ github.event.pull_request.head.sha }}
-          path: visual-review/
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Preserve static build for later review
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: hallpartner-v1-draft-${{ github.event.pull_request.head.sha }}
-          path: dist/
-          if-no-files-found: error
-          retention-days: 7
-
-      - name: Verify explicit legacy Footer rollback (no artifact replacement)
+        run: bash scripts/preview/install-private-amp.sh
+      - name: Verify explicit Footer rollback on the actual visitor routes
         env:
           HALLPARTNER_FOOTER_MODE: legacy
         run: |
           npm run build
-          node --experimental-strip-types scripts/verify-hallpartner-draft.mjs
+          node scripts/verify-hallpartner-draft.mjs
+          node scripts/verify-url-migration-draft.mjs
