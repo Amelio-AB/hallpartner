@@ -24,11 +24,11 @@ export const hallpartnerQuoteConfig = {
           label: 'Vad ska du främst använda hallen till?',
           help: { title: 'Utgå från användningen', text: 'Lager och ridverksamhet är användningsområden, medan exempelvis tälthall beskriver en konstruktion. Du behöver inte välja konstruktion här.' },
           options: [
-            { value: 'storage', label: 'Lager eller förvaring' },
-            { value: 'machinery', label: 'Maskiner eller verkstad' },
-            { value: 'riding', label: 'Ridverksamhet' },
-            { value: 'other', label: 'Annat behov' },
-            { value: 'unknown', label: 'Behöver rådgivning' }
+            { value: 'storage', label: 'Lager eller förvaring', description: 'Varor, material och utrustning' },
+            { value: 'machinery', label: 'Maskiner eller verkstad', description: 'Utrymme för maskiner och arbete' },
+            { value: 'riding', label: 'Ridverksamhet', description: 'Ridbana eller annan hästverksamhet' },
+            { value: 'other', label: 'Annat behov', description: 'Berätta vad hallen ska användas till' },
+            { value: 'unknown', label: 'Behöver rådgivning', description: 'Vi hjälper dig att beskriva behovet' }
           ]
         },
         {
