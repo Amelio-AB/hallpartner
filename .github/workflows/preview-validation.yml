@@ -1,5 +1,20 @@
 name: Preview candidate - validation only
 'on':
+  workflow_dispatch:
+    inputs:
+      operation:
+        type: choice
+        required: true
+        default: validate
+        options: [validate, private-backup, approved-cleanup]
+      backup_recipient:
+        description: Public RSA recipient only; never a private key or credential
+        type: string
+        required: false
+      verified_backup_sha256:
+        description: Inventory digest from the complete privately restored FTPS backup
+        type: string
+        required: false
   pull_request:
     branches:
       - main
@@ -25,6 +40,7 @@ permissions:
   contents: read
 jobs:
   validate:
+    if: inputs.operation != 'private-backup' && inputs.operation != 'approved-cleanup'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     outputs:
@@ -138,6 +154,73 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: preview-evidence-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/
+          if-no-files-found: error
+          retention-days: 7
+  maintenance:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && (inputs.operation == 'private-backup' || inputs.operation == 'approved-cleanup')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+    concurrency:
+      group: hallpartner-inleed-preview-20261103
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install and verify locked private AMP
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: bash scripts/preview/install-private-amp.sh
+      - name: Install verified TLS client
+        run: |-
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp >/dev/null
+      - name: Prove approved removals are absent from current payload
+        if: inputs.operation == 'approved-cleanup'
+        env:
+          COMMIT: ${{ github.sha }}
+        run: |-
+          npm run build
+          node scripts/preview/payload.mjs prepare "$COMMIT"
+          node scripts/preview/payload.mjs verify
+          node scripts/preview/payload.mjs rights
+      - name: Explicit manual backup or exact approved cleanup
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          HP_OPERATION: ${{ inputs.operation }}
+          HP_BACKUP_RECIPIENT: ${{ inputs.backup_recipient }}
+          HP_VERIFIED_BACKUP_SHA256: ${{ inputs.verified_backup_sha256 }}
+        run: |-
+          case "$HP_OPERATION" in
+            private-backup) node scripts/preview/remote.mjs private-backup ;;
+            approved-cleanup) node scripts/preview/approved-cleanup.mjs ;;
+            *) exit 1 ;;
+          esac
+      - name: Encrypted one-time transport only - no raw server files
+        if: inputs.operation == 'private-backup'
+        uses: actions/upload-artifact@v4
+        with:
+          name: private-preview-backup-${{ github.run_id }}
+          path: reports/private-preview-backup.envelope.json
+          if-no-files-found: error
+          retention-days: 1
+      - name: Preserve hash-only maintenance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-maintenance-${{ github.run_id }}
           path: reports/preview/
           if-no-files-found: error
           retention-days: 7

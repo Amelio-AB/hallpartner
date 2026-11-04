@@ -5,24 +5,60 @@ import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, remoteInventory, deliveryStatus, assertDelivery } from '../scripts/preview/remote.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished } from '../scripts/preview/remote.mjs';
+import { expectedHttpBytes, fingerprint } from '../scripts/preview/delivery.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
-test('pre-upload delivery gate rejects rewritten bytes, errors and incomplete evidence without normalizing content', async () => {
+test('pre-upload delivery allows only the exact forward HTML origin rewrite', async () => {
   const body = Buffer.from('<link rel="canonical" href="https://hallpartner.se/">');
-  const fileFingerprints = [{ path: 'index.html', sha256: sha256(body) }, { path: 'cgi-bin/.htaccess', sha256: 'a'.repeat(64) }];
+  const fileFingerprints = [fingerprint('index.html', body), { path: 'cgi-bin/.htaccess', sha256: 'a'.repeat(64) }];
+  const expected = expectedHttpBytes('index.html', body);
   const requested = [];
   const deliveryChecks = await deliveryStatus(fileFingerprints, async url => {
-    requested.push(url); return { status: 200, body };
+    requested.push(url); return { status: 200, body: expected, url };
   });
   assert.equal(requested.length, 1); // Never request protected server configuration via HTTP.
   assertDelivery({ fileFingerprints, deliveryChecks });
-  for (const response of [{ status: 200, body: Buffer.from(body.toString().replace('https://hallpartner.se', PREVIEW)) }, { status: 404, body }]) {
-    const checks = await deliveryStatus(fileFingerprints, async () => response);
+  for (const response of [
+    { status: 200, body }, // Required observed substitution missing.
+    { status: 404, body: expected },
+    { status: 200, body: Buffer.concat([expected, Buffer.from('changed text')]) },
+    { status: 200, body: Buffer.from(expected.toString().replace(PREVIEW, 'https://other.invalid')) },
+    { status: 200, body: expected, url: 'https://other.invalid/index.html' },
+  ]) {
+    const checks = await deliveryStatus(fileFingerprints, async url => ({ url, ...response }));
     assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: checks }));
   }
   assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: [] }));
   assert.throws(() => assertDelivery({ fileFingerprints: [], deliveryChecks: [] }));
+  assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, path:'wrong.html'})) }));
+  assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, expectedHttpSha256:r.ftpsSha256})) }));
+});
+
+test('forward transformation preserves all other bytes, origins and file types', () => {
+  const raw = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from('https://hallpartner.se/a https://hallpartner.se?x https://hallpartner.se#x https://hallpartner.se.evil/x https://www.hallpartner.se/ http://hallpartner.se/\r\n')]);
+  for (const path of ['x.css','x.js','x.json','x.svg','x.webp','x.txt']) assert.deepEqual(expectedHttpBytes(path, raw), raw);
+  for (const path of ['x.html','x.xml']) {
+    const expected = Buffer.concat([Buffer.from([0xff, 0xfe]), Buffer.from(`${PREVIEW}/a ${PREVIEW}?x ${PREVIEW}#x https://hallpartner.se.evil/x https://www.hallpartner.se/ http://hallpartner.se/\r\n`)]);
+    assert.deepEqual(expectedHttpBytes(path, raw), expected);
+  }
+});
+
+test('post-upload verification reads every FTPS original and rejects tampering before trusting HTTP', async () => {
+  const raw = Buffer.from('<h1>Original</h1><a href="https://hallpartner.se/">Home</a>');
+  const css = Buffer.from('/* https://hallpartner.se/ */');
+  const manifest = { commit:'a'.repeat(40), files:[{path:'index.html',sha256:sha256(raw)},{path:'a.css',sha256:sha256(css)}], externalAssets:[] };
+  const transfer = (commands, _creds, cwd) => {
+    assert.deepEqual(commands,['get index.html -o original-0','get a.css -o original-1']);
+    writeFileSync(cwd+'/original-0', raw); writeFileSync(cwd+'/original-1', css);
+  };
+  const get = async url => ({url,status:200,body:new URL(url).pathname === '/' ? expectedHttpBytes('index.html',raw) : css});
+  assert.equal((await verifyPublished(manifest, {}, get, transfer, false)).length, 2);
+  await assert.rejects(() => verifyPublished(manifest, {}, get, (commands,creds,cwd) => {
+    transfer(commands,creds,cwd);writeFileSync(cwd+'/original-0',expectedHttpBytes('index.html',raw));
+  }, false), /FTPS original/);
+  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:200,body:Buffer.from('wrong file')}),transfer,false), /HTTPS differs/);
+  await assert.rejects(() => verifyPublished(manifest, {}, async url => ({url,status:404,body:raw}),transfer,false));
 });
 test('read-only inventory records protected paths without permitting command injection or traversal', () => {
   assert.deepEqual(remoteInventory('./\n./cgi-bin/\n./cgi-bin/.htaccess\n./index.html\n'), {
@@ -86,10 +122,28 @@ test('stale remote pages/PHP/unreviewed assets block without deleting anything',
   const entry={path:'old-image.jpg',sha256:'a'.repeat(64),approvedBy:'Owner',evidence:'Preview usage permission'};
   assert.deepEqual(retainedFiles(['old-image.jpg'],m,{retainedFiles:[entry]}),[entry]);
 });
+
+test('server configuration exemption is explicit, hash-bound and cannot publish or retain arbitrary dotfiles', () => {
+  const entry = {path:'cgi-bin/.htaccess',sha256:'a'.repeat(64),reviewedBy:'Owner',evidence:'Private raw configuration review'};
+  const policy = {retainedFiles:[],serverFiles:[entry]};
+  assert.deepEqual(retainedFiles([entry.path],{files:[]},policy),[entry]);
+  assert.throws(() => safePath(entry.path));
+  for (const path of ['.htaccess','cgi-bin/.env','other/.htaccess']) assert.throws(() => retainedFiles([path],{files:[]},{...policy,serverFiles:[{...entry,path}]}));
+  for (const field of ['sha256','reviewedBy','evidence']) assert.throws(() => retainedFiles([entry.path],{files:[]},{...policy,serverFiles:[{...entry,[field]:''}]}));
+});
 test('production fingerprint requires stable successful responses before upload', async () => {
   assert.equal((await productionSnapshot(async()=>({status:200,body:Buffer.from('same')}))).length,6);
   let n=0;await assert.rejects(()=>productionSnapshot(async()=>({status:200,body:Buffer.from(String(n++))})));
   await assert.rejects(()=>productionSnapshot(async()=>({status:500,body:Buffer.from('error')})));
+});
+
+test('a changed production HTML hash cannot skip the concrete marker separation checks', async () => {
+  const requested = [];
+  await assert.rejects(() => verifyProduction([{url:'https://hallpartner.se/',sha256:sha256('before')}], 'hp-preview-deploy-test.json', async url => {
+    requested.push(url); return {status:url.includes('hp-preview-')?404:200,body:Buffer.from('dynamic after')};
+  }, false), /dynamic WordPress bytes alone/);
+  assert.equal(requested.filter(url=>url.includes('hp-preview-')).length,6);
+  await assert.rejects(() => verifyProduction([], 'hp-preview-deploy-test.json', async()=>({status:200,body:Buffer.from(PROBE)}), false), /Production marker/);
 });
 test('payload verification rejects empty or forged file inventory', () => {
   assert.throws(()=>verifyPayload('not-present',{commit:'a'.repeat(40),files:[],images:[]}));

@@ -5,6 +5,8 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PREVIEW, PRODUCTION, PROBE, PROBE_FILE, BLOCKED, safePath, sha256, json, assert } from './policy.mjs';
 import { verifyPayload, rightsStatus } from './payload.mjs';
+import { fingerprint, assertOriginal, compareDelivery, assertChecks } from './delivery.mjs';
+import { encryptBackup } from './private-backup.mjs';
 
 const REPORT = 'reports/preview';
 const MARKER = 'hp-preview-deploy.json';
@@ -35,7 +37,7 @@ export function lftpScript(commands, creds) {
     'cd ./', ...commands, 'bye', ''
   ].join('\n');
 }
-function ftps(commands, creds, cwd) {
+export function ftps(commands, creds, cwd) {
   const result = spawnSync('lftp', ['--norc'], { input: lftpScript(commands, creds), encoding: 'utf8', cwd,
     env: { ...process.env, LFTP_PASSWORD: creds.password }, timeout: 10 * 60 * 1000, maxBuffer: 16 * 1024 * 1024 });
   // Never print lftp diagnostics: they can contain credential-bearing server URLs.
@@ -85,20 +87,16 @@ export async function deliveryStatus(fingerprints, get = request) {
   for (const file of fingerprints.filter(f => !BLOCKED.test(f.path))) {
     safePath(file.path);
     const response = await get(PREVIEW + '/' + file.path + '?hp-delivery-check=' + Date.now());
-    const httpSha256 = sha256(response.body);
-    results.push({ path: file.path, status: response.status, ftpsSha256: file.sha256, httpSha256,
-      matches: response.status === 200 && httpSha256 === file.sha256 });
+    results.push(compareDelivery(file, response));
   }
   return results;
 }
 export function assertDelivery(proof) {
   const expected = proof.fileFingerprints.filter(f => !BLOCKED.test(f.path));
-  assert(expected.length > 0 && Array.isArray(proof.deliveryChecks) && proof.deliveryChecks.length === expected.length &&
-    expected.every(f => proof.deliveryChecks.some(r => r.path === f.path && r.status === 200 &&
-      r.ftpsSha256 === f.sha256 && r.httpSha256 === f.sha256 && r.matches)),
-  'BLOCKED: existing FTPS files do not match HTTPS delivery; review server/proxy rewriting before any upload');
+  assertChecks(expected, proof.deliveryChecks);
 }
-export async function checkTarget(creds = credentials()) {
+export async function checkTarget(creds = credentials(), backupRecipient) {
+  assert(creds.username === 'deploy@hallpartner.se', 'Unexpected preview FTP account');
   await publicProof();
   const temp = mkdtempSync(tmpdir() + '/hp-preview-read-');
   try {
@@ -112,15 +110,23 @@ export async function checkTarget(creds = credentials()) {
     ftps(remoteFiles.map((path, index) => 'get ' + path + ' -o inventory-' + index), creds, temp);
     const fileFingerprints = remoteFiles.map((path, index) => {
       const body = readFileSync(temp + '/inventory-' + index);
-      return { path, sha256: sha256(body), bytes: body.length };
+      return fingerprint(path, body);
     });
     const after = remoteInventory(ftps(['find .'], creds, temp));
     assert(JSON.stringify(after) === JSON.stringify({ remoteFiles, remoteDirectories }), 'Remote inventory changed during read-only inspection');
     const deliveryChecks = await deliveryStatus(fileFingerprints);
-    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', bindingSha256: creds.binding, remoteFiles, remoteDirectories, fileFingerprints, deliveryChecks,
+    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', accountVerified: true, tlsCertificateAndHostnameRequired: true, bindingSha256: creds.binding, remoteFiles, remoteDirectories, fileFingerprints, deliveryChecks,
       writeOperations: 0,
       forbiddenFiles: remoteFiles.filter(p => BLOCKED.test(p)) };
     mkdirSync(REPORT, { recursive: true }); writeFileSync(REPORT + '/target-proof.json', JSON.stringify(result, null, 2) + '\n');
+    assertDelivery(result);
+    if (backupRecipient) {
+      assertPublishContext(process.env, process.env.GITHUB_SHA);
+      await latest(process.env.GITHUB_SHA);
+      const archive = encryptBackup(result, path => readFileSync(temp + '/inventory-' + remoteFiles.indexOf(path)), backupRecipient,
+        {commit:process.env.GITHUB_SHA,runId:process.env.GITHUB_RUN_ID});
+      writeFileSync('reports/private-preview-backup.envelope.json', JSON.stringify(archive) + '\n', {mode:0o600,flag:'wx'});
+    }
     console.log('Read-only proof passed: FTPS login root marker matches preview and is absent from both production hosts.');
     return result;
   } finally { rmSync(temp, { recursive: true, force: true }); }
@@ -134,27 +140,48 @@ export function assertPublishContext(env, commit) {
   assert(env.GITHUB_REPOSITORY === REPO && env.GITHUB_REF === 'refs/heads/main' && ['push','workflow_dispatch'].includes(env.GITHUB_EVENT_NAME), 'Publication is only allowed from main push/manual events');
   assert(/^[a-f0-9]{40}$/.test(commit) && env.GITHUB_SHA === commit, 'Publication commit mismatch');
 }
-async function latest(commit) {
+export async function latest(commit) {
   assert((await github('git/ref/heads/main')).object.sha === commit, 'Superseded commit: main has advanced');
+}
+export async function assertOldPublishersIdle() {
+  for (const id of [405335800,405334470]) {
+    assert((await github('actions/workflows/' + id)).state === 'disabled_manually', 'BLOCKED: old ops workflow is still active');
+    for (const status of ['queued','in_progress','waiting','pending','requested']) {
+      const runs = await github('actions/workflows/' + id + '/runs?status=' + status + '&per_page=1');
+      assert(runs.total_count === 0, 'BLOCKED: unfinished old ops workflow run');
+    }
+  }
 }
 export async function productionSnapshot(get = request) {
   const snapshot = [];
   for (const origin of PRODUCTION) for (const path of ['/', '/robots.txt', '/stalhallar/']) {
     const url = origin + path; const a = await get(url); const b = await get(url);
-    assert(a.status === 200 && b.status === 200 && sha256(a.body) === sha256(b.body), 'Production is unavailable/unstable; cannot prove unchanged content: ' + url);
+    assert(a.status === 200 && b.status === 200 && sha256(a.body) === sha256(b.body), 'Production baseline is unavailable/variable; investigate before upload (not evidence of production modification): ' + url);
     snapshot.push({ url, sha256: sha256(a.body) });
   }
   return snapshot;
 }
-async function verifyProduction(snapshot, marker) {
+export async function verifyProduction(snapshot, marker, get = request, reportDirectory = REPORT) {
+  const checks = [];
   for (const row of snapshot) {
-    const r = await request(row.url);
-    assert(r.status === 200 && sha256(r.body) === row.sha256, 'Production changed during preview transfer; stop and investigate: ' + row.url);
+    const r = await get(row.url);
+    checks.push({ url: row.url, status:r.status, beforeSha256:row.sha256, afterSha256:sha256(r.body), matches:r.status === 200 && sha256(r.body) === row.sha256 });
   }
-  for (const host of PRODUCTION) { await assertAbsent(host, marker); await assertAbsent(host, MARKER); await assertAbsent(host, PROBE_FILE); }
+  if (reportDirectory) {
+    mkdirSync(reportDirectory, { recursive:true });
+    writeFileSync(reportDirectory + '/production-checks.json', JSON.stringify({ checks }, null, 2) + '\n');
+  }
+  // Always check target separation even when dynamic WordPress HTML changed.
+  for (const host of PRODUCTION) { await assertAbsent(host, marker, get); await assertAbsent(host, MARKER, get); await assertAbsent(host, PROBE_FILE, get); }
+  assert(checks.every(r => r.matches), 'Production response differs; stop and investigate (dynamic WordPress bytes alone do not prove preview impact); see production-checks.json');
 }
 export function retainedFiles(remoteFiles, manifest, policy, previous = [], imageApprovals = []) {
   return remoteFiles.filter(p => !manifest.files.some(f => f.path === p) && p !== PROBE_FILE && p !== MARKER && p !== INVENTORY && !/^hp-preview-deploy-[a-f0-9]{40}\.json$/.test(p)).map(path => {
+    if (path === 'cgi-bin/.htaccess') {
+      const config = policy.serverFiles?.find(f => f.path === path && /^[a-f0-9]{64}$/.test(f.sha256) && f.reviewedBy?.trim() && f.evidence?.trim());
+      assert(config, 'Unreviewed server configuration (preserved): ' + path);
+      return config;
+    }
     safePath(path);
     // Automatically retain only previously verified static assets. Removed HTML is never grandfathered.
     const prior = previous.find(f => f.path === path && /^[a-f0-9]{64}$/.test(f.sha256));
@@ -166,14 +193,29 @@ export function retainedFiles(remoteFiles, manifest, policy, previous = [], imag
     return entry;
   });
 }
-async function verifyPublished(manifest) {
-  for (const file of manifest.files) {
-    // Fetch every staged page and local CSS/JS/image/font, not just a few screenshots.
-    const route = file.path === 'index.html' ? '/' : '/' + file.path.replace(/\/index\.html$/, '/');
-    const r = await request(PREVIEW + route + '?hp-commit=' + manifest.commit);
-    assert(r.status === 200 && sha256(r.body) === file.sha256, 'Published content does not match tested payload: ' + file.path);
-  }
-  for (const url of manifest.externalAssets) assert((await request(url)).status === 200, 'Existing external font stylesheet unavailable');
+export async function verifyPublished(manifest, creds, get = request, transfer = ftps, reportDirectory = REPORT) {
+  const temp = mkdtempSync(tmpdir() + '/hp-preview-verify-');
+  const checks = []; const originals = [];
+  try {
+    // Download every uploaded original, independently of the HTTP proxy/cache.
+    transfer(manifest.files.map((f, index) => 'get ' + safePath(f.path) + ' -o original-' + index), creds, temp);
+    for (const file of manifest.files) {
+      const original = readFileSync(temp + '/original-' + originals.length);
+      assertOriginal(file, original);
+      const expected = fingerprint(file.path, original); originals.push(expected);
+      // Fetch every staged page and local CSS/JS/image/font, not just a few screenshots.
+      const route = file.path === 'index.html' ? '/' : '/' + file.path.replace(/\/index\.html$/, '/');
+      const r = await get(PREVIEW + route + '?hp-commit=' + manifest.commit);
+      checks.push(compareDelivery(expected, r));
+    }
+    if (reportDirectory) {
+      mkdirSync(reportDirectory, { recursive: true });
+      writeFileSync(reportDirectory + '/published-delivery.json', JSON.stringify({ commit: manifest.commit, checks }, null, 2) + '\n');
+    }
+    assertChecks(originals, checks);
+    for (const url of manifest.externalAssets) assert((await get(url)).status === 200, 'Existing external font stylesheet unavailable');
+    return checks;
+  } finally { rmSync(temp, { recursive: true, force: true }); }
 }
 export async function publish() {
   const manifest = json(REPORT + '/manifest.json');
@@ -182,7 +224,7 @@ export async function publish() {
   assert(policy.schemaVersion === 1 && /^[a-f0-9]{64}$/.test(policy.targetBindingSha256 ?? '') && policy.targetEvidence?.trim(), 'BLOCKED: target approval is not recorded');
   assert(rightsStatus(manifest).every(x => x.approved), 'BLOCKED: image rights are not approved');
   verifyPayload('preview-payload', manifest);
-  for (const id of [405335800,405334470]) assert((await github('actions/workflows/' + id)).state === 'disabled_manually', 'BLOCKED: old ops workflow is still active');
+  await assertOldPublishersIdle();
   const creds = credentials(); assert(creds.binding === policy.targetBindingSha256, 'FTPS account binding has changed');
   const proof = await checkTarget(creds);
   assertDelivery(proof); // Detect known delivery transformations before the first remote write.
@@ -211,7 +253,7 @@ export async function publish() {
     const directories = [...new Set(ordered.map(f => dirname(f.path)).filter(x => x !== '.'))].sort();
     const commands = [...directories.map(path => 'mkdir -p ' + safePath(path)), ...ordered.map(f => 'put ' + safePath(f.path) + ' -o ' + safePath(f.path))];
     ftps(commands, creds, resolve('preview-payload'));
-    await verifyPublished(manifest);
+    await verifyPublished(manifest, creds);
     await verifyProduction(snapshot, uniqueMarker);
     await latest(manifest.commit);
     const inventory = { schemaVersion: 1, target: PREVIEW, commit: manifest.commit, files: [...manifest.files.map(({path,sha256}) => ({path,sha256})), ...extras.map(({path,sha256}) => ({path,sha256}))] };
@@ -220,6 +262,10 @@ export async function publish() {
     const markerBody = JSON.stringify(marker, null, 2) + '\n'; writeFileSync(temp + '/marker.json', markerBody);
     // Written last, only after all HTTP/resource/form/noindex and production checks passed.
     ftps(['put inventory.json -o ' + INVENTORY, 'put marker.json -o ' + uniqueMarker, 'put marker.json -o ' + MARKER], creds, temp);
+    ftps(['get ' + INVENTORY + ' -o inventory-readback.json', 'get ' + uniqueMarker + ' -o unique-readback.json', 'get ' + MARKER + ' -o marker-readback.json'], creds, temp);
+    assert(readFileSync(temp + '/inventory-readback.json').equals(Buffer.from(inventoryBody)) &&
+      readFileSync(temp + '/unique-readback.json').equals(Buffer.from(markerBody)) &&
+      readFileSync(temp + '/marker-readback.json').equals(Buffer.from(markerBody)), 'FTPS deployment marker/inventory readback mismatch');
     const publishedInventory = await request(PREVIEW + '/' + INVENTORY + '?hp-commit=' + manifest.commit);
     assert(publishedInventory.status === 200 && sha256(publishedInventory.body) === marker.inventorySha256, 'Published inventory mismatch');
     for (const name of [uniqueMarker, MARKER]) {
@@ -233,6 +279,10 @@ export async function publish() {
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   if (process.argv[2] === 'check-target') await checkTarget();
+  else if (process.argv[2] === 'private-backup') {
+    assert(process.env.HP_BACKUP_RECIPIENT?.startsWith('-----BEGIN PUBLIC KEY-----'), 'Missing public backup recipient');
+    await checkTarget(credentials(), process.env.HP_BACKUP_RECIPIENT);
+  }
   else if (process.argv[2] === 'publish') await publish();
   else throw new Error('Use check-target or publish');
 }
