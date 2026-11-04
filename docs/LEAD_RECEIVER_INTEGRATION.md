@@ -1,5 +1,6 @@
 # Hallpartner – säker mottagning av kontakt och offert (2026-11-02)
 
+> **Senare V2-arbete (2026-11-04):** Beskrivningen nedan av offertguidens fyra pilotsteg gäller den historiska V1-implementationen. Draft-PR #22 har i stället [fem frågesteg och automatisk kontroll](content/HALLPARTNER_OFFERTGUIDE_V2.md); offertinskick är uttryckligen avstängd för dess nya fält. PHP-mottagaren och SMTP ändras inte av UX-arbetet.\n
 > **Uppdatering 2026-11-04:** Inleeds SMTP-inloggning för det privata `kontakt@amelio.se`-kontot och leverans av ett syntetiskt testmejl till Roundcube-inkorgen har bekräftats manuellt. Det bevisar endast SMTP/inkorg, **inte** ett fungerande publikt formulär eller en kundgodkänd mottagare. Formulären förblir inaktiva. AMP-001 1.5.0:s nya bilagekontrakt V2 hanteras separat; befintlig `/api/lead.php` och `server/lead/` accepterar endast V1 JSON. Se [Hallpartners AMP-001 1.5.0 integrationsplan](AMP_001_150_HALLPARTNER.md).
 
 **Status: kod finns och automatiska offline-test genomförs; kundmottagning INTE aktiverad.**
