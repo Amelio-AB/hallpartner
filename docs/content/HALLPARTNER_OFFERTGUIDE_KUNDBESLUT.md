@@ -1,5 +1,7 @@
 # Hallpartner – sju beslut för offertguidens frågeinnehåll
 
+> **Arkiverat arbetsutkast (4 november 2026). Använd inte som aktiv arbetsplan, kundfrågeformulär eller blockerare för offertguiden.** Projektägaren har uttryckligen valt att inte fortsätta med något nytt frågespår riktat till Hallpartner. Behåll denna fil endast för historisk spårbarhet. Aktuellt arbete sker i formulärets existerande frågekonfiguration och [V2-specifikationen](HALLPARTNER_OFFERTGUIDE_V2.md). Ingen separat utsändning till Peter eller Jimmy ska initieras genom detta dokument.
+
 **Datum:** 2026-11-04  
 **Status:** Frågor till Peter och Jimmy. **Inga svar är bekräftade i den genomgångna dokumentationen.**  
 **Syfte:** Avgränsa vilka uppgifter webbplatsens besökare ska lämna **före första samtalet**. Designen är godkänd av projektägaren, men affärsfrågorna är fortfarande arbetsförslag.
