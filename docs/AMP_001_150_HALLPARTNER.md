@@ -42,3 +42,7 @@ Hallpartner uses that exact Git source SHA in `package.json`, `package-lock.json
 - Inspect actual `/offert/` on local preview at 360px/390px and desktop; test informational dialog (open, Escape, focus return), collapsed-group retained values, irrelevant dimension omission and no-submit safety.
 - If no customer deployment is authorized, keep this as a Draft PR. Never merge automatically from a green CI alone.
 - An `AMP-001 1.5.0` platform source **does not** mean its upload backend exists at Hallpartner. Keep two separate checklists.
+
+## CI follow-up: AMP-003 Footer exact-version guard
+
+The first candidate CI confirmed private `npm ci`, installed source identity, TypeScript and ESLint, but the static build stopped in `scripts/prepare-amp-footer.mjs` because the inherited Footer package guard required 1.4.0. This integration updates that guard and its regression test to the verified private 1.5.0 source; the actual AMP-003 renderer and Footer content remain unchanged. The new head must pass full CI again before any merge.
