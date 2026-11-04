@@ -1,5 +1,5 @@
 import type { QuoteConfig } from '@amelio/web-platform/quote-flow';
-import { hallpartnerQuoteConfig } from './hallpartner-quote';
+import { hallpartnerQuoteConfig } from './hallpartner-quote.ts';
 
 /**
  * Review-only V2 configuration. Never connect this to /api/lead.php:
