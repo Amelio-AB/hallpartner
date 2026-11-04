@@ -107,7 +107,8 @@ try {
       const sibling=bar.querySelector(innerWidth<=1024?'.hm__mobile-toggle':'.hm__desktop-nav');
       return {
         h1:document.querySelectorAll('h1').length,header:document.querySelectorAll('header.hm').length,
-        visibleHeaders:[...document.querySelectorAll('header')].filter(node=>getComputedStyle(node).display!=='none').length,
+        // The quote wizard has a valid nested header inside main, not a second site header.
+        visibleHeaders:[...document.querySelectorAll('header')].filter(node=>!node.closest('main')&&getComputedStyle(node).display!=='none').length,
         footer:document.querySelectorAll('footer').length,ampFooter:!!document.querySelector('footer.af--compact'),
         noindex:document.querySelector('meta[name="robots"]')?.content==='noindex,nofollow',
         fallbackHidden:document.querySelector('#hp-amp-header-fallback')?.hidden===true,
