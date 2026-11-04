@@ -1,6 +1,6 @@
 # AMP-001 1.5.0 – Hallpartner adoption checkpoint (2026-11-04)
 
-## Verified platform source
+> **Uppdatering 2026-11-04:** Delarna nedan beskriver den tidigare AMP-001 **1.5.0-adoptionscheckpointen**, då fyrastegsguiden ännu var oförändrad. På samma Draft-PR #22 har vi **därefter** byggt en arbetskandidat med fem frågesteg och ett automatiskt granskningssteg. Läs den aktuella fråge- och säkerhetsspecifikationen i [HALLPARTNER_OFFERTGUIDE_V2.md](content/HALLPARTNER_OFFERTGUIDE_V2.md). Inskickning är uttryckligen avstängd för nya V2-fält; PHP V1-mottagaren är inte kompatibel och filpiloten är enbart lokal. Inget av detta är ännu kundgodkänt eller publicerat.\n\n## Verified platform source
 
 Private Amelio Web Platform `1.5.0`, merged PR [#33](https://github.com/Amelio-AB/amelio-web-platform/pull/33), post-merge SHA:
 
