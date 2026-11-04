@@ -210,10 +210,15 @@ export async function verifyProduction(snapshot, marker, get = request, reportDi
 }
 export function retainedFiles(remoteFiles, manifest, policy, previous = [], imageApprovals = []) {
   return remoteFiles.filter(p => !manifest.files.some(f => f.path === p) && p !== PROBE_FILE && p !== MARKER && p !== INVENTORY && !/^hp-preview-deploy-[a-f0-9]{40}\.json$/.test(p)).map(path => {
-    if (path === 'cgi-bin/.htaccess') {
-      const config = policy.serverFiles?.find(f => f.path === path && /^[a-f0-9]{64}$/.test(f.sha256) && f.reviewedBy?.trim() && f.evidence?.trim());
-      assert(config, 'Unreviewed server configuration (preserved): ' + path);
-      return config;
+    if (path === 'cgi-bin/.htaccess' || path === 'api/lead.php') {
+      // Preserve-only exemption: never include server code in the upload payload.
+      // Exactly these two existing paths may be retained after an exact SHA check.
+      const entry = policy.serverFiles?.find(f =>
+        f.path === path && /^[a-f0-9]{64}$/.test(f.sha256) &&
+        f.reviewedBy?.trim() && f.evidence?.trim() &&
+        (path !== 'api/lead.php' || f.preserveOnly === true));
+      assert(entry, 'Unreviewed server-side file (preserve-only): ' + path);
+      return entry;
     }
     safePath(path);
     // Automatically retain only previously verified static assets. Removed HTML is never grandfathered.
@@ -333,7 +338,13 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     const creds = credentials(); const proof = json(REPORT+'/target-proof.json');
     const policy = json('config/preview-release.json');
     assert(proof.bindingSha256 === creds.binding && policy.targetBindingSha256 === creds.binding, 'Retained preflight binding mismatch');
-    const paths = [...policy.retainedFiles,...policy.serverFiles].map(file=>file.path).filter(path=>proof.remoteFiles.includes(path));
+    // PR preflight must not silently ignore a new excluded remote file.
+    // Both permitted exceptions remain hash-bound and are re-read without writes.
+    const approvedServerPaths = new Set((policy.serverFiles ?? []).map(file => file.path));
+    const unexpectedProtected = proof.remoteFiles.filter(path => BLOCKED.test(path) && !approvedServerPaths.has(path));
+    assert(unexpectedProtected.length === 0,
+      'Unreviewed excluded remote file detected before merge: ' + unexpectedProtected.join(', '));
+    const paths = [...policy.retainedFiles,...(policy.serverFiles ?? [])].map(file=>file.path).filter(path=>proof.remoteFiles.includes(path));
     const extras = retainedFiles(paths,{files:[]},policy);
     const temp = mkdtempSync(tmpdir()+'/hp-retained-preflight-');
     try { verifyRetainedFiles(extras,creds,temp); } finally { rmSync(temp,{recursive:true,force:true}); }

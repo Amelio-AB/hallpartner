@@ -192,6 +192,13 @@
       "sha256": "74d7c0a057cc6a4e4b762757f8f69194a1249028bff3ede8ed80a66f06494d21",
       "reviewedBy": "Codex technical review under Andreas publication task, 2026-11-04",
       "evidence": "docs/preview/publication-fix-20261104.md#serverkonfiguration"
+    },
+    {
+      "path": "api/lead.php",
+      "sha256": "7d252addd5378e98ddb42871934190800800e076318661b3d66c1a202a89e7ef",
+      "reviewedBy": "Codex: scope/hash-only preservation review on 2026-11-04; raw PHP source not audited",
+      "evidence": "docs/preview/preserve-lead-bootstrap-20261104.md#farskt-hashbevis",
+      "preserveOnly": true
     }
   ]
 }
