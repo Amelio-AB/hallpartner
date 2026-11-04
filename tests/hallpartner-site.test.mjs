@@ -104,7 +104,13 @@ test('visitor pages introduce neither developer contacts nor calculator or fabri
   for (const path of ['src/pages/kontakt/index.astro','src/pages/offert/index.astro']) assert.doesNotMatch(read(path),/andreas@amelio\.se|tel:\+46735054763/);
   for (const path of ['src/pages/rakna-pris','src/pages/referenser']) assert.equal(existsSync(join(root,path)),false);
   const about=read('src/pages/om-oss/index.astro');
-  for (const name of ['Jimmy Gustafsson','Peter Fridland']) assert.ok(about.includes(name));
+  for (const name of ['Jimmy Gustafsson','Peter Fridland']) assert.ok(read('src/config/hallpartner-people.ts').includes(name));
   assert.doesNotMatch(about,/egna montörer|20 års erfarenhet|lång erfarenhet|ansvarar för våra montage|levererar över hela Norden|garanti på arbete|kostnadsfri offert|hallprojekt i\s+\d{4}/i);
-  assert.doesNotMatch(about,/<img(?:\s|>)|<Image(?:\s|>)/i);
+  assert.match(about, /<img(?:\s|>)/i);
+  assert.match(about, /person\.portrait/);
+  const contactPeople = read('src/pages/kontakt/index.astro');
+  assert.match(contactPeople, /om-oss\/#/);
+  assert.match(read('src/config/hallpartner-amp-header.ts'), /label: 'Be om offert', href: '\/offert\/'/);
+  const people = read('src/config/hallpartner-people.ts');
+  for (const id of ['jimmy-gustafsson','peter-fridland']) assert.ok(people.includes(id));
 });

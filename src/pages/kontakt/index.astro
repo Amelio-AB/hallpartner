@@ -2,6 +2,7 @@
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
 import ContactForm from '../../components/ContactForm.astro';
+import { hallpartnerPeople } from '../../config/hallpartner-people';
 
 // Published on the former Hallpartner WordPress footer (2026-11-01 review).
 // Customer verification of ownership, recipient and current phone is still
@@ -63,11 +64,43 @@ const preparations = [
     <nav class="hp-info__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-info__jump-inner">
         <span>På den här sidan</span>
+        <a href="#personer">Peter och Jimmy</a>
         <a href="#kontaktformular">Kontaktformulär</a>
         <a href="#infor-kontakt">Förbered din fråga</a>
         <a href="#nasta-steg">Nästa steg</a>
       </div>
     </nav>
+
+    <section class="hp-info__section hp-info__section--light hp-info__team-contact" id="personer" aria-labelledby="contact-people-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Personlig kontakt</p>
+            <h2 id="contact-people-heading">Prata med Peter eller Jimmy.</h2>
+          </div>
+          <p>Här ser du vilka du kan prata med på Hallpartner. Telefonnumret och mejladressen nedan är företagets gemensamma kontaktvägar.</p>
+        </div>
+        <div class="hp-info__people hp-info__people--contact">
+          {hallpartnerPeople.map((person) => (
+            <article class="hp-info__person hp-info__person--contact" aria-labelledby={person.id + '-kontakt-namn'}>
+              <div class="hp-info__person-photo">
+                <img src={person.portrait} alt={`Porträtt av ${person.name}`} width="886" height="887" loading="lazy" decoding="async" />
+              </div>
+              <div class="hp-info__person-content">
+                <p class="hp-info__person-label">Hallpartner</p>
+                <h3 id={person.id + '-kontakt-namn'}>{person.name}</h3>
+                <p class="hp-info__person-role">{person.role}</p>
+                <div class="hp-info__person-contact-links">
+                  <a href="tel:+46548200490" aria-label={`Ring Hallpartners gemensamma nummer för att nå ${person.firstName}`}>054-820 04 90</a>
+                  <a href="mailto:info@hallpartner.se" aria-label={`Mejla Hallpartner angående ${person.firstName}`}>info@hallpartner.se</a>
+                </div>
+                <a class="hp-info__person-more" href={`/om-oss/#${person.id}`}>Läs mer om {person.firstName} <span aria-hidden="true">→</span></a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
 
     <ContactForm />
 
