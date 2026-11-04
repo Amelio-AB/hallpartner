@@ -1,0 +1,155 @@
+{
+  "reviewDate": "2026-11-04",
+  "sourceSha256": "8a6935f32c3c5dacb2f99dcafce7978f0a7560af092ace35367f7b644fc1dddc",
+  "ampVersion": "1.4.0",
+  "ampSource": "fec9ca01b3c0d4bc9002fa21832a51cf51009749",
+  "scope": "Unchanged source in a temporary isolated Astro fixture; no application route added",
+  "results": [
+    {
+      "width": 320,
+      "initial": {
+        "headers": 1,
+        "fallbackHidden": true,
+        "h1": 1,
+        "noindex": "noindex,nofollow",
+        "overflow": false,
+        "images": true,
+        "forms": 0,
+        "surface": "transparent"
+      },
+      "mobile": true,
+      "opened": true,
+      "closed": true,
+      "anchors": [
+        {
+          "id": "halltyper",
+          "top": 112,
+          "headerBottom": 70.59375
+        },
+        {
+          "id": "att-tanka-pa",
+          "top": 322.90625,
+          "headerBottom": -2
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "initial": {
+        "headers": 1,
+        "fallbackHidden": true,
+        "h1": 1,
+        "noindex": "noindex,nofollow",
+        "overflow": false,
+        "images": true,
+        "forms": 0,
+        "surface": "transparent"
+      },
+      "mobile": true,
+      "opened": true,
+      "closed": true,
+      "anchors": [
+        {
+          "id": "halltyper",
+          "top": 112,
+          "headerBottom": 70.59375
+        },
+        {
+          "id": "att-tanka-pa",
+          "top": 382.109375,
+          "headerBottom": -2
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "initial": {
+        "headers": 1,
+        "fallbackHidden": true,
+        "h1": 1,
+        "noindex": "noindex,nofollow",
+        "overflow": false,
+        "images": true,
+        "forms": 0,
+        "surface": "transparent"
+      },
+      "mobile": true,
+      "opened": true,
+      "closed": true,
+      "anchors": [
+        {
+          "id": "halltyper",
+          "top": 112,
+          "headerBottom": 70.59375
+        },
+        {
+          "id": "att-tanka-pa",
+          "top": 428.484375,
+          "headerBottom": -2
+        }
+      ]
+    },
+    {
+      "width": 1280,
+      "initial": {
+        "headers": 1,
+        "fallbackHidden": true,
+        "h1": 1,
+        "noindex": "noindex,nofollow",
+        "overflow": false,
+        "images": true,
+        "forms": 0,
+        "surface": "transparent"
+      },
+      "mobile": false,
+      "opened": true,
+      "closed": true,
+      "anchors": [
+        {
+          "id": "halltyper",
+          "top": 112,
+          "headerBottom": 92.1875
+        },
+        {
+          "id": "att-tanka-pa",
+          "top": 304.984375,
+          "headerBottom": -2
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "initial": {
+        "headers": 1,
+        "fallbackHidden": true,
+        "h1": 1,
+        "noindex": "noindex,nofollow",
+        "overflow": false,
+        "images": true,
+        "forms": 0,
+        "surface": "transparent"
+      },
+      "mobile": false,
+      "opened": true,
+      "closed": true,
+      "anchors": [
+        {
+          "id": "halltyper",
+          "top": 112,
+          "headerBottom": 92.1875
+        },
+        {
+          "id": "att-tanka-pa",
+          "top": 261.296875,
+          "headerBottom": -2
+        }
+      ]
+    }
+  ],
+  "noJS": {
+    "fallbackVisible": true,
+    "links": 5,
+    "hero": true
+  },
+  "errors": []
+}
