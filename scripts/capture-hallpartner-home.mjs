@@ -225,11 +225,11 @@ try {
         const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
         host.querySelector('input[name="project.use"][value="storage"]')?.click();
         const field=host.querySelector('textarea[name="project.description"]');
-        field.value='Synthetic example enquiry for a warehouse hall.';
-        field.dispatchEvent(new Event('input',{bubbles:true}));
+        const descriptionOptional=field?.required===false&&field?.value==='';
         form.requestSubmit();
         const certainty=host.querySelector('select[name="dimensions.confidence"]');
         if(!certainty)return {onDimensions:false};
+        const blankDescriptionAccepted=!!certainty;
         const optional=certainty.required===false&&certainty.value==='';
         form.requestSubmit();
         const skippedToDesign=!!host.querySelector('select[name="design.insulation"]');
@@ -249,7 +249,7 @@ try {
         const closed=group?.getAttribute('aria-expanded')==='false';
         group?.click();
         return {
-          onDimensions:!!certainty,optional,skippedToDesign,returned,collapsed,expanded,closed,
+          onDimensions:!!certainty,descriptionOptional,blankDescriptionAccepted,optional,skippedToDesign,returned,collapsed,expanded,closed,
           retained:host.querySelector('input[name="dimensions.side_height"]')?.value==='5',
           groupOpen:group?.getAttribute('aria-expanded')==='true'
         };

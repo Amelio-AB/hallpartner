@@ -35,10 +35,9 @@ export const hallpartnerQuoteConfig = {
           ]
         },
         {
-          id: 'project.description', kind: 'textarea', required: true,
-          label: 'Berätta kort om projektet',
-          hint: 'Minst tio tecken. Vad ska få plats, eller vad vill du kunna göra i hallen?',
-          validate: value => value.trim().length < 10 ? 'Beskriv behovet med minst tio tecken.' : undefined
+          id: 'project.description', kind: 'textarea',
+          label: 'Beskriv gärna ditt behov (frivilligt)',
+          hint: 'Frivilligt. Till exempel vad som ska få plats eller vad du vill kunna göra i hallen.'
         },
         {
           id: 'project.hall_interest', group: 'project.extra', kind: 'select',

@@ -20,8 +20,7 @@ test('AMP-001 genuine public contract accepts the compact Hallpartner draft',()=
  assert.equal(hallpartnerQuoteConfig.steps.length,5);
  assert.equal(flow.next(),false,'required first question blocks empty step');
  assert.equal(flow.set('project.use','storage'),true);
- assert.equal(flow.set('project.description','This synthetic enquiry is long enough.'),true);
- assert.equal(flow.next(),true);
+ assert.equal(flow.next(),true,'a selected use is sufficient without a project description');
  assert.equal(flow.set('dimensions.confidence','need_help'),true);
  assert.equal(flow.set('dimensions.width','20'),false,'irrelevant dimension must not be editable');
  assert.equal(flow.next(),true);
@@ -146,9 +145,9 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
 
 
 
-test('optional hall interest is independent of intended use and only four fields are required',()=>{
+test('optional hall interest is independent of intended use and only three fields are required',()=>{
  const required=hallpartnerQuoteConfig.steps.flatMap(step=>step.fields.filter(field=>field.required).map(field=>field.id));
- assert.deepEqual(required,['project.use','project.description','contact.name','contact.email']);
+ assert.deepEqual(required,['project.use','contact.name','contact.email']);
  assert.deepEqual(hallpartnerQuoteAttachmentsReviewConfig.steps.flatMap(step=>step.fields.filter(field=>field.required).map(field=>field.id)),required,'file review has same four required answers');
  const project=hallpartnerQuoteConfig.steps[0];
  const preference=project.fields.find(field=>field.id==='project.hall_interest');
@@ -165,6 +164,32 @@ test('optional hall interest is independent of intended use and only four fields
  assert.equal(flow.snapshot().active['project.hall_interest'],'talthall','hall interest is retained');
  assert.equal(flow.next(),true);
  flow.dispose();
+});
+
+test('stage one requires a selected use but never forces a project description',()=>{
+ for(const [config,options] of [
+   [hallpartnerQuoteConfig,{}],
+   [hallpartnerQuoteAttachmentsReviewConfig,{uploads:{
+     async upload(){throw new Error('review-only files');},
+     async submit(){return {status:'failed'};}
+   }}]
+ ]) {
+   const desc=config.steps[0].fields.find(field=>field.id==='project.description');
+   assert.ok(desc && desc.kind==='textarea' && !desc.required && !desc.validate);
+   const choice=config.steps[0].fields.find(field=>field.id==='project.use');
+   assert.ok(choice?.required,'one card must be selected');
+   const flow=createQuoteFlow(config,async()=>({status:'failed'}),options);
+   assert.equal(flow.next(),false,'no choice cannot pass stage one');
+   flow.set('project.description','Hej');
+   assert.equal(flow.next(),false,'a short comment cannot replace a card choice');
+   flow.set('project.use','unknown');
+   assert.equal(flow.next(),true,'short voluntary text is accepted');
+   assert.equal(flow.back(),true);
+   flow.set('project.description','');
+   assert.equal(flow.next(),true,'empty voluntary text is accepted');
+   assert.equal(flow.snapshot().active['project.description'],'');
+   flow.dispose();
+ }
 });
 
 test('optional measurement certainty can be skipped without blocking the full six-step review',()=>{
@@ -214,10 +239,11 @@ test('phone as contact preference requires a phone number, email does not',()=>{
 });
 
 
-test('V2 specification separates approved four-field minimum from remaining working proposals',()=>{
+test('V2 specification documents the updated three-field minimum without requiring free text',()=>{
  const spec=read('docs/content/HALLPARTNER_OFFERTGUIDE_V2.md');
- for(const token of ['Kundbekräftat','Arbetsförslag','fyra obligatoriska','dimensions.confidence','documents.attachments','fem frågesteg']) {
+ for(const token of ['Kundbekräftat','Arbetsförslag','tre obligatoriska','project.description','dimensions.confidence','documents.attachments','fem frågesteg']) {
    assert.ok(spec.includes(token),token);
  }
  assert.doesNotMatch(spec,/fem obligatoriska fält/i);
+ assert.match(spec,/\`project.description\`[^\n]*\*\*Frivillig\*\*/);
 });

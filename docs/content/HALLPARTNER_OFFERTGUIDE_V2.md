@@ -9,11 +9,13 @@
 
 **Godkänt:** Den visuella Hallpartner-anpassningen på PR #22 med Inter, befintliga gröna färgroller, nedtonade valkort, responsiv tvåkolumnslayout för fält och kompakt sexstegsindikator. Godkännandet gäller designriktningen i commit `de93fe309ec45ef7059a92eab3c6b40ce2e1342d`; färgnyanser, toning och transparens är justerbara vid framtida finputsning och ska inte blockera det fortsatta arbetet.
 
-**Separat innehållsbeslut 2026-11-04:** Projektägaren har uttryckligen godkänt **exakt fyra obligatoriska fält**: användningsområde, kort projektbeskrivning, namn och e-post. `dimensions.confidence` är frivilligt. Övriga frågeformuleringar, faktiska produkter, verklig filuppladdning, servermottagning, aktivering och merge/publicering är inte därmed slutgodkända. PR #22 förblir Draft tills återstående grindar har passerats.
+**Senaste innehållsbeslut 2026-11-04 (ersätter tidigare fyrfältsbeslut):** Projektägaren har godkänt **exakt tre obligatoriska fält**: användningsområde, namn och e-post. Beskrivningsrutan `project.description` är frivillig utan minsta teckenantal, och `dimensions.confidence` förblir frivilligt. Övriga frågeformuleringar, faktiska produkter, verklig filuppladdning, servermottagning, aktivering och merge/publicering är inte därmed slutgodkända. PR #22 förblir Draft tills återstående grindar har passerats.
 
-## Beslut 2026-11-04 – exakt fyra obligatoriska svar
+## Beslut 2026-11-04 – tre obligatoriska svar (senaste beslut)
 
-**Godkänt av projektägaren för den befintliga offertguidens arbetsversion:** `project.use`, `project.description`, `contact.name` och `contact.email` är obligatoriska. `dimensions.confidence` är frivilligt; kunden ska kunna gå vidare från steg 2 utan att välja ett måttalternativ. Bredd och längd får fortfarande anges utan måttsäkerhetsval, medan valet `need_help` fortsatt döljer måttfält. Den opt-in-filgranskade varianten har samma fyra obligatoriska frågor och frivilliga bilagor.
+**Godkänt av projektägaren för den befintliga offertguidens arbetsversion:** Endast `project.use`, `contact.name` och `contact.email` är obligatoriska. På steg 1 måste besökaren **välja ett användningsområde**, men får lämna fritextrutan `project.description` tom eller ange en kort kommentar utan tioteckenskrav. Fritexten ligger kvar på steg 1 tills vidare; vi flyttar inte runt frågor nu. `dimensions.confidence` fortsätter vara frivilligt, och `need_help` döljer fortfarande måtten. Opt-in-varianten med en lokal filväljare har också bara dessa tre obligatoriska frågor.
+
+**Tidigare beslut:** Fyrfältsmodellen från samma dag har uttryckligen ersatts när projektägaren tog bort beskrivningen som krav. Inget annat steg eller affärsinnehåll ändras i detta beslut.
 
 **Inte godkänt här:** Att slå ihop PR, publicera på preview eller aktivera inskickning, SMTP, V2-backend eller filöverföring. Den visuella designen är redan godkänd och lämnas orörd.
 
@@ -47,9 +49,9 @@ kraven på kontakt/grundbeskrivning eller påstått att sortimentet är kundgodk
 | Lägre nytta i första kontakten | Takvinkel, paneltjocklek, RAL, grundtyp, portmått per enhet, omfattande installationer | Håll borta från första obligatoriska flödet; använd senare vid behov |
 | Kräver separat beslut/infrastruktur | Inkommande filer, mottagaradress, personuppgiftsrutiner och aktiverad inskickning | Fortsatt avstängt. UI-piloten ger inte ett produktionsgodkännande |
 
-**Fastställt för arbetsversionen:** Exakt fyra obligatoriska fält:
-`project.use`, `project.description`, `contact.name` och `contact.email`.
-Måttsäkerhet, mått, ort, tidsplan och telefon är frivilliga. Frågor om verkliga produkter och tekniska utföranden är fortfarande arbetsförslag; beslutet gäller inte aktivering.
+**Fastställt för arbetsversionen:** Exakt tre obligatoriska fält:
+`project.use`, `contact.name` och `contact.email`.
+Projektbeskrivning, måttsäkerhet, mått, ort, tidsplan och telefon är frivilliga. Frågor om verkliga produkter och tekniska utföranden är fortfarande arbetsförslag; beslutet gäller inte aktivering.
 
 **Nästa interna steg:** Granska formulärets existerande frågor och svarsalternativ tillsammans med projektägaren. Inga nya kundfrågeunderlag ska skapas eller skickas. Historiska verksamhetsenkäter är inte en aktiv källa eller blockerare för denna arbetsomgång.
 
@@ -60,7 +62,7 @@ Måttsäkerhet, mått, ort, tidsplan och telefon är frivilliga. Frågor om verk
 | Datanyckel | Fråga / svar | Krav, villkor, UI | Beslutsstatus |
 | --- | --- | --- | --- |
 | `project.use` | **Vad ska du främst använda hallen till?** Lager eller förvaring (`storage`), maskiner eller verkstad (`machinery`), ridverksamhet (`riding`), annat behov (`other`), behöver rådgivning (`unknown`). | **Obligatorisk**; valkort; informationsknapp. Utgår från användning, inte en sammanblandad produktfamilj. | Arbetsförslag; valen finns även i äldre fyrastegsguide. |
-| `project.description` | **Berätta kort om projektet**. Fri text om användningen och vad som ska få plats. | **Obligatorisk**, minst 10 tecken i frontend; kort hjälptext. | Arbetsförslag; tidigare V1-validator kräver 10 tecken men V2-servermottagning är ännu inte byggd. |
+| `project.description` | **Beskriv gärna ditt behov (frivilligt)**. Fri text om användningen och vad som ska få plats. | **Frivillig**; inget minsta teckenantal, kan lämnas tom. Ligger kvar synlig på steg 1. | Uttryckligt godkänt av projektägaren 2026-11-04; V2-servermottagning är ännu inte byggd. |
 
 | `project.hall_interest` | **Vilken av våra hallkategorier tänker du på?** Lagerhall, maskinhall, plåthall, tälthall, ridhus, isolerad hall eller vill ha hjälp att välja. | **Frivillig**, dold under **Har du en viss halltyp i åtanke?** i steg 1. Valet anger vad kunden tittat på – inte en teknisk specifikation. | Arbetsförslag baserat på webbplatsens sex kategorisidor; **inte kundbekräftad produktmodell**. |
 
@@ -122,7 +124,7 @@ Måttsäkerhet, mått, ort, tidsplan och telefon är frivilliga. Frågor om verk
 | `contact.role` | **Vilken roll har du i projektet?** Beställare/slutkund, entreprenör, konsult/projektör, annan roll. | Frivillig, samma grupp. | Arbetsförslag; ingen automatisk gren för separat slutkund i denna version. |
 | `contact.preference` | **Hur vill du helst bli kontaktad?** E-post, telefon, spelar ingen roll. | Frivillig, samma grupp. **Telefon** kräver ifyllt och giltigt `contact.phone`; annars visas fel innan kontrollsteget. | Arbetsförslag. Kräver affärsbeslut före publik inskickning. |
 
-**Obligatoriska fält godkända för arbetsversionen:** `project.use`, `project.description`, `contact.name`, `contact.email`. **Alla övriga är frivilliga.** Detta är ett godkännande av formulärlogikens krav, inte kundgodkännande av produkter eller tillåtelse att aktivera inskickning.
+**Obligatoriska fält godkända för arbetsversionen:** `project.use`, `contact.name`, `contact.email`. **Alla övriga är frivilliga**, inklusive projektbeskrivningen. Detta är ett godkännande av formulärlogikens krav, inte kundgodkännande av produkter eller tillåtelse att aktivera inskickning.
 
 ### Steg 6 – Granska och skicka
 
@@ -168,10 +170,10 @@ Det tidigare sidospåret med nya frågor till Hallpartner är **avslutat**. Vi a
 
 - Godkänna fem frågesteg + AMP-001:s automatiska slutgranskning.
 - Godkänna huvudfrågorna: användning, kort projektbeskrivning, ungefärliga mått och byggplats, relevanta önskemål, projektläge, kontakt.
-- [x] **Minsta obligatoriska nivå godkänd 2026-11-04:** användning, projektbeskrivning, namn och e-post. Måttsäkerhet, ort, mått, tidsplan och telefon är frivilliga.
+- [x] **Uppdaterad obligatorisk nivå godkänd 2026-11-04:** användning, namn och e-post. Projektbeskrivning, måttsäkerhet, ort, mått, tidsplan och telefon är frivilliga.
 - Behålla möjligheten att ange intresse för en hallkategori **frivilligt**, utan att låsa konstruktionsutförandet.
 
-Den godkända fyrfältsregeln genomförs och verifieras på befintlig Draft-PR #22. Övriga frågor och serveraktivering bedöms separat. Inget ytterligare designgodkännande behövs för den redan accepterade visuella riktningen.
+Den godkända trefältsregeln genomförs och verifieras på befintlig Draft-PR #22. Övriga frågor och serveraktivering bedöms separat. Inget ytterligare designgodkännande behövs för den redan accepterade visuella riktningen.
 
 **Separat, senare beslut:** Om den färdiga och testade, fortfarande inaktiva guiden får mergas till `main` och därmed potentiellt publiceras på utvecklingspreviewn. Detta ger **inte** tillstånd att aktivera faktisk inskickning, filuppladdning, e-postmottagning eller kundens WordPress.
 
@@ -219,5 +221,5 @@ ska först få visuell ägargranskning och innebär **inte** kundgodkända offer
 - [ ] Testa både vanlig sexstegsguide utan filfält och opt-in sexstegsguide med lokalt filfält.
 - [ ] Kontrollera att **inga** nätverksanrop för inskickning eller filuppladdning sker.
 - [x] Projektägaren godkände formulärets visuella design 2026-11-04 (layout, typografi och färgriktning).
-- [x] Projektägaren har godkänt exakt fyra obligatoriska frågor för arbetsversionen.
+- [x] Projektägaren har godkänt exakt tre obligatoriska frågor för arbetsversionen; beskrivningen är frivillig.
 - [ ] Övrig frågecopy, val och eventuella produktpåståenden granskas innan någon merge; inga obekräftade produktlöften får införas.
