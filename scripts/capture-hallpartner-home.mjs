@@ -220,5 +220,13 @@ try {
   if(browser.exitCode===null&&browser.signalCode===null){
     browser.kill('SIGTERM');await Promise.race([new Promise(done=>browser.once('exit',done)),sleep(2000)]);
   }
-  if(browser.exitCode!==null||browser.signalCode!==null)await rm(profile,{recursive:true,force:true});
+  if(browser.exitCode!==null||browser.signalCode!==null){
+    // Chrome cache subprocesses can finish writing just after the parent exits.
+    // Only this generated OS-temp profile is eligible for cleanup, never project files.
+    try{await rm(profile,{recursive:true,force:true,maxRetries:10,retryDelay:250});}
+    catch(error){
+      console.warn('Temporary Chrome profile cleanup incomplete: '+error.code);
+      await writeFile(join(output,prefix+'-cleanup-warning.txt'),'Generated temporary profile retained: '+profile+'\n'+String(error));
+    }
+  }
 }
