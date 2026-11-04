@@ -11,7 +11,7 @@ assert(deploy.jobs.validate.uses === './.github/workflows/preview-validation.yml
 assert(validation.on.pull_request.branches.includes('main') && validation.on.pull_request.branches.includes('integration/hallpartner-main-20261103') && validation.on.workflow_call, 'Missing stacked PR/reusable validation');
 const prRuns = validation.jobs.validate.steps.map(s => s.run ?? '').join('\n');
 assert(!/remote\.mjs publish|workflow enable|workflow run/.test(prRuns), 'PR validation must never publish/activate');
-for (const cmd of ['npm run check','npm run lint','node --test tests/*.test.mjs','npm audit --audit-level=high','composer audit --locked --no-dev','npm run build','scripts/preview/payload.mjs prepare','scripts/preview/browser.mjs','remote.mjs check-target']) assert(prRuns.includes(cmd), 'Missing validation command: ' + cmd);
+for (const cmd of ['npm run check','npm run lint','node --test tests/*.test.mjs','npm audit --audit-level=high','composer audit --locked --no-dev','npm run build','scripts/preview/payload.mjs prepare','scripts/preview/payload.mjs rights','scripts/preview/browser.mjs','remote.mjs check-target']) assert(prRuns.includes(cmd), 'Missing validation command: ' + cmd);
 for (const job of [validation.jobs.validate,deploy.jobs.publish]) {
   assert(job.steps.some(s=>s.uses==='actions/setup-node@v4' && s.with['node-version']==='24'), 'Node 24 required');
   assert(job.steps.find(s=>s.uses==='actions/checkout@v6')?.with['persist-credentials']===false, 'Persisted Git credentials forbidden');

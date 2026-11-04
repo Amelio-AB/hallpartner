@@ -5,9 +5,33 @@ import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot } from '../scripts/preview/remote.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, remoteInventory, deliveryStatus, assertDelivery } from '../scripts/preview/remote.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
+test('pre-upload delivery gate rejects rewritten bytes, errors and incomplete evidence without normalizing content', async () => {
+  const body = Buffer.from('<link rel="canonical" href="https://hallpartner.se/">');
+  const fileFingerprints = [{ path: 'index.html', sha256: sha256(body) }, { path: 'cgi-bin/.htaccess', sha256: 'a'.repeat(64) }];
+  const requested = [];
+  const deliveryChecks = await deliveryStatus(fileFingerprints, async url => {
+    requested.push(url); return { status: 200, body };
+  });
+  assert.equal(requested.length, 1); // Never request protected server configuration via HTTP.
+  assertDelivery({ fileFingerprints, deliveryChecks });
+  for (const response of [{ status: 200, body: Buffer.from(body.toString().replace('https://hallpartner.se', PREVIEW)) }, { status: 404, body }]) {
+    const checks = await deliveryStatus(fileFingerprints, async () => response);
+    assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: checks }));
+  }
+  assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: [] }));
+  assert.throws(() => assertDelivery({ fileFingerprints: [], deliveryChecks: [] }));
+});
+test('read-only inventory records protected paths without permitting command injection or traversal', () => {
+  assert.deepEqual(remoteInventory('./\n./cgi-bin/\n./cgi-bin/.htaccess\n./index.html\n'), {
+    remoteFiles: ['cgi-bin/.htaccess', 'index.html'], remoteDirectories: ['cgi-bin'],
+  });
+  for (const path of ['../outside', './a/../outside', '/absolute', '-o', 'a;put x', 'a b', 'a"b', 'a\\b', './a//b', './x\n./x']) {
+    assert.throws(() => remoteInventory(path));
+  }
+});
 test('public allowlist excludes internal pages and server code', () => {
   assert.equal(PAGES.length,13);
   for (const path of ['../index.html','/index.html','a//x','.env','api/lead.php','server/key.json','prototype/index.html','x.php5','x.PHTML','x.log','x.map','docs/a.html','x;put-secret']) assert.throws(()=>safePath(path));

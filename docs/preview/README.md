@@ -1,99 +1,160 @@
-# Automatisk Inleed-preview – implementation och aktivering
+# Automatisk Inleed-preview – förberedelser och aktivering
 
-Status 2026-11-03: **redo för kodgranskning, inte godkänd för aktivering/publicering**. Arbetet är stackat på PR #12, bas `ff1ea21d36a0a636fa1bd0e35a514758f99bc7a1`. Varken PR #12 eller denna PR har mergats av detta arbete. Workflow-ID **316932905 förblir disabled_manually**.
+Status 2026-11-04: PR #12, #13 och #14 är mergade. Godkänd bas är
+`0c27b4a8e20efd3b8dca2498e5c2005df68f423b`. Bildgodkännanden är nu
+registrerade. **NO-GO för aktivering och publicering:** serverns gamla filer,
+kontots isolering, HTTP-domänomskrivning och äldre ops-flöden återstår. Workflow **316932905 är
+fortfarande disabled_manually**. Denna PR ändrar inte webbplatsens bilder,
+design, innehåll, komponenter eller beroendeversioner.
 
-## Miljöer
+## Miljöer och gränser
 
 | Miljö | Roll |
 | --- | --- |
-| main | Ordinarie utvecklingsbas efter godkänd merge av PR #12. Nuvarande gamla main får inte publiceras. |
-| https://hallpartner-se.preview2.inleed.com | Utvecklings- och kundgranskningspreview. Uppdateras automatiskt först efter aktivering och passerade kontroller. |
-| https://hallpartner.se (även www) | Kundens befintliga/framtida produktion. Inget publiceringsmål i detta workflow. |
-| Kundens framtida Inleed-konto | Separat, skapas av Andreas för slutlig lansering. En godkänd dist levereras separat; inga automatiska credentials/triggers till detta konto. |
+| main | Ordinarie utvecklingsbas. Endast senaste godkända main kan publiceras. |
+| https://hallpartner-se.preview2.inleed.com | Offentligt åtkomlig utvecklings- och kundgranskningspreview, med noindex. |
+| https://hallpartner.se och www | Befintlig produktion. Aldrig ett publiceringsmål i processen. |
+| Kundens framtida Inleed-konto | Separat slutleverans av en godkänd dist-version; ingår inte i automatiken. |
 
-## Workflows och exakta byggresultat
+Inga secrets, DNS-, SMTP-, konto- eller produktionsinställningar ändras.
+De åtta bevarade lokala råfilerna från PR #14 ligger kvar utanför arbetsytan.
 
-`.github/workflows/deploy-production.yml` ersätter samma gamla fil och workflow-ID. Nytt namn: **Hallpartner Inleed development preview**. Triggers: push på main och workflow_dispatch. Publiceringsskriptet avvisar andra ref/event/repository även vid manuell körning. Ingen PR-trigger finns i publiceringsworkflowet.
+## Bildbesked och exakt kandidat
 
-`preview-validation.yml` är både PR-validering (main eller integrationsgrenen) och återanvändbar workflow_call. Den installerar exakt lockfil med Node 24, tillfällig GIT_ASKPASS och befintlig AMELIO_PLATFORM_READ_TOKEN, utan beständiga token-URL:er. AMP-manifest/version/käll-SHA verifieras. Token finns bara i installationssteget. Build-/teststeg får ingen FTP-hemlighet. Inga secrets ändras av denna implementation.
+[Andreas besked och dess gränser](customer-image-approval-20261104.md) skiljer
+leverantörsbilder enligt kundens bekräftelse från den tillfälliga AI-Heron,
+ordlogotypen och H-faviconen. Även de tre senare är uttryckligen godkända av
+Andreas för offentlig preview och normal bildoptimering. Inget externt
+licensavtal eller okänd rättighetsinnehavare har uppfunnits.
 
-Valideringen kör check, lint, alla Node-/PHP-regressioner, npm-audit på den oförändrade high-gränsen, Composer-audit, build, HTML/URL-kontrakt, statisk payload-validering och Chrome mot **själva uppladdningspaketet** (13 sidor × 5 bredder, AMP-006 och galleri). Befintliga CI-, AMP- och fulla draft-workflows utökas med integrationsgrenen som PR-bas; deras tester behålls. Två befintliga vänteloopar får ShellCheck-kompatibel syntax med oförändrat antal försök. Chrome-starten får 30 sekunders tidsgräns, kontroll av tidig processdöd och sparad stderr-diagnostik; sid- och interaktionskraven är oförändrade. Full draft-validation testar även interna Header-prototyper som inte publiceras.
+[Den aktuella inventeringen](candidate-images-20261104.json) omfattar 14
+källor och 51 bildfiler i ett statiskt paket med 74 filer. Godkännandena i
+`config/preview-image-rights.json` binder verklig källa och utdata via SHA-256,
+exakt previeworigin, Andreas och beslutsdokumentet. Linux-artifactens bytes
+är kontrollerade; faviconens Windows-CRLF avviker från Git/Linux-LF och
+redovisas separat. Bildfilerna och optimeringen är oförändrade.
 
-Actionlint 1.7.12 laddas från officiell release med hårdkodad SHA-256. ShellCheck granskar shellskripten. Återanvändbara JS/YAML-parsers kommer från befintliga låsta Astro-beroenden; inga nya npm-paket eller plattformsversioner införs.
+Rättighetskontrollen körs nu även i PR-valideringen. Ändrade bildbytes eller
+återkallade godkännanden stoppar nästa kandidat. Noindex är inte ett
+tillstånd. Beskedet är kundens bekräftelse, inte en oberoende juridisk
+verifiering. Leverantörsbilder får inte presenteras som egna genomförda
+Hallpartner-projekt. En referenssida väntar på verkliga projektfotografier.
 
-Payload/evidence artifacts innehåller exakt checkout-SHA och run_attempt. Publiceringsjobbet hämtar endast artifacts från **samma workflow-körning**, verifierar filernas SHA-256 och bygger inte om. Gamla PR #5-artifacts används aldrig.
+## Validering och publiceringspaket
 
-## Statiskt innehåll och bildrättigheter
+`.github/workflows/deploy-production.yml` heter **Hallpartner Inleed
+development preview** och använder fortfarande workflow-ID 316932905.
+Endast main-push och manuell körning tillåts; publiceringsskriptet avvisar
+andra refs, events, repository och inaktuell main. Ingen PR publicerar.
 
-`scripts/preview/payload.mjs` går igenom faktisk dist och kopierar endast 13 explicit tillåtna publika HTML-filer och deras använda CSS/JS/bild/font-resurser. Inline-modulimporter, srcset och CSS-url följs. Saknade resurser, oväntade externa ursprung, aktivt formulär, inbäddningar eller ändrade robots-meta stoppar processen. Befintlig Google Fonts-CSS är det enda tillåtna externa resursursprunget tillsammans med fonts.gstatic.com.
+`preview-validation.yml` kör med Node 24: riktig npm ci med låst AMP 1.4.0
+på `fec9ca01b3c0d4bc9002fa21832a51cf51009749`, källkontroll, check, lint,
+alla Node-/PHP-regressioner, npm-audit på oförändrad high-gräns,
+Composer-audit, build, HTML-/URL-kontrakt, payload-/bildrättighetskontroller
+samt Chrome på själva paketet (13 sidor × 5 bredder, AMP-006 och galleri).
+Workflow-YAML, shell och kontrakt granskas också. Den privata AMP-tokenen
+används endast i installationen, utan beständiga token-URL:er.
 
-Appens HTML ändras inte. Paketets robots.txt sätts till `User-agent: * / Disallow: /` (två rader); den gamla dist-filens Allow-regel publiceras inte. Sitemap behövs inte i blockerad utvecklingspreview och följer inte med. Noindex,nofollow och inaktiv kontakt/offert verifieras före och efter överföring via byteidentisk HTTP-verifiering.
+Payloaden består av 13 tillåtna publika HTML-filer och deras använda
+CSS/JS/bild/font-resurser. PHP/API/SMTP, privata filer, interna prototyper,
+projekt, roadmap, vision, workshop och Markdown utesluts. Alla sidor måste
+behålla noindex,nofollow; kontakt och offert måste förbli inaktiva.
+Payloadens robots.txt blockerar all crawling. Ingen sitemap publiceras.
+Google Fonts är befintligt tillåtet externt resursursprung.
 
-PHP/API/SMTP, privata konfigurationer, .git/.env, sourcemaps, Markdown, loggar, backupfiler och `prototype/`, `projekt/`, `roadmap/`, `vision/`, `workshop/`, `quote-engine-test/` är uteslutna. Avsiktligt behållna källfiler och lokal dist raderas inte.
+Publiceringsjobbet hämtar bara exakt SHA-märkt payload och manifest från
+samma körning, verifierar filhasharna och bygger inte om. Gamla PR #5-
+artifacts används inte av det nya workflowet.
 
-Basens kandidat ger **74 filer, 51 bildfiler från 14 källbilder**. [Kandidatinventeringen](candidate-images-20261103.json) redovisar källor/hashar/sidor. [Nuvarande publika previewbilder](current-public-images-20261103.json) redovisar samtliga 18 bildfiler från den läsande FTPS-rootinventeringen; alla gav HTTP 200 över preview-HTTPS. Sex var refererade från de 13 publika sidornas HTML/lokala CSS. Även äldre, oannonserade bild-URL:er är alltså publikt åtkomliga. Status och SHA-256 finns per fil. Inbyggda SVG-ikoner ingår i granskad komponentkod.
+## Färsk serverinventering och kvarvarande spärrar
 
-**Alla bildrättigheter är fortsatt overifierade.** Noindex ger inget bildtillstånd. `config/preview-image-rights.json` har därför inga godkännanden; faktisk publicering blockeras. Rättighetsinnehavarens tillstånd måste omfatta offentlig preview och eventuella bearbetningar. Säkra alternativ är kundägda fotografier med dokumenterat tillstånd eller korrekt licensierat ersättningsmaterial, infört i separat godkänd innehållsändring. Inget motiv byts i denna PR.
+Se [servergranskning och filvis plan](server-review-20261104.md),
+[FTPS-målbevis](target-proof-20261104.json),
+[HTTPS-kontroller](https-inventory-20261104.json) och
+[workflowinventering](workflow-inventory-20261104.json).
 
-Ett framtida godkännande registreras per bildvariant med `source`, `sourceSha256`, `outputSha256`, `scope` (= exakt previeworigin), `approvedBy` och `evidence`. Använd den senaste **Linux-CI-rapportens** image-rights.json; versionsbyten kan ändra bildbytes. Evidence är ett ärende-/avtalsreferens-ID, inte ett privat avtal eller personuppgifter. Ändrade bilder eller återkallade godkännanden blockerar nästa publicering.
+Den läsande kontrollen hittar fortfarande 63 fjärrfiler och samma 12
+policyförbjudna sökvägar. Fyra gamla interna sidor och sju README-filer
+svarar HTTP 200. `cgi-bin/.htaccess` svarar 403 och får inte behandlas som
+en vanlig webbplatsfil. Ingen serverfil har ändrats eller raderats.
 
-## FTPS-målet
+FTPS-markören matchar previewn och är frånvarande med HTTP 404 på båda
+produktionsvärdarna. Detta är ett färskt observerat målbevis, inte bevis för
+fullständig vhost-/kontoisolering. `config/preview-release.json` behåller
+`targetBindingSha256: null`, `targetEvidence: null` och tom retentionlista.
+Inleed-kontots domänkoppling, custom root, eventuell delning med andra
+webbplatser och .htaccess-funktion behöver granskas av kontoägaren/Inleed.
+En ren, separat previewrot föredras om den kan ordnas utan påverkan på
+andra tjänster; ingen sådan serverändring görs i denna PR.
 
-Den gamla kommentaren `/domains/hallpartner.se/public_html/` får inte användas som bevis för en säker destination. Den beskriver FTP-kontots custom root, inte vilken publik domän som faktiskt visar filerna. Ingen sådan serverabsolut path används i den nya processen.
+Den utökade check-target-kontrollen läser kataloglista och samtliga
+filhashar via FTPS. Endast sökväg, storlek och hash sparas i artifacts.
+Råfiler/serverkonfiguration stannar i runnerns temporära katalog och
+städas lokalt; detta är inte en återställningsbackup. Okända/osäkra
+sökvägar och ändrad fil-/kataloglista under läsningen stoppar kontrollen.
+Listkontrollen är inte ett atomiskt serverlås och upptäcker inte varje
+samtidig ändring av bytes i en oförändrad sökväg.
 
-Befintlig ofarlig kontrollfil: `hp-preview-probe-20261103-6de487a.txt`, exakt innehåll `HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a`. En läsande HTTPS-kontroll 2026-11-03 gav 200/exakt innehåll på previewn och 404 på både hallpartner.se och www. Historisk ops-verifiering: [41585184270](https://github.com/Amelio-AB/hallpartner/actions/runs/41585184270). Ny PR-validering läser även samma fil via **aktuella FTPS-credentials** och listar root med `find .`, utan uppladdning. Resultatet sparas som target-proof.json.
+## Ny blockerare: HTTP-domänomskrivning
 
-**Färskt läsande målbevis 2026-11-03 21:46 UTC:** [Actions 41724120102](https://github.com/Amelio-AB/hallpartner/actions/runs/41724120102) passerade FTPS/HTTPS-kontrollen på commit `3236954ecfc77d12989269fc423cf587c923cef4`. [Sparad rootinventering](target-proof-20261103.json) innehåller 63 filer, varav 12 bryter mot publiceringspolicyn. `/projekt/`, `/roadmap/`, `/vision/` och `/workshop/` svarar fortfarande HTTP 200 (med noindex). Dessutom finns sju README.md-filer och `cgi-bin/.htaccess`. Det är en faktisk aktiveringsblockerare, inte enbart en framtida risk. `.htaccess` kan vara serverns skyddskonfiguration och får inte raderas blint; Inleed behöver granska isolering/hantering i en separat godkänd åtgärd. Inga filer har ändrats på servern. Kontobindningen är verifierad som observation men inte godkänd i releasekonfigurationen.
+44 filer matchar mellan FTPS och HTTPS, men 18 HTML/XML-svar gör det inte.
+Alla 18 skillnader förklaras exakt av ersättning av produktionsorigin med
+previeworigin. Mekanismen måste verifieras med Inleed. Publiceringen får nu
+en förkontroll som stoppar sådana avvikelser före första skrivningen. Den
+strikta efterkontrollen förblir oförändrad; inga bytes normaliseras.
+Se [diagnosen](http-ftps-comparison-20261104.json) och serverplanen.
 
-Varje framtida publicering upprepar kontrollen med befintliga FTP_HOST, FTP_USERNAME, FTP_PASSWORD. Explicit FTPS på port 21, TLS >=1.2, skyddad kontroll-/datakanal samt certifikat- och värdnamnskontroll är obligatoriska. Timeout, TLS-fel, oväntad redirect, saknad markör eller soft-404 på produktionsdomänen stoppar allt före första skrivning. Inga fallback-anrop med avstängd TLS görs. Lösenordet skickas via LFTP_PASSWORD, inte kommandorad, URL eller skriptfil; råa lftp-fel skrivs inte till logg.
+## Överföringens spärrar och begränsningar
 
-`config/preview-release.json` måste efter separat målgranskning få `targetBindingSha256` från aktuell target-proof och `targetEvidence`. Bindningen är SHA-256 av normaliserad endpoint + kontonamn + `./`; inga credential-värden lagras i repo. Byte av konto/host/root kräver ny granskning. Kontot ska vara separat begränsat till previewroot; använd aldrig framtida kundkontots credentials här. Om tillförlitlig isolering inte kan visas förblir publiceringen blockerad.
+Explicit FTPS på port 21 kräver TLS >=1.2, skyddade kontroll-/datakanaler,
+certifikat- och värdnamnskontroll. Ingen okrypterad fallback tillåts.
+Lösenord ligger i LFTP_PASSWORD, inte argument, URL eller skriptfil.
+Kontobindningen är hash av normaliserad endpoint, konto och root `./`.
 
-## Konkurrens, gamla filer och fel
+De två gamla ops-workflows **405335800** (publicering) och **405334470**
+(markörskrivning) är fortfarande aktiva och måste inaktiveras före ny
+publicering. Båda triggas av push på ops/inleed-preview-cutover-20261103;
+den grenen och flödenas status lämnas orörda här. Nya publiceringsskriptet
+kräver disabled_manually för båda. Delad concurrency hindrar överlappande
+körningar men ersätter inte avstängning.
 
-Concurrency-grupp `hallpartner-inleed-preview-20261103`, cancel-in-progress=false, är samma som de gamla ops-flödena. Ingen ny körning avbryter en påbörjad uppladdning. Inaktuella väntande körningar får falla bort; senaste main kontrolleras via GitHub omedelbart före första skrivning samt efter verifiering. Ett nytt main under pågående överföring gör att äldre körningen inte rapporteras lyckad; den nya körningen får sedan publicera. FTPS är inte en atomisk releaseväxling: ett nätavbrott kan lämna en delvis uppdaterad preview. Assetfiler skickas före HTML och startsidan sist; ingen automatisk destruktiv rollback sker.
+Inget --delete, rm, rekursiv serverrensning eller serverflytt ingår.
+Otillåtna gamla sidor och dotfiler kan inte kringgås med retainedFiles.
+Andra äldre statiska filer behöver separat hashbunden retentiongranskning;
+nya bildgodkännanden gör inte alla gamla fjärrbilder automatiskt godkända.
 
-De två gamla ops-workflows, ID **405335800 och 405334470**, måste stängas av efter separat godkännande före första nya publiceringen. Publish-spärren kontrollerar att båda är disabled_manually. Deras gren lämnas orörd i denna PR. Delad concurrency minskar överlapp men kan inte förhindra att ett gammalt flöde senare skriver över en ny release; därför krävs avstängningen.
+FTPS är inte en atomisk releaseväxling. Assets överförs före HTML och
+startsidan sist. Ett avbrott kan lämna en delvis uppdaterad preview;
+ingen automatisk destruktiv rollback sker. Senaste main kontrolleras
+omedelbart före skrivning och efter verifiering.
 
-**Inget --delete, rm, serverflytt eller serverradering används.** Nytt innehåll får skriva över samma statiska målfil. Hela fjärrlistningen inventeras: okända gamla filer blockerar. PHP, interna HTML-sidor och dotfiler får inte godkännas för retention; de kräver separat plan och godkänd städning utanför denna PR. Det är otillräckligt att bara utelämna dem ur uppladdningen. Tillåtna, äldre statiska filer kan granskas individuellt i retainedFiles med path, sha256, approvedBy och evidence (inklusive användningsrätt för bilder). Bytes läses och kontrolleras före publicering.
+Efter uppladdning måste varje paketfil matcha över HTTPS. Två stabila
+förkontroller av /, /robots.txt och /stalhallar/ på båda produktionsvärdarna
+måste vara oförändrade efteråt; markörerna ska förbli frånvarande där.
+Först därefter skrivs hashbunden inventory och commit-/run-markörer.
+Både lyckad workflowstatus och hp-preview-deploy.json måste verifieras.
 
-Efter första verifierade release sparas `hp-preview-inventory.json` med publik filsökväg/hash. Dess hash finns i deploymarkören. Tidigare verifierade hashade resurser kan därefter ligga kvar automatiskt; gamla bilder kräver fortsatt explicit bildgodkännande. Gammal borttagen HTML godkänns aldrig automatiskt. Detta låter framtida CSS/JS-ändringar publiceras utan serverradering, men skapar växande lagring som behöver separat, godkänd periodisk städning.
+## Rekommenderad ordning – ingen åtgärd utförs automatiskt
 
-## Efterkontroll och spårbarhet
+1. Granska denna Draft-PR och slutlig HEAD/CI. Låt workflow 316932905 vara avstängt.
+2. Kontoägaren/Inleed utreder HTTP-omskrivningen och verifierar domänisolering och väljer ren previewrot eller exakt godkänd hantering av gamla filer. Serverkonfiguration får inte ändras utan separat godkännande.
+3. Före varje eventuell filändring: ta full relevant privat backup, verifiera hash, kontrollera färsk lista och få Andreas separata godkännande av den filvisa planen. Ingen radering är godkänd av denna PR.
+4. Registrera därefter verifierad målbindning och eventuell tillåten retention i en granskad commit. Kör alla tester och färsk läsande serverkontroll igen. Okända filer ska fortsatt blockera.
+5. Inaktivera de två äldre ops-flödena efter godkännande; kontrollera att inga gamla körningar pågår/köar. Granska main-skydd och preview-behörigheter: main är nu oskyddad och preview-environment saknar reviewers. Automatik kan annars inte i sig garantera att alla main-ändringar är mänskligt godkända.
+6. Mergea endast godkända förberedelser till main medan publiceringen fortfarande är avstängd. Ingen merge utförs av denna uppgift. Notera exakt slutlig main-SHA; PR-HEAD är inte automatiskt publicerings-SHA.
+7. Redovisa alla passerade kontroller, isolerat mål och kvarvarande risker. **Stanna för Andreas separata slutliga GO för exakt main-SHA, aktivering och första manuella uppladdning.**
+8. Efter detta GO: aktivera 316932905 och kör workflow_dispatch på senaste main. Kontrollera slutstatus, SHA-markör, alla resurser, mobil/desktop, noindex, inaktiva formulär och oförändrad produktion.
+9. Först efter verifierad första publicering lämnas automatiken aktiverad för framtida godkända merges till main. Inga kundkonton eller andra domäner läggs till i denna process.
 
-Varje HTML/CSS/JS/bild/font i manifestet hämtas från preview över HTTPS och måste matcha exakt SHA-256. Därmed kontrolleras både startsida/undersidor, noindex och avstängda formulär mot det testade innehållet. Befintlig extern font-CSS kontrolleras också.
+## Incidentstopp och kvarvarande validering
 
-Före överföring krävs två stabila HTTP-svar från /, /robots.txt och /stalhallar/ på båda produktionsvärdarna. Deras fingeravtryck måste vara oförändrade efteråt. Markörerna måste fortsatt ge 404/410 där. Om WordPress blir dynamisk/instabil eller ändras samtidigt blockeras körningen för utredning; frånvaro av nätkontakt räknas aldrig som bevis för säkerhet.
+Inaktivering av 316932905 stoppar nya körningar men avbryter inte en
+pågående överföring; den måste stoppas explicit vid incident. Gamla ops
+ska förbli avstängda. Skrivbehörighet, verklig FTPS-överföring,
+avbrottsåterhämtning och efter-publiceringskontroll är ännu inte testade.
+Ingen lokal/PR-kontroll ersätter ett godkänt första publiceringstest.
 
-Först efter godkänd resurskontroll skrivs `hp-preview-deploy-<40-teckens-commit>.json` och `hp-preview-deploy.json`. Markörerna innehåller commit, runId, manifest-/inventory-hash och verifieringstid, inga secrets. De läses tillbaka och produktionen kontrolleras igen. **Workflowets slutstatus och markören måste båda verifieras**; en markör ensam bevisar inte att sista kontrollen lyckades.
-
-Senast publicerade kandidat läses på https://hallpartner-se.preview2.inleed.com/hp-preview-deploy.json och jämförs med en lyckad Actions-körning för runId samt senaste avsedda main. Den markören finns inte förrän första godkända nya publiceringen. Inga testmarkörer har laddats upp av detta arbete.
-
-## Första aktivering – strikt ordning
-
-1. Granska denna stackade Draft-PR och dess CI, utan publicering.
-2. Låt workflow 316932905 förbli manuellt avstängt.
-3. Invänta Andreas godkännande.
-4. Mergea PR #12 till main (separat godkänd åtgärd).
-5. Byt denna PR:s bas till uppdaterad main; kontrollera diff och kör CI igen.
-6. Mergea preview-PR:n medan publiceringsworkflowet fortfarande är avstängt.
-7. Kontrollera färsk FTPS/HTTPS-målbevisning, kontoisolering, bildtillstånd och alla gamla fjärrfiler. Registrera godkännanden via granskad commit. Stäng av gamla ops-flöden efter godkännande. Kontrollera main/preview-behörigheter; befintlig preview-environment saknar manuella reviewers och main var oskyddad vid inventeringen.
-8. **Efter separat uttryckligt godkännande av Andreas:** aktivera workflow 316932905 och kör workflow_dispatch från senaste main. Använd aldrig gamla main eller annan gren.
-9. Kontrollera slutstatus, commitmarkör, preview visuellt på mobil/desktop, resurser/formulär/noindex och oförändrad hallpartner.se.
-10. Framtida godkända main-uppdateringar kör samma fulla verifiering och publicerar endast om samtliga säkerhetsvillkor fortfarande gäller. Ändrad bild, okända gamla filer, nytt konto eller brutna tester stoppar publiceringen.
-
-Inga merge-, aktiverings-, uppladdnings-, DNS- eller SMTP-åtgärder ingår i denna implementation.
-
-## Incidentstopp
-
-Stäng av workflow 316932905 i GitHub Actions för att stoppa nya körningar. Det avbryter inte en pågående körning: avbryt den explicit om omedelbart stopp behövs, och anta att previewn kan vara delvis uppdaterad. Låt gamla ops-flöden förbli avstängda. Vid fel konto/credentialincident: stoppa åtkomst hos Inleed och utred privat; skriv inga hemligheter i ärenden/loggar. Gör ingen automatisk deletion eller uppladdning till alternativ root.
-
-Återställning sker genom en separat godkänd revert på main och ny verifierad körning, eller en uttryckligen godkänd manuell återställningsplan. Manuell körning av en gammal SHA tillåts inte av latest-main-spärren.
-
-## Vad som återstår att verifiera
-
-Lokala/PR-kontroller kan verifiera struktur, skript, byggning, manifest, säkerhetsspärrar, browserbeteende och läsande målbevis. **Skrivbehörighet, verklig FTPS-överföring, avbrottsåterhämtning och efter-deployment-kontroll på Inleed kan inte verifieras förrän steg 8 uttryckligen godkänts.** Inga mocktester ersätter det.
-
-Bildrättigheter och initial fjärrstädning/retention är verkliga aktiveringsblockerare. Kvarvarande minimatch-advisory i utvecklingsberoenden från PR #12 redovisas fortsatt i npm-audit (9 måttliga markeringar, inga höga/kritiska); CI-gränsen ändras inte.
-
-[Workflowinventering med triggers och tillstånd](workflow-inventory-20261103.json). Den omfattar även historiska/isolera­de grenar; att en workflow syns i GitHub betyder inte att filen finns på aktuell main. Inventeringen är en daterad ögonblicksbild.
+Återställning görs genom separat godkänd revert på main och ny verifierad
+körning eller en uttryckligen godkänd manuell plan. Gamla SHA får inte
+kringgå latest-main-spärren. Npm-auditens kvarvarande måttliga
+utvecklingsberoendefynd redovisas i CI; ingen gräns sänks här.

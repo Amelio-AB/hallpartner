@@ -113,6 +113,7 @@ jobs:
         run: |-
           node scripts/preview/payload.mjs prepare "$COMMIT"
           node scripts/preview/payload.mjs verify
+          node scripts/preview/payload.mjs rights
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
       - name: Install FTPS client for read-only PR target proof

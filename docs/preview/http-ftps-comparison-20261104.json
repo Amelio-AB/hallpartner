@@ -1,0 +1,459 @@
+{
+  "checkedAt": "2026-11-04T07:27:18.831Z",
+  "matched": 44,
+  "differences": [
+    {
+      "path": "index.html",
+      "httpsSha": "1c5889a78e794c5d40c35f5d7b47e66b1143603bd4f8d2f589e084af1525bbf6",
+      "httpsBytes": 13717,
+      "ftps": {
+        "path": "index.html",
+        "sha256": "ef29450df82d3e233973f8e228ce7d5d1311af0a6ccaba0406e4cb912dd27c59",
+        "bytes": 13677
+      },
+      "now": {
+        "status": 200,
+        "sha256": "1c5889a78e794c5d40c35f5d7b47e66b1143603bd4f8d2f589e084af1525bbf6",
+        "bytes": 13717
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "kontakt/index.html",
+      "httpsSha": "dda8ea9ceb391116b41d0a6311fb54158be60ed364b0177d4c49c1ea68675201",
+      "httpsBytes": 17449,
+      "ftps": {
+        "path": "kontakt/index.html",
+        "sha256": "a14a9ef60b062eefdbd2c4ca4b7dfc20287febb75d3c1144bd8ac71e8c763519",
+        "bytes": 17409
+      },
+      "now": {
+        "status": 200,
+        "sha256": "dda8ea9ceb391116b41d0a6311fb54158be60ed364b0177d4c49c1ea68675201",
+        "bytes": 17449
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "offert/index.html",
+      "httpsSha": "a156015a6d2cdd873728c98f93524817fa3e53e9ae5ca1fd68417f53626c4f31",
+      "httpsBytes": 11129,
+      "ftps": {
+        "path": "offert/index.html",
+        "sha256": "c087a097e9ecd7f6ba4886e2ae133bd2c4509a92fc2141c22e8b98eac772f28c",
+        "bytes": 11089
+      },
+      "now": {
+        "status": 200,
+        "sha256": "a156015a6d2cdd873728c98f93524817fa3e53e9ae5ca1fd68417f53626c4f31",
+        "bytes": 11129
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "om-oss/index.html",
+      "httpsSha": "733fcc0c5f4c6a6f45eabd5a1e885eefba48391a2796c69c18727f6cee08b350",
+      "httpsBytes": 11844,
+      "ftps": {
+        "path": "om-oss/index.html",
+        "sha256": "efec92b7e34c9b9b2f667d9144a0c2f88576af6815f815a1c7271166a85b1a5c",
+        "bytes": 11804
+      },
+      "now": {
+        "status": 200,
+        "sha256": "733fcc0c5f4c6a6f45eabd5a1e885eefba48391a2796c69c18727f6cee08b350",
+        "bytes": 11844
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "projekt/index.html",
+      "httpsSha": "968fe1af3a3fb283fd63520144ccea4c0664b888752c791257b552acea573003",
+      "httpsBytes": 21114,
+      "ftps": {
+        "path": "projekt/index.html",
+        "sha256": "350ba10482671ff1d4fc50c715c6f91835f3fe80edc6eadd6216f3361f8f9300",
+        "bytes": 21074
+      },
+      "now": {
+        "status": 200,
+        "sha256": "968fe1af3a3fb283fd63520144ccea4c0664b888752c791257b552acea573003",
+        "bytes": 21114
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 12
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "roadmap/index.html",
+      "httpsSha": "c5b77d533867e5bb4f17612c983de6debfb8264afe8bf5a7455b8d546eedf677",
+      "httpsBytes": 12350,
+      "ftps": {
+        "path": "roadmap/index.html",
+        "sha256": "178f038adf55d310343865349615a8766aa98397c66c97f4fbfcc7536d9c685a",
+        "bytes": 12310
+      },
+      "now": {
+        "status": 200,
+        "sha256": "c5b77d533867e5bb4f17612c983de6debfb8264afe8bf5a7455b8d546eedf677",
+        "bytes": 12350
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 12
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "sa-gar-det-till/index.html",
+      "httpsSha": "ef1833a82ed9ec58042268e0497e8248512b3993929a37fccbb540dae3004e27",
+      "httpsBytes": 12127,
+      "ftps": {
+        "path": "sa-gar-det-till/index.html",
+        "sha256": "25cf76d45a2909f46c2c61dc45da8910683b4b231c5f626908528694cc88a2cf",
+        "bytes": 12087
+      },
+      "now": {
+        "status": 200,
+        "sha256": "ef1833a82ed9ec58042268e0497e8248512b3993929a37fccbb540dae3004e27",
+        "bytes": 12127
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "sitemap-0.xml",
+      "httpsSha": "9aabb46d49a0e628caa2578c4ce06535dfb9aa36d0afd604ecff50d97e2a24bd",
+      "httpsBytes": 1217,
+      "ftps": {
+        "path": "sitemap-0.xml",
+        "sha256": "0a8173316cb8c79fb3c161f87c24e0ecd10acc2a6ce30dd398fa05aefa46bf2e",
+        "bytes": 997
+      },
+      "now": {
+        "status": 200,
+        "sha256": "9aabb46d49a0e628caa2578c4ce06535dfb9aa36d0afd604ecff50d97e2a24bd",
+        "bytes": 1217
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 0
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 11,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "sitemap-index.xml",
+      "httpsSha": "977cc32254654837c9b8665b48b91746256398a0a4617f75ae5ac15588e2a87f",
+      "httpsBytes": 205,
+      "ftps": {
+        "path": "sitemap-index.xml",
+        "sha256": "cf567677bcd31504b08eaece0160b69b83abf6f44304ac0ad47bdf9f907f1623",
+        "bytes": 185
+      },
+      "now": {
+        "status": 200,
+        "sha256": "977cc32254654837c9b8665b48b91746256398a0a4617f75ae5ac15588e2a87f",
+        "bytes": 205
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 0
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 1,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/index.html",
+      "httpsSha": "e54a5d5697ad7fba7ec7f4940a4c83617040351ec4f1db2a829edd0bd69d4c18",
+      "httpsBytes": 15876,
+      "ftps": {
+        "path": "stalhallar/index.html",
+        "sha256": "22dbe426ba7336e7310f6299ee27deb34b4d1184caabe10d75158600ba871022",
+        "bytes": 15836
+      },
+      "now": {
+        "status": 200,
+        "sha256": "e54a5d5697ad7fba7ec7f4940a4c83617040351ec4f1db2a829edd0bd69d4c18",
+        "bytes": 15876
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/isolerad-hall/index.html",
+      "httpsSha": "50545f2e6808e7643370849b620a35486287ff3133138e139220b24236524191",
+      "httpsBytes": 16263,
+      "ftps": {
+        "path": "stalhallar/isolerad-hall/index.html",
+        "sha256": "bab7e9a12eb9348f221ee61217c6e84986ba057c5426b7e4456d34692846f114",
+        "bytes": 16223
+      },
+      "now": {
+        "status": 200,
+        "sha256": "50545f2e6808e7643370849b620a35486287ff3133138e139220b24236524191",
+        "bytes": 16263
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/lagerhall/index.html",
+      "httpsSha": "e047f00ea1bbd425a0a8f93d98b14fad64558224ee96fb35a3e2eed336313918",
+      "httpsBytes": 15246,
+      "ftps": {
+        "path": "stalhallar/lagerhall/index.html",
+        "sha256": "b3ec68c812e6f2dd8420122f15e107ea180532bd580041d9f5601d66eef83608",
+        "bytes": 15206
+      },
+      "now": {
+        "status": 200,
+        "sha256": "e047f00ea1bbd425a0a8f93d98b14fad64558224ee96fb35a3e2eed336313918",
+        "bytes": 15246
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/maskinhall/index.html",
+      "httpsSha": "5455d7a2ba41ef5cc38ff765cacd5f68855ddb76a4a597efcaebcba954c98d2f",
+      "httpsBytes": 15745,
+      "ftps": {
+        "path": "stalhallar/maskinhall/index.html",
+        "sha256": "1e728ed3f29c0d5fd0f2869b58949d0395371667e130c48236f265a94d352779",
+        "bytes": 15705
+      },
+      "now": {
+        "status": 200,
+        "sha256": "5455d7a2ba41ef5cc38ff765cacd5f68855ddb76a4a597efcaebcba954c98d2f",
+        "bytes": 15745
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 2
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/plathall/index.html",
+      "httpsSha": "d75a4f8b66702b1549187a4a957bf8d42b9f47cb1e65da740d8e1b82c435d6d3",
+      "httpsBytes": 15989,
+      "ftps": {
+        "path": "stalhallar/plathall/index.html",
+        "sha256": "9553bf07947fb59d74fa1b98e493eed85b03260635a3dc027aad51e91bad3675",
+        "bytes": 15949
+      },
+      "now": {
+        "status": 200,
+        "sha256": "d75a4f8b66702b1549187a4a957bf8d42b9f47cb1e65da740d8e1b82c435d6d3",
+        "bytes": 15989
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/ridhus/index.html",
+      "httpsSha": "567ab041e23a7ba27a54b2bca4b3f727c73ac93347148c45516b8d59e0fc1e2e",
+      "httpsBytes": 16981,
+      "ftps": {
+        "path": "stalhallar/ridhus/index.html",
+        "sha256": "f2598fe782c9992d1848385cec10bb4ad05aa47e832931850ce126c002aab4bd",
+        "bytes": 16941
+      },
+      "now": {
+        "status": 200,
+        "sha256": "567ab041e23a7ba27a54b2bca4b3f727c73ac93347148c45516b8d59e0fc1e2e",
+        "bytes": 16981
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "stalhallar/talthall/index.html",
+      "httpsSha": "905b82a8fb3bb5098719343574649910fb38494f455c9724f4e9b7a319534b18",
+      "httpsBytes": 16560,
+      "ftps": {
+        "path": "stalhallar/talthall/index.html",
+        "sha256": "c9dce13b575f1b85a8e6560cc9d6a3d75445e03a7e39f619989278f10cbf4001",
+        "bytes": 16520
+      },
+      "now": {
+        "status": 200,
+        "sha256": "905b82a8fb3bb5098719343574649910fb38494f455c9724f4e9b7a319534b18",
+        "bytes": 16560
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 3
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "vision/index.html",
+      "httpsSha": "ddc3f4b6c0ecc7771cc513ae0d4dd10ee4692216c5ec0d26f893283b0784762f",
+      "httpsBytes": 8913,
+      "ftps": {
+        "path": "vision/index.html",
+        "sha256": "ac57cb68573bd9d90355e4264e304aff387d948d7568b973d9632ddb115617cc",
+        "bytes": 8873
+      },
+      "now": {
+        "status": 200,
+        "sha256": "ddc3f4b6c0ecc7771cc513ae0d4dd10ee4692216c5ec0d26f893283b0784762f",
+        "bytes": 8913
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 10
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    },
+    {
+      "path": "workshop/index.html",
+      "httpsSha": "7fbf2242e010ff87e2350f12e9eb4a2fc9a15074a012b325365ae13c2d71b7f4",
+      "httpsBytes": 47143,
+      "ftps": {
+        "path": "workshop/index.html",
+        "sha256": "a216d98e9376d285052dd21fdc13d4efa939bb2074f527e99d23c68a828b6fc6",
+        "bytes": 47103
+      },
+      "now": {
+        "status": 200,
+        "sha256": "7fbf2242e010ff87e2350f12e9eb4a2fc9a15074a012b325365ae13c2d71b7f4",
+        "bytes": 47143
+      },
+      "httpLineEndings": {
+        "crlf": 0,
+        "lf": 8
+      },
+      "originSubstitutionCheck": {
+        "from": "https://hallpartner-se.preview2.inleed.com",
+        "to": "https://hallpartner.se",
+        "occurrences": 2,
+        "matchesFtpsSha256": true
+      }
+    }
+  ],
+  "evidenceRun": "https://github.com/Amelio-AB/hallpartner/actions/runs/41791114322",
+  "testedCommit": "4d39a09b3671c96051ad5a58e007b557bdf7adc0",
+  "interpretation": "All 18 HTTP differences are exactly reproduced by origin replacement. HTTP/proxy rewriting is inferred; actual Inleed configuration is unverified. No publication verification is normalized or bypassed."
+}
