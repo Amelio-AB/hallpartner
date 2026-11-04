@@ -176,17 +176,85 @@ try {
       const form=document.querySelector('#hp-contact-form');
       return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
     }),width+': inactive contact');
-    if(expectedPath==='/offert/')allTrue(await run(async function(){
-      const host=document.querySelector('#hp-offert-guide'),form=host?.querySelector('form.qf-panel');
-      if(!host||!form)return {mounted:false};
-      host.querySelector('input[name="project.use"][value="storage"]')?.click();
-      const fill=(selector,value)=>{const field=host.querySelector(selector);if(field){field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));}};
-      fill('textarea[name="project.description"]','Synthetic example enquiry for a warehouse hall.');form.requestSubmit();
-      fill('select[name="dimensions.confidence"]','need_help');form.requestSubmit();form.requestSubmit();
-      fill('input[name="contact.name"]','Test Person');fill('input[name="contact.email"]','test@example.invalid');form.requestSubmit();await Promise.resolve();
-      const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
-      return {mounted:!!host.querySelector('.qf'),inactive:host.dataset.enabled==='false',review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),disabled:send?.disabled===true,notice:!!document.querySelector('.hp-leads-note--review')};
-    }),width+': quote review must never send');
+    if(expectedPath==='/offert/') {
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide');
+        const trigger=host?.querySelector('button.qf-help-trigger');
+        trigger?.focus();trigger?.click();
+        const dialog=host?.querySelector('dialog.qf-help-dialog[open]');
+        return {
+          mounted:!!host?.querySelector('.qf'),
+          disabled:host?.dataset.enabled==='false',
+          helpOpen:!!dialog?.open,
+          helpTitle:!!dialog?.querySelector('h3')?.textContent,
+          helpText:!!dialog?.querySelector('p')?.textContent
+        };
+      }),width+': AMP-001 info popup');
+      if(width===390||width===1280)await capture(prefix+'-'+width+'-amp001-help.png');
+      await key('Escape');await sleep(80);
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide');
+        return {
+          escaped:!host?.querySelector('dialog.qf-help-dialog[open]'),
+          focusReturned:document.activeElement===host?.querySelector('button.qf-help-trigger')
+        };
+      }),width+': AMP-001 Escape and focus');
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
+        host.querySelector('input[name="project.use"][value="storage"]')?.click();
+        const field=host.querySelector('textarea[name="project.description"]');
+        field.value='Synthetic example enquiry for a warehouse hall.';
+        field.dispatchEvent(new Event('input',{bubbles:true}));
+        form.requestSubmit();
+        const certainty=host.querySelector('select[name="dimensions.confidence"]');
+        certainty.value='approximate';
+        certainty.dispatchEvent(new Event('input',{bubbles:true}));
+        const group=host.querySelector('button.qf-group-toggle');
+        const collapsed=group?.getAttribute('aria-expanded')==='false';
+        group?.click();
+        const expanded=group?.getAttribute('aria-expanded')==='true';
+        const height=host.querySelector('input[name="dimensions.side_height"]');
+        if(height){height.value='5';height.dispatchEvent(new Event('input',{bubbles:true}));}
+        group?.click();
+        const closed=group?.getAttribute('aria-expanded')==='false';
+        group?.click();
+        return {
+          onDimensions:!!host.querySelector('select[name="dimensions.confidence"]'),
+          collapsed,expanded,closed,
+          retained:host.querySelector('input[name="dimensions.side_height"]')?.value==='5',
+          groupOpen:group?.getAttribute('aria-expanded')==='true'
+        };
+      }),width+': AMP-001 collapsible fields');
+      if(width===390||width===1280){
+        const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
+        await capture(prefix+'-'+width+'-amp001-groups.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
+      allTrue(await run(async function(){
+        const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
+        const fill=(selector,value)=>{
+          const field=host.querySelector(selector);
+          if(field){field.value=value;field.dispatchEvent(new Event('input',{bubbles:true}));}
+        };
+        fill('select[name="dimensions.confidence"]','need_help');
+        const irrelevant=!host.querySelector('input[name="dimensions.side_height"]');
+        form.requestSubmit();
+        fill('input[name="site.city"]','Karlstad');
+        form.requestSubmit();
+        fill('input[name="contact.name"]','Test Person');
+        fill('input[name="contact.email"]','test@example.invalid');
+        form.requestSubmit();
+        await Promise.resolve();
+        const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
+        return {
+          inactive:host.dataset.enabled==='false',
+          irrelevant,
+          review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),
+          disabled:send?.disabled===true,
+          notice:!!document.querySelector('.hp-leads-note--review')
+        };
+      }),width+': quote review must never send');
+    }
+
     await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur()');
     const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
     const filename=prefix+'-'+width+'-full.png';
