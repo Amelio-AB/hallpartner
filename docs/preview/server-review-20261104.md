@@ -1,5 +1,11 @@
 # Servergranskning och filvis plan – 2026-11-04
 
+> Historisk observation från morgonens förberedelse. Inleed-omskrivningen är
+> bekräftad och befintlig rot är beslutad; inga nya stagingmiljöer ska skapas.
+> Allmänt merge-/aktiveringsklartecken finns nu. Aktuella regler finns i
+> [publiceringsprocessen](README.md). Filhasharna nedan behöver färsk kontroll;
+> råbackup och exakt raderingsbeslut får inte antas vara klara.
+
 **NO-GO för publicering. Ingen serverändring eller radering har utförts.**
 
 ## Färsk observation
