@@ -2,36 +2,33 @@ import type { QuoteConfig } from '@amelio/web-platform/quote-flow';
 import { hallpartnerQuoteConfig } from './hallpartner-quote.ts';
 
 /**
- * Review-only V2 configuration. Never connect this to /api/lead.php:
- * the installed PHP receiver validates contractVersion 1 and has no upload service.
- * Files stay in browser memory; the review adapter deliberately rejects uploads.
+ * Opt-in V2 file UI on the fourth question step; AMP-001 still adds only one
+ * automatic review step. Never submit V2 attachments to /api/lead.php (V1).
+ * Browser-local review only. A real upload receiver does not exist.
  */
 export const hallpartnerQuoteAttachmentsReviewConfig: QuoteConfig = {
   ...hallpartnerQuoteConfig,
   id: 'hallpartner-offert-files-review-v2',
-  steps: [
-    ...hallpartnerQuoteConfig.steps,
-    {
-      id: 'documents',
-      title: 'Ritningar och underlag',
-      description: 'Frivilligt granskningssteg. Filerna skickas inte i denna arbetsversion.',
-      fields: [
-        {
-          id: 'documents.attachments',
-          kind: 'files',
-          label: 'Bilder, ritningar eller andra dokument',
-          help: {
-            title: 'Vilka filer kan vara användbara?',
-            text: 'En skiss, en ritning eller bilder från byggplatsen kan ge Hallpartner bättre förutsättningar. Det är frivilligt och ingen fil laddas upp i granskningsläget.'
-          },
-          files: {
-            maxFiles: 10,
-            maxFileBytes: 15 * 1024 * 1024,
-            maxTotalBytes: 50 * 1024 * 1024,
-            allowedFormats: ['jpg', 'png', 'webp', 'pdf', 'docx']
-          }
+  steps: hallpartnerQuoteConfig.steps.map(step => step.id !== 'planning' ? step : {
+    ...step,
+    fields: [
+      ...step.fields,
+      {
+        id: 'documents.attachments',
+        kind: 'files' as const,
+        label: 'Välj bilder eller dokument (endast lokal test)',
+        hint: 'Inga filer lämnar webbläsaren i denna arbetsversion.',
+        help: {
+          title: 'Frivilliga filer – bara för granskning',
+          text: 'Skisser, ritningar eller platsbilder kan vara användbara längre fram. Ingen fil skickas eller lagras på Hallpartners server i detta granskningsläge.'
+        },
+        files: {
+          maxFiles: 10,
+          maxFileBytes: 15 * 1024 * 1024,
+          maxTotalBytes: 50 * 1024 * 1024,
+          allowedFormats: ['jpg', 'png', 'webp', 'pdf', 'docx'] as const
         }
-      ]
-    }
-  ]
+      }
+    ]
+  })
 };
