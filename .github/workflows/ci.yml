@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, integration/hallpartner-main-20261103]
   push:
     branches: [main]
 

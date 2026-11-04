@@ -1,0 +1,205 @@
+{
+  "checkedAt": "2026-11-03T21:48:14.429Z",
+  "scope": "Every image file listed in the read-only FTPS root inventory, verified over public HTTPS; page references from the 13 public-page HTML documents and their local stylesheets. Empty pages means no reference found in those pages, not private access.",
+  "evidenceRun": "https://github.com/Amelio-AB/hallpartner/actions/runs/41724120102",
+  "images": [
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/lagerhall.GPeeZOoY_Z1MjiPC.webp",
+      "pages": [
+        "/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 40812,
+      "sha256": "b1d23510cb847a172f62f7ee41c38edaef09ebb56527d98c1b4f30ec49f87bed",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/lagerhall.GPeeZOoY_Z1O7orc.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 12558,
+      "sha256": "7b1cb51b756e23746b0a733abd3c36ba5a826f2f4064e04eb86c00c535568b3a",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/lagerhall.GPeeZOoY_ZWaSV7.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 36150,
+      "sha256": "e1bf0a2c5bef3dd27f60689439b08a7e59613fb176b6ffa04cffac08a853621b",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/lagerhall.GPeeZOoY_ZsTBw1.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 25714,
+      "sha256": "79c2add9399f1391fd6ad2746726d7fa5101b022104d6aa7e9111da07289edda",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/maskinhall.CY7PyZ0H_22cXX5.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 20866,
+      "sha256": "dcbcc14a44a6a246cf16645e1ddc25b03db717e98fb76802d8a021231cb220e9",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/maskinhall.CY7PyZ0H_2pyQtm.webp",
+      "pages": [
+        "/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 94370,
+      "sha256": "1d6afc21c7ae7dd4cc57e75e30c2cfa7e8c6af75668974cfeb90cdca6bede1b7",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/maskinhall.CY7PyZ0H_Z26r2bW.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 79838,
+      "sha256": "aba28caa4d050abc5286dc967954729ec8a11c8c6ec653e1d6d5601567bfaa08",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/maskinhall.CY7PyZ0H_Z2lkW6i.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 52472,
+      "sha256": "642b36e3e397208ea97b1c1767291e1db13f2e66a6456dc5dbac94ac397a55c0",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_1dTXzQ.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 77856,
+      "sha256": "1e5b86751580bab76eae51a1e2b0c54274b25e138274ea9aa0c10fb4fc6ad3e7",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_Z5UAgg.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 114268,
+      "sha256": "983927ac9d1dbea7d0b75e5fe22dc7d91cde6e53365c02ccd0003422a2a03583",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_Zpu0oi.webp",
+      "pages": [
+        "/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 131882,
+      "sha256": "878acc13b42c00661f10065d4be5259e714dd74d24bde781d1b321574d2a6888",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_gKg3S.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 34300,
+      "sha256": "e5b0205a2b617cbdf2c84bedb3a3d72c0978567f6a4ff6b53ab0ab00f56bb35c",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/_astro/talthall.Bs7k6_C3_jwvGm.webp",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 58618,
+      "sha256": "a6848724568215d6d84072f67fada633d8f32e396a8814bcc333cbd377ebca9f",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/favicon.ico",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 655,
+      "sha256": "09d2ac08d8cca9b6e1f90221f345a8c4dd0371c64a0dc52b6f96fc589b1e3d67",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/favicon.svg",
+      "pages": [
+        "/",
+        "/404.html",
+        "/kontakt/",
+        "/offert/",
+        "/om-oss/",
+        "/sa-gar-det-till/",
+        "/stalhallar/",
+        "/stalhallar/lagerhall/",
+        "/stalhallar/maskinhall/",
+        "/stalhallar/plathall/",
+        "/stalhallar/isolerad-hall/",
+        "/stalhallar/ridhus/",
+        "/stalhallar/talthall/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 247,
+      "sha256": "a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/images/hallpartner-hero-temporary.webp",
+      "pages": [
+        "/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 161370,
+      "sha256": "ab48603ac5bca0c19b1e6baa2db1cf547e5961b9f0f40b618c001f3e2c532537",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/images/hallpartner-logo.png",
+      "pages": [],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 37524,
+      "sha256": "b8ee0c27a701c6426b4a1945b64accf1e23b0c8718699b3406d55fdf7c6995f6",
+      "rights": "unverified"
+    },
+    {
+      "url": "https://hallpartner-se.preview2.inleed.com/images/logo_text_white.png",
+      "pages": [
+        "/",
+        "/404.html",
+        "/kontakt/",
+        "/offert/",
+        "/om-oss/",
+        "/sa-gar-det-till/",
+        "/stalhallar/",
+        "/stalhallar/lagerhall/",
+        "/stalhallar/maskinhall/",
+        "/stalhallar/plathall/",
+        "/stalhallar/isolerad-hall/",
+        "/stalhallar/ridhus/",
+        "/stalhallar/talthall/"
+      ],
+      "discovery": "Read-only FTPS root inventory",
+      "status": 200,
+      "bytes": 368395,
+      "sha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "rights": "unverified"
+    }
+  ]
+}

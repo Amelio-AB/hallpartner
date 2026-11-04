@@ -21,18 +21,31 @@ const port = 9300 + process.pid % 300;
 const profile = join(tmpdir(), 'hp-cdp-' + process.pid);
 const browser = spawn(executable, [
   '--headless', '--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage',
-  '--disable-background-networking', '--remote-allow-origins=*',
+  '--disable-background-networking', '--no-first-run', '--no-default-browser-check',
+  '--remote-allow-origins=*',
   '--remote-debugging-port=' + port, '--user-data-dir=' + profile,
   'about:blank',
-], { stdio: 'ignore' });
+], { stdio: ['ignore', 'ignore', 'pipe'] });
+let startupError;
+let chromeDiagnostics = '';
+browser.on('error', error => { startupError = error; });
+browser.stderr.on('data', chunk => {
+  // Bound diagnostics while retaining the most recent startup failure.
+  chromeDiagnostics = (chromeDiagnostics + chunk.toString()).slice(-65536);
+});
 
 await mkdir(output, { recursive: true });
 let socket;
 try {
   let target;
-  for (let attempt = 0; attempt < 80; attempt++) {
+  const startupDeadline = Date.now() + 30000;
+  while (Date.now() < startupDeadline) {
+    if (startupError) throw startupError;
+    if (browser.exitCode !== null || browser.signalCode !== null) {
+      throw new Error('Chrome exited before exposing its debugging target: ' + (browser.exitCode ?? browser.signalCode));
+    }
     try {
-      const response = await fetch('http://127.0.0.1:' + port + '/json');
+      const response = await fetch('http://127.0.0.1:' + port + '/json', { signal: AbortSignal.timeout(1500) });
       if (response.ok) {
         const pages = await response.json();
         target = pages.find((page) => page.type === 'page' && page.webSocketDebuggerUrl);
@@ -301,6 +314,7 @@ try {
   console.error('Visual QA failed:', error);
   process.exitCode = 1;
 } finally {
+  await writeFile(join(output, prefix + '-chrome-stderr.log'), chromeDiagnostics);
   if (socket && socket.readyState === WebSocket.OPEN) socket.close();
   browser.kill('SIGTERM');
 }

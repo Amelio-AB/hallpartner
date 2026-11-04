@@ -1,0 +1,210 @@
+{
+  "baseline": "ff1ea21d36a0a636fa1bd0e35a514758f99bc7a1",
+  "status": "BLOCKED: no rights approvals",
+  "images": [
+    {
+      "source": "src/assets/images/legacy/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.jpg",
+      "sourceSha256": "8d893d11bf65ded52b3cd68a7ade9c54b0983d63eb155e2817e98aaaae2cc5f2",
+      "outputs": [
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_1LAKTh.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_1vj5kt.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_2t59EA.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_Z1WLSGT.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_Z1hMNsY.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_ZTyOjx.webp",
+        "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_ZYubIl.webp"
+      ],
+      "pages": [
+        "index.html",
+        "stalhallar/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/Lagerbyggbad-med-Sandwixh-1536x1055.jpg",
+      "sourceSha256": "55a17521750b8d314bd650cf83753c70996713076ca1b44ecfdbf3264e8926d8",
+      "outputs": [
+        "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_1PsvHz.webp",
+        "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_Z2EE7c.webp",
+        "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_a4Pt9.webp",
+        "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_jOXC2.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/Lagertalt-1536x1023.jpg",
+      "sourceSha256": "16b59211658a16b1c788606374d9a024ce47f896cfa59e8d82bd9bd359f1607a",
+      "outputs": [
+        "_astro/Lagertalt-1536x1023.CkreVAor_16S04z.webp",
+        "_astro/Lagertalt-1536x1023.CkreVAor_1Heqhh.webp",
+        "_astro/Lagertalt-1536x1023.CkreVAor_Z1OOkpa.webp",
+        "_astro/Lagertalt-1536x1023.CkreVAor_Z218NqG.webp",
+        "_astro/Lagertalt-1536x1023.CkreVAor_ZYApLX.webp",
+        "_astro/Lagertalt-1536x1023.CkreVAor_ZjWJHV.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/Stalstomme-1-1536x1152.jpg",
+      "sourceSha256": "9607be58d9e11c8826f9bf25b357c70bd8c6c984b8d7a1b4230cd79a71866107",
+      "outputs": [
+        "_astro/Stalstomme-1-1536x1152.DhCAjshP_29bnkP.webp",
+        "_astro/Stalstomme-1-1536x1152.DhCAjshP_OyWBW.webp",
+        "_astro/Stalstomme-1-1536x1152.DhCAjshP_Z1oUKMG.webp",
+        "_astro/Stalstomme-1-1536x1152.DhCAjshP_ZLPJaV.webp",
+        "_astro/Stalstomme-1-1536x1152.DhCAjshP_Zk3gu1.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/bygga-maskinhall.jpeg",
+      "sourceSha256": "c8d0e2d4e15a32bbdfe72cda0f8d13b8c172a6584627788ce07c6c0240597443",
+      "outputs": [
+        "_astro/bygga-maskinhall.C13Fx3b3_18xSRr.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_1ep8rj.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_2c01JF.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_AcBr1.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_EpOaW.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_ZNxzNw.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_ZRKMxs.webp",
+        "_astro/bygga-maskinhall.C13Fx3b3_zNfQL.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html",
+        "stalhallar/maskinhall/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/lagerhall-med-enkelplat.jpg",
+      "sourceSha256": "c86a73d2e50996093f8ea26a24926466cc196c80a089085fc8b575775285a1f8",
+      "outputs": [
+        "_astro/lagerhall-med-enkelplat.CezV5BfM_2dSwWc.webp",
+        "_astro/lagerhall-med-enkelplat.CezV5BfM_2eRVNy.webp",
+        "_astro/lagerhall-med-enkelplat.CezV5BfM_x0vWB.webp"
+      ],
+      "pages": [
+        "stalhallar/lagerhall/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/lagerhall.jpg",
+      "sourceSha256": "afd18fe9a436cd31d177edca59db883cdaf0e535bded46a51c10526fe107039c",
+      "outputs": [
+        "_astro/lagerhall.GPeeZOoY_Z1MjiPC.webp"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/maskinhall.jpeg",
+      "sourceSha256": "fb77ac15c50d418f559de52406ca8e512649dd3978af5e95399900afd55c529f",
+      "outputs": [
+        "_astro/maskinhall.CY7PyZ0H_2pyQtm.webp"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/plathall-1536x1152.jpeg",
+      "sourceSha256": "d399b2e22fe044bf1d16e14b15e7d2affce109771a4768dbefd8100e525a2cb5",
+      "outputs": [
+        "_astro/plathall-1536x1152.d5qGBwTn_Z1VLOnj.webp",
+        "_astro/plathall-1536x1152.d5qGBwTn_Z1iGiFD.webp",
+        "_astro/plathall-1536x1152.d5qGBwTn_Z1ldA1O.webp",
+        "_astro/plathall-1536x1152.d5qGBwTn_Z2hlX9d.webp",
+        "_astro/plathall-1536x1152.d5qGBwTn_ZFk8CL.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/talthall-1536x1152.jpg",
+      "sourceSha256": "d3a397e6ea698c1c2c8599b0e48e7b895d39f79a468dd49f4a83b135b59000d0",
+      "outputs": [
+        "_astro/talthall-1536x1152.BKASKmQo_1abmOP.webp",
+        "_astro/talthall-1536x1152.BKASKmQo_Z144GwM.webp",
+        "_astro/talthall-1536x1152.BKASKmQo_Z1gDoPf.webp",
+        "_astro/talthall-1536x1152.BKASKmQo_ZDm1O3.webp",
+        "_astro/talthall-1536x1152.BKASKmQo_ZoVnmO.webp",
+        "_astro/talthall-1536x1152.BKASKmQo_zF7dz.webp"
+      ],
+      "pages": [
+        "stalhallar/index.html",
+        "stalhallar/talthall/index.html"
+      ]
+    },
+    {
+      "source": "src/assets/images/legacy/talthall-LED.jpg",
+      "sourceSha256": "17b0f2dee490a05becb6acbffcdc18aca935b11d11f660d95432adb99c094ffe",
+      "outputs": [
+        "_astro/talthall-LED.BPdMfHZ7_14g1Rr.webp",
+        "_astro/talthall-LED.BPdMfHZ7_My6OL.webp"
+      ],
+      "pages": [
+        "stalhallar/talthall/index.html"
+      ]
+    },
+    {
+      "source": "public/favicon.svg",
+      "sourceSha256": "e5642e1b6399eaeac2c4a602836cc0251c06ed21e86ccae0bfe561554c6badb9",
+      "outputs": [
+        "favicon.svg"
+      ],
+      "pages": [
+        "404.html",
+        "index.html",
+        "kontakt/index.html",
+        "offert/index.html",
+        "om-oss/index.html",
+        "sa-gar-det-till/index.html",
+        "stalhallar/index.html",
+        "stalhallar/isolerad-hall/index.html",
+        "stalhallar/lagerhall/index.html",
+        "stalhallar/maskinhall/index.html",
+        "stalhallar/plathall/index.html",
+        "stalhallar/ridhus/index.html",
+        "stalhallar/talthall/index.html"
+      ]
+    },
+    {
+      "source": "public/images/hallpartner-hero-temporary.webp",
+      "sourceSha256": "ab48603ac5bca0c19b1e6baa2db1cf547e5961b9f0f40b618c001f3e2c532537",
+      "outputs": [
+        "images/hallpartner-hero-temporary.webp"
+      ],
+      "pages": [
+        "index.html"
+      ]
+    },
+    {
+      "source": "public/images/logo_text_white.png",
+      "sourceSha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "outputs": [
+        "images/logo_text_white.png"
+      ],
+      "pages": [
+        "404.html",
+        "index.html",
+        "kontakt/index.html",
+        "offert/index.html",
+        "om-oss/index.html",
+        "sa-gar-det-till/index.html",
+        "stalhallar/index.html",
+        "stalhallar/isolerad-hall/index.html",
+        "stalhallar/lagerhall/index.html",
+        "stalhallar/maskinhall/index.html",
+        "stalhallar/plathall/index.html",
+        "stalhallar/ridhus/index.html",
+        "stalhallar/talthall/index.html"
+      ]
+    }
+  ]
+}

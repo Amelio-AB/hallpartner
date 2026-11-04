@@ -1,100 +1,72 @@
-# Hallpartner preview — migration phase 1.
-# FTP-kontots angivna custom root är /domains/hallpartner.se/public_html/.
-# Remote target är därför ./ relativt inloggningsroten.
-# Granska första dry-run och verifiera root före aktivering av upload.
-# Ingen serverradering används. Secrets: FTP_HOST/FTP_USERNAME/FTP_PASSWORD.
-name: Hallpartner preview FTP dry-run
-
-on:
+# Keep workflow ID 316932905 disabled_manually until the separately approved activation.
+# Development preview only. No production/customer hosting target is configurable.
+name: Hallpartner Inleed development preview
+'on':
   push:
     branches:
       - main
-  workflow_dispatch:
-
+  workflow_dispatch: {}
 permissions:
   contents: read
-
+  actions: read
 concurrency:
-  group: hallpartner-preview
-  cancel-in-progress: true
-
+  group: hallpartner-inleed-preview-20261103
+  cancel-in-progress: false
 jobs:
-  build:
-    name: Build and validate Astro
+  validate:
+    uses: ./.github/workflows/preview-validation.yml
+    secrets:
+      AMELIO_PLATFORM_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+  publish:
+    needs: validate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install locked dependencies
-        run: npm ci
-
-      - name: Build production site
-        run: npm run build
-        env:
-          NODE_ENV: production
-
-      - name: Verify production output
-        shell: bash
-        run: |
-          test -d dist
-          test -f dist/index.html
-          echo "Build verified: dist/index.html exists."
-
-      - name: Save production build
-        uses: actions/upload-artifact@v4
-        with:
-          name: hallpartner-dist
-          path: dist/
-          if-no-files-found: error
-          retention-days: 7
-
-  deploy:
-    name: Validate preview FTP target (dry-run)
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment:
       name: preview
-      url: https://hallpartner-se.preview2.inleed.com
-
+      url: https://hallpartner-se.preview2.inleed.com/
     steps:
-      - name: Download verified build
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.validate.outputs.commit }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install and verify locked private AMP
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: bash scripts/preview/install-private-amp.sh
+      - name: Download only this run’s verified payload
         uses: actions/download-artifact@v4
         with:
-          name: hallpartner-dist
-          path: dist/
-
-      - name: Verify downloaded build before FTP
-        shell: bash
-        run: |
-          test -d dist
-          test -s dist/index.html
-
-      - name: Install lftp
-        run: sudo apt-get update && sudo apt-get install -y lftp
-
-      - name: Preview FTP dry-run (lftp mirror)
+          name: ${{ needs.validate.outputs.payload }}
+          path: preview-payload
+      - name: Download matching manifest
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.validate.outputs.evidence }}
+          path: reports/preview
+      - name: Verify downloaded payload and rights gate
+        run: |-
+          node scripts/preview/payload.mjs verify
+          node scripts/preview/payload.mjs rights
+      - name: Install encrypted FTPS client
+        run: |-
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lftp >/dev/null
+      - name: Publish to verified development target and verify HTTP content
         env:
+          GH_TOKEN: ${{ github.token }}
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        run: |
-          lftp <<EOF
-          set cmd:fail-exit yes
-          set ftp:ssl-allow no
-          set ftp:passive-mode yes
-          set net:max-retries 2
-          set net:timeout 10
-          open -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_HOST"
-          mirror --reverse --verbose --parallel=4 ./dist/ ./
-          bye
-          EOF
+        run: node scripts/preview/remote.mjs publish
+      - name: Preserve deployment verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preview-publication-${{ needs.validate.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/
+          if-no-files-found: error
+          retention-days: 14

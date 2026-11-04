@@ -1,18 +1,13 @@
 # Hallpartner webbplats
 
-Kodbas för Hallpartners nya Astro-webbplats. Senaste utvecklingsgren:
-`feature/hallpartner-v1-skeleton-20261031`, [Draft PR #5](https://github.com/Amelio-AB/hallpartner/pull/5).
-Gamla `main` är inte den senaste webbplatsen. Kontrollera aktuell GitHub-HEAD;
-PR-beskrivningen innehåller äldre historiska SHA-värden.
+Kodbas för Hallpartners statiska Astro-webbplats. **main är ordinarie utvecklingsbas efter godkänd integration av [PR #12](https://github.com/Amelio-AB/hallpartner/pull/12).** Fram till dess är integrationsgrenen aktuell webbplats; gamla main får inte publiceras.
 
-Lokal konsolidering 2026-11-03 finns på `chore/local-workspace-cleanup-20261103`.
-Se [städrapporten](docs/LOCAL_WORKSPACE_CLEANUP.md) för backup och verifiering.
-Läs [AGENTS.md](AGENTS.md) före ändringar.
+Automatisk Inleed-preview förbereds i en separat stackad Draft-PR. Workflowet är fortfarande manuellt avstängt. Se [publiceringsprocessen och aktiveringsordningen](docs/preview/README.md). Originalmapp, lokala filer och backup lämnas orörda. Läs [AGENTS.md](AGENTS.md) före ändringar.
 
 ## Lokal start
 
 Använd **Node.js 24**. Privat `@amelio/web-platform` är oförändrat låst till
-`a11811bfbf51416e7fe7d58aed4551be77914d65` (1.1.0).
+`fec9ca01b3c0d4bc9002fa21832a51cf51009749` (1.4.0).
 Git-inloggningen behöver läsåtkomst; använd befintlig Credential Manager.
 Lägg inga tokens i filer, kommandon eller Git-URL:er.
 
@@ -95,11 +90,6 @@ Alla sidor behåller `noindex,nofollow`. Canonical/sitemap använder
 `https://hallpartner.se`; det ändrar inte DNS eller hosting.
 Historiska rutter, prototyper, 404 och offertguiden är undantagna från sitemap.
 
-`deploy-production.yml` kan göra **riktig FTP-upload** vid push till `main`
-eller manuell körning. Remote target är `./`, utan `--delete`.
-Kör inte workflowet för lokal verifiering. Dess äldre Node-/installationskonfiguration
-hanteras i ett separat uppdrag.
+`deploy-production.yml` är ersatt med en verifierad FTPS-process för utvecklingspreviewn. Workflow-ID 316932905 ska förbli `disabled_manually` tills Andreas separat godkänt första aktiveringen efter båda mergarna. PHP och interna demos utesluts ur uppladdningspaketet; bildrättigheter, FTPS-mål och gamla serverfiler måste vara godkända. Inga filer raderas automatiskt.
 
-Lokal städning omfattar ingen push, merge, deployment, GO-LIVE, DNS-/FTP-ändring,
-ändring av secrets, formuläraktivering eller SMTP.
-Arkivbranchen `archive/vision-site-2026-10-02` lämnas orörd.
+`hallpartner.se` och kundens framtida separata Inleed-konto är aldrig publiceringsmål för detta workflow. Se [driftinstruktionen](docs/preview/README.md) för kontrollmarkör, incidentstopp och kvarvarande blockerare.

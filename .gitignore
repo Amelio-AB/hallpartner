@@ -41,3 +41,7 @@ visual-review/
 
 # Local receiver runtime data
 server/lead/rates/
+
+# Reviewed static preview payload and CI evidence
+preview-payload/
+reports/
