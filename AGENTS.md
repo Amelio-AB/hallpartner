@@ -1,5 +1,19 @@
 # AGENTS.md
 
+## AMP-001 1.5.0 – granskning av Hallpartners offertguide (2026-11-04)
+
+Det verifierade Amelio Web Platform-`main`-SHA:t `4ee0a081c3d799cd30e3075247fdb98473aa49f6` används som
+privat, SHA-låst kandidat i Hallpartners separata PR. Den befintliga
+`hallpartner-offert-v1` använder fortfarande V1 JSON utan bilagor. Nya
+fält-hjälprutor och frivilliga grupper är presentationsfunktioner och ändrar
+inte PHP-mottagarens fältnycklar. Filuppladdningens V2-kontrakt får **inte**
+skickas till `/api/lead.php`, som endast kan hantera V1. Ett separat
+syntetiskt granskningsläge kan användas, men ingen verklig uppladdning får
+ske förrän säker kundbackend är implementerad, granskad och verifierad.
+
+Läs `docs/AMP_001_150_HALLPARTNER.md`. Behåll formulären avstängda,
+PHP/SMTP-filer oförändrade och preview-publicering åtskild från PR-granskning.
+
 # Hallpartner webbplats -- AI Agent Guide
 
 > Detta dokument är den primära instruktionen för alla AI-agenter som

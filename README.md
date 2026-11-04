@@ -16,7 +16,7 @@ aktiva arbetsytor.
 ## Lokal start
 
 Använd **Node.js 24**. Privat `@amelio/web-platform` är låst till
-`fec9ca01b3c0d4bc9002fa21832a51cf51009749` (1.4.0).
+`4ee0a081c3d799cd30e3075247fdb98473aa49f6` (privat plattformskälla 1.5.0; AMP-001 P0).
 Git-inloggningen behöver läsåtkomst; använd befintlig Credential Manager.
 Lägg inga tokens i filer, kommandon eller Git-URL:er.
 

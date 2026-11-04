@@ -19,7 +19,7 @@
     "test:footer": "node --test tests/hallpartner-amp-footer.test.mjs"
   },
   "dependencies": {
-    "@amelio/web-platform": "github:Amelio-AB/amelio-web-platform#fec9ca01b3c0d4bc9002fa21832a51cf51009749",
+    "@amelio/web-platform": "github:Amelio-AB/amelio-web-platform#4ee0a081c3d799cd30e3075247fdb98473aa49f6",
     "astro": "^7.3.3",
     "@astrojs/sitemap": "^3.6.0"
   },
