@@ -210,3 +210,29 @@ extra fält och dubblerat scriptblock fångas av negativa tester.
 Oberoende efterkontroll 2026-11-04T12:36:42.959Z bekräftar filstädningen och
 produktionssepareringen. Ursprungligt misslyckat jobb och dess råhashavvikelse
 bevaras som bevis; det skrivs inte om till en lyckad Actions-körning.
+
+## FTPS-läsfel före uppladdning
+
+Publiceringskörning `41832308947`, försök 1 och 2, stoppade på main `8ea034a`
+i extra läsning av bevarade filer, före första uppladdningen. Det gamla
+anropet öppnade en ny lftp-process och FTPS-session per fil. Ursprunglig
+felhantering kastade bort diagnostiken och kunde inte ange fil eller orsak.
+
+Läsande PR-diagnos `41834879839` reproducerade felet efter 11 lyckade
+separata läsningar, på `_astro/lagerhall.GPeeZOoY_Z1O7orc.webp`. Samma
+fil hade nyss lästs och hashverifierats i full inventering. Ett efterföljande
+anslutningsförsök misslyckades redan under anslutning/uppstart efter cirka
+20 sekunder. Det stöder ett anslutningsrelaterat problem vid många sessioner;
+ingen uttrycklig serverkod för en anslutningsgräns kunde beläggas. Ett fel i
+filens bytes har inte påvisats. Diagnosen gjorde inga serverändringar.
+
+De 27 bevarade filerna läses nu i en gemensam FTPS-session. Varje fils
+SHA-256 kontrolleras fortfarande; `retained-verification.json` redovisar
+filvis förväntad och faktisk hash. TLS, målbindning, 20 sekunders nätverkstimeout
+och återförsöksgräns behålls. Felrapporten anger aktiv operation/fil, tid och
+klassificerade felindikatorer, aldrig rå stderr, server-URL eller credentials.
+Säkra stegmarkörer identifierar var en gemensam session stannar.
+
+Den tillfälliga reproduktionen med många sessioner är borttagen före merge.
+PR-valideringen testar i stället de uttryckligen bevarade filerna läsande i
+en session före Chrome-steget. Rättningen berör inga webbkomponenter.

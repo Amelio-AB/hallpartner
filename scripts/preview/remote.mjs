@@ -1,4 +1,5 @@
 import { spawnSync } from 'node:child_process';
+import { randomUUID } from 'node:crypto';
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { resolve, dirname } from 'node:path';
@@ -38,12 +39,37 @@ export function lftpScript(commands, creds) {
     'cd ./', ...commands, 'bye', ''
   ].join('\n');
 }
-export function ftps(commands, creds, cwd) {
-  const result = spawnSync('lftp', ['--norc'], { input: lftpScript(commands, creds), encoding: 'utf8', cwd,
+export function ftpsFailure(result, commands, lastStep) {
+  // Classify in memory. Never return stderr, URLs, credentials or server text.
+  const diagnostic = String(result.stderr ?? '') + '\n' + String(result.stdout ?? '');
+  const command = commands[lastStep] ?? '';
+  const match = /^(get|put|rm|find) ([A-Za-z0-9_./-]+)(?: |$)/.exec(command);
+  return { operation:match?.[1] ?? 'connect-or-setup', path:match?.[2] ?? null,
+    exitCode:Number.isInteger(result.status) ? result.status : null,
+    timeout:result.error?.code === 'ETIMEDOUT' || /timed? out|timeout/i.test(diagnostic),
+    retryLimit:/max-retries|maximum.*retr(?:y|ies)|retry limit/i.test(diagnostic),
+    connectionFailure:/connection (?:refused|closed|reset)|not connected|network is unreachable/i.test(diagnostic),
+    connectionLimit:/too many (?:connections|users)|connection limit|maximum.*connections|limit.*connections/i.test(diagnostic),
+    tlsFailure:/certificate|TLS.*(?:fail|error)|SSL.*(?:fail|error)/i.test(diagnostic),
+    unavailableFile:/no such file|not found|failed to open file/i.test(diagnostic),
+    permissionDenied:/permission denied|access denied|login failed/i.test(diagnostic),
+    responseCodes:[...new Set(diagnostic.match(/\b(?:421|425|426|450|451|452|530|550|553)\b/g) ?? [])] };
+}
+export function ftps(commands, creds, cwd, run = spawnSync) {
+  const started = Date.now();
+  const prefix = 'HP_FTPS_STEP_' + randomUUID().replaceAll('-', '') + '_';
+  const traced = commands.flatMap((command,index) => ['echo ' + prefix + index, command]);
+  const result = run('lftp', ['--norc'], { input: lftpScript(traced, creds), encoding: 'utf8', cwd,
     env: { ...process.env, LFTP_PASSWORD: creds.password }, timeout: 10 * 60 * 1000, maxBuffer: 16 * 1024 * 1024 });
-  // Never print lftp diagnostics: they can contain credential-bearing server URLs.
-  assert(result.status === 0 && !result.error, 'FTPS operation failed; no success claimed. Inspect credentials/TLS/permissions privately.');
-  return result.stdout;
+  const marker = new RegExp('^' + prefix + '(\\d+)\\r?$', 'gm');
+  const steps = [...String(result.stdout ?? '').matchAll(marker)];
+  if (result.status !== 0 || result.error) {
+    const details = ftpsFailure(result, commands, steps.length ? Number(steps.at(-1)[1]) : -1);
+    details.elapsedMs = Date.now() - started;
+    const error = new Error('FTPS operation failed; no success claimed. Safe diagnostics: ' + JSON.stringify(details));
+    error.safeDetails = details; throw error;
+  }
+  return String(result.stdout ?? '').replace(new RegExp('^' + prefix + '\\d+\\r?\\n?', 'gm'), '');
 }
 export async function request(url) {
   const initial = new URL(url); let current = initial;
@@ -224,6 +250,21 @@ export async function verifyPublished(manifest, creds, get = request, transfer =
     return checks;
   } finally { rmSync(temp, { recursive: true, force: true }); }
 }
+export function verifyRetainedFiles(extras, creds, temp, transfer = ftps, reportDirectory = REPORT) {
+  const report = { mode:'single-session', status:'checking', files:extras.map(({path,sha256})=>({path,expectedSha256:sha256})) };
+  const save = () => { if (reportDirectory) { mkdirSync(reportDirectory,{recursive:true}); writeFileSync(reportDirectory+'/retained-verification.json',JSON.stringify(report,null,2)+'\n'); } };
+  save();
+  try {
+    if (extras.length) transfer(extras.map((entry,index) => 'get '+entry.path+' -o retained-'+index),creds,temp);
+    for (const [index, entry] of extras.entries()) {
+      report.files[index].actualSha256 = sha256(readFileSync(temp+'/retained-'+index));
+      assert(report.files[index].actualSha256 === entry.sha256, 'Retained remote file changed: '+entry.path);
+    }
+    report.status='verified'; save(); return report;
+  } catch(error) {
+    report.status='failed'; report.failure=error.safeDetails ?? {reason:'file-content-verification-failed'}; save(); throw error;
+  }
+}
 export async function publish() {
   const manifest = json(REPORT + '/manifest.json');
   assertPublishContext(process.env, manifest.commit);
@@ -248,10 +289,7 @@ export async function publish() {
       previous = inventory.files;
     }
     const extras = retainedFiles(proof.remoteFiles, manifest, policy, previous, json('config/preview-image-rights.json').approvals);
-    for (const [index, entry] of extras.entries()) {
-      ftps(['get ' + entry.path + ' -o retained-' + index], creds, temp);
-      assert(sha256(readFileSync(temp + '/retained-' + index)) === entry.sha256, 'Retained remote file changed');
-    }
+    verifyRetainedFiles(extras, creds, temp);
     const snapshot = await productionSnapshot();
     const uniqueMarker = 'hp-preview-deploy-' + manifest.commit + '.json';
     for (const host of PRODUCTION) { await assertAbsent(host, uniqueMarker); await assertAbsent(host, MARKER); }
@@ -289,6 +327,16 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   else if (process.argv[2] === 'private-backup') {
     assert(process.env.HP_BACKUP_RECIPIENT?.startsWith('-----BEGIN PUBLIC KEY-----'), 'Missing public backup recipient');
     await checkTarget(credentials(), process.env.HP_BACKUP_RECIPIENT);
+  }
+  else if (process.argv[2] === 'check-retained') {
+    assert(process.env.GITHUB_EVENT_NAME === 'pull_request', 'Retained preflight is read-only PR validation');
+    const creds = credentials(); const proof = json(REPORT+'/target-proof.json');
+    const policy = json('config/preview-release.json');
+    assert(proof.bindingSha256 === creds.binding && policy.targetBindingSha256 === creds.binding, 'Retained preflight binding mismatch');
+    const paths = [...policy.retainedFiles,...policy.serverFiles].map(file=>file.path).filter(path=>proof.remoteFiles.includes(path));
+    const extras = retainedFiles(paths,{files:[]},policy);
+    const temp = mkdtempSync(tmpdir()+'/hp-retained-preflight-');
+    try { verifyRetainedFiles(extras,creds,temp); } finally { rmSync(temp,{recursive:true,force:true}); }
   }
   else if (process.argv[2] === 'publish') await publish();
   else throw new Error('Use check-target or publish');
