@@ -193,6 +193,10 @@ try {
           helpTitle:!!dialog?.querySelector('h3')?.textContent,
           helpText:!!dialog?.querySelector('p')?.textContent,
           sixSteps:steps.length===6,
+          hallpartnerFont:getComputedStyle(host.querySelector('.qf')).fontFamily.includes('Inter'),
+          tintedCards:cards.length===5&&getComputedStyle(cards[0]).backgroundColor==='rgb(241, 244, 240)',
+          noDuplicateTitle:getComputedStyle(host.querySelector('.qf-intro')).display==='none'&&
+            document.querySelector('.hp-quote-shell__lead h1')?.textContent.trim()==='Berätta om hallen du planerar',
           progressFits:progress?.getBoundingClientRect().right<=innerWidth+1,
           cardsFit:cards.length===5&&cards.every(card=>{
             const r=card.getBoundingClientRect(),copy=card.querySelector('.qf-card-copy strong')?.getBoundingClientRect();
@@ -243,6 +247,25 @@ try {
           groupOpen:group?.getAttribute('aria-expanded')==='true'
         };
       }),width+': AMP-001 collapsible fields');
+      allTrue(await run(function(){
+        const host=document.querySelector('#hp-offert-guide'),grid=host.querySelector('.qf-fields');
+        const columns=getComputedStyle(grid).gridTemplateColumns.split(' ').length;
+        const a=host.querySelector('[name="dimensions.width"]')?.getBoundingClientRect();
+        const b=host.querySelector('[name="dimensions.length"]')?.getBoundingClientRect();
+        return {
+          columns:innerWidth>=740?columns===2:columns===1,
+          pairedMeasures:!!a&&!!b&&(innerWidth>=740
+            ? Math.abs(a.top-b.top)<=2&&a.left<b.left
+            : a.top<b.top&&Math.abs(a.left-b.left)<=2),
+          noOverflow:document.documentElement.scrollWidth<=innerWidth+1
+        };
+      }),width+': two-column form fields and mobile stacking');
+      if([390,768,1440].includes(width)) {
+        await evaluate('window.scrollTo(0,0)');
+        await sleep(70);
+        const metrics=await call('Page.getLayoutMetrics'),size=metrics.cssContentSize||metrics.contentSize;
+        await capture(prefix+'-'+width+'-amp001-step2.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
       if(width===390||width===1280){
         const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
         await capture(prefix+'-'+width+'-amp001-groups.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});

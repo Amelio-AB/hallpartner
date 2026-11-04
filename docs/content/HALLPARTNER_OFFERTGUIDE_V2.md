@@ -140,6 +140,31 @@
 - Innan aktivering behövs kundgodkända fält/avtal, servervalidering för den nya nyckellistan och maxstorleken, GDPR-/mottagarbeslut, separata aktiveringsflaggor och verifierat riktiga testförfrågningar. Bilagor kräver dessutom helt separat säker serverhantering.
 - PR #22 stannar **Draft**, utan merge eller publicering från grenen. Publicerad `main`-preview är **inte** denna redesign.
 
+## Visuell formstandard för Hallpartner (designkandidat 2026-11-04)
+
+De två kundreferensbilderna används enbart som **layoutreferenser**. Hallpartners faktiska
+besökarsida använder **Inter** och en mörkgrön CTA. Vi kopierar inte den andra
+kundens seriftypsnitt, färger eller tjänstefrågor.
+
+| Område | Hallpartners anpassning |
+| --- | --- |
+| Rubriker, etiketter och input | Inter, samma font som besökarsidan |
+| Sidbakgrund | `#EBEBE8` |
+| Nedtonade valkort | `#F1F4F0`, fast ton i stället för genomskinliga kort |
+| Aktivt val | `#E7F1E6`, kantmarkering `#287B39` |
+| Huvudknapp/fokus | `#287B39`, hover `#1D6529`; vit text |
+| Intro | En centrerad H1 och kort förklaring; redundant AMP-intro dold visuellt men formulärets aria-label kvarstår |
+| Stegindikator | Sex cirklar på större skärmar, sex segment och aktiv stegtext på mobil |
+| Valkort i första steget | Två kolumner på desktop, en kolumn på mobil, kort behovsbeskrivning |
+| Fält i senare steg | Två kolumner från 740 px, en kolumn under 740 px; textytor och fällbara grupper fullbredd |
+| Navigering | Nästa/tillbaka i formulärpanelen; inga knappar flyttas med sköra DOM-hack |
+| Avstängd funktion | Ingen verklig inskickning eller filuppladdning förrän separat godkänd backend finns |
+
+CSS ligger **endast** i `src/styles/hallpartner-leads.css` och är avgränsad till
+`.hp-quote-shell`; Amelio Web Platform ändras inte. Kontrast testas på fasta
+ytfärger, inte med `opacity` som ändras beroende på bakgrunden. Designkandidaten
+ska först få visuell ägargranskning och innebär **inte** kundgodkända offertfrågor.
+
 ## 8. Granskningschecklista
 
 - [ ] TypeScript, ESLint, Astro-build, Node/PHP-kontrakt och GitHub Actions gröna på sista commit.
