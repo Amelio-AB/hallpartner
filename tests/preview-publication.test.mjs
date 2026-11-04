@@ -5,9 +5,25 @@ import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, remoteInventory } from '../scripts/preview/remote.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, remoteInventory, deliveryStatus, assertDelivery } from '../scripts/preview/remote.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
+test('pre-upload delivery gate rejects rewritten bytes, errors and incomplete evidence without normalizing content', async () => {
+  const body = Buffer.from('<link rel="canonical" href="https://hallpartner.se/">');
+  const fileFingerprints = [{ path: 'index.html', sha256: sha256(body) }, { path: 'cgi-bin/.htaccess', sha256: 'a'.repeat(64) }];
+  const requested = [];
+  const deliveryChecks = await deliveryStatus(fileFingerprints, async url => {
+    requested.push(url); return { status: 200, body };
+  });
+  assert.equal(requested.length, 1); // Never request protected server configuration via HTTP.
+  assertDelivery({ fileFingerprints, deliveryChecks });
+  for (const response of [{ status: 200, body: Buffer.from(body.toString().replace('https://hallpartner.se', PREVIEW)) }, { status: 404, body }]) {
+    const checks = await deliveryStatus(fileFingerprints, async () => response);
+    assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: checks }));
+  }
+  assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: [] }));
+  assert.throws(() => assertDelivery({ fileFingerprints: [], deliveryChecks: [] }));
+});
 test('read-only inventory records protected paths without permitting command injection or traversal', () => {
   assert.deepEqual(remoteInventory('./\n./cgi-bin/\n./cgi-bin/.htaccess\n./index.html\n'), {
     remoteFiles: ['cgi-bin/.htaccess', 'index.html'], remoteDirectories: ['cgi-bin'],

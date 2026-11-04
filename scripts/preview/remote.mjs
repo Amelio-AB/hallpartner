@@ -80,6 +80,24 @@ export function remoteInventory(listing) {
   assert(new Set([...remoteFiles, ...remoteDirectories]).size === remoteFiles.length + remoteDirectories.length, 'Duplicate remote inventory path');
   return { remoteFiles: remoteFiles.sort(), remoteDirectories: remoteDirectories.sort() };
 }
+export async function deliveryStatus(fingerprints, get = request) {
+  const results = [];
+  for (const file of fingerprints.filter(f => !BLOCKED.test(f.path))) {
+    safePath(file.path);
+    const response = await get(PREVIEW + '/' + file.path + '?hp-delivery-check=' + Date.now());
+    const httpSha256 = sha256(response.body);
+    results.push({ path: file.path, status: response.status, ftpsSha256: file.sha256, httpSha256,
+      matches: response.status === 200 && httpSha256 === file.sha256 });
+  }
+  return results;
+}
+export function assertDelivery(proof) {
+  const expected = proof.fileFingerprints.filter(f => !BLOCKED.test(f.path));
+  assert(expected.length > 0 && Array.isArray(proof.deliveryChecks) && proof.deliveryChecks.length === expected.length &&
+    expected.every(f => proof.deliveryChecks.some(r => r.path === f.path && r.status === 200 &&
+      r.ftpsSha256 === f.sha256 && r.httpSha256 === f.sha256 && r.matches)),
+  'BLOCKED: existing FTPS files do not match HTTPS delivery; review server/proxy rewriting before any upload');
+}
 export async function checkTarget(creds = credentials()) {
   await publicProof();
   const temp = mkdtempSync(tmpdir() + '/hp-preview-read-');
@@ -98,7 +116,8 @@ export async function checkTarget(creds = credentials()) {
     });
     const after = remoteInventory(ftps(['find .'], creds, temp));
     assert(JSON.stringify(after) === JSON.stringify({ remoteFiles, remoteDirectories }), 'Remote inventory changed during read-only inspection');
-    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', bindingSha256: creds.binding, remoteFiles, remoteDirectories, fileFingerprints,
+    const deliveryChecks = await deliveryStatus(fileFingerprints);
+    const result = { checkedAt: new Date().toISOString(), target: PREVIEW, root: './', bindingSha256: creds.binding, remoteFiles, remoteDirectories, fileFingerprints, deliveryChecks,
       writeOperations: 0,
       forbiddenFiles: remoteFiles.filter(p => BLOCKED.test(p)) };
     mkdirSync(REPORT, { recursive: true }); writeFileSync(REPORT + '/target-proof.json', JSON.stringify(result, null, 2) + '\n');
@@ -166,6 +185,7 @@ export async function publish() {
   for (const id of [405335800,405334470]) assert((await github('actions/workflows/' + id)).state === 'disabled_manually', 'BLOCKED: old ops workflow is still active');
   const creds = credentials(); assert(creds.binding === policy.targetBindingSha256, 'FTPS account binding has changed');
   const proof = await checkTarget(creds);
+  assertDelivery(proof); // Detect known delivery transformations before the first remote write.
   const temp = mkdtempSync(tmpdir() + '/hp-preview-publish-');
   try {
     let previous = [];
