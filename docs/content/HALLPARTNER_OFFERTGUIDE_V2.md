@@ -9,14 +9,13 @@
 
 **Godkänt:** Den visuella Hallpartner-anpassningen på PR #22 med Inter, befintliga gröna färgroller, nedtonade valkort, responsiv tvåkolumnslayout för fält och kompakt sexstegsindikator. Godkännandet gäller designriktningen i commit `de93fe309ec45ef7059a92eab3c6b40ce2e1342d`; färgnyanser, toning och transparens är justerbara vid framtida finputsning och ska inte blockera det fortsatta arbetet.
 
-**Inte godkänt genom detta beslut:** Exakt frågeinnehåll, vilka frågor som är obligatoriska, verklig filuppladdning, servermottagning, aktivering eller merge/publicering. Frågorna kräver separat beslut med Hallpartner. PR #22 förblir Draft tills återstående grindar har passerats.
+**Inte godkänt genom detta beslut:** Exakt frågeinnehåll, vilka frågor som är obligatoriska, verklig filuppladdning, servermottagning, aktivering eller merge/publicering. Frågornas omfattning och miniminivå kräver separat godkännande av projektägaren; produktlöften eller tekniska uppgifter får inte antas vara kundbekräftade. PR #22 förblir Draft tills återstående grindar har passerats.
 
 ## 1. Underlag och källkritik
 
 | Källa | Vad den styr / inte styr | Bedömning |
 | --- | --- | --- |
 | `docs/OFFERTFLODE.md` (2 oktober) | Frågebank med **tio sakområden**, alternativa formuleringar, datamodell och regler. Dokumentet kallar sig självt ”source of truth” och talar om tio beslutade steg. | **Historiskt underlag**, inte aktuell låst UI-struktur. Frågorna ska spåras, men inte automatiskt byggas som tio steg. |
-| `Hallpartner_Beslutsunderlag_Peter_Jimmy.docx` / PDF (oktober, tillgänglig i projektets dokumentbibliotek men inte versionshanterad) | 36 **verksamhetsfrågor till Hallpartner**. Framför allt fråga 14–15 och 27–36 rör förfrågans innehåll och process. De synliga svarsfälten är tomma. | **Öppet beslut**, inte kundbekräftat sortiment eller obligatoriska leadfält. |
 | `src/config/hallpartner-quote.ts` före V2 | Fyra frågesteg för användning, mått, ort och kontakt; AMP-001 lägger till kontroll. | Verifierad föregående implementation. Ursprungliga fälten `project.use`, `project.description`, `dimensions.*`, `site.city`, `site.postal_code` och `contact.*` bevaras där de används. |
 | `src/config/hallpartner-quote-attachments-review.ts` före V2 | En femte fråga-/filsektion i ett opt-in V2-granskningsläge. | Filfrågan flyttas nu till **frågesteg 4**, annars hade sexstegsmålet överskridits. |
 | `HallPartner_V70_NORGE_v5_790KR_FIX2 (2).html` (historisk biblioteksfil) | Äldre formulärreferens med bl.a. halltyp, mått, takvinkel, vägg-/takval, antal portar, montagespår och kontaktfält. Den är märkt NORGE, har förvalda tekniska värden och är inte en kundgodkänd svensk offertspecifikation. | **Design-/frågereferens**, inte källa för priser, fasta standarder eller leveransomfattning. |
@@ -48,8 +47,7 @@ Framför allt `dimensions.confidence` bör ifrågasättas: om en besökare redan
 obligatorisk bedömning av måttsäkerheten vara onödig friktion. Ingen ändring görs av obligatoriskt-status
 innan Hallpartner bekräftar vilka uppgifter som verkligen behövs före första återkopplingen.
 
-**Nästa externa beslut:** Använd den korta [beslutslistan för Peter och Jimmy](HALLPARTNER_OFFERTGUIDE_KUNDBESLUT.md)
-i stället för att skicka om hela den historiska listan med 36 verksamhetsfrågor.
+**Nästa interna steg:** Granska formulärets existerande frågor och svarsalternativ tillsammans med projektägaren. Inga nya kundfrågeunderlag ska skapas eller skickas. Historiska verksamhetsenkäter är inte en aktiv källa eller blockerare för denna arbetsomgång.
 
 ## 2. Fältinventering – aktuell V2-kandidat
 
@@ -76,7 +74,7 @@ i stället för att skicka om hela den historiska listan med 36 verksamhetsfråg
 | `site.postal_code` | **Postnummer**. Svenska fem siffror. | Frivillig, i grupp **Fler uppgifter om byggplatsen**. | Arbetsförslag; tidigare nyckel. |
 | `site.decided` | **Är den exakta byggplatsen bestämd?** Ja/nej/vet inte. | Frivillig, samma grupp. | Arbetsförslag baserat på historisk fråga. |
 | `site.address` | **Adress eller fastighetsbeteckning**. Fri text. | Frivillig; visas endast om `site.decided=yes`; samma grupp. | Arbetsförslag; ingen platsuppgift måste lämnas i granskningsläget. |
-| `foundation.status` | **Hur ser det ut med grunden?** Befintlig (`existing`), planerad (`planned`), ingen planerad (`none`), vet inte (`unknown`). | Frivillig, grupp **Fler uppgifter om byggplatsen**. | Arbetsförslag; fråga 28 i kundunderlaget är obesvarad. |
+| `foundation.status` | **Hur ser det ut med grunden?** Befintlig (`existing`), planerad (`planned`), ingen planerad (`none`), vet inte (`unknown`). | Frivillig, grupp **Fler uppgifter om byggplatsen**. | Arbetsförslag, inte tekniskt eller kundgodkänt. |
 | `foundation.notes` | **Vad vet du om grunden?** Exempelvis befintlig platta eller planeringsansvar. | Frivillig, samma grupp; bara när grunden finns eller planeras. | Arbetsförslag; inget påstående om Hallpartners leverans. |
 
 **Viktigt villkor:** `site.city` och övriga platsdata är oberoende av `foundation.status`. Endast `foundation.notes` rensas när grundvalet inte längre gör kommentaren relevant. För bredd/längd/höjd rensas tidigare värden om `dimensions.confidence` ändras till `need_help`.
@@ -90,7 +88,7 @@ i stället för att skicka om hela den historiska listan med 36 verksamhetsfråg
 | `openings.port_needs` | **Beskriv gärna hur portarna ska användas.** Ungefärligt antal, mått, trafik eller maskiner. | Frivillig; endast om `openings.ports=yes`. Tillfällig fritext för behov; **inte** en ersättning för separata portobjekt. | Arbetsförslag; detaljerad portmodell kräver plattformsarbete och kundbeslut. |
 | `openings.windows` | **Behövs fönster eller ljusinsläpp?** Ja/nej/behöver diskuteras. | Frivillig; grupp **Fler önskemål**. | Arbetsförslag. |
 | `design.envelope_wishes` | **Önskemål om väggar, tak eller färg.** Fri text. | Frivillig; samma grupp. | Arbetsförslag. Inga material-/RAL-/takvinkelalternativ hårdkodas. |
-| `design.installation_wishes` | **Övriga funktioner eller tillval att diskutera.** Fri text. | Frivillig; samma grupp. Inga utfästelser om utbud. | Arbetsförslag; fråga 31 måste besvaras innan verkliga tillval får väljas. |
+| `design.installation_wishes` | **Övriga funktioner eller tillval att diskutera.** Fri text. | Frivillig; samma grupp. Inga utfästelser om utbud. | Arbetsförslag; verkliga tillval kräver verifierat utbud innan de visas som produktalternativ. |
 | `delivery.wishes` | **Vad vill du ha hjälp med utöver själva hallen?** Fri text om exempelvis montage eller grund. | Frivillig; samma grupp. | Arbetsförslag, ingen produkt- eller leveransnivå bekräftad. |
 
 **Öppet tekniskt behov:** AMP-001 1.5.0 stöder inte upprepningsbara portposter eller flervalsfält. Implementera inte ”antal portar + ett gemensamt mått” som en falsk komplett modell. En separat plattforms- och mottagarversion krävs om Hallpartner bekräftar detaljerad portkonfigurering före första kontakt.
@@ -99,7 +97,7 @@ i stället för att skicka om hela den historiska listan med 36 verksamhetsfråg
 
 | Datanyckel | Fråga / svar | Krav, villkor, UI | Beslutsstatus |
 | --- | --- | --- | --- |
-| `planning.stage` | **Hur långt har projektet kommit?** Undersöker (`ideas`), planering (`planning`), bygglov/projektering (`permit`), redo för nästa steg (`ready`), vet inte (`unknown`). | Frivillig, synlig. | Arbetsförslag; möjlig kvalificering enligt fråga 32. |
+| `planning.stage` | **Hur långt har projektet kommit?** Undersöker (`ideas`), planering (`planning`), bygglov/projektering (`permit`), redo för nästa steg (`ready`), vet inte (`unknown`). | Frivillig, synlig. | Arbetsförslag; kan hjälpa säljaren att förstå projektets tidshorisont. |
 | `planning.timeline` | **När skulle du vilja att bygget startar?** Snarast, inom 3 månader, 3–6, 6–12, senare, vet inte. | Frivillig, synlig. | Arbetsförslag; uppskattning från kund, inte Hallpartners leveranslöfte. |
 | `documents.available` | **Har du ritningar, skisser eller bilder?** Ja, något, inte ännu, nej. | Frivillig, synlig, informationsknapp. | Arbetsförslag; inga filer krävs. |
 | `documents.description` | **Vilket underlag finns?** Fri text. | Frivillig; bara vid ja/något. | Arbetsförslag. |
@@ -117,10 +115,10 @@ i stället för att skicka om hela den historiska listan med 36 verksamhetsfråg
 | `contact.email` | **E-post**. | **Obligatorisk**, e-posttyp/autocomplete. | Arbetsförslag; tidigare krav. |
 | `contact.phone` | **Telefon**. | Frivillig, mönstervaliderad, autocomplete tel. | Arbetsförslag. |
 | `contact.company` | **Företag**. | Frivillig, grupp **Fler kontaktuppgifter**, autocomplete organization. | Arbetsförslag. |
-| `contact.role` | **Vilken roll har du i projektet?** Beställare/slutkund, entreprenör, konsult/projektör, annan roll. | Frivillig, samma grupp. | Arbetsförslag; fråga 35 är obesvarad. Ingen automatisk gren för separat slutkund ännu. |
+| `contact.role` | **Vilken roll har du i projektet?** Beställare/slutkund, entreprenör, konsult/projektör, annan roll. | Frivillig, samma grupp. | Arbetsförslag; ingen automatisk gren för separat slutkund i denna version. |
 | `contact.preference` | **Hur vill du helst bli kontaktad?** E-post, telefon, spelar ingen roll. | Frivillig, samma grupp. **Telefon** kräver ifyllt och giltigt `contact.phone`; annars visas fel innan kontrollsteget. | Arbetsförslag. Kräver affärsbeslut före publik inskickning. |
 
-**Obligatoriska fält i denna kandidat:** `project.use`, `project.description`, `dimensions.confidence`, `contact.name`, `contact.email`. Detta är **inte** Hallpartners godkända slutliga kravlista. Valen behöver bekräftas mot fråga 14, 15 och 34. Minsta möjliga krav kan vara ännu bättre för konverteringen.
+**Obligatoriska fält i denna kandidat:** `project.use`, `project.description`, `dimensions.confidence`, `contact.name`, `contact.email`. Detta är **inte** Hallpartners godkända slutliga kravlista. Projektägaren ska ta ställning till om `dimensions.confidence` verkligen behöver vara obligatorisk. Färre tvingande svar kan göra det lättare att skicka en första förfrågan.
 
 ### Steg 6 – Granska och skicka
 
@@ -158,13 +156,21 @@ i stället för att skicka om hela den historiska listan med 36 verksamhetsfråg
 
 **Utanför uppdraget:** prisberäkning, konfigurator, köp och leverantörsintegration. Se beslutet från 2026-11-02 om pausad kalkylator.
 
-## 6. Beslut att be Hallpartner om före låsning
+## 6. Nästa godkännanden – endast offertguiden
 
-1. **Fråga 14–15, 27, 34:** Vilka uppgifter måste finnas före första samtalet, och vilka är onödiga som krav? Ska man alltid ange användning, text och måttsäkerhet?
-2. **Fråga 27–31:** Hur säljs halltyperna i praktiken? Vilka utformnings-/port-/installationsval är verkliga erbjudanden? Vad är endast förfrågningsönskemål?
-3. **Fråga 6–10, 28, 31:** Vilka arbeten ingår/kan diskuteras för grund, montage och leverans? Ska besökaren ens välja leveransomfattning?
-4. **Fråga 32–35:** Behövs tidsplan, bygglovsstatus, bilagor, telefon eller kundroll före kontakt? Ska kontaktpreferens finnas?
-5. **Fråga 33, 36:** Vilka filer är tillåtna, hur behandlas personuppgifter, vem tar emot förfrågan, och hur godkänns lagring/retention?
+Det tidigare sidospåret med nya frågor till Hallpartner är **avslutat**. Vi arbetar vidare i den existerande formulärspecifikationen och koden, utan att skapa fler kundfrågeunderlag.
+
+**Första beslutet från projektägaren (innehåll, inte design):**
+
+- Godkänna fem frågesteg + AMP-001:s automatiska slutgranskning.
+- Godkänna huvudfrågorna: användning, kort projektbeskrivning, ungefärliga mått och byggplats, relevanta önskemål, projektläge, kontakt.
+- Ta ställning till **minsta obligatoriska nivå**. Rekommenderat arbetsförslag: användning, projektbeskrivning, namn och e-post. Måttsäkerhet, ort, mått, tidsplan och telefon kan vara frivilliga.
+- Behålla möjligheten att ange intresse för en hallkategori **frivilligt**, utan att låsa konstruktionsutförandet.
+
+Först när ovanstående beslut är godkända görs eventuella motsvarande kodjusteringar och nya tester. Inget ytterligare designgodkännande behövs för den redan accepterade visuella riktningen.
+
+**Separat, senare beslut:** Om den färdiga och testade, fortfarande inaktiva guiden får mergas till `main` och därmed potentiellt publiceras på utvecklingspreviewn. Detta ger **inte** tillstånd att aktivera faktisk inskickning, filuppladdning, e-postmottagning eller kundens WordPress.
+
 
 ## 7. Säkerhets- och leveransgräns
 
@@ -209,4 +215,4 @@ ska först få visuell ägargranskning och innebär **inte** kundgodkända offer
 - [ ] Testa både vanlig sexstegsguide utan filfält och opt-in sexstegsguide med lokalt filfält.
 - [ ] Kontrollera att **inga** nätverksanrop för inskickning eller filuppladdning sker.
 - [x] Projektägaren godkände formulärets visuella design 2026-11-04 (layout, typografi och färgriktning).
-- [ ] Frågefördelning, obligatoriska uppgifter och affärsfakta behöver godkännas separat av Hallpartner.
+- [ ] Frågeinnehåll, antal obligatoriska uppgifter och val som visas ska godkännas av projektägaren för arbetsversionen; inga obekräftade produktlöften får införas.
