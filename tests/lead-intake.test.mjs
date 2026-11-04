@@ -214,7 +214,10 @@ test('phone as contact preference requires a phone number, email does not',()=>{
 });
 
 
-test('V2 field specification is tracked as a non-approved proposal',()=>{
+test('V2 specification separates approved four-field minimum from remaining working proposals',()=>{
  const spec=read('docs/content/HALLPARTNER_OFFERTGUIDE_V2.md');
- for(const token of ['Kundbekräftat','Arbetsförslag','Öppet beslut','documents.attachments','fem frågesteg']) assert.ok(spec.includes(token),token);
+ for(const token of ['Kundbekräftat','Arbetsförslag','fyra obligatoriska','dimensions.confidence','documents.attachments','fem frågesteg']) {
+   assert.ok(spec.includes(token),token);
+ }
+ assert.doesNotMatch(spec,/fem obligatoriska fält/i);
 });
