@@ -176,20 +176,30 @@ try {
       const form=document.querySelector('#hp-contact-form');
       return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
     }),width+': inactive contact');
+
     if(expectedPath==='/offert/') {
       allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide');
         const trigger=host?.querySelector('button.qf-help-trigger');
+        const steps=[...host.querySelectorAll('.qf-progress-item')];
+        const cards=[...host.querySelectorAll('.qf-card')];
         trigger?.focus();trigger?.click();
         const dialog=host?.querySelector('dialog.qf-help-dialog[open]');
+        const progress=host.querySelector('.qf-progress');
         return {
           mounted:!!host?.querySelector('.qf'),
           disabled:host?.dataset.enabled==='false',
           helpOpen:!!dialog?.open,
           helpTitle:!!dialog?.querySelector('h3')?.textContent,
-          helpText:!!dialog?.querySelector('p')?.textContent
+          helpText:!!dialog?.querySelector('p')?.textContent,
+          sixSteps:steps.length===6,
+          progressFits:progress?.getBoundingClientRect().right<=innerWidth+1,
+          cardsFit:cards.length===5&&cards.every(card=>{
+            const r=card.getBoundingClientRect(),copy=card.querySelector('.qf-card-copy strong')?.getBoundingClientRect();
+            return r.width>=180&&r.left>=-1&&r.right<=innerWidth+1&&!!copy&&copy.right<=r.right+1;
+          })
         };
-      }),width+': AMP-001 info popup');
+      }),width+': AMP-001 six steps, cards and info popup');
       if(width===390||width===1280)await capture(prefix+'-'+width+'-amp001-help.png');
       await key('Escape');await sleep(80);
       allTrue(await run(function(){
@@ -199,6 +209,10 @@ try {
           focusReturned:document.activeElement===host?.querySelector('button.qf-help-trigger')
         };
       }),width+': AMP-001 Escape and focus');
+      if([320,390,768,1024,1440].includes(width)) {
+        const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
+        await capture(prefix+'-'+width+'-amp001-step1.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
+      }
       allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
         host.querySelector('input[name="project.use"][value="storage"]')?.click();
@@ -207,6 +221,7 @@ try {
         field.dispatchEvent(new Event('input',{bubbles:true}));
         form.requestSubmit();
         const certainty=host.querySelector('select[name="dimensions.confidence"]');
+        if(!certainty)return {onDimensions:false};
         certainty.value='approximate';
         certainty.dispatchEvent(new Event('input',{bubbles:true}));
         const group=host.querySelector('button.qf-group-toggle');
@@ -219,8 +234,7 @@ try {
         const closed=group?.getAttribute('aria-expanded')==='false';
         group?.click();
         return {
-          onDimensions:!!host.querySelector('select[name="dimensions.confidence"]'),
-          collapsed,expanded,closed,
+          onDimensions:!!certainty,collapsed,expanded,closed,
           retained:host.querySelector('input[name="dimensions.side_height"]')?.value==='5',
           groupOpen:group?.getAttribute('aria-expanded')==='true'
         };
@@ -229,7 +243,7 @@ try {
         const layout=await call('Page.getLayoutMetrics'),size=layout.cssContentSize||layout.contentSize;
         await capture(prefix+'-'+width+'-amp001-groups.png',{x:0,y:0,width:Math.ceil(size.width),height:Math.ceil(size.height),scale:1});
       }
-      allTrue(await run(async function(){
+      allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide'),form=host.querySelector('form.qf-panel');
         const fill=(selector,value)=>{
           const field=host.querySelector(selector);
@@ -238,21 +252,34 @@ try {
         fill('select[name="dimensions.confidence"]','need_help');
         const irrelevant=!host.querySelector('input[name="dimensions.side_height"]');
         form.requestSubmit();
-        fill('input[name="site.city"]','Karlstad');
+        const design=!!host.querySelector('select[name="design.insulation"]');
+        fill('select[name="openings.ports"]','yes');
+        fill('textarea[name="openings.port_needs"]','Synthetic example: wide port');
+        fill('select[name="openings.ports"]','no');
+        const irrelevantPort=!host.querySelector('textarea[name="openings.port_needs"]');
         form.requestSubmit();
+        const planning=!!host.querySelector('select[name="planning.stage"]');
+        fill('select[name="documents.available"]','yes');
+        fill('textarea[name="documents.description"]','Synthetic document description');
+        fill('select[name="documents.available"]','later');
+        const irrelevantDocument=!host.querySelector('textarea[name="documents.description"]');
+        form.requestSubmit();
+        const customer=!!host.querySelector('input[name="contact.name"]');
         fill('input[name="contact.name"]','Test Person');
         fill('input[name="contact.email"]','test@example.invalid');
         form.requestSubmit();
-        await Promise.resolve();
         const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
+        const summary=[...host.querySelectorAll('.qf-summary-section')];
         return {
           inactive:host.dataset.enabled==='false',
-          irrelevant,
+          irrelevant,design,irrelevantPort,planning,irrelevantDocument,customer,
           review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),
+          sixSteps:host.querySelectorAll('.qf-progress-item').length===6,
+          fiveSections:summary.length===5,
           disabled:send?.disabled===true,
           notice:!!document.querySelector('.hp-leads-note--review')
         };
-      }),width+': quote review must never send');
+      }),width+': all five question steps, final review and no-send gate');
     }
 
     await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur()');
