@@ -32,6 +32,13 @@ const transport = maintenance.steps.find(s=>s.with?.name === 'private-preview-ba
 assert(transport?.with.path === 'reports/private-preview-backup.envelope.json' && transport.with['retention-days'] === 1, 'Only encrypted temporary backup transport may be uploaded');
 assert(!deploy.jobs.publish.steps.some(s=>/approved-cleanup|private-backup/.test(s.run ?? '')), 'Automatic publication must never run maintenance');
 const liveBrowser = deploy.jobs.publish.steps.find(s=>s.name === 'Verify actual preview interactions in Chrome after publication');
+for (const [job, boundary] of [[validation.jobs.validate, 'Chrome regression on the actual upload payload'], [deploy.jobs.publish, 'Publish to verified development target and verify HTTP content']]) {
+  const preflight = job.steps.findIndex(s => s.run === 'node scripts/preview/chrome-preflight.mjs');
+  assert(preflight >= 0 && preflight < job.steps.findIndex(s => s.name === boundary), 'Chrome infrastructure must be checked before site tests/publication');
+}
+const tooling = yaml.load(readFileSync('.github/workflows/release-tooling.yml','utf8'));
+assert(Object.keys(tooling.on).join(',') === 'pull_request' && tooling.permissions.contents === 'read', 'Tooling validation must remain PR-only/read-only');
+assert(JSON.stringify(tooling.jobs['byte-exact-archive'].strategy.matrix.os) === JSON.stringify(['ubuntu-latest','windows-latest']), 'Exact PHP bytes require Linux and Windows validation');
 assert(liveBrowser?.run.includes('https://hallpartner-se.preview2.inleed.com/stalhallar/') && liveBrowser.run.includes('verify-hallpartner-amp006.mjs') && liveBrowser.run.includes('verify-hallpartner-gallery.mjs'), 'Missing real preview browser verification');
 assert(liveBrowser.run.includes('https://hallpartner-se.preview2.inleed.com/offert/'), 'Missing read-only live quote verification');
 console.log('Workflow structure/permissions/triggers/contracts: PASS');

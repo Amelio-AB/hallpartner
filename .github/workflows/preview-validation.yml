@@ -139,6 +139,12 @@ jobs:
           node scripts/preview/payload.mjs prepare "$COMMIT"
           node scripts/preview/payload.mjs verify
           node scripts/preview/payload.mjs rights
+      - name: Verify Chrome environment before website assertions
+        run: node scripts/preview/chrome-preflight.mjs
+      - name: Build byte-exact private PHP source candidate
+        env:
+          COMMIT: ${{ steps.revision.outputs.commit }}
+        run: node scripts/preview/php-candidate.mjs build "$COMMIT" reports/preview/php-candidate
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
       - name: Archive quote browser review before remote FTPS checks

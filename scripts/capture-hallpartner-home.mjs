@@ -1,10 +1,9 @@
 /** Chrome checks on real visitor routes. No publication or form delivery. */
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { createChromeSession, openChromeSocket } from './preview/chrome-session.mjs';
 import { quoteReleasePolicy } from './preview/quote-release.mjs';
 
 const url=process.env.HP_PREVIEW_URL||'http://127.0.0.1:4321/';
@@ -15,38 +14,14 @@ const prefix=process.env.HP_SCREENSHOT_PREFIX||'validated';
 const sections=(process.env.HP_SCREENSHOT_SECTIONS||'').split(',').filter(Boolean);
 assert.match(prefix,/^[a-z0-9-]+$/i);
 for(const id of sections)assert.match(id,/^[a-z0-9-]+$/i);
-const port=9300+process.pid%300;
-const profile=await mkdtemp(join(tmpdir(),'hp-site-cdp-'));
-const browser=spawn(process.env.HP_CHROME||'google-chrome',[
-  '--headless','--no-sandbox','--disable-gpu','--disable-dev-shm-usage',
-  '--disable-background-networking','--no-first-run','--no-default-browser-check',
-  '--remote-allow-origins=*','--remote-debugging-port='+port,'--user-data-dir='+profile,'about:blank',
-],{stdio:['ignore','ignore','pipe']});
-let startupError, socket, captureFailure;
-let diagnostics='';
-browser.on('error',error=>{startupError=error;});
-browser.stderr.on('data',chunk=>{diagnostics=(diagnostics+chunk).slice(-65536);});
 await mkdir(output,{recursive:true});
+const session=await createChromeSession();
+let socket, captureFailure;
+let phase='chrome-startup';
 const report=[];
 try {
-  let target;
-  for(let attempt=0;attempt<160;attempt++) {
-    if(startupError)throw startupError;
-    if(browser.exitCode!==null||browser.signalCode!==null)throw Error('Chrome exited before startup');
-    try {
-      const response=await fetch('http://127.0.0.1:'+port+'/json',{signal:AbortSignal.timeout(1000)});
-      if(response.ok)target=(await response.json()).find(page=>page.type==='page'&&page.webSocketDebuggerUrl);
-    }catch{/* Chrome may not have opened its debugging port yet. */}
-    if(target)break;
-    await sleep(150);
-  }
-  assert.ok(target,'Chrome debugging target unavailable');
-  socket=new WebSocket(target.webSocketDebuggerUrl);
-  await new Promise((done,fail)=>{
-    const timer=setTimeout(()=>fail(Error('WebSocket startup timeout')),8000);
-    socket.addEventListener('open',()=>{clearTimeout(timer);done();},{once:true});
-    socket.addEventListener('error',event=>{clearTimeout(timer);fail(event);},{once:true});
-  });
+  socket=await openChromeSocket(await session.ready());
+  phase='site-regression';
   let sequence=0;
   const pending=new Map(),browserErrors=[];
   socket.addEventListener('message',event=>{
@@ -360,23 +335,14 @@ try {
   await writeFile(join(output,prefix+'-REPORT.json'),JSON.stringify({route:expectedPath,pages:report,status:'passed'},null,2));
   console.log('PASS '+expectedPath+': AMP-002, images, release gates and no-JS navigation at six widths; no API requests.');
 }catch(error){
-  await writeFile(join(output,prefix+'-ERROR.txt'),String(error));
+  session.evidence.failurePhase=phase;
+  session.evidence.failureKind=phase==='chrome-startup'?'browser-startup':error.code==='ERR_ASSERTION'?'site-assertion':'browser-protocol-or-harness';
+  session.evidence.error=String(error);
+  await writeFile(join(output,prefix+'-ERROR.txt'),phase+': '+String(error));
   await writeFile(join(output,prefix+'-PARTIAL.json'),JSON.stringify(report,null,2));
   if(captureFailure){try{await captureFailure();}catch{/* Preserve original assertion. */}}
   console.error(error);process.exitCode=1;
 }finally{
-  await writeFile(join(output,prefix+'-chrome-stderr.log'),diagnostics);
   if(socket?.readyState===WebSocket.OPEN)socket.close();
-  if(browser.exitCode===null&&browser.signalCode===null){
-    browser.kill('SIGTERM');await Promise.race([new Promise(done=>browser.once('exit',done)),sleep(2000)]);
-  }
-  if(browser.exitCode!==null||browser.signalCode!==null){
-    // Chrome cache subprocesses can finish writing just after the parent exits.
-    // Only this generated OS-temp profile is eligible for cleanup, never project files.
-    try{await rm(profile,{recursive:true,force:true,maxRetries:10,retryDelay:250});}
-    catch(error){
-      console.warn('Temporary Chrome profile cleanup incomplete: '+error.code);
-      await writeFile(join(output,prefix+'-cleanup-warning.txt'),'Generated temporary profile retained: '+profile+'\n'+String(error));
-    }
-  }
+  await session.close(join(output,prefix+'-chrome.json'));
 }
