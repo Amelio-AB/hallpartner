@@ -4,9 +4,10 @@ import { fileURLToPath } from 'node:url';
 import { parse, walkSync } from 'ultrahtml';
 import { init, parse as parseJS } from 'es-module-lexer';
 import { PAGES, PREVIEW, IMAGE, safePath, files, json, sha256, assert, assertAmp } from './policy.mjs';
+import { quoteReleasePolicy } from './quote-release.mjs';
 
 const ROBOTS = 'User-agent: *\nDisallow: /\n';
-export function inspectHtml(html, page) {
+export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enabled) {
   const assets = []; const links = []; const scripts = []; let noindex = false; let contact = false; let quote = false;
   walkSync(parse(html), node => {
     if (!node.name) return;
@@ -16,10 +17,14 @@ export function inspectHtml(html, page) {
       noindex = values?.includes('noindex') && values.includes('nofollow');
     }
     assert(!['iframe','object','embed','base'].includes(node.name), 'Unexpected active embed/base in ' + page);
-    if (a['data-enabled'] !== undefined) assert(a['data-enabled'] === 'false', 'Enabled form in ' + page);
+    if (a['data-enabled'] !== undefined) {
+      const permitted = page === 'offert/index.html' && a.id === 'hp-offert-guide' && quoteEnabled;
+      assert(a['data-enabled'] === (permitted ? 'true' : 'false'),
+        'Unapproved form activation or mismatched quote release: ' + page);
+    }
     if (node.name === 'form') assert(a['data-enabled'] === 'false' && !a.action, 'Active form in ' + page);
     if (a.id === 'hp-contact-form') contact = a['data-enabled'] === 'false';
-    if (a.id === 'hp-offert-guide') quote = a['data-enabled'] === 'false';
+    if (a.id === 'hp-offert-guide') quote = a['data-enabled'] === (quoteEnabled ? 'true' : 'false');
     if (a.src) assets.push(a.src);
     if (a.poster) assets.push(a.poster);
     if (a.srcset) assets.push(...a.srcset.split(',').map(x => x.trim().split(/\s+/)[0]));
@@ -31,7 +36,7 @@ export function inspectHtml(html, page) {
   });
   assert(noindex, 'Missing noindex,nofollow: ' + page);
   if (page === 'kontakt/index.html') assert(contact, 'Contact disabled contract missing');
-  if (page === 'offert/index.html') assert(quote, 'Quote disabled contract missing');
+  if (page === 'offert/index.html') assert(quote, 'Quote mode does not match approved preview release');
   if (page === 'index.html') assert(html.includes('En hall börjar med ditt behov.'), 'Unexpected homepage');
   return { assets, links, scripts };
 }
