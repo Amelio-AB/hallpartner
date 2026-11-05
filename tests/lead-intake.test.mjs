@@ -34,12 +34,15 @@ test('AMP-001 genuine public contract accepts the compact Hallpartner draft',()=
  flow.dispose();
 });
 
-test('V2 quote is always blocked while contact keeps its previous release gate',()=>{
+test('V2 submit requires three explicit release gates; contact keeps its previous gate',()=>{
  const quote=read('src/pages/offert/index.astro');
  const contact=read('src/components/ContactForm.astro');
- assert.match(quote,/const ready = false;/);
+ assert.match(quote,/PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED === 'true'/);
+ assert.match(quote,/PUBLIC_HP_RECEIVER_VERIFIED === 'true'/);
+ assert.match(quote,/PUBLIC_HP_PRIVACY_APPROVED === 'true'/);
  assert.match(quote,/data-enabled=\{String\(ready\)\}/);
- assert.doesNotMatch(quote,/createJsonAdapter|fetch\(\s*['"]\/api\/lead\.php/);
+ assert.match(quote,/createJsonAdapter\('\/api\/lead\.php'\)/);
+ assert.match(quote,/host\.dataset\.enabled === 'true'/);
  assert.match(quote,/const blocked: Adapter = async/);
  assert.ok(quote.includes('button.disabled = true'));
  assert.match(contact,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
@@ -139,7 +142,8 @@ test('V2 attachment review cannot silently fall back to V1 or the PHP receiver',
  assert.match(page,/PUBLIC_HP_QUOTE_FILES_REVIEW === 'true'/);
  assert.match(page,/!ready && import\.meta\.env/);
  assert.match(page,/async upload\(\) \{ throw new Error/);
- assert.match(page,/const ready = false;/);
+ assert.match(page,/PUBLIC_HP_RECEIVER_VERIFIED === 'true'/);
+ assert.match(page,/PUBLIC_HP_PRIVACY_APPROVED === 'true'/);
  assert.match(read('server/lead/validator.php'),/\$input\['contractVersion'\] \?\? null\) !== 1/);
 });
 
