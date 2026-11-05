@@ -79,11 +79,31 @@ $labels = [
     'contact.name' => 'Namn', 'contact.email' => 'E-post',
     'contact.phone' => 'Telefon', 'contact.company' => 'Företag',
     'contact.message' => 'Meddelande',
+    'project.hall_interest' => 'Önskad hallkategori',
+    'site.decided' => 'Byggplats bestämd',
+    'site.address' => 'Adress eller fastighet',
+    'foundation.status' => 'Grundstatus',
+    'foundation.notes' => 'Kommentar om grunden',
+    'design.insulation' => 'Isoleringsbehov',
+    'openings.ports' => 'Portbehov',
+    'openings.port_needs' => 'Så ska portarna användas',
+    'openings.windows' => 'Fönster och ljusinsläpp',
+    'design.envelope_wishes' => 'Väggar, tak och färg',
+    'design.installation_wishes' => 'Övriga funktioner',
+    'delivery.wishes' => 'Önskad hjälp',
+    'planning.stage' => 'Projektläge',
+    'planning.timeline' => 'Önskad byggstart',
+    'documents.available' => 'Ritningar och bilder',
+    'documents.description' => 'Tillgängligt underlag',
+    'planning.permit_status' => 'Bygglovsläge',
+    'planning.notes' => 'Övrigt om projektet',
+    'contact.role' => 'Roll i projektet',
+    'contact.preference' => 'Önskad kontaktväg',
 ];
 $reference = bin2hex(random_bytes(12));
 $kind = $validation['kind'];
 $answers = $validation['answers'];
-$subject = $kind === 'hallpartner-offert-v1' ? 'Ny hallförfrågan' : 'Nytt kontaktmeddelande';
+$subject = $kind === 'hallpartner-contact-v1' ? 'Nytt kontaktmeddelande' : 'Ny hallförfrågan';
 $body = "Hallpartner – " . $subject . "\n" .
     "Referens: " . $reference . "\n" .
     "Mottagartid UTC: " . gmdate('Y-m-d H:i:s') . "\n\n";
