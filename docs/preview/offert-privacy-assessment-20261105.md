@@ -49,18 +49,29 @@ denna dokumentation redovisar bedömningen och dess tekniska villkor.
 
 ## Faktisk behandling och gallring
 
-- Privat PHP-validering, exakt preview-Origin och krypterad SMTP. Mejlet
-  stannar hos `kontakt@amelio.se`; inga automatiska vidarebefordringar görs
-  av applikationen. Serverns faktiska brevlådeinställningar verifieras separat.
+- Privat PHP-validering, exakt preview-Origin och krypterad SMTP. PHP använder
+  fortsatt `kontakt@amelio.se` som både avsändare och mottagare. Andreas har
+  uttryckligen bekräftat den faktiska kedjan: Inleeds PHP-mottagare → SMTP →
+  kontot `kontakt@amelio.se` hos Inleed → vidarebefordran till
+  `andreas@amelio.se` → läsning i Gmail. Endast Andreas har åtkomst.
+  DNS/MX för hela domänen är inte bevis för att det enskilda kontot är
+  Google-hostat. SMTP, adresser och vidarebefordran har inte ändrats.
 - Formulärinnehållet sparas som mejl. Applikationens fellogg skriver endast
   en slumpad referens vid osäkert SMTP-utfall, aldrig formulärsvaret.
-- Andreas raderar förfrågan och sammanhörande svar från testinkorgen och
-  papperskorgen senast 30 dagar efter mottagandet. Vid återställning av
-  backup ska tidigare gallrade mejl raderas igen.
+- Andreas raderar förfrågan och sammanhörande svar senast 30 dagar efter
+  mottagandet i både Inleeds och Gmails e-posthantering, inklusive kvarvarande
+  kopior, skickade svar och papperskorgar. Detta är ägarens bekräftade ansvar,
+  inte ett påstående om ett installerat automatiskt brevlådegallringsjobb.
+  Leverantörernas tekniska säkerhetskopior och återställningsmöjligheter
+  följer respektive tjänsts tillämpliga regler. Vid återställning av backup
+  ska tidigare gallrade mejl raderas igen.
 - Inleed är biträde enligt [biträdesavtalet](https://inleed.se/bitradesavtal.pdf)
   som ingår i tjänsteavtalet. [Villkor 3.3 och 6.1](https://inleed.se/avtal)
   anger rullande sjudagarsbackup respektive biträdesavtalet. Detta ger inte
-  stöd för att lova omedelbar radering ur alla säkerhetskopior.
+  stöd för att lova omedelbar radering ur alla säkerhetskopior. Inleeds
+  sjudagarsregel får inte tillämpas på Google. Google ingår i den bekräftade
+  mottagningskedjan; inga obekräftade kontospecifika Google-inställningar,
+  avtal eller juridiska godkännanden påstås verifierade.
 - Missbruksskyddet lagrar HMAC av IP-adress och anropstidpunkter, separat
   från formulärdata. En timmes historik begränsar till fem inskick.
   Den nya CLI-gallringen tar bara bort utgångna `lead-<sha256>.json`-poster.
