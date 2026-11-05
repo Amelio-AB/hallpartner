@@ -14,8 +14,11 @@ PHP-mottagaren `/home/s164937/hallpartner-leads` ingår. WordPress, DNS,
 andra webbplatser och framtida kundkonto ingår inte.
 
 Amelio AB är ansvarig i denna preview. Endast Andreas har åtkomst till
-testinkorgen och ansvarar för gallring inom 30 dagar, inklusive papperskorgen.
-Avsändare och mottagare är `kontakt@amelio.se`.
+förfrågningarna och ansvarar för gallring inom 30 dagar. Detta omfattar
+kopior, svar och papperskorgar i både Inleeds och Gmails e-posthantering.
+PHP-avsändare och mottagare är `kontakt@amelio.se`, ett konto hos Inleed.
+Mejl vidarebefordras därifrån till `andreas@amelio.se` och läses i Gmail,
+enligt Andreas uttryckliga klargörande. Ingen e-postinställning ändras.
 [Intresseavvägning och behandlingsbeskrivning](offert-privacy-assessment-20261105.md)
 redovisar underlaget för artikel 6.1 f. Ingen extern juridisk granskning
 eller kundproduktionsrelease påstås.
@@ -64,6 +67,10 @@ Privat backup finns under `.release-20261105/backup` i mottagarkatalogen.
    `b48d4df51f2834f90d04e086` ersätter inte detta sluttest.
 6. Ta bort exakt den tillfälliga SSH-nyckeln och verifiera borttagningen.
 
-Detta dokument registrerar godkännande och förkontroller. Det är inte
-bevis för genomförd merge, publicering, aktivering eller slutlig leverans.
-Utfallet dokumenteras efter respektive faktisk kontroll.
+Godkänd funktionsrelease är nu genomförd: `8d50c82`, grön publiceringskörning
+`42095152188`, HTTP 200 från ett enda verkligt syntetiskt inskick och referens
+`aeb3c18da57f497ff2949777`. Andreas bekräftade den identiska referensen i
+mottaget mejl och godkände leveranstestet. Tillfällig SSH-nyckel har tagits bort
+med bevarade övriga nycklar och verifierat nekad ny anslutning. Se
+[slutcheckpointen](../checkpoints/2026-11-05-offert-v2-inleed-preview.md).
+Inga ytterligare SMTP-testutskick ska göras för text- och dokumentationsrättningen.

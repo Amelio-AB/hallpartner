@@ -1,5 +1,54 @@
 # Checkpoint – Hallpartner offertguide V2 och Inleed-preview (2026-11-05)
 
+## Aktuellt leveransbevis – ersätter äldre pausstatus nedan
+
+- PR [#26](https://github.com/Amelio-AB/hallpartner/pull/26) och #27 är mergade.
+  Publicerad funktionsversion är `8d50c829ba964aeed1f722d184122fddae954181`.
+  [Publiceringskörning 42095152188](https://github.com/Amelio-AB/hallpartner/actions/runs/42095152188)
+  har gröna validerings- och publiceringsjobb inklusive live Chrome på offertguiden.
+  Vanlig CI är också grön. Tidigare `913a84c` och slutligt PR-HEAD `673545d`
+  hade godkända CI-, Footer- och previewkontroller.
+- Publiceringsmarkören återlästes via HTTPS och SSH. Samtliga 79 publicerade
+  filer matchade körningens manifest byte för byte. Markören skrevs
+  `2026-11-05T19:51:20.264Z`; manifest-SHA-256 är
+  `7635e1718d6babf91b19c650aa4238f848905ead2b375532acb1f4e04462c5fc`.
+- Privat mottagning aktiverades först efter publicering och verifierad
+  integritetssida. PHP:s avsändare och mottagare är `kontakt@amelio.se`.
+  Kontaktformulär, bilagor, kundpriser och köp är fortsatt avstängda.
+- **Ett syntetiskt inskick via den riktiga publicerade guiden** genomfördes
+  `2026-11-05T19:55:38Z`: exakt ett POST till `/api/lead.php`, HTTP 200,
+  `status: success`, referens **`aeb3c18da57f497ff2949777`**. Chrome visade
+  **”Förfrågan är mottagen.”** Andreas kontrollerade själv inkorgen och
+  bekräftade exakt samma mejlreferens samt godkände leveranstestet i chatten.
+  Inget ytterligare testutskick behövs. Den automatiska läsningen av en lokal
+  Inleed-Maildir var inte leveransbevis; ägarens mottagningskontroll är beviset.
+- Andreas klargjorde e-postkedjan: offertguide → privat PHP på Inleed → SMTP
+  med `kontakt@amelio.se` → kontot `kontakt@amelio.se` hos Inleed →
+  vidarebefordran till `andreas@amelio.se` → Gmail. Inga SMTP-adresser,
+  serverinställningar eller vidarebefordringar har ändrats. Integritetstexten
+  rättas till denna kedja. Andreas ansvarar för radering inom 30 dagar av
+  kopior och svar i båda tjänsterna, inklusive papperskorgar. Leverantörernas
+  tekniska lagringsregler hålls åtskilda från Amelios brevlådegallring.
+- Integritetssidan granskades visuellt i den riktiga previewn på mobil och
+  desktop samt kontrollerades vid sex skärmbredder utan API-anrop. Rättningen
+  av e-postbeskrivningen och denna slutdokumentation publiceras som en separat
+  textuppdatering genom samma GitHub-flöde; inga andra funktioner eller design ändras.
+- **Tillfällig SSH-nyckel borttagen:** exakt en matchande nyckelrad togs bort;
+  alla andra rader bevarades byte för byte. Återläsning visade noll matchningar
+  och läge 0600. Ny anslutning med enbart denna nyckel nekades (exit 255).
+  Lokala privata och publika nyckelfiler raderades. Fingeravtryck:
+  `SHA256:PwfrR6F12/LZMczYkymVh4Bjwbz9SZnfv8vIXS+eR4Y`.
+- Privat råbackup av previewn finns i
+  `/home/s164937/hallpartner-leads/.release-20261105/backup/public-preview.tar`,
+  SHA-256 `d115a6fa140b1b4267cc5a3ba968b467a896cfd490c69adca6ff80496bef5711`.
+  Originalfiler och innehållet i arkivet verifierades innan publicering.
+  Privat konfigurationsbackup finns i samma backupkatalog; inga hemligheter
+  har lagts i GitHub eller loggats. Publik PHP-bootstrap är oförändrad.
+- Noindex, robots-, mål-, Origin-, validerings- och leveransskydd är kvar.
+  Kundens WordPress, DNS, andra webbplatser och framtida Inleed-konto har inte ändrats.
+
+## Historik före godkänd aktivering
+
 **Återupptaget på projektägarens begäran:** se
 [fortsatt teknisk verifiering och återstående godkännanden](2026-11-05-offert-release-resumed.md).
 Pausen nedan dokumenterar det tidigare stoppet, inte ett nytt stoppbeslut.

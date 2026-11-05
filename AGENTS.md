@@ -1,13 +1,16 @@
-# Aktuell pauscheckpoint – offertguidens mottagning (2026-11-05)
+# Aktuell leveranscheckpoint – offertguidens mottagning (2026-11-05)
 
 **Läs först** [checkpointen för V2 och Inleed-preview](docs/checkpoints/2026-11-05-offert-v2-inleed-preview.md)
-och kontrollera därefter aktuell GitHub-HEAD, PR #25, PR #26, GitHub Actions och live-preview.
-Tidigare ingress nedan om att PR #22 fortfarande är Draft och att PHP enbart
-accepterar V1 är **historisk och ersatt**: V2-backend har installerats och
-SMTP har testats med bekräftad leverans till `kontakt@amelio.se`.
-**Den publika skickaknappen är dock fortfarande avstängd.**
-Det finns ett dokumenterat `EPIPE`-fel i senaste main-publicering som måste
-undersökas med nya bevis innan fler deployer görs.
+och kontrollera därefter aktuell GitHub-HEAD, GitHub Actions och live-preview.
+PR #26 och #27 är mergade. `8d50c82` publicerades med grön körning
+`42095152188`; ett riktigt syntetiskt inskick gav HTTP 200 och referensen
+`aeb3c18da57f497ff2949777`, vars mejlleverans Andreas bekräftade.
+**Skicka förfrågan är aktiverad enbart på Amelios preview.** Inga fler
+testutskick behövs för slutdokumentationen. Tillfällig SSH-nyckel är borttagen.
+Äldre pauser, inaktiva flaggor, PR-status och EPIPE-stopp nedan är historiska.
+Inleed-kontot `kontakt@amelio.se` är både PHP-avsändare och mottagare;
+mejlen vidarebefordras till `andreas@amelio.se` och läses i Gmail. Gallring
+inom 30 dagar omfattar kopior i båda tjänsterna inklusive papperskorgar.
 
 ---
  
