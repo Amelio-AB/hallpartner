@@ -1,5 +1,17 @@
 # Issue #29 – tekniska releasegrindar och återstart
 
+**Senaste läge efter godkänd återstart:** PR #32 är mergad och `931e214` är
+publicerad med grön körning `42121351331`. PHP-aktiveringen stoppades före
+filinstallation eftersom den redan aktiva `validator.php` har CRLF och inte
+matchar kandidatens exakta Git-bytes. Kandidatarkivet är korrekt. Aktiv
+mottagare/konfiguration är oförändrade, inget liveinskick har gjorts och
+SSH-nyckeln är återkallad. Se
+[aktuell checkpoint](../checkpoints/2026-11-05-issue-29-offert-confirmation.md).
+Nästa installation måste omfatta även Git-exakt validator med backup och
+återställning; ingen normaliserad hashjämförelse får ersätta detta.
+
+Nedan följer den tidigare återstartsplanen och dess tekniska bakgrund.
+
 Utgångspunkt 2026-11-05: `main` = `4e9d1f7c6c71e5b1e439292710ded649f2d2ead6`.
 [Draft PR #31](https://github.com/Amelio-AB/hallpartner/pull/31) behålls
 oförändrad som checkpoint för den stoppade releasen. Denna tekniska PR får

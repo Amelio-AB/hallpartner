@@ -1,6 +1,89 @@
-# Issue #29 – tacksida och kundkopia, kandidat för godkännande
+# Issue #29 – publicerad frontend, stoppad PHP-aktivering
 
-## Aktuell releasestatus – stoppad före publicering (2026-11-05)
+## Aktuell releasestatus – återstart efter PR #32 (2026-11-05)
+
+Andreas godkände hela återstartsplanen, inklusive merge/publicering, privat
+installation och exakt ett syntetiskt liveinskick. Releasen stoppades vid
+en strikt bytekontroll **före någon privat filinstallation**. Inget inskick
+gjordes. PR #31 ligger kvar som Draft; ingen ny publicering följer av denna
+dokumentationsuppdatering.
+
+### Mergat, publicerat och verifierat
+
+- PR #32:s exakta HEAD `e4e7945bcf712bc10ec401a8260120eb91cdc4eb` hade alla
+  kontroller gröna. Main och preview var oförändrade före merge. PR #32
+  mergades till **`931e2149d5477e33aaa4d19bbaa7ad264b04d320`**.
+- Ny ordinarie main-körning
+  [42121351331](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351331)
+  är helt grön: validering, publicering, original-/HTTP-kontroller och
+  läsande live-Chrome. Vanlig CI
+  [42121351071](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351071)
+  är också grön. Den gamla misslyckade körningen startades inte om.
+- SSH och HTTPS bekräftar publicerad commit `931e214` och rätt run-ID.
+  Alla **117 originalfiler** i publiceringsinventeringen verifierades
+  med full SHA-256 via SSH. Markörens `verifiedAt` är
+  `2026-11-05T22:45:29.998Z`. Inventeringens SHA-256:
+  `19a3e34a54434650ab845973405ab7e360c4080af71cc1e79493527542852d87`.
+  Manifestets SHA-256:
+  `9884cb94e43be4bd00abb644709855661e340903bd61b47d3ce4a286de296a88`.
+- Backupen nedan verifierades före merge mot samtliga berörda privata
+  original och dåvarande statiska preview. Den behövde inte tas om.
+
+### Korrekt kandidatarkiv, men avvikande installerad validator
+
+- Arkivet för exakt publicerad commit har SHA-256
+  `d1c1a36416f081f825c78246e007e2ae60dee5a0f59f7ff0576a4ef2f84be9f0`.
+  Alla sju filer matchar råa Git-blobbar byte för byte. Arkivhash och
+  samtliga filhashar verifierades efter överföring och uppackning på servern.
+  PHP 8.3.36-syntax, oberoende validerings-/rate-limit-test samt svensk
+  sammanfattning och laddning av delivery-koden passerade utan SMTP.
+- Inaktiv staging finns i
+  `/home/s164937/hallpartner-leads/.release-issue29-restart-20261105`.
+  Det tidigare nekade CRLF-arkivet användes inte.
+- Aktiveringsskriptet antog att befintlig `validator.php` redan hade exakt
+  samma bytes som Git och skulle därför lämnas orörd. Den strikta `cmp`-
+  kontrollen nekade filen **innan stödfiler eller receiver installerades**.
+  Den aktiva filen är 12 091 byte med 266 CRLF-radslut och SHA-256
+  `39fd8ffac6ad078c70394b4cb9f647f2f0aef67c9ffbba342959328a9d7751f0`.
+  Git-kandidaten är 11 825 byte med LF och SHA-256
+  `a7f9ddf4ee59636b8f52d943c72777d8f432118a525cc819b6673be13be42385`.
+  Läsande diagnostik visade enbart radslutsskillnader; detta användes
+  **inte** som accepterad byte-/hashkontroll och inga filer normaliserades.
+  `rate-cleanup.php` är däremot redan exakt byteidentisk med Git.
+- Efter stoppet verifierades aktiv receiver, validator, rate-cleanup,
+  konfiguration, composer-filer, smtp-smoke och publik bootstrap mot backupen.
+  De är oförändrade. `messages.php`, `delivery.php` och `quote-fields.json`
+  saknas fortfarande i aktiv katalog. Ingen receiver-temporärfil skapades.
+
+Den nya statiska frontendversionen är publicerad, men den tidigare privata
+mottagaren är fortsatt aktiv. Frontenden är kompatibel med dess äldre svar:
+saknad kundkopiestatus visas som obekräftad. **Kundkopian är inte installerad
+eller liveverifierad. Noll syntetiska liveinskick gjordes i återstarten.**
+
+### Åtkomst avslutad och återstående arbete
+
+Nyckeln hade `restrict`, `expiry-time="20261106022032Z"` och fingeravtryck
+`SHA256:Or8486MyZtci0Cl3DPoCHSSq/gzli29xy1waqNHypZ0`. Efter stoppet togs exakt
+dess rad bort atomiskt; övriga bytes bevarades, filrättighet 0600. En ny
+BatchMode-anslutning med enbart denna nyckel nekades med exit 255. Lokala
+privata och publika nyckelfiler är raderade.
+
+Nästa kontrollerade installation behöver även omfatta **Git-exakt
+`validator.php`**, med verifierad backup av den befintliga CRLF-filen och
+återställning av båda filerna vid ett fel efter byte. Ersätt filen med den
+verifierade kandidatens bytes; acceptera inte en normaliserad hash eller
+ändra aktiv fil på plats. Ingen ny statisk publicering behövs enbart för
+denna installationsrättning om main, preview och kandidat fortfarande är
+oförändrade. Därefter återstår exakt ett liveinskick, redirect/tacksida,
+två separata mejl med samma referens, Andreas inkorgsbekräftelse och ny
+åtkomststängning. Ingen testförfrågan ska skickas som följd av denna checkpoint.
+
+Design, frågor, SMTP-inställningar/lösenord, integritet, WordPress och DNS
+har inte ändrats i återstarten.
+
+---
+
+## Historisk releasestatus – första stoppet före publicering (2026-11-05)
 
 Andreas godkände uttryckligen merge, kontrollerad previewrelease, privat
 PHP-installation och **ett enda** syntetiskt inskick med besökaradressen
