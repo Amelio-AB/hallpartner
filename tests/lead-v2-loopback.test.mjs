@@ -23,6 +23,10 @@ test('synthetic test only uses loopback and retains private production config', 
   ]) assert.ok(source.includes(token), token);
   assert.doesNotMatch(source, /config\.local\.php["']?\s*\)\s*>|sed -i[^\\n]*config\.local\.php/);
   assert.match(source, /-S "127\.0\.0\.1:\$port"/);
+  assert.ok(source.includes("$c['rate_secret'] = getenv('HP_V2_TEST_RATE_SECRET')"),
+    'isolated test must not rely on the production rate limiter secret');
+  assert.ok(source.includes('HP_V2_TEST_RATE_DIR='),
+    'rate directory must be isolated from production');
   assert.ok(source.includes("$c['recipient'] = 'andreas@amelio.se'"),
     'temporary test config must redirect every SMTP message to approved test inbox');
   assert.ok(!source.includes('($c["recipient"] ?? "") !== "andreas@amelio.se"'),
