@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished } from '../scripts/preview/remote.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished, request, transientHttpReadError } from '../scripts/preview/remote.mjs';
 import { expectedHttpBytes, fingerprint } from '../scripts/preview/delivery.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
@@ -33,6 +33,58 @@ test('pre-upload delivery allows only the exact forward HTML origin rewrite', as
   assert.throws(() => assertDelivery({ fileFingerprints: [], deliveryChecks: [] }));
   assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, path:'wrong.html'})) }));
   assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, expectedHttpSha256:r.ftpsSha256})) }));
+});
+
+test('remote HTTP proof retries only transient read errors without changing any verification rules', async () => {
+  const url = PREVIEW + '/offert/';
+  const transient = new TypeError('fetch failed', {cause:Object.assign(new Error('closed'),{code:'EPIPE'})});
+  assert.equal(transientHttpReadError(transient), true);
+  assert.equal(transientHttpReadError(Object.assign(new Error('certificate failed'),{code:'CERT_HAS_EXPIRED'})),false);
+  let calls=0, delays=[];
+  const ok=await request(url,async () => {
+    calls++;
+    if (calls===1) throw transient;
+    return new Response('<h1>Expected</h1>',{status:200,headers:{'content-type':'text/html'}});
+  },async ms=>{delays.push(ms);});
+  assert.equal(calls,2);
+  assert.deepEqual(delays,[250]);
+  assert.equal(ok.status,200);
+  assert.equal(ok.body.toString(),'<h1>Expected</h1>');
+
+  calls=0;
+  const status=await request(url,async()=>{
+    calls++;return new Response('blocked',{status:503});
+  },async()=>{throw Error('unexpected retry delay');});
+  assert.equal(calls,1,'503 must not be treated as a transient transport failure');
+  assert.equal(status.status,503,'HTTP status must not be rewritten as success');
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;throw transient;
+  },async()=>{}),/no verification claimed/);
+  assert.equal(calls,3,'retry limit for failed HTTPS reads');
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;
+    throw Object.assign(new Error('TLS mismatch'),{code:'ERR_TLS_CERT_ALTNAME_INVALID'});
+  },async()=>{}),/no verification claimed/);
+  assert.equal(calls,1,'TLS failures never retried');
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;return new Response(null,{status:302,headers:{location:'https://attacker.invalid/' }});
+  },async()=>{}),/Unexpected redirect origin/);
+  assert.equal(calls,1,'unapproved redirects never retried');
+
+  calls=0;
+  const bodyError=await request(url,async()=>{
+    calls++;
+    if(calls===1)return {status:200,headers:new Headers(),arrayBuffer:async()=>{throw transient;}};
+    return new Response('valid full body',{status:200});
+  },async()=>{});
+  assert.equal(calls,2,'partial HTTP body must be retried, not accepted');
+  assert.equal(bodyError.body.toString(),'valid full body');
 });
 
 test('forward transformation preserves all other bytes, origins and file types', () => {
