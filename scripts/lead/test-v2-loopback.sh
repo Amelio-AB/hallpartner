@@ -29,7 +29,8 @@ $c = require $argv[1];
 if (!is_array($c) || ($c["enabled"] ?? null) !== false ||
     ($c["privacy_approved"] ?? null) !== false ||
     ($c["allowed_origin"] ?? "") !== "https://hallpartner-se.preview2.inleed.com" ||
-    ($c["recipient"] ?? "") !== "andreas@amelio.se" ||
+    // The installed recipient may belong to the configured project. Never
+    // send synthetic mail there: the disposable wrapper below redirects it.
     ($c["smtp_from"] ?? "") !== "kontakt@amelio.se" ||
     !is_string($c["smtp_password"] ?? null) || $c["smtp_password"] === "") {
     fwrite(STDERR, "Server configuration differs from the isolated Amelio test setup. Stopped.\n");
@@ -61,6 +62,7 @@ $c = require getenv('HP_V2_TEST_ORIGINAL_CONFIG');
 if (!is_array($c)) throw new RuntimeException('Missing private config');
 $c['enabled'] = true;
 $c['privacy_approved'] = true; // Synthetic localhost simulation, NOT legal approval.
+$c['recipient'] = 'andreas@amelio.se'; // Local test only: never mail configured recipient.
 $c['rate_dir'] = getenv('HP_V2_TEST_RATE_DIR');
 return $c;
 PHP
