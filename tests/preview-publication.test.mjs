@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
+import { quoteRelease, quoteReleasePolicy } from '../scripts/preview/quote-release.mjs';
 import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished } from '../scripts/preview/remote.mjs';
 import { expectedHttpBytes, fingerprint } from '../scripts/preview/delivery.mjs';
 
@@ -82,6 +83,37 @@ test('missing robots and active form contracts fail closed', () => {
   assert.throws(()=>inspectHtml(html,'offert/index.html'));
   inspectHtml(html+'<form id="hp-contact-form" data-enabled="false"></form>','kontakt/index.html');
   inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html');
+});
+test('preview form activation is limited to the exact quote host and approved mode', () => {
+  const disabled = html + '<div id="hp-offert-guide" data-enabled="false"></div>';
+  const enabled = html + '<div id="hp-offert-guide" data-enabled="true"></div>';
+  inspectHtml(disabled, 'offert/index.html');
+  assert.throws(() => inspectHtml(enabled, 'offert/index.html'));
+  inspectHtml(enabled, 'offert/index.html', true);
+  assert.throws(() => inspectHtml(disabled, 'offert/index.html', true));
+  assert.throws(() => inspectHtml(html + '<form data-enabled="true"></form>', 'offert/index.html', true));
+  assert.throws(() => inspectHtml(html + '<div id="hp-contact-form" data-enabled="true"></div>', 'kontakt/index.html', true));
+  assert.throws(() => inspectHtml(html + '<div id="hp-offert-guide" data-enabled="true"></div>', 'other.html', true));
+});
+test('approval must be complete, preview-only and backed by a published privacy route', () => {
+  const policy = JSON.parse(readFileSync('config/preview-quote-release.json','utf8'));
+  assert.deepEqual(quoteRelease(policy), { enabled:false });
+  const fields = {
+    customerPrivacyNoticePath:'/integritet/', privacyApprovedBy:'Hallpartner authorized sign-off',
+    receiverVerifiedBy:'Andreas successful real intake', recipientVerifiedBy:'Amelio owner verified',
+    ownerReleaseApprovedBy:'Andreas release approval', evidence:'docs/preview/approved-quote-release.md'
+  };
+  const enabled={...policy, mode:'enabled', approval:fields};
+  assert.throws(() => quoteRelease(enabled), /Privacy notice must be published/);
+  assert.deepEqual(quoteRelease(enabled, [...PAGES,'integritet/index.html']), { enabled:true });
+  for (const field of Object.keys(fields)) {
+    assert.throws(() => quoteRelease({...enabled,approval:{...fields,[field]:null}},[...PAGES,'integritet/index.html']));
+  }
+  for (const extra of [{sender:'other@invalid.test'},{recipient:'someone@invalid.test'},
+    {targetOrigin:'https://hallpartner.se'},{scope:'other'},{mode:'something-else'}]) {
+    assert.throws(() => quoteRelease({...policy,...extra}));
+  }
+  assert.deepEqual(quoteReleasePolicy(),{enabled:false});
 });
 test('HTML parser retains responsive images, inline imports and stylesheet references', () => {
   const r=inspectHtml(html+'<img src="/a.webp" srcset="/a.webp 320w, /b.webp 640w"><link rel="stylesheet" href="/a.css"><script type="module">import "/a.js"</script>','other.html');
