@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
+import { inspectHtml } from './preview/payload.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const dist=join(root,'dist');
 const m=JSON.parse(readFileSync(join(root,'docs/migration/legacy-url-map.v01.json'),'utf8'));
@@ -22,9 +23,9 @@ for(const r of unresolved){
  assert.equal(r.destinationPath,null);
  if(r.sourcePath==='/offert/') {
    const draftFile=join(dist,'offert','index.html');
-   assert.ok(existsSync(draftFile),'missing disabled AMP-001 draft');
+   assert.ok(existsSync(draftFile),'missing AMP-001 preview');
    const html=readFileSync(draftFile,'utf8');
-   assert.ok(html.includes('noindex,nofollow') && html.includes('data-enabled="false"'),'quote preview must be non-delivering');
+   inspectHtml(html,'offert/index.html');
  } else {
    assert.ok(!existsSync(join(dist,r.sourcePath.slice(1),'index.html')),'unapproved new route '+r.sourcePath);
  }
