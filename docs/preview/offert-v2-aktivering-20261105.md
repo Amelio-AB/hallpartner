@@ -16,6 +16,14 @@ Den nya sexstegsguiden är redan publicerad på Amelios Inleed-preview som **gra
 - Ingen filuppladdning aktiveras. `PUBLIC_HP_QUOTE_FILES_REVIEW` tillåts bara när verklig inskickning är avstängd.
 - Tidigare kontaktformulär och V1-validator fortsätter att fungera separat.
 
+## Ytterligare verifierad releaseblockerare: dagens previewpipeline
+
+`scripts/preview/payload.mjs` kräver uttryckligen `data-enabled="false"` för varje formulär och för `offert/index.html`. Kontrolltesterna i `tests/preview-publication.test.mjs` förutsätter detta. Även när privat mottagare installerats och PHP fungerar skulle en byggd guide med aktiv skickaknapp därför **stoppas av den befintliga säkerhetskontrollen**.
+
+Dessutom skickar `.github/workflows/deploy-production.yml` inte de tre `PUBLIC_HP_*`-aktiveringsflaggorna till Astro-byggsteget i det återanvända `preview-validation.yml`. En manuell ändring av privata PHP-inställningar kan därför inte aktivera den statiska frontendknappen.
+
+**Krävd separat, godkänd aktiverings-PR:** inför en explicit, spårbar preview-only releaseväg som bara tillåter aktiv `offert/index.html` efter dokumenterad mottagar- och integritetskontroll; bevara att kontaktformulär och PR-granskningar förblir avstängda. Gränsen ska testas både för avstängd standard och godkänd aktivering; alla andra förbjudna payloads ska fortsätta stoppas. Aktivera aldrig detta genom att generellt ta bort `inspectHtml`-skydden.
+
 ## Vad som faktiskt blockerar riktig inskickning
 
 1. **Installera den reviderade privata PHP-mottagaren** (`server/lead/receiver.php` och `validator.php`) utanför `public_html` på rätt Inleed-konto. Verifiera den redan befintliga *serverkopian* `api/lead.php` separat: dess dokumenterade SHA motsvarar inte repots offentliga bootstrap. Ändra ingen PHP i den statiska FTPS-publiceringen.
