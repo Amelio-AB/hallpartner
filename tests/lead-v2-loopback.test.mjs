@@ -17,7 +17,7 @@ test('synthetic test only uses loopback and retains private production config', 
   const source = readFileSync(script, 'utf8');
   for (const token of [
     '127.0.0.1:', 'HP_V2_TEST_TOKEN', 'HP_V2_TEST_ORIGINAL_CONFIG',
-    'hallpartner-offert-v2-review', 'andreas@amelio.se',
+    'hallpartner-offert-v2-review', 'kontakt@amelio.se',
     'wrong-origin.invalid', "https://hallpartner-se.preview2.inleed.com",
     'TEST INTE BEKRÄFTAT', 'Publik mottagning fortfarande avstängd'
   ]) assert.ok(source.includes(token), token);
@@ -27,8 +27,8 @@ test('synthetic test only uses loopback and retains private production config', 
     'isolated test must not rely on the production rate limiter secret');
   assert.ok(source.includes('HP_V2_TEST_RATE_DIR='),
     'rate directory must be isolated from production');
-  assert.ok(source.includes("$c['recipient'] = 'andreas@amelio.se'"),
+  assert.ok(source.includes("$c['recipient'] = 'kontakt@amelio.se'"),
     'temporary test config must redirect every SMTP message to approved test inbox');
-  assert.ok(!source.includes('($c["recipient"] ?? "") !== "andreas@amelio.se"'),
+  assert.ok(!source.includes('($c["recipient"] ?? "") !== "kontakt@amelio.se"'),
     'do not require changing the existing recipient in the real private config');
 });
