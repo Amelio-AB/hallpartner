@@ -1,7 +1,7 @@
 import { appendFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PREVIEW, assert, json } from './policy.mjs';
+import { PREVIEW, PAGES, assert, json } from './policy.mjs';
 
 const EXPECTED_SCOPE = 'amelio-inleed-development-preview-only';
 const REFERENCE_PATH = '/integritet/';
@@ -11,7 +11,7 @@ const REFERENCE_PATH = '/integritet/';
  * reviewed preview-only release. A successful SMTP smoke test alone is not
  * approval for capturing real customers' personal data.
  */
-export function quoteRelease(policy) {
+export function quoteRelease(policy, publishedPages = PAGES) {
   assert(policy?.schemaVersion === 1, 'Invalid quote release schema');
   assert(policy.scope === EXPECTED_SCOPE && policy.targetOrigin === PREVIEW,
     'Quote release target must be the existing Amelio Inleed preview');
@@ -22,6 +22,8 @@ export function quoteRelease(policy) {
   if (enabled) {
     assert(policy.approval?.customerPrivacyNoticePath === REFERENCE_PATH,
       'Missing customer-approved privacy notice for V2');
+    assert(publishedPages.includes('integritet/index.html'),
+      'Privacy notice must be published as an explicitly allowlisted preview page');
     for (const property of [
       'privacyApprovedBy', 'receiverVerifiedBy', 'recipientVerifiedBy',
       'ownerReleaseApprovedBy', 'evidence'
