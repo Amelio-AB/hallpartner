@@ -4,10 +4,13 @@ import '../../styles/hallpartner-info.css';
 import '../../styles/hallpartner-leads.css';
 import '@amelio/web-platform/quote-flow/style.css';
 
-// Explicitly locked for the V2 question schema: PHP /api/lead.php accepts
-// ONLY the previous V1 field allowlist. No environment flag may enable this
-// review candidate until a separately validated backend has been released.
-const ready = false;
+// Submit must remain fail-closed unless the separately deployed private V2
+// receiver and published privacy terms have been verified for this exact host.
+// All flags default to false on preview and must be set in a reviewed release.
+const ready =
+  import.meta.env.PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED === 'true' &&
+  import.meta.env.PUBLIC_HP_RECEIVER_VERIFIED === 'true' &&
+  import.meta.env.PUBLIC_HP_PRIVACY_APPROVED === 'true';
 const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === 'true';
 ---
 
@@ -37,7 +40,7 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
 </HallpartnerSiteLayout>
 
 <script>
-  import { mountQuoteFlow } from '@amelio/web-platform/quote-flow';
+  import { mountQuoteFlow, createJsonAdapter } from '@amelio/web-platform/quote-flow';
   import type { Adapter, UploadIntegration } from '@amelio/web-platform/quote-flow';
   import { hallpartnerQuoteConfig } from '../../config/hallpartner-quote';
   import { hallpartnerQuoteAttachmentsReviewConfig } from '../../config/hallpartner-quote-attachments-review';
@@ -50,11 +53,14 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
       async upload() { throw new Error('Filuppladdningen är inte aktiverad.'); },
       async submit() { return { status: 'failed' }; }
     };
+    const adapter: Adapter = host.dataset.enabled === 'true'
+      ? createJsonAdapter('/api/lead.php') : blocked;
     const instance = mountQuoteFlow(host,
       reviewFiles ? hallpartnerQuoteAttachmentsReviewConfig : hallpartnerQuoteConfig,
-      blocked,
+      adapter,
       reviewFiles ? { timeoutMs: 15000, uploads: reviewOnlyUploads } : { timeoutMs: 15000 });
     const protect = () => {
+      if (host.dataset.enabled === 'true') return;
       for (const button of host.querySelectorAll<HTMLButtonElement>('button[type="submit"]')) {
         if (button.textContent?.includes('Skicka förfrågan')) {
           button.disabled = true;
@@ -65,6 +71,7 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
     // A capture-phase guard also blocks submit events invoked before the
     // MutationObserver runs. This avoids relying on disabled-button timing.
     host.addEventListener('submit', event => {
+      if (host.dataset.enabled === 'true') return;
       const finalButton = host.querySelector<HTMLButtonElement>('button[type="submit"]');
       if (!finalButton?.textContent?.includes('Skicka förfrågan')) return;
       event.preventDefault();
