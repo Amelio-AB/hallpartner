@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "scope": "amelio-inleed-development-preview-only",
+  "targetOrigin": "https://hallpartner-se.preview2.inleed.com",
+  "mode": "review",
+  "sender": "kontakt@amelio.se",
+  "recipient": "andreas@amelio.se",
+  "approval": {
+    "customerPrivacyNoticePath": null,
+    "privacyApprovedBy": null,
+    "receiverVerifiedBy": null,
+    "recipientVerifiedBy": null,
+    "ownerReleaseApprovedBy": null,
+    "evidence": null
+  }
+}
