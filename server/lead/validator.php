@@ -224,6 +224,22 @@ function hp_validate_lead(mixed $input): array
 function hp_allow_rate(string $directory, string $secret, string $address, int $now): bool
 {
     if (strlen($secret) < 32 || !is_dir($directory) || !is_writable($directory)) return false;
+    // Serialize pruning against readers that may already have opened a rate file.
+    $lock = @fopen(rtrim($directory, '/') . '/.cleanup.lock', 'c');
+    if ($lock === false) return false;
+    @chmod(rtrim($directory, '/') . '/.cleanup.lock', 0600);
+    try {
+        if (!flock($lock, LOCK_SH)) return false;
+        return hp_write_rate($directory, $secret, $address, $now);
+    } finally {
+        flock($lock, LOCK_UN);
+        fclose($lock);
+    }
+}
+
+function hp_write_rate(string $directory, string $secret, string $address, int $now): bool
+{
+    if (strlen($secret) < 32 || !is_dir($directory) || !is_writable($directory)) return false;
     $digest = hash_hmac('sha256', $address, $secret);
     $path = rtrim($directory, '/') . '/lead-' . $digest . '.json';
     $handle = @fopen($path, 'c+');

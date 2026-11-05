@@ -9,6 +9,11 @@ assert(deploy.concurrency.group === 'hallpartner-inleed-preview-20261103' && dep
 assert(deploy.permissions.contents === 'read' && deploy.permissions.actions === 'read' && Object.keys(deploy.permissions).length === 2, 'Excess deployment permissions');
 assert(deploy.jobs.validate.uses === './.github/workflows/preview-validation.yml' && deploy.jobs.publish.needs === 'validate', 'Publication must depend on reusable validation');
 assert(validation.on.pull_request.branches.includes('main') && validation.on.pull_request.branches.includes('integration/hallpartner-main-20261103') && validation.on.workflow_call, 'Missing stacked PR/reusable validation');
+const buildIndex = validation.jobs.validate.steps.findIndex(step => step.name === 'Build exact checkout');
+const quoteIndex = validation.jobs.validate.steps.findIndex(step => step.name === 'Pin quote submission flags to reviewed preview release policy');
+assert(quoteIndex >= 0 && quoteIndex < buildIndex &&
+  validation.jobs.validate.steps[quoteIndex].run === 'node scripts/preview/quote-release.mjs github-env',
+  'Preview build must use exact reviewed quote release policy before building or publishing');
 const prRuns = validation.jobs.validate.steps.map(s => s.run ?? '').join('\n');
 assert(!/remote\.mjs publish|workflow enable|workflow run/.test(prRuns), 'PR validation must never publish/activate');
 for (const cmd of ['npm run check','npm run lint','node --test tests/*.test.mjs','npm audit --audit-level=high','composer audit --locked --no-dev','npm run build','scripts/preview/payload.mjs prepare','scripts/preview/payload.mjs rights','scripts/preview/browser.mjs','remote.mjs check-target']) assert(prRuns.includes(cmd), 'Missing validation command: ' + cmd);
@@ -28,4 +33,5 @@ assert(transport?.with.path === 'reports/private-preview-backup.envelope.json' &
 assert(!deploy.jobs.publish.steps.some(s=>/approved-cleanup|private-backup/.test(s.run ?? '')), 'Automatic publication must never run maintenance');
 const liveBrowser = deploy.jobs.publish.steps.find(s=>s.name === 'Verify actual preview interactions in Chrome after publication');
 assert(liveBrowser?.run.includes('https://hallpartner-se.preview2.inleed.com/stalhallar/') && liveBrowser.run.includes('verify-hallpartner-amp006.mjs') && liveBrowser.run.includes('verify-hallpartner-gallery.mjs'), 'Missing real preview browser verification');
+assert(liveBrowser.run.includes('https://hallpartner-se.preview2.inleed.com/offert/'), 'Missing read-only live quote verification');
 console.log('Workflow structure/permissions/triggers/contracts: PASS');

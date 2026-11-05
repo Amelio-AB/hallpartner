@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
-import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished } from '../scripts/preview/remote.mjs';
+import { quoteRelease, quoteReleasePolicy } from '../scripts/preview/quote-release.mjs';
+import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished, request, transientHttpReadError } from '../scripts/preview/remote.mjs';
 import { expectedHttpBytes, fingerprint } from '../scripts/preview/delivery.mjs';
 
 const html = '<meta name="robots" content="noindex,nofollow"><h1>Test</h1>';
@@ -33,6 +34,66 @@ test('pre-upload delivery allows only the exact forward HTML origin rewrite', as
   assert.throws(() => assertDelivery({ fileFingerprints: [], deliveryChecks: [] }));
   assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, path:'wrong.html'})) }));
   assert.throws(() => assertDelivery({ fileFingerprints, deliveryChecks: deliveryChecks.map(r => ({...r, expectedHttpSha256:r.ftpsSha256})) }));
+});
+
+test('remote HTTP proof retries only transient read errors without changing any verification rules', async () => {
+  const url = PREVIEW + '/offert/';
+  const transient = new TypeError('fetch failed', {cause:Object.assign(new Error('closed'),{code:'EPIPE'})});
+  assert.equal(transientHttpReadError(transient), true);
+  assert.equal(transientHttpReadError(Object.assign(new Error('certificate failed'),{code:'CERT_HAS_EXPIRED'})),false);
+  let calls=0, delays=[];
+  const ok=await request(url,async () => {
+    calls++;
+    if (calls===1) throw transient;
+    return new Response('<h1>Expected</h1>',{status:200,headers:{'content-type':'text/html'}});
+  },async ms=>{delays.push(ms);});
+  assert.equal(calls,2);
+  assert.deepEqual(delays,[250]);
+  assert.equal(ok.status,200);
+  assert.equal(ok.body.toString(),'<h1>Expected</h1>');
+
+  calls=0;
+  const status=await request(url,async()=>{
+    calls++;return new Response('blocked',{status:503});
+  },async()=>{throw Error('unexpected retry delay');});
+  assert.equal(calls,1,'503 must not be treated as a transient transport failure');
+  assert.equal(status.status,503,'HTTP status must not be rewritten as success');
+
+  for (const status of [404, 503]) {
+    calls=0;
+    await assert.rejects(request(url,async()=>{
+      calls++;return {status,arrayBuffer:async()=>{throw transient;}};
+    },async()=>{throw Error('HTTP error must never retry, even with a broken body');}), /no verification claimed/);
+    assert.equal(calls,1,'A known HTTP error cannot be hidden by retrying its body');
+  }
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;throw transient;
+  },async()=>{}),/no verification claimed/);
+  assert.equal(calls,3,'retry limit for failed HTTPS reads');
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;
+    throw Object.assign(new Error('TLS mismatch'),{code:'ERR_TLS_CERT_ALTNAME_INVALID'});
+  },async()=>{}),/no verification claimed/);
+  assert.equal(calls,1,'TLS failures never retried');
+
+  calls=0;
+  await assert.rejects(request(url,async()=>{
+    calls++;return new Response(null,{status:302,headers:{location:'https://attacker.invalid/' }});
+  },async()=>{}),/Unexpected redirect origin/);
+  assert.equal(calls,1,'unapproved redirects never retried');
+
+  calls=0;
+  const bodyError=await request(url,async()=>{
+    calls++;
+    if(calls===1)return {status:200,headers:new Headers(),arrayBuffer:async()=>{throw transient;}};
+    return new Response('valid full body',{status:200});
+  },async()=>{});
+  assert.equal(calls,2,'partial HTTP body must be retried, not accepted');
+  assert.equal(bodyError.body.toString(),'valid full body');
 });
 
 test('forward transformation preserves all other bytes, origins and file types', () => {
@@ -69,7 +130,9 @@ test('read-only inventory records protected paths without permitting command inj
   }
 });
 test('public allowlist excludes internal pages and server code', () => {
-  assert.equal(PAGES.length,13);
+  assert.equal(PAGES.length,14);
+  assert.ok(PAGES.includes('integritet/index.html'));
+  assert.ok(!PAGES.some(p=>p.startsWith('api/')));
   for (const path of ['../index.html','/index.html','a//x','.env','api/lead.php','server/key.json','prototype/index.html','x.php5','x.PHTML','x.log','x.map','docs/a.html','x;put-secret']) assert.throws(()=>safePath(path));
   assert.equal(safePath('_astro/gallery.aB-12.js'),'_astro/gallery.aB-12.js');
 });
@@ -81,7 +144,39 @@ test('missing robots and active form contracts fail closed', () => {
   assert.throws(()=>inspectHtml(html,'kontakt/index.html'));
   assert.throws(()=>inspectHtml(html,'offert/index.html'));
   inspectHtml(html+'<form id="hp-contact-form" data-enabled="false"></form>','kontakt/index.html');
-  inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html');
+  inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html',false);
+});
+test('preview form activation is limited to the exact quote host and approved mode', () => {
+  const disabled = html + '<div id="hp-offert-guide" data-enabled="false"></div>';
+  const enabled = html + '<div id="hp-offert-guide" data-enabled="true"></div><a href="/integritet/">Personuppgifter</a>';
+  inspectHtml(disabled, 'offert/index.html',false);
+  assert.throws(() => inspectHtml(enabled, 'offert/index.html',false));
+  inspectHtml(enabled, 'offert/index.html', true);
+  assert.throws(() => inspectHtml(enabled.replace('href="/integritet/"', 'href="/kontakt/"'), 'offert/index.html', true), /privacy notice/);
+  assert.throws(() => inspectHtml(disabled, 'offert/index.html', true));
+  assert.throws(() => inspectHtml(html + '<form data-enabled="true"></form>', 'offert/index.html', true));
+  assert.throws(() => inspectHtml(html + '<div id="hp-contact-form" data-enabled="true"></div>', 'kontakt/index.html', true));
+  assert.throws(() => inspectHtml(html + '<div id="hp-offert-guide" data-enabled="true"></div>', 'other.html', true));
+});
+test('approval must be complete, preview-only and backed by a published privacy route', () => {
+  const policy = {...JSON.parse(readFileSync('config/preview-quote-release.json','utf8')),mode:'review',approval:{}};
+  assert.deepEqual(quoteRelease(policy), { enabled:false });
+  const fields = {
+    customerPrivacyNoticePath:'/integritet/', privacyApprovedBy:'Hallpartner authorized sign-off',
+    receiverVerifiedBy:'Andreas successful real intake', recipientVerifiedBy:'Amelio owner verified',
+    ownerReleaseApprovedBy:'Andreas release approval', evidence:'docs/preview/approved-quote-release.md'
+  };
+  const enabled={...policy, mode:'enabled', recipient:'kontakt@amelio.se', approval:fields};
+  assert.throws(() => quoteRelease(enabled, PAGES.filter(p => p !== 'integritet/index.html')), /Privacy notice must be published/);
+  assert.deepEqual(quoteRelease(enabled, PAGES), { enabled:true });
+  for (const field of Object.keys(fields)) {
+    assert.throws(() => quoteRelease({...enabled,approval:{...fields,[field]:null}},[...PAGES,'integritet/index.html']));
+  }
+  for (const extra of [{sender:'other@invalid.test'},{recipient:'someone@invalid.test'},
+    {targetOrigin:'https://hallpartner.se'},{scope:'other'},{mode:'something-else'}]) {
+    assert.throws(() => quoteRelease({...policy,...extra}));
+  }
+  assert.deepEqual(quoteReleasePolicy(),quoteRelease(JSON.parse(readFileSync('config/preview-quote-release.json','utf8'))));
 });
 test('HTML parser retains responsive images, inline imports and stylesheet references', () => {
   const r=inspectHtml(html+'<img src="/a.webp" srcset="/a.webp 320w, /b.webp 640w"><link rel="stylesheet" href="/a.css"><script type="module">import "/a.js"</script>','other.html');
@@ -174,7 +269,8 @@ test('verified payload rejects changed bytes, forbidden additions and forged act
   try {
     const manifest={commit:'a'.repeat(40),files:[],images:[]};
     for(const page of PAGES){
-      const body=html+'En hall börjar med ditt behov.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?'<div id="hp-offert-guide" data-enabled="false"></div>':'');
+      const quote='<div id="hp-offert-guide" data-enabled="'+quoteReleasePolicy().enabled+'"></div><a href="/integritet/">Personuppgifter</a>';
+      const body=html+'En hall börjar med ditt behov.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?quote:'');
       mkdirSync(dirname(root+'/'+page),{recursive:true});writeFileSync(root+'/'+page,body);manifest.files.push({path:page,sha256:sha256(body)});
     }
     const robots='User-agent: *\nDisallow: /\n';writeFileSync(root+'/robots.txt',robots);manifest.files.push({path:'robots.txt',sha256:sha256(robots)});

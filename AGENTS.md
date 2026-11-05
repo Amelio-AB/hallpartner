@@ -1,3 +1,16 @@
+# Aktuell pauscheckpoint – offertguidens mottagning (2026-11-05)
+
+**Läs först** [checkpointen för V2 och Inleed-preview](docs/checkpoints/2026-11-05-offert-v2-inleed-preview.md)
+och kontrollera därefter aktuell GitHub-HEAD, PR #25, PR #26, GitHub Actions och live-preview.
+Tidigare ingress nedan om att PR #22 fortfarande är Draft och att PHP enbart
+accepterar V1 är **historisk och ersatt**: V2-backend har installerats och
+SMTP har testats med bekräftad leverans till `kontakt@amelio.se`.
+**Den publika skickaknappen är dock fortfarande avstängd.**
+Det finns ett dokumenterat `EPIPE`-fel i senaste main-publicering som måste
+undersökas med nya bevis innan fler deployer görs.
+
+---
+ 
 # AGENTS.md
 
 ## AMP-001 1.5.0 – aktiv offertguidekandidat (2026-11-04)

@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { readFileSync, writeFileSync, mkdirSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
+import { setTimeout as delay } from 'node:timers/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PREVIEW, PRODUCTION, PROBE, PROBE_FILE, BLOCKED, safePath, sha256, json, assert } from './policy.mjs';
@@ -71,17 +72,53 @@ export function ftps(commands, creds, cwd, run = spawnSync) {
   }
   return String(result.stdout ?? '').replace(new RegExp('^' + prefix + '\\d+\\r?\\n?', 'gm'), '');
 }
-export async function request(url) {
+// HTTP GET reading is strictly read-only. Only transient transport failures may
+// be retried; HTTP status codes, redirects, content or hash mismatches NEVER are.
+const TRANSIENT_HTTP_CODES = new Set([
+  'EPIPE', 'ECONNRESET', 'ETIMEDOUT', 'UND_ERR_SOCKET',
+  'UND_ERR_CONNECT_TIMEOUT', 'UND_ERR_HEADERS_TIMEOUT', 'UND_ERR_BODY_TIMEOUT'
+]);
+export function transientHttpReadError(error) {
+  const code = error?.cause?.code ?? error?.code;
+  return TRANSIENT_HTTP_CODES.has(code) ||
+    error?.name === 'TimeoutError'; // This request owns its 25s timeout.
+}
+export async function request(url, send = fetch, wait = delay) {
   const initial = new URL(url); let current = initial;
-  for (let i = 0; i < 4; i++) {
-    const response = await fetch(current, { redirect: 'manual', signal: AbortSignal.timeout(25000), headers: { 'Cache-Control': 'no-cache' } });
+  for (let redirect = 0; redirect < 4; redirect++) {
+    let response, body;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      response = undefined;
+      try {
+        // Read the full response body inside the retry boundary; a half-read body
+        // must never be accepted as valid remote content.
+        response = await send(current, {
+          redirect: 'manual',
+          signal: AbortSignal.timeout(25000),
+          headers: { 'Cache-Control': 'no-cache' }
+        });
+        if (![301,302,303,307,308].includes(response.status)) {
+          body = Buffer.from(await response.arrayBuffer());
+        }
+        break;
+      } catch (error) {
+        if (response?.status >= 400 || !transientHttpReadError(error) || attempt === 2) {
+          throw new Error('Preview HTTP read failed; no verification claimed (' +
+            current.origin + current.pathname + ', attempt ' + (attempt + 1) + ')',
+          { cause: error });
+        }
+        // Do not reissue writes or relax any content checks. Small bounded
+        // backoff avoids hammering a preview host closing idle connections.
+        await wait(250 * (attempt + 1));
+      }
+    }
     if ([301,302,303,307,308].includes(response.status)) {
       const next = new URL(response.headers.get('location') ?? '', current);
       const productionRedirect = PRODUCTION.includes(initial.origin) && PRODUCTION.includes(next.origin);
       assert(next.protocol === 'https:' && (next.origin === initial.origin || productionRedirect), 'Unexpected redirect origin');
       current = next; continue;
     }
-    return { status: response.status, url: current.href, body: Buffer.from(await response.arrayBuffer()), type: response.headers.get('content-type') };
+    return { status: response.status, url: current.href, body, type: response.headers.get('content-type') };
   }
   throw new Error('Too many redirects');
 }

@@ -64,6 +64,10 @@ try {
 }
 $validation = hp_validate_lead($input);
 if (!$validation['valid']) hp_reply(422, ['status' => 'validation-error', 'fields' => $validation['errors']]);
+if (isset($config['allowed_configurations']) &&
+    (!is_array($config['allowed_configurations']) || !in_array($validation['kind'], $config['allowed_configurations'], true))) {
+    hp_reply(403, ['status' => 'failed']);
+}
 
 $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
 if ($ip === '' || !hp_allow_rate($rateRoot, $config['rate_secret'], $ip, time())) {

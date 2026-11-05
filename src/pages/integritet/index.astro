@@ -1,0 +1,46 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-info.css';
+---
+
+<HallpartnerSiteLayout
+  title="Personuppgifter i testmiljön"
+  description="Information om hur offertförfrågningar hanteras på Amelios tillfälliga utvecklingspreview."
+>
+  <div class="hp-info">
+    <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Personuppgifter</span>
+    </nav>
+    <section class="hp-info__section hp-info__section--light" aria-labelledby="privacy-title">
+      <div class="hp-draft-rail" style="max-width: 860px">
+        <p class="hp-info__eyebrow">Amelios utvecklingspreview</p>
+        <h1 id="privacy-title">Hur uppgifter hanteras i offertguidens testmiljö</h1>
+        <p>Detta är Hallpartners tillfälliga utvecklingspreview på Amelios konto hos Inleed. Förfrågningar som du skickar här tas emot av Amelio för återkoppling under utvecklingen. För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
+
+        <h2>Vem tar emot uppgifterna?</h2>
+        <p>Amelio AB är personuppgiftsansvarig för mottagningen i denna utvecklingsmiljö. Du når oss på <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a>. Samma adress används som avsändare och mottagare för formulärets mejl. Endast Andreas, projektansvarig hos Amelio, har åtkomst till inkorgen. Förfrågningarna vidarebefordras inte automatiskt till Hallpartner.</p>
+
+        <h2>Vad samlas in och varför?</h2>
+        <p>När du väljer Skicka förfrågan överförs de svar du lämnat om hallbehov och projekt samt ditt namn och din e-postadress. Användningsområde, namn och e-post behövs för att skicka förfrågan. Övriga uppgifter är frivilliga, men väljer du återkoppling via telefon behöver du ange ett telefonnummer. Inga filer kan skickas.</p>
+        <p>Vi använder uppgifterna för att läsa och besvara din förfrågan. Tekniska funktionstester görs med påhittade testuppgifter. Skicka inte känsliga personuppgifter, personnummer eller uppgifter om andra personer. Guiden sparar inte dina svar på servern innan du väljer att skicka.</p>
+
+        <h2>Rättslig grund</h2>
+        <p>Behandlingen grundas på berättigat intresse enligt artikel 6.1 f i dataskyddsförordningen. Vårt intresse är att kunna återkoppla på en förfrågan som du själv väljer att skicka till Amelio och att skydda mottagningen mot missbruk. Vi har vägt detta mot din integritet och begränsar uppgifter, åtkomst och lagring. Uppgifterna används inte för marknadsföring, profilering eller automatiserade beslut. Du kan invända mot behandlingen genom att kontakta oss.</p>
+
+        <h2>Lagring och åtkomst</h2>
+        <p>Inleed (Yelles AB) tillhandahåller webbhotell och e-post som personuppgiftsbiträde. Förfrågan skickas krypterat till mottagaren och sparas som mejl, inte i en separat kunddatabas. Andreas ansvarar för att förfrågningar och eventuella svar i testinkorgen raderas senast 30 dagar efter mottagandet, även ur papperskorgen.</p>
+        <p>Inleeds säkerhetskopior har en separat rullande lagring. Enligt <a href="https://inleed.se/avtal">Inleeds webbhotellsvillkor</a> sparas säkerhetskopior i sju dagar. En raderad uppgift kan därför finnas kvar i en äldre säkerhetskopia under den tiden. Vid återställning ska redan gallrade förfrågningar raderas igen.</p>
+
+        <h2>Skydd mot missbruk</h2>
+        <p>Mottagaren använder din IP-adress för att begränsa antalet inskick. Den sparar en nyckelskyddad identifierare och tidpunkter, utan formulärsvar eller läsbar IP-adress. Dessa säkerhetsposter gallras automatiskt efter att de inte längre behövs för begränsningen, senast inom två timmar. Webbhotellet kan även behandla tekniska anslutningsuppgifter för drift och säkerhet.</p>
+
+        <h2>Dina rättigheter</h2>
+        <p>Du kan kontakta <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> för att begära tillgång till, rättelse, radering eller begränsning av behandlingen av dina personuppgifter, eller för att invända mot behandlingen. Du kan även lämna klagomål till <a href="https://www.imy.se/">Integritetsskyddsmyndigheten (IMY)</a>.</p>
+
+        <p>Informationen gäller endast denna utvecklingspreview och är uppdaterad den 5 november 2026. Hallpartners framtida ordinarie mottagning omfattas av en separat integritetsinformation.</p>
+
+        <p><a href="/offert/">Tillbaka till offertguiden</a></p>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>

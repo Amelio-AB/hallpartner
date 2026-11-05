@@ -84,6 +84,7 @@ jobs:
           php -l public/api/lead.php
           php -l server/lead/validator.php
           php -l server/lead/receiver.php
+          php -l server/lead/rate-cleanup.php
           php -l server/lead/config.example.php
           php -l server/lead/smtp-smoke.php
           git check-ignore -q server/lead/config.local.php
@@ -96,6 +97,8 @@ jobs:
         run: npm audit --audit-level=high --json > reports/preview/npm-audit.json
       - name: Audit locked PHP dependencies without SMTP
         run: composer audit --locked --no-dev --working-dir=server/lead --format=json > reports/preview/composer-audit.json
+      - name: Pin quote submission flags to reviewed preview release policy
+        run: node scripts/preview/quote-release.mjs github-env
       - name: Build exact checkout
         run: npm run build
         env:
@@ -166,6 +169,17 @@ jobs:
           path: preview-payload/
           if-no-files-found: error
           retention-days: 7
+      - name: Chrome regression for future active quote with local mock only
+        env:
+          NODE_ENV: production
+          PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED: 'true'
+          PUBLIC_HP_RECEIVER_VERIFIED: 'true'
+          PUBLIC_HP_PRIVACY_APPROVED: 'true'
+        run: |-
+          # This second build is deliberately NOT part of the verified upload payload.
+          # The previously archived preview-payload remains fail-closed.
+          npm run build
+          node scripts/preview/active-quote-browser.mjs
       - name: Save manifest and evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4

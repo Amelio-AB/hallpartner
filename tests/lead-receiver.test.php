@@ -156,10 +156,22 @@ try {
         if ($file[0] === '.') continue;
         must(!str_contains($file, '192.0.2.'), 'no raw IP in file names');
     }
+    require_once __DIR__ . '/../server/lead/rate-cleanup.php';
+    $now = time();
+    foreach (glob($dir . '/lead-*.json') as $path) touch($path, $now - 7200);
+    $active = $dir . '/lead-' . str_repeat('b', 64) . '.json';
+    file_put_contents($active, json_encode([$now]));
+    $unknown = $dir . '/keep.txt';
+    file_put_contents($unknown, 'Not a rate record');
+    touch($unknown, $now - 7200);
+    must(hp_prune_rates($dir, $now) === 2, 'only expired rate records removed');
+    must(is_file($active) && is_file($unknown), 'active and unrelated files preserved');
+    must(hp_prune_rates($dir, $now) === 0, 'cleanup is idempotent');
 } finally {
     foreach (scandir($dir) as $file) {
         if ($file[0] !== '.') unlink($dir . '/' . $file);
     }
+    if (is_file($dir . '/.cleanup.lock')) unlink($dir . '/.cleanup.lock');
     rmdir($dir);
 }
 echo "PHP intake validator: valid/invalid contact & offer, honeypot and rate limits PASS\n";

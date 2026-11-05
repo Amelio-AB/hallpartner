@@ -5,9 +5,11 @@ import { mkdir, writeFile, mkdtemp, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
+import { quoteReleasePolicy } from './preview/quote-release.mjs';
 
 const url=process.env.HP_PREVIEW_URL||'http://127.0.0.1:4321/';
 const expectedPath=new URL(url).pathname;
+const quoteEnabled=quoteReleasePolicy().enabled;
 const output=resolve(process.env.HP_SCREENSHOT_DIR||'visual-review');
 const prefix=process.env.HP_SCREENSHOT_PREFIX||'validated';
 const sections=(process.env.HP_SCREENSHOT_SECTIONS||'').split(',').filter(Boolean);
@@ -83,6 +85,16 @@ try {
   };
   captureFailure=()=>capture(prefix+'-FAILURE.png');
   await call('Runtime.enable');await call('Page.enable');
+  // This review never delivers personal data, even when the deployed guide is active.
+  let blockedSubmissions=0;
+  await call('Fetch.enable',{patterns:[{urlPattern:'*/api/*',requestStage:'Request'}]});
+  socket.addEventListener('message',event=>{
+    const packet=JSON.parse(event.data);
+    if(packet.method==='Fetch.requestPaused'){
+      blockedSubmissions++;
+      call('Fetch.failRequest',{requestId:packet.params.requestId,errorReason:'BlockedByClient'}).catch(()=>{});
+    }
+  });
   for(const width of [320,390,768,1024,1280,1440]) {
     const viewport={width,height:width<800?844:900};
     await call('Emulation.setDeviceMetricsOverride',{...viewport,deviceScaleFactor:1,mobile:false});
@@ -178,6 +190,7 @@ try {
     }),width+': inactive contact');
 
     if(expectedPath==='/offert/') {
+      await evaluate('window.hpExpectedQuoteEnabled='+JSON.stringify(quoteEnabled));
       allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide');
         const trigger=host?.querySelector('button.qf-help-trigger');
@@ -188,7 +201,7 @@ try {
         const progress=host.querySelector('.qf-progress');
         return {
           mounted:!!host?.querySelector('.qf'),
-          disabled:host?.dataset.enabled==='false',
+          releaseMode:host?.dataset.enabled===String(window.hpExpectedQuoteEnabled),
           helpOpen:!!dialog?.open,
           helpTitle:!!dialog?.querySelector('h3')?.textContent,
           helpText:!!dialog?.querySelector('p')?.textContent,
@@ -307,15 +320,18 @@ try {
         const send=[...host.querySelectorAll('button[type="submit"]')].find(button=>button.textContent.includes('Skicka förfrågan'));
         const summary=[...host.querySelectorAll('.qf-summary-section')];
         return {
-          inactive:host.dataset.enabled==='false',
+          releaseMode:host.dataset.enabled===String(window.hpExpectedQuoteEnabled),
           irrelevant,design,irrelevantPort,planning,irrelevantDocument,customer,
           review:!!host.querySelector('.qf-step-heading h3')?.textContent.includes('Kontrollera dina svar'),
           sixSteps:host.querySelectorAll('.qf-progress-item').length===6,
           fiveSections:summary.length===5,
-          disabled:send?.disabled===true,
-          notice:!!document.querySelector('.hp-leads-note--review')
+          submitGate:send?.disabled===!window.hpExpectedQuoteEnabled,
+          notice:window.hpExpectedQuoteEnabled
+            ? !!document.querySelector('#hp-offert-notice a[href="/integritet/"]')
+            : !!document.querySelector('.hp-leads-note--review')
         };
-      }),width+': all five question steps, final review and no-send gate');
+      }),width+': all five question steps, final review and release gate (no send)');
+      assert.equal(blockedSubmissions,0,'Guide attempted an API request before final submit');
     }
 
     await evaluate('if(document.activeElement instanceof HTMLElement)document.activeElement.blur();window.scrollTo(0,0)');
@@ -340,8 +356,9 @@ try {
     Object.assign(entry,{filename,noJavaScript:'passed',status:'passed'});
   }
   assert.equal(browserErrors.length,0,'Browser errors: '+browserErrors.join('\n'));
+  assert.equal(blockedSubmissions,0,'Read-only browser review attempted an API request');
   await writeFile(join(output,prefix+'-REPORT.json'),JSON.stringify({route:expectedPath,pages:report,status:'passed'},null,2));
-  console.log('PASS '+expectedPath+': AMP-002, images, inactive forms and no-JS navigation at six widths.');
+  console.log('PASS '+expectedPath+': AMP-002, images, release gates and no-JS navigation at six widths; no API requests.');
 }catch(error){
   await writeFile(join(output,prefix+'-ERROR.txt'),String(error));
   await writeFile(join(output,prefix+'-PARTIAL.json'),JSON.stringify(report,null,2));

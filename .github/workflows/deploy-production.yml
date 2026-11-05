@@ -70,6 +70,7 @@ jobs:
         run: |-
           HP_PREVIEW_URL=https://hallpartner-se.preview2.inleed.com/ HP_SCREENSHOT_PREFIX=home node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL=https://hallpartner-se.preview2.inleed.com/stalhallar/ HP_SCREENSHOT_PREFIX=halls node scripts/capture-hallpartner-home.mjs
+          HP_PREVIEW_URL=https://hallpartner-se.preview2.inleed.com/offert/ HP_SCREENSHOT_PREFIX=quote node scripts/capture-hallpartner-home.mjs
           HP_PREVIEW_URL=https://hallpartner-se.preview2.inleed.com/stalhallar/ HP_SCREENSHOT_DIR=reports/preview/live-browser/amp006 node scripts/verify-hallpartner-amp006.mjs
           HP_PREVIEW_URL=https://hallpartner-se.preview2.inleed.com/stalhallar/ HP_SCREENSHOT_DIR=reports/preview/live-browser/gallery node scripts/verify-hallpartner-gallery.mjs
       - name: Preserve deployment verification
