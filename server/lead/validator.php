@@ -15,11 +15,11 @@ function hp_validate_lead(mixed $input): array
         !is_string($input['configurationId'] ?? null) ||
         !is_array($input['answers'] ?? null) ||
         array_is_list($input['answers']) ||
-        count($input['answers']) > 24) {
+        count($input['answers']) > 40) {
         return ['valid' => false, 'errors' => ['_global' => 'Ogiltig förfrågan.']];
     }
     $kind = $input['configurationId'];
-    if (!in_array($kind, ['hallpartner-contact-v1', 'hallpartner-offert-v1'], true)) {
+    if (!in_array($kind, ['hallpartner-contact-v1', 'hallpartner-offert-v1', 'hallpartner-offert-v2-review'], true)) {
         return ['valid' => false, 'errors' => ['_global' => 'Okänd formulärtyp.']];
     }
 
@@ -43,7 +43,38 @@ function hp_validate_lead(mixed $input): array
         'site.city' => 120,
         'site.postal_code' => 6,
     ];
-    $allowed = array_merge($common, $kind === 'hallpartner-contact-v1' ? $contact : $quote);
+    $quoteV2 = [
+        'project.use' => 24,
+        'project.description' => 4000,
+        'project.hall_interest' => 32,
+        'dimensions.confidence' => 16,
+        'dimensions.width' => 12,
+        'dimensions.length' => 12,
+        'dimensions.side_height' => 12,
+        'site.city' => 120,
+        'site.postal_code' => 6,
+        'site.decided' => 16,
+        'site.address' => 240,
+        'foundation.status' => 16,
+        'foundation.notes' => 4000,
+        'design.insulation' => 16,
+        'openings.ports' => 16,
+        'openings.port_needs' => 4000,
+        'openings.windows' => 16,
+        'design.envelope_wishes' => 4000,
+        'design.installation_wishes' => 4000,
+        'delivery.wishes' => 4000,
+        'planning.stage' => 16,
+        'planning.timeline' => 16,
+        'documents.available' => 16,
+        'documents.description' => 4000,
+        'planning.permit_status' => 24,
+        'planning.notes' => 4000,
+        'contact.role' => 20,
+        'contact.preference' => 16,
+    ];
+    $allowed = array_merge($common, $kind === 'hallpartner-contact-v1' ? $contact :
+        ($kind === 'hallpartner-offert-v1' ? $quote : $quoteV2));
     $values = [];
     $errors = [];
     foreach ($input['answers'] as $key => $value) {
@@ -92,7 +123,7 @@ function hp_validate_lead(mixed $input): array
         if (!empty($values['website'])) {
             return ['valid' => false, 'errors' => ['_global' => 'Förfrågan kunde inte tas emot.']];
         }
-    } else {
+    } elseif ($kind === 'hallpartner-offert-v1') {
         if (!in_array($values['project.use'] ?? '', ['storage','machinery','riding','other','unknown'], true)) {
             $errors['project.use'] = 'Välj ett giltigt alternativ.';
         }
@@ -118,6 +149,66 @@ function hp_validate_lead(mixed $input): array
         if (!empty($values['site.postal_code']) &&
             preg_match('/^\d{3} ?\d{2}$/', $values['site.postal_code']) !== 1) {
             $errors['site.postal_code'] = 'Ange fem siffror.';
+        }
+    }
+    if ($kind === 'hallpartner-offert-v2-review') {
+        // Independently enforce the V2 client schema. Empty optional answers are valid.
+        $choices = [
+            'project.use' => ['storage','machinery','riding','other','unknown'],
+            'project.hall_interest' => ['lagerhall','maskinhall','plathall','talthall','ridhus','isolerad-hall','unknown'],
+            'dimensions.confidence' => ['exact','approximate','need_help'],
+            'site.decided' => ['yes','no','unknown'],
+            'foundation.status' => ['existing','planned','none','unknown'],
+            'design.insulation' => ['yes','no','recommend','unknown'],
+            'openings.ports' => ['yes','no','unknown'],
+            'openings.windows' => ['yes','no','unknown'],
+            'planning.stage' => ['ideas','planning','permit','ready','unknown'],
+            'planning.timeline' => ['soon','within_3','three_six','six_twelve','later','unknown'],
+            'documents.available' => ['yes','some','later','no'],
+            'planning.permit_status' => ['not_checked','considering','submitted','approved','unknown'],
+            'contact.role' => ['customer','contractor','advisor','other'],
+            'contact.preference' => ['email','phone','either'],
+        ];
+        foreach ($choices as $key => $options) {
+            if (($values[$key] ?? '') !== '' && !in_array($values[$key], $options, true)) {
+                $errors[$key] = 'Välj ett giltigt alternativ.';
+            }
+        }
+        if (!in_array($values['project.use'] ?? '', $choices['project.use'], true)) {
+            $errors['project.use'] = 'Välj ett giltigt användningsområde.';
+        }
+        foreach (['dimensions.width','dimensions.length','dimensions.side_height'] as $key) {
+            if (($values[$key] ?? '') === '') continue;
+            if (($values['dimensions.confidence'] ?? '') === 'need_help') {
+                $errors[$key] = 'Mått ska inte skickas när hjälp med storlek valts.';
+                continue;
+            }
+            $pattern = $key === 'dimensions.side_height'
+                ? '/^\\d{1,2}([,.]\\d{1,2})?$/'
+                : '/^\\d{1,3}([,.]\\d{1,2})?$/';
+            if (!preg_match($pattern, $values[$key]) ||
+                (float)str_replace(',', '.', $values[$key]) <= 0) {
+                $errors[$key] = 'Ange ett positivt mått i meter.';
+            }
+        }
+        if (($values['site.postal_code'] ?? '') !== '' &&
+            !preg_match('/^\\d{3} ?\\d{2}$/', $values['site.postal_code'])) {
+            $errors['site.postal_code'] = 'Ange fem siffror.';
+        }
+        $conditional = [
+            'site.address' => ($values['site.decided'] ?? '') === 'yes',
+            'foundation.notes' => in_array($values['foundation.status'] ?? '', ['existing','planned'], true),
+            'openings.port_needs' => ($values['openings.ports'] ?? '') === 'yes',
+            'documents.description' => in_array($values['documents.available'] ?? '', ['yes','some'], true),
+        ];
+        foreach ($conditional as $key => $relevant) {
+            if (!$relevant && ($values[$key] ?? '') !== '') {
+                $errors[$key] = 'Fältet är inte relevant för valt svar.';
+            }
+        }
+        if (($values['contact.preference'] ?? '') === 'phone' &&
+            ($values['contact.phone'] ?? '') === '') {
+            $errors['contact.preference'] = 'Ange telefonnummer om du vill bli uppringd.';
         }
     }
     if ($errors !== []) {
