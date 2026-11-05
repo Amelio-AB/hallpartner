@@ -32,7 +32,10 @@ if (!is_array($c) || ($c["enabled"] ?? null) !== false ||
     // The installed recipient may belong to the configured project. Never
     // send synthetic mail there: the disposable wrapper below redirects it.
     ($c["smtp_from"] ?? "") !== "kontakt@amelio.se" ||
-    !is_string($c["smtp_password"] ?? null) || $c["smtp_password"] === "") {
+    !is_string($c["smtp_password"] ?? null) || $c["smtp_password"] === "" ||
+    !is_string($c["smtp_host"] ?? null) || trim($c["smtp_host"]) === "" ||
+    !filter_var($c["smtp_username"] ?? null, FILTER_VALIDATE_EMAIL) ||
+    !in_array($c["smtp_port"] ?? null, [465,587], true)) {
     fwrite(STDERR, "Server configuration differs from the isolated Amelio test setup. Stopped.\n");
     exit(1);
 }
@@ -64,6 +67,9 @@ $c['enabled'] = true;
 $c['privacy_approved'] = true; // Synthetic localhost simulation, NOT legal approval.
 $c['recipient'] = 'andreas@amelio.se'; // Local test only: never mail configured recipient.
 $c['rate_dir'] = getenv('HP_V2_TEST_RATE_DIR');
+// This is a disposable local-only rate limit key. It does not change or
+// prove the key used by the inactive public receiver.
+$c['rate_secret'] = getenv('HP_V2_TEST_RATE_SECRET');
 return $c;
 PHP
 cat > "$workdir/public/router.php" <<'PHP'
@@ -85,6 +91,7 @@ port="$(php -r '$s=stream_socket_server("tcp://127.0.0.1:0",$e,$m); if(!$s)exit(
 HP_LEAD_PRIVATE_DIR="$workdir/private" \
 HP_V2_TEST_ORIGINAL_CONFIG="$base/config.local.php" \
 HP_V2_TEST_RATE_DIR="$workdir/rate" \
+HP_V2_TEST_RATE_SECRET="$(php -r 'echo bin2hex(random_bytes(32));')" \
 HP_V2_TEST_TOKEN="$token" \
 php -S "127.0.0.1:$port" -t "$workdir/public" "$workdir/public/router.php" > "$workdir/server.log" 2>&1 &
 server_pid=$!
@@ -104,7 +111,8 @@ bad_code="$(curl --noproxy '*' -sS --max-time 5 -o /dev/null -w '%{http_code}' -
   -H 'Content-Type: application/json' --data-binary "@$workdir/request.json" \
   "http://127.0.0.1:$port/api/lead.php")"
 [[ "$bad_code" == '403' ]] || { echo "Wrong origin not rejected (HTTP $bad_code); no test sent."; exit 1; }
-echo 'Origin-skydd: OK. Skickar en syntetisk V2-förfrågan via isolerad PHP-server.'
+echo 'Origin-skydd: OK. Testet använder separat mottagare, rate-dir och rate-secret.' 
+echo 'Skickar en syntetisk V2-förfrågan via isolerad PHP-server.'
 http_code="$(curl --noproxy '*' -sS --max-time 25 -o "$workdir/response.json" -w '%{http_code}' -X POST \
   -H "X-HP-Test-Token: $token" -H "Origin: $origin" \
   -H 'Content-Type: application/json' -H 'Accept: application/json' \
