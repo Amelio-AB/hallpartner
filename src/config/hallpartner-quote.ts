@@ -235,7 +235,7 @@ export const hallpartnerQuoteConfig = {
     },
     {
       id: 'customer', title: 'Kontakt',
-      description: 'Så att Hallpartner kan följa upp när formuläret senare är aktiverat.',
+      description: 'Så att Hallpartner kan återkomma om din förfrågan.',
       groups: [
         { id: 'customer.extra', title: 'Fler kontaktuppgifter', description: 'Frivilligt om företaget eller hur du helst blir kontaktad.', initiallyCollapsed: true }
       ],
