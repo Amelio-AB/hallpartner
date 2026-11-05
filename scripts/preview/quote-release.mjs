@@ -43,21 +43,25 @@ export function quoteReleasePolicy() {
   return quoteRelease(json('config/preview-quote-release.json'));
 }
 
+export function quoteBuildEnvironment(policy) {
+  const flag = quoteRelease(policy).enabled ? 'true' : 'false';
+  return {
+    PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED: flag,
+    PUBLIC_HP_RECEIVER_VERIFIED: flag,
+    PUBLIC_HP_PRIVACY_APPROVED: flag,
+    PUBLIC_HP_LEADS_ENABLED: 'false',
+    PUBLIC_HP_QUOTE_FILES_REVIEW: 'false'
+  };
+}
+
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const [operation] = process.argv.slice(2);
   assert(operation === 'github-env', 'Use github-env');
   const envFile = process.env.GITHUB_ENV;
   assert(typeof envFile === 'string' && envFile.length > 0, 'GITHUB_ENV is required');
-  const { enabled } = quoteReleasePolicy();
+  const policy = json('config/preview-quote-release.json');
+  const { enabled } = quoteRelease(policy);
   // Never echo secrets or inspect the server's private config here.
-  const flag = enabled ? 'true' : 'false';
-  appendFileSync(envFile, [
-    'PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED=' + flag,
-    'PUBLIC_HP_RECEIVER_VERIFIED=' + flag,
-    'PUBLIC_HP_PRIVACY_APPROVED=' + flag,
-    'PUBLIC_HP_LEADS_ENABLED=false',
-    'PUBLIC_HP_QUOTE_FILES_REVIEW=false',
-    ''
-  ].join('\n'));
+  appendFileSync(envFile, Object.entries(quoteBuildEnvironment(policy)).map(([key,value])=>key+'='+value).join('\n')+'\n');
   console.log('Preview-only quote release mode: ' + (enabled ? 'enabled' : 'review-disabled'));
 }

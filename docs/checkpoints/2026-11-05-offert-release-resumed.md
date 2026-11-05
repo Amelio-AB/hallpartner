@@ -1,5 +1,9 @@
 # Återupptagen offertrelease – 2026-11-05
 
+**Senare uppdatering:** Andreas har godkänt hantering och publicering.
+Se [den godkända releasen och faktiska serverkontroller](../preview/offert-approved-release-20261105.md).
+Texten nedan beskriver läget före detta godkännande.
+
 Arbetet återupptogs på projektägarens uttryckliga uppdrag i befintliga
 `C:\webbprojekt\hallpartner`, på PR #26:s gren
 `feat/preview-offert-release-gate-20261105`. Tidigare arbete bevarades.

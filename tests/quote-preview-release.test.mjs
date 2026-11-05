@@ -6,8 +6,9 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { createJsonAdapter, createQuoteFlow } from '@amelio/web-platform/quote-flow';
 import { hallpartnerQuoteConfig } from '../src/config/hallpartner-quote.ts';
+import { quoteReleasePolicy, quoteBuildEnvironment } from '../scripts/preview/quote-release.mjs';
 
-test('ordinary preview build gets all three quote submission flags false', () => {
+test('preview build flags follow the reviewed policy; review fixtures always disable submission', () => {
   const dir=mkdtempSync(join(tmpdir(),'hp-quote-flags-'));
   try {
     const envFile=join(dir,'flags');
@@ -16,10 +17,14 @@ test('ordinary preview build gets all three quote submission flags false', () =>
     });
     assert.equal(proc.status,0,proc.stderr);
     const flags=readFileSync(envFile,'utf8');
+    const expected=String(quoteReleasePolicy().enabled);
     for(const key of ['PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED','PUBLIC_HP_RECEIVER_VERIFIED','PUBLIC_HP_PRIVACY_APPROVED']) {
-      assert.ok(flags.includes(key+'=false\n'),key+' must remain disabled');
-      assert.ok(!flags.includes(key+'=true'),key+' must never be active without approval');
+      assert.ok(flags.includes(key+'='+expected+'\n'),key+' must follow the verified policy');
     }
+    const policy=JSON.parse(readFileSync('config/preview-quote-release.json','utf8'));
+    const review=quoteBuildEnvironment({...policy,mode:'review',approval:{}});
+    assert.ok(Object.values(review).every(value=>value==='false'));
+    assert.throws(()=>quoteBuildEnvironment({...policy,mode:'enabled',approval:{}}));
     for(const key of ['PUBLIC_HP_LEADS_ENABLED','PUBLIC_HP_QUOTE_FILES_REVIEW']) {
       assert.ok(flags.includes(key+'=false\n'),key+' must remain disabled independently of quote activation');
     }

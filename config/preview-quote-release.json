@@ -2,16 +2,16 @@
   "schemaVersion": 1,
   "scope": "amelio-inleed-development-preview-only",
   "targetOrigin": "https://hallpartner-se.preview2.inleed.com",
-  "mode": "review",
+  "mode": "enabled",
   "sender": "kontakt@amelio.se",
   "recipient": "kontakt@amelio.se",
   "approval": {
-    "customerPrivacyNoticePath": null,
-    "privacyApprovedBy": null,
-    "receiverVerifiedBy": null,
-    "recipientVerifiedBy": null,
-    "ownerReleaseApprovedBy": null,
-    "evidence": null
+    "customerPrivacyNoticePath": "/integritet/",
+    "privacyApprovedBy": "Andreas: preview handling approved 2026-11-05; documented interest assessment and verified controls",
+    "receiverVerifiedBy": "SSH ns15:2020: V2 hashes, private config, PHP regression and cleanup verified 2026-11-05; runtime enabled only after publication",
+    "recipientVerifiedBy": "Andreas inbox evidence b48d4df51f2834f90d04e086 and SSH sender/recipient equality check 2026-11-05",
+    "ownerReleaseApprovedBy": "Andreas: implementation, preview publication and one synthetic end-to-end delivery approved in project chat 2026-11-05",
+    "evidence": "docs/preview/offert-approved-release-20261105.md"
   },
   "testRecipient": "andreas@amelio.se"
 }

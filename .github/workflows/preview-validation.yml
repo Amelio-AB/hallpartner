@@ -84,6 +84,7 @@ jobs:
           php -l public/api/lead.php
           php -l server/lead/validator.php
           php -l server/lead/receiver.php
+          php -l server/lead/rate-cleanup.php
           php -l server/lead/config.example.php
           php -l server/lead/smtp-smoke.php
           git check-ignore -q server/lead/config.local.php

@@ -26,6 +26,8 @@ jobs:
         env:
           AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
         run: bash scripts/preview/install-private-amp.sh
+      - name: Pin quote flags to the reviewed release policy
+        run: node scripts/preview/quote-release.mjs github-env
       - name: Verify explicit Footer rollback on the actual visitor routes
         env:
           HALLPARTNER_FOOTER_MODE: legacy

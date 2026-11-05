@@ -356,8 +356,9 @@ try {
     Object.assign(entry,{filename,noJavaScript:'passed',status:'passed'});
   }
   assert.equal(browserErrors.length,0,'Browser errors: '+browserErrors.join('\n'));
+  assert.equal(blockedSubmissions,0,'Read-only browser review attempted an API request');
   await writeFile(join(output,prefix+'-REPORT.json'),JSON.stringify({route:expectedPath,pages:report,status:'passed'},null,2));
-  console.log('PASS '+expectedPath+': AMP-002, images, inactive forms and no-JS navigation at six widths.');
+  console.log('PASS '+expectedPath+': AMP-002, images, release gates and no-JS navigation at six widths; no API requests.');
 }catch(error){
   await writeFile(join(output,prefix+'-ERROR.txt'),String(error));
   await writeFile(join(output,prefix+'-PARTIAL.json'),JSON.stringify(report,null,2));

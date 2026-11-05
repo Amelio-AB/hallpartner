@@ -144,13 +144,13 @@ test('missing robots and active form contracts fail closed', () => {
   assert.throws(()=>inspectHtml(html,'kontakt/index.html'));
   assert.throws(()=>inspectHtml(html,'offert/index.html'));
   inspectHtml(html+'<form id="hp-contact-form" data-enabled="false"></form>','kontakt/index.html');
-  inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html');
+  inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html',false);
 });
 test('preview form activation is limited to the exact quote host and approved mode', () => {
   const disabled = html + '<div id="hp-offert-guide" data-enabled="false"></div>';
   const enabled = html + '<div id="hp-offert-guide" data-enabled="true"></div><a href="/integritet/">Personuppgifter</a>';
-  inspectHtml(disabled, 'offert/index.html');
-  assert.throws(() => inspectHtml(enabled, 'offert/index.html'));
+  inspectHtml(disabled, 'offert/index.html',false);
+  assert.throws(() => inspectHtml(enabled, 'offert/index.html',false));
   inspectHtml(enabled, 'offert/index.html', true);
   assert.throws(() => inspectHtml(enabled.replace('href="/integritet/"', 'href="/kontakt/"'), 'offert/index.html', true), /privacy notice/);
   assert.throws(() => inspectHtml(disabled, 'offert/index.html', true));
@@ -159,7 +159,7 @@ test('preview form activation is limited to the exact quote host and approved mo
   assert.throws(() => inspectHtml(html + '<div id="hp-offert-guide" data-enabled="true"></div>', 'other.html', true));
 });
 test('approval must be complete, preview-only and backed by a published privacy route', () => {
-  const policy = JSON.parse(readFileSync('config/preview-quote-release.json','utf8'));
+  const policy = {...JSON.parse(readFileSync('config/preview-quote-release.json','utf8')),mode:'review',approval:{}};
   assert.deepEqual(quoteRelease(policy), { enabled:false });
   const fields = {
     customerPrivacyNoticePath:'/integritet/', privacyApprovedBy:'Hallpartner authorized sign-off',
@@ -176,7 +176,7 @@ test('approval must be complete, preview-only and backed by a published privacy 
     {targetOrigin:'https://hallpartner.se'},{scope:'other'},{mode:'something-else'}]) {
     assert.throws(() => quoteRelease({...policy,...extra}));
   }
-  assert.deepEqual(quoteReleasePolicy(),{enabled:false});
+  assert.deepEqual(quoteReleasePolicy(),quoteRelease(JSON.parse(readFileSync('config/preview-quote-release.json','utf8'))));
 });
 test('HTML parser retains responsive images, inline imports and stylesheet references', () => {
   const r=inspectHtml(html+'<img src="/a.webp" srcset="/a.webp 320w, /b.webp 640w"><link rel="stylesheet" href="/a.css"><script type="module">import "/a.js"</script>','other.html');
@@ -269,7 +269,8 @@ test('verified payload rejects changed bytes, forbidden additions and forged act
   try {
     const manifest={commit:'a'.repeat(40),files:[],images:[]};
     for(const page of PAGES){
-      const body=html+'En hall börjar med ditt behov.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?'<div id="hp-offert-guide" data-enabled="false"></div>':'');
+      const quote='<div id="hp-offert-guide" data-enabled="'+quoteReleasePolicy().enabled+'"></div><a href="/integritet/">Personuppgifter</a>';
+      const body=html+'En hall börjar med ditt behov.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?quote:'');
       mkdirSync(dirname(root+'/'+page),{recursive:true});writeFileSync(root+'/'+page,body);manifest.files.push({path:page,sha256:sha256(body)});
     }
     const robots='User-agent: *\nDisallow: /\n';writeFileSync(root+'/robots.txt',robots);manifest.files.push({path:'robots.txt',sha256:sha256(robots)});
