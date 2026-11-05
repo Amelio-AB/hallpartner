@@ -19,12 +19,11 @@ export function quoteRelease(policy, publishedPages = PAGES) {
   assert(policy.sender === 'kontakt@amelio.se' && policy.testRecipient === 'andreas@amelio.se',
     'Quote release must preserve the verified Amelio SMTP sender and isolated test inbox');
   const enabled = policy.mode === 'enabled';
-  if (!enabled) {
-    assert(policy.recipient === null, 'Review mode must not claim a confirmed public recipient');
-  }
+  // The intended preview receiver is explicitly confirmed by the project owner.
+  // This policy is public metadata, not proof that the private PHP config matches.
+  assert(policy.recipient === 'kontakt@amelio.se',
+    'Preview quote recipient must be kontakt@amelio.se');
   if (enabled) {
-    assert(['kontakt@amelio.se', 'andreas@amelio.se'].includes(policy.recipient),
-      'Release needs an explicitly confirmed Amelio preview recipient');
     assert(policy.approval?.customerPrivacyNoticePath === REFERENCE_PATH,
       'Missing customer-approved privacy notice for V2');
     assert(publishedPages.includes('integritet/index.html'),
