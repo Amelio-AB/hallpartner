@@ -139,7 +139,7 @@ $invalid = $v2;
 $invalid['answers']['project.description'] = str_repeat('x', 17000);
 must(hp_validate_lead($invalid)['valid'] === false, 'V2 limits text length');
 $invalid = $v2;
-$invalid['answers']['contact.name'] = "Fake\\r\\nBcc: spam@example.invalid";
+$invalid['answers']['contact.name'] = "Fake\r\nBcc: spam@example.invalid";
 must(hp_validate_lead($invalid)['valid'] === false, 'V2 rejects header injection');
 
 $dir = sys_get_temp_dir() . '/hp-intake-test-' . bin2hex(random_bytes(7));
