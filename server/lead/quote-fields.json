@@ -1,0 +1,185 @@
+{
+  "project.use": {
+    "label": "Vad ska du främst använda hallen till?",
+    "options": {
+      "storage": "Lager eller förvaring",
+      "machinery": "Maskiner eller verkstad",
+      "riding": "Ridverksamhet",
+      "other": "Annat behov",
+      "unknown": "Behöver rådgivning"
+    }
+  },
+  "project.description": {
+    "label": "Beskriv gärna ditt behov (frivilligt)"
+  },
+  "project.hall_interest": {
+    "label": "Vilken av våra hallkategorier tänker du på?",
+    "options": {
+      "lagerhall": "Lagerhall",
+      "maskinhall": "Maskinhall",
+      "plathall": "Plåthall",
+      "talthall": "Tälthall",
+      "ridhus": "Ridhus",
+      "isolerad-hall": "Isolerad hall",
+      "unknown": "Jag vill ha hjälp att välja"
+    }
+  },
+  "dimensions.confidence": {
+    "label": "Vet du ungefär hur stor hallen ska vara?",
+    "options": {
+      "exact": "Ja, jag vet måtten",
+      "approximate": "Jag har ungefärliga mått",
+      "need_help": "Jag behöver hjälp med storleken"
+    }
+  },
+  "dimensions.width": {
+    "label": "Bredd i meter"
+  },
+  "dimensions.length": {
+    "label": "Längd i meter"
+  },
+  "dimensions.side_height": {
+    "label": "Sidohöjd i meter"
+  },
+  "site.city": {
+    "label": "I vilken ort eller vilket område vill du bygga?"
+  },
+  "site.postal_code": {
+    "label": "Postnummer"
+  },
+  "site.decided": {
+    "label": "Är den exakta byggplatsen bestämd?",
+    "options": {
+      "yes": "Ja",
+      "no": "Nej",
+      "unknown": "Vet inte ännu"
+    }
+  },
+  "site.address": {
+    "label": "Adress eller fastighetsbeteckning"
+  },
+  "foundation.status": {
+    "label": "Hur ser det ut med grunden?",
+    "options": {
+      "existing": "Det finns en grund",
+      "planned": "En grund planeras",
+      "none": "Ingen grund planerad",
+      "unknown": "Vet inte"
+    }
+  },
+  "foundation.notes": {
+    "label": "Vad vet du om grunden?"
+  },
+  "design.insulation": {
+    "label": "Behöver hallen vara isolerad?",
+    "options": {
+      "yes": "Ja, troligen",
+      "no": "Nej, troligen inte",
+      "recommend": "Hallpartner rekommenderar",
+      "unknown": "Vet inte"
+    }
+  },
+  "openings.ports": {
+    "label": "Behöver hallen en eller flera portar?",
+    "options": {
+      "yes": "Ja",
+      "no": "Nej",
+      "unknown": "Osäker"
+    }
+  },
+  "openings.port_needs": {
+    "label": "Beskriv gärna hur portarna ska användas"
+  },
+  "openings.windows": {
+    "label": "Behövs fönster eller ljusinsläpp?",
+    "options": {
+      "yes": "Ja",
+      "no": "Nej",
+      "unknown": "Behöver diskuteras"
+    }
+  },
+  "design.envelope_wishes": {
+    "label": "Önskemål om väggar, tak eller färg"
+  },
+  "design.installation_wishes": {
+    "label": "Övriga funktioner eller tillval att diskutera"
+  },
+  "delivery.wishes": {
+    "label": "Vad vill du ha hjälp med utöver själva hallen?"
+  },
+  "planning.stage": {
+    "label": "Hur långt har projektet kommit?",
+    "options": {
+      "ideas": "Jag undersöker möjligheterna",
+      "planning": "Mått eller planering finns",
+      "permit": "Bygglov eller projektering pågår",
+      "ready": "Redo att ta nästa steg",
+      "unknown": "Vet inte"
+    }
+  },
+  "planning.timeline": {
+    "label": "När skulle du vilja att bygget startar?",
+    "options": {
+      "soon": "Så snart som möjligt",
+      "within_3": "Inom 3 månader",
+      "three_six": "Om 3–6 månader",
+      "six_twelve": "Om 6–12 månader",
+      "later": "Senare",
+      "unknown": "Vet inte"
+    }
+  },
+  "documents.available": {
+    "label": "Har du ritningar, skisser eller bilder?",
+    "options": {
+      "yes": "Ja",
+      "some": "Något underlag",
+      "later": "Inte ännu",
+      "no": "Nej"
+    }
+  },
+  "documents.description": {
+    "label": "Vilket underlag finns?"
+  },
+  "planning.permit_status": {
+    "label": "Hur ser det ut med bygglovet?",
+    "options": {
+      "not_checked": "Inte undersökt",
+      "considering": "Undersöks",
+      "submitted": "Ansökan pågår",
+      "approved": "Beviljat",
+      "unknown": "Vet inte"
+    }
+  },
+  "planning.notes": {
+    "label": "Övrigt om projektet"
+  },
+  "contact.name": {
+    "label": "Namn"
+  },
+  "contact.email": {
+    "label": "E-post"
+  },
+  "contact.phone": {
+    "label": "Telefon"
+  },
+  "contact.company": {
+    "label": "Företag"
+  },
+  "contact.role": {
+    "label": "Vilken roll har du i projektet?",
+    "options": {
+      "customer": "Beställare eller slutkund",
+      "contractor": "Entreprenör",
+      "advisor": "Konsult eller projektör",
+      "other": "Annan roll"
+    }
+  },
+  "contact.preference": {
+    "label": "Hur vill du helst bli kontaktad?",
+    "options": {
+      "email": "E-post",
+      "phone": "Telefon",
+      "either": "Spelar ingen roll"
+    }
+  }
+}

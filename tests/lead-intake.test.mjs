@@ -41,7 +41,7 @@ test('V2 submit requires three explicit release gates; contact keeps its previou
  assert.match(quote,/PUBLIC_HP_RECEIVER_VERIFIED === 'true'/);
  assert.match(quote,/PUBLIC_HP_PRIVACY_APPROVED === 'true'/);
  assert.match(quote,/data-enabled=\{String\(ready\)\}/);
- assert.match(quote,/createJsonAdapter\('\/api\/lead\.php'\)/);
+ assert.match(quote,/createQuoteConfirmationAdapter/);
  assert.match(quote,/host\.dataset\.enabled === 'true'/);
  assert.match(quote,/const blocked: Adapter = async/);
  assert.ok(quote.includes('button.disabled = true'));

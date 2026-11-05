@@ -75,35 +75,6 @@ if ($ip === '' || !hp_allow_rate($rateRoot, $config['rate_secret'], $ip, time())
     hp_reply(503, ['status' => 'failed']);
 }
 
-$labels = [
-    'project.use' => 'Användning', 'project.description' => 'Projektbeskrivning',
-    'dimensions.confidence' => 'Måttstatus', 'dimensions.width' => 'Bredd (m)',
-    'dimensions.length' => 'Längd (m)', 'dimensions.side_height' => 'Sidohöjd (m)',
-    'site.city' => 'Ort', 'site.postal_code' => 'Postnummer',
-    'contact.name' => 'Namn', 'contact.email' => 'E-post',
-    'contact.phone' => 'Telefon', 'contact.company' => 'Företag',
-    'contact.message' => 'Meddelande',
-    'project.hall_interest' => 'Önskad hallkategori',
-    'site.decided' => 'Byggplats bestämd',
-    'site.address' => 'Adress eller fastighet',
-    'foundation.status' => 'Grundstatus',
-    'foundation.notes' => 'Kommentar om grunden',
-    'design.insulation' => 'Isoleringsbehov',
-    'openings.ports' => 'Portbehov',
-    'openings.port_needs' => 'Så ska portarna användas',
-    'openings.windows' => 'Fönster och ljusinsläpp',
-    'design.envelope_wishes' => 'Väggar, tak och färg',
-    'design.installation_wishes' => 'Övriga funktioner',
-    'delivery.wishes' => 'Önskad hjälp',
-    'planning.stage' => 'Projektläge',
-    'planning.timeline' => 'Önskad byggstart',
-    'documents.available' => 'Ritningar och bilder',
-    'documents.description' => 'Tillgängligt underlag',
-    'planning.permit_status' => 'Bygglovsläge',
-    'planning.notes' => 'Övrigt om projektet',
-    'contact.role' => 'Roll i projektet',
-    'contact.preference' => 'Önskad kontaktväg',
-];
 $reference = bin2hex(random_bytes(12));
 $kind = $validation['kind'];
 $answers = $validation['answers'];
@@ -111,39 +82,11 @@ $subject = $kind === 'hallpartner-contact-v1' ? 'Nytt kontaktmeddelande' : 'Ny h
 $body = "Hallpartner – " . $subject . "\n" .
     "Referens: " . $reference . "\n" .
     "Mottagartid UTC: " . gmdate('Y-m-d H:i:s') . "\n\n";
-foreach ($labels as $key => $label) {
-    if (!empty($answers[$key])) {
-        $body .= $label . ": " . $answers[$key] . "\n\n";
-    }
-}
+require_once __DIR__ . '/messages.php';
+require_once __DIR__ . '/delivery.php';
+$summary = hp_answer_summary($kind, $answers);
+$body .= $summary;
 
 require_once $vendor;
-try {
-    $mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
-    $mailer->isSMTP();
-    $mailer->Host = $config['smtp_host'];
-    $mailer->SMTPAuth = true;
-    $mailer->Username = $config['smtp_username'];
-    $mailer->Password = $config['smtp_password'];
-    $mailer->SMTPSecure = $port === 465
-        ? \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS
-        : \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-    $mailer->Port = $port;
-    $mailer->Timeout = 15;
-    $mailer->CharSet = 'UTF-8';
-    $mailer->setFrom($config['smtp_from'], 'Hallpartner webbplats');
-    $mailer->addAddress($config['recipient']);
-    $mailer->addReplyTo($answers['contact.email'], $answers['contact.name']);
-    $mailer->isHTML(false);
-    $mailer->Subject = $subject . ' [' . $reference . ']';
-    $mailer->Body = $body;
-    if ($mailer->send() !== true) {
-        throw new RuntimeException('SMTP did not confirm acceptance');
-    }
-    hp_reply(200, ['status' => 'success', 'requestId' => $reference]);
-} catch (Throwable) {
-    // The SMTP service may already have accepted a message before a timeout.
-    // Never return 503+failed after a send attempt; outcome is unknown.
-    error_log('[Hallpartner intake] SMTP outcome unknown, reference ' . $reference);
-    hp_reply(500, ['status' => 'unknown']);
-}
+$result = hp_deliver_enquiry($config, $port, $kind, $answers, $reference, $subject, $body, $summary);
+hp_reply($result['status'] === 'success' ? 200 : 500, $result);
