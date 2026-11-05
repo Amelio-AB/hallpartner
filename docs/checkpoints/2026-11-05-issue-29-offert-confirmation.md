@@ -54,6 +54,8 @@ previewflödet och får därför inte göras före godkännandet.
 - `npm run lint`: godkänd.
 - `node --test tests/*.test.mjs`: 79/79 godkända.
 - Aktiv Astro-byggnad: 15 sidor; samma tre releaseflaggor som tidigare.
+- HTML-/migrationskontrakt verifierade för både AMP-sidfoten och legacy-
+  reservsidfoten: canonical, noindex, länkar, ankare och avgränsad sitemap.
 - PHP 8.3.36: syntaxkontroll av receiver, delivery, messages och testfixtur
   samt befintlig oberoende validering/rate-limit-regression godkända.
 - Riktig, låst PHPMailer 7.1.1 mot en isolerad SMTP-server på `127.0.0.1`:

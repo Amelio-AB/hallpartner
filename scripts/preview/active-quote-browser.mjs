@@ -170,7 +170,7 @@ try{
     writeFileSync(output+'/'+width+'-direct.png',Buffer.from(shot.data,'base64'));
   }
   writeFileSync(output+'/result.json',JSON.stringify({localMockOnly:true,results},null,2)+'\n');
-  console.log('OFFLINE ACTIVE CHROME: PASS; mobile/desktop, 6 steps, redirect/copy/direct/422/503/500/disconnect; one local POST per case, no SMTP.');
+  console.log('OFFLINE ACTIVE CHROME: PASS; mobile/desktop, 6 steps, redirect/copy/direct/422/503/500/disconnect/timeout; one local POST per case, no SMTP.');
 }finally{
   for(const pending of requests.values())pending.reject(Error('Browser closing'));
   if(socket)socket.close();
