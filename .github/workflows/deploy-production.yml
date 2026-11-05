@@ -57,6 +57,8 @@ jobs:
         run: |-
           sudo apt-get update -qq
           sudo apt-get install -y -qq lftp >/dev/null
+      - name: Verify Chrome environment before any publication
+        run: node scripts/preview/chrome-preflight.mjs
       - name: Publish to verified development target and verify HTTP content
         env:
           GH_TOKEN: ${{ github.token }}

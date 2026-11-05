@@ -7,6 +7,6 @@ curl --fail --silent --show-error --location --proto '=https' --proto-redir '=ht
 printf '%s  %s\n' '8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8' "$archive" | sha256sum --check --status
 mkdir -p "$RUNNER_TEMP/hp-actionlint"
 tar -xzf "$archive" -C "$RUNNER_TEMP/hp-actionlint" actionlint
-"$RUNNER_TEMP/hp-actionlint/actionlint" .github/workflows/deploy-production.yml .github/workflows/preview-validation.yml .github/workflows/ci.yml .github/workflows/amp-readiness.yml .github/workflows/hallpartner-draft.yml
+"$RUNNER_TEMP/hp-actionlint/actionlint" .github/workflows/deploy-production.yml .github/workflows/preview-validation.yml .github/workflows/ci.yml .github/workflows/amp-readiness.yml .github/workflows/hallpartner-draft.yml .github/workflows/release-tooling.yml
 shellcheck scripts/preview/*.sh
 node scripts/preview/workflow-contract.mjs
