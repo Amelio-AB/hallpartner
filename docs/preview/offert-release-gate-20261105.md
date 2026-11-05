@@ -18,7 +18,7 @@ Offentliga `config.local.php`-inställningar är fortfarande `enabled=false` och
 ## Återstående faktiska steg innan aktiv publik knapp
 
 1. Fastställ vem som är personuppgiftsansvarig under **Amelios testpreview**, vilka som får åtkomst till testinkorgen och när testuppgifter raderas. Lägg till och granska en integritetssida. Ingen faktisk kunddata ska användas i förtid.
-2. Verifiera privat `config.local.php` på servern utan att dela hemligheter. E-post ska gå **från** `kontakt@amelio.se` **till** `andreas@amelio.se` under test. Serverns origin måste vara `https://hallpartner-se.preview2.inleed.com`.
+2. Verifiera privat `config.local.php` på servern utan att dela hemligheter. E-post ska gå **från** `kontakt@amelio.se`; välj och bekräfta avsedd **mottagare** separat innan previewn öppnas för verkliga inskick. Den tidigare syntetiska testen använde `andreas@amelio.se` som testinkorg. Serverns origin måste vara `https://hallpartner-se.preview2.inleed.com`.
 3. Dokumentera konkret go/no-go, lås en revision som endast gäller previewdomänen, och ändra därefter `mode` i en separat godkänd PR. Håll WordPress och kundens befintliga webbhotell orörda.
 4. När integritet och servermottagning är godkända, aktivera den privata konfigurationen och publicera **enbart på Inleed-previewn**. Testa webbläsarens sex steg med syntetiska uppgifter och bekräfta exakt referens i Roundcube. Avbryt om någon del fallerar.
 5. För framtida drift på Hallpartners eget konto krävs en **separat** mottagar-, SMTP-, domän- och integritetsrelease. Flytta aldrig automatiskt Amelios uppgifter eller hemligheter dit.
