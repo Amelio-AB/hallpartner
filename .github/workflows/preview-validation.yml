@@ -96,6 +96,8 @@ jobs:
         run: npm audit --audit-level=high --json > reports/preview/npm-audit.json
       - name: Audit locked PHP dependencies without SMTP
         run: composer audit --locked --no-dev --working-dir=server/lead --format=json > reports/preview/composer-audit.json
+      - name: Pin quote submission flags to reviewed preview release policy
+        run: node scripts/preview/quote-release.mjs github-env
       - name: Build exact checkout
         run: npm run build
         env:
