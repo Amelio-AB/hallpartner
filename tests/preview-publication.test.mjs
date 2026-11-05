@@ -70,7 +70,9 @@ test('read-only inventory records protected paths without permitting command inj
   }
 });
 test('public allowlist excludes internal pages and server code', () => {
-  assert.equal(PAGES.length,13);
+  assert.equal(PAGES.length,14);
+  assert.ok(PAGES.includes('integritet/index.html'));
+  assert.ok(!PAGES.some(p=>p.startsWith('api/')));
   for (const path of ['../index.html','/index.html','a//x','.env','api/lead.php','server/key.json','prototype/index.html','x.php5','x.PHTML','x.log','x.map','docs/a.html','x;put-secret']) assert.throws(()=>safePath(path));
   assert.equal(safePath('_astro/gallery.aB-12.js'),'_astro/gallery.aB-12.js');
 });
