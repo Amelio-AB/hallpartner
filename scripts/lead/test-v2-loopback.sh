@@ -3,7 +3,7 @@
 set -Eeuo pipefail
 if [[ $# -ne 1 || "$1" != '--send-test' ]]; then
   echo 'Usage: bash test-v2-loopback.sh --send-test'
-  echo 'Runs one localhost-only V2 test and sends one synthetic email to andreas@amelio.se.'
+  echo 'Runs one localhost-only V2 test and sends one synthetic email to kontakt@amelio.se.'
   exit 2
 fi
 umask 077
@@ -65,7 +65,7 @@ $c = require getenv('HP_V2_TEST_ORIGINAL_CONFIG');
 if (!is_array($c)) throw new RuntimeException('Missing private config');
 $c['enabled'] = true;
 $c['privacy_approved'] = true; // Synthetic localhost simulation, NOT legal approval.
-$c['recipient'] = 'andreas@amelio.se'; // Local test only: never mail configured recipient.
+$c['recipient'] = 'kontakt@amelio.se'; // Local test only: explicitly chosen preview inbox; real config remains unchanged.
 $c['rate_dir'] = getenv('HP_V2_TEST_RATE_DIR');
 // This is a disposable local-only rate limit key. It does not change or
 // prove the key used by the inactive public receiver.
