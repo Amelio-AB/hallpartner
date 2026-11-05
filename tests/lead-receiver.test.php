@@ -72,6 +72,76 @@ $invalid = $quote;
 $invalid['answers']['site.postal_code'] = '123 abc';
 must(hp_validate_lead($invalid)['valid'] === false, 'invalid postal code rejected');
 
+
+$v2 = [
+    'contractVersion' => 1,
+    'technicalId' => 'quote-flow',
+    'configurationId' => 'hallpartner-offert-v2-review',
+    'answers' => [
+        'project.use' => 'storage',
+        'project.description' => '',
+        'dimensions.confidence' => '',
+        'contact.name' => 'Syntetisk testperson',
+        'contact.email' => 'test@example.invalid',
+    ],
+];
+must(hp_validate_lead($v2)['valid'] === true, 'V2 three required answers without description or size');
+$variant = $v2;
+$variant['answers']['project.hall_interest'] = 'talthall';
+$variant['answers']['dimensions.width'] = '18,5';
+$variant['answers']['dimensions.length'] = '40';
+$variant['answers']['site.city'] = 'Teststad';
+$variant['answers']['site.decided'] = 'yes';
+$variant['answers']['site.address'] = 'Testgatan 1';
+$variant['answers']['foundation.status'] = 'planned';
+$variant['answers']['foundation.notes'] = 'Syntetisk provgrund';
+$variant['answers']['design.insulation'] = 'recommend';
+$variant['answers']['openings.ports'] = 'yes';
+$variant['answers']['openings.port_needs'] = 'Två större portar';
+$variant['answers']['openings.windows'] = 'yes';
+$variant['answers']['design.envelope_wishes'] = 'Ljusgrått tak';
+$variant['answers']['design.installation_wishes'] = 'Ventilation';
+$variant['answers']['delivery.wishes'] = 'Fråga om montage';
+$variant['answers']['planning.stage'] = 'planning';
+$variant['answers']['planning.timeline'] = 'three_six';
+$variant['answers']['documents.available'] = 'some';
+$variant['answers']['documents.description'] = 'Skiss finns';
+$variant['answers']['planning.permit_status'] = 'not_checked';
+$variant['answers']['planning.notes'] = 'Syntetisk notering';
+$variant['answers']['contact.phone'] = '070 123 45 67';
+$variant['answers']['contact.company'] = 'Testbolaget';
+$variant['answers']['contact.role'] = 'contractor';
+$variant['answers']['contact.preference'] = 'phone';
+must(hp_validate_lead($variant)['valid'] === true, 'V2 full allowed active answers');
+$invalid = $v2;
+unset($invalid['answers']['project.use']);
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 requires use selection');
+$invalid = $v2;
+$invalid['answers']['project.use'] = 'not-approved';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 choice allowlist');
+$invalid = $variant;
+$invalid['answers']['dimensions.confidence'] = 'need_help';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 prohibits dimensions when user needs help');
+$invalid = $v2;
+$invalid['answers']['openings.ports'] = 'no';
+$invalid['answers']['openings.port_needs'] = 'Hidden input bypass';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 conditional field cannot be forged');
+$invalid = $v2;
+$invalid['answers']['documents.description'] = 'Hidden document bypass';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 document condition');
+$invalid = $v2;
+$invalid['answers']['contact.preference'] = 'phone';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 callback requires phone');
+$invalid = $v2;
+$invalid['answers']['recipient'] = 'unauthorized@example.invalid';
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 rejects unknown recipient key');
+$invalid = $v2;
+$invalid['answers']['project.description'] = str_repeat('x', 17000);
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 limits text length');
+$invalid = $v2;
+$invalid['answers']['contact.name'] = "Fake\\r\\nBcc: spam@example.invalid";
+must(hp_validate_lead($invalid)['valid'] === false, 'V2 rejects header injection');
+
 $dir = sys_get_temp_dir() . '/hp-intake-test-' . bin2hex(random_bytes(7));
 must(mkdir($dir, 0700), 'create private rate directory');
 try {
