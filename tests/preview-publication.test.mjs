@@ -131,6 +131,26 @@ test('server configuration exemption is explicit, hash-bound and cannot publish 
   for (const path of ['.htaccess','cgi-bin/.env','other/.htaccess']) assert.throws(() => retainedFiles([path],{files:[]},{...policy,serverFiles:[{...entry,path}]}));
   for (const field of ['sha256','reviewedBy','evidence']) assert.throws(() => retainedFiles([entry.path],{files:[]},{...policy,serverFiles:[{...entry,[field]:''}]}));
 });
+test('existing PHP bootstrap is retained byte-for-byte only with an explicit exact hash and no upload permission', () => {
+  const allowed = {
+    path:'api/lead.php',
+    sha256:'7d252addd5378e98ddb42871934190800800e076318661b3d66c1a202a89e7ef',
+    reviewedBy:'Hash-and-scope review; PHP content is not audited',
+    evidence:'docs/preview/preserve-lead-bootstrap-20261104.md#farskt-hashbevis',
+    preserveOnly:true
+  };
+  const policy={retainedFiles:[],serverFiles:[allowed]};
+  assert.deepEqual(retainedFiles([allowed.path],{files:[]},policy),[allowed]);
+  assert.throws(()=>safePath(allowed.path),'PHP must never enter static upload payload');
+  assert.throws(()=>retainedFiles([allowed.path],{files:[]},{...policy,serverFiles:[]}),/Unreviewed/);
+  for(const field of ['sha256','reviewedBy','evidence']) {
+    assert.throws(()=>retainedFiles([allowed.path],{files:[]},{...policy,serverFiles:[{...allowed,[field]:''}]}));
+  }
+  assert.throws(()=>retainedFiles([allowed.path],{files:[]},{...policy,serverFiles:[{...allowed,preserveOnly:false}]}));
+  assert.throws(()=>retainedFiles(['api/other.php'],{files:[]},{...policy,serverFiles:[{...allowed,path:'api/other.php'}]}));
+  assert.throws(()=>retainedFiles(['server/lead.php'],{files:[]},{...policy,serverFiles:[{...allowed,path:'server/lead.php'}]}));
+});
+
 test('production fingerprint requires stable successful responses before upload', async () => {
   assert.equal((await productionSnapshot(async()=>({status:200,body:Buffer.from('same')}))).length,6);
   let n=0;await assert.rejects(()=>productionSnapshot(async()=>({status:200,body:Buffer.from(String(n++))})));
