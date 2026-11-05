@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { resolve, join } from 'node:path';
+import { resolve, join, dirname, basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const FILES = Object.freeze([
@@ -12,8 +12,8 @@ export const FILES = Object.freeze([
   'tests/lead-receiver.test.php',
 ]);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
-function run(command, args) {
-  const result = spawnSync(command, args, { maxBuffer: 8 * 1024 * 1024, env: { ...process.env, TAR_OPTIONS: '' }, windowsHide: true });
+function run(command, args, cwd) {
+  const result = spawnSync(command, args, { cwd, maxBuffer: 8 * 1024 * 1024, env: { ...process.env, TAR_OPTIONS: '' }, windowsHide: true });
   if (result.error) throw result.error;
   assert.equal(result.status, 0, command + ' failed: ' + result.stderr.toString());
   return result.stdout;
@@ -26,14 +26,18 @@ function revision(commit) {
 
 export function verifyCandidate(commit, archive) {
   revision(commit);
-  const entries = run('tar', ['-tf', resolve(archive)]).toString().trim().split(/\r?\n/);
+  // GNU tar in Git Bash interprets a Windows drive colon as a remote host.
+  // Use a local relative filename from the archive directory for both tar variants.
+  const archiveDirectory = dirname(resolve(archive));
+  const archiveName = './' + basename(archive);
+  const entries = run('tar', ['-tf', archiveName], archiveDirectory).toString().trim().split(/\r?\n/);
   // Git archive includes parent directory entries. No extra files, duplicates or paths permitted.
   const directories = ['server/', 'server/lead/', 'tests/'];
   assert.deepEqual(entries.filter(path => !directories.includes(path)).sort(), [...FILES].sort(), 'Unexpected archive entries');
   assert.equal(new Set(entries).size, entries.length, 'Duplicate archive entry');
   const files = FILES.map(path => {
     const expected = run('git', ['cat-file', 'blob', commit + ':' + path]);
-    const actual = run('tar', ['-xOf', resolve(archive), path]);
+    const actual = run('tar', ['-xOf', archiveName, path], archiveDirectory);
     // Both complete bytes and complete SHA-256 must match. Never normalize line endings.
     assert.equal(sha256(actual), sha256(expected), 'Git blob SHA-256 mismatch: ' + path);
     assert.ok(actual.equals(expected), 'Git blob bytes mismatch: ' + path);
