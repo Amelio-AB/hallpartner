@@ -4,7 +4,7 @@
   "targetOrigin": "https://hallpartner-se.preview2.inleed.com",
   "mode": "review",
   "sender": "kontakt@amelio.se",
-  "recipient": "andreas@amelio.se",
+  "recipient": null,
   "approval": {
     "customerPrivacyNoticePath": null,
     "privacyApprovedBy": null,
@@ -12,5 +12,6 @@
     "recipientVerifiedBy": null,
     "ownerReleaseApprovedBy": null,
     "evidence": null
-  }
+  },
+  "testRecipient": "andreas@amelio.se"
 }
