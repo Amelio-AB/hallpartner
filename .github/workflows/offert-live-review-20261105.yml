@@ -1,0 +1,129 @@
+name: Offertguide live review - read only
+'on':
+  push:
+    branches: [qa/offert-preview-54c6586-20261105]
+    paths: [.github/workflows/offert-live-review-20261105.yml]
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: hallpartner-offert-live-review-20261105
+  cancel-in-progress: false
+jobs:
+  live-offert:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 54c6586b9eba93c4febf9b22604473c2b8316ad7
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Wait for exact published preview, stop on failed deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { mkdir, writeFile } from 'node:fs/promises';
+          import { setTimeout as sleep } from 'node:timers/promises';
+          const commit = '54c6586b9eba93c4febf9b22604473c2b8316ad7';
+          const origin = 'https://hallpartner-se.preview2.inleed.com';
+          const runId = '41973215969';
+          const output = 'reports/preview/live-offert';
+          await mkdir(output, { recursive: true });
+          await writeFile(output + '/context.json', JSON.stringify({ commit, origin, runId, mode: 'read-only', startedAt: new Date().toISOString() }, null, 2));
+          let marker;
+          for (let attempt = 0; attempt < 50; attempt++) {
+            const response = await fetch('https://api.github.com/repos/Amelio-AB/hallpartner/actions/runs/' + runId, {
+              headers: { Authorization: 'Bearer ' + process.env.GH_TOKEN, Accept: 'application/vnd.github+json' },
+              signal: AbortSignal.timeout(20000)
+            });
+            assert.ok(response.ok, 'Cannot verify deployment run');
+            const run = await response.json();
+            assert.equal(run.head_sha, commit, 'Unexpected deployment revision');
+            assert.ok(run.status !== 'completed' || run.conclusion === 'success', 'Deployment did not succeed: ' + run.conclusion);
+            try {
+              const result = await fetch(origin + '/hp-preview-deploy.json?quote-review=' + Date.now(), {
+                redirect: 'error', headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(20000)
+              });
+              if (result.ok) {
+                const observed = await result.json();
+                if (observed.commit === commit && String(observed.runId) === runId) { marker = observed; break; }
+              }
+            } catch { /* Read-only retry while publication is completing. */ }
+            console.log('Expected deployment marker not ready; deployment status: ' + run.status);
+            await sleep(30000);
+          }
+          assert.ok(marker, 'Exact release was not published within the bounded verification window');
+          await writeFile(output + '/deployment-marker-before.json', JSON.stringify(marker, null, 2));
+          console.log('Exact published revision confirmed: ' + commit);
+          JS
+      - name: Prepare existing browser test with a network write block
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync, writeFileSync } from 'node:fs';
+          let source = readFileSync('scripts/capture-hallpartner-home.mjs', 'utf8');
+          const replaceOnce = (before, after) => {
+            assert.equal(source.split(before).length, 2, 'Browser test anchor changed');
+            source = source.replace(before, after);
+          };
+          replaceOnce('const pending=new Map(),browserErrors=[];', 'const pending=new Map(),browserErrors=[],forbiddenRequests=[];');
+          replaceOnce('const packet=JSON.parse(event.data);', `const packet=JSON.parse(event.data);
+              if(packet.method==='Fetch.requestPaused') {
+                const {requestId,request}=packet.params;
+                const path=new URL(request.url).pathname;
+                const blocked=!['GET','HEAD'].includes(request.method)||path.startsWith('/api/');
+                if(blocked)forbiddenRequests.push({method:request.method,path});
+                void call(blocked?'Fetch.failRequest':'Fetch.continueRequest',blocked?{requestId,errorReason:'BlockedByClient'}:{requestId})
+                  .catch(error=>browserErrors.push('Request guard: '+String(error)));
+                return;
+              }`);
+          replaceOnce("await call('Runtime.enable');await call('Page.enable');", "await call('Runtime.enable');await call('Page.enable');await call('Fetch.enable',{patterns:[{urlPattern:'http*',requestStage:'Request'}]});");
+          replaceOnce("console.log('PASS '+expectedPath", "await writeFile(join(output,prefix+'-NETWORK.json'),JSON.stringify({forbiddenRequests,status:forbiddenRequests.length?'failed':'passed'},null,2));\n  assert.equal(forbiddenRequests.length,0,'Unexpected API or write request was blocked');\n  console.log('PASS '+expectedPath");
+          writeFileSync(process.env.RUNNER_TEMP + '/hallpartner-live-offert.mjs', source);
+          JS
+          node --check "$RUNNER_TEMP/hallpartner-live-offert.mjs"
+      - name: Chrome on actual live offertguide at six widths - no submissions
+        timeout-minutes: 5
+        env:
+          HP_PREVIEW_URL: https://hallpartner-se.preview2.inleed.com/offert/
+          HP_SCREENSHOT_DIR: reports/preview/live-offert
+          HP_SCREENSHOT_PREFIX: offert-live
+        run: |
+          set -euo pipefail
+          node "$RUNNER_TEMP/hallpartner-live-offert.mjs" 2>&1 | tee reports/preview/live-offert/browser.log
+      - name: Verify release remained unchanged and record results
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFile, writeFile } from 'node:fs/promises';
+          const output = 'reports/preview/live-offert';
+          const before = JSON.parse(await readFile(output + '/deployment-marker-before.json', 'utf8'));
+          const response = await fetch('https://hallpartner-se.preview2.inleed.com/hp-preview-deploy.json?quote-review=' + Date.now(), {
+            redirect: 'error', headers: { 'Cache-Control': 'no-cache' }, signal: AbortSignal.timeout(20000)
+          });
+          assert.equal(response.status, 200);
+          const after = await response.json();
+          assert.deepEqual(after, before, 'Preview revision changed during browser review');
+          const browser = JSON.parse(await readFile(output + '/offert-live-REPORT.json', 'utf8'));
+          const network = JSON.parse(await readFile(output + '/offert-live-NETWORK.json', 'utf8'));
+          assert.equal(browser.status, 'passed');
+          assert.equal(browser.pages.length, 6);
+          assert.equal(network.status, 'passed');
+          assert.equal(network.forbiddenRequests.length, 0);
+          const result = { commit: before.commit, deploymentRunId: before.runId, verifiedAt: new Date().toISOString(), url: 'https://hallpartner-se.preview2.inleed.com/offert/', status: 'passed', widths: browser.pages.map(page => page.viewport.width), submissions: 0, uploads: 0, sourceCodeChanges: false };
+          await writeFile(output + '/live-result.json', JSON.stringify(result, null, 2));
+          console.log(JSON.stringify(result, null, 2));
+          JS
+      - name: Save live evidence and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offert-live-54c6586-${{ github.run_id }}
+          path: reports/preview/live-offert/
+          if-no-files-found: error
+          retention-days: 14
