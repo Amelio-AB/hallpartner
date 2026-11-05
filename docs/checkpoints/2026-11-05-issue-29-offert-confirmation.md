@@ -1,5 +1,84 @@
 # Issue #29 – tacksida och kundkopia, kandidat för godkännande
 
+## Aktuell releasestatus – stoppad före publicering (2026-11-05)
+
+Andreas godkände uttryckligen merge, kontrollerad previewrelease, privat
+PHP-installation och **ett enda** syntetiskt inskick med besökaradressen
+`andreas@amelio.se`. Godkännandet ersätter kandidatens tidigare väntan på
+godkännande nedan. Vid ett kritiskt fel ska releasen stoppas och den fungerande
+versionen säkras, utan upprepade testinskick.
+
+- Arbetsmappen var ren. PR #30:s exakta HEAD
+  `de8569b7a513eaec8edc8ca5ca1e6ac8cf8b2f48` hade fortsatt gröna CI-,
+  Footer- och previewkontroller. PR #30 mergades med SHA-kontroll till
+  **`4e9d1f7c6c71e5b1e439292710ded649f2d2ead6`**.
+- Vanlig main-CI [42114236938](https://github.com/Amelio-AB/hallpartner/actions/runs/42114236938)
+  är grön. Den automatiska publiceringskörningen
+  [42114236597](https://github.com/Amelio-AB/hallpartner/actions/runs/42114236597)
+  **stoppades i valideringen**: `Chrome debugging target unavailable` vid
+  första sidan, `index-html`, 2026-11-05T21:38:43Z. Node-, PHP-, isolerade
+  SMTP-, bygg-, säkerhets- och HTML-kontroller hade passerat. Felet visar
+  att Chrome-testet inte fick en debugging-anslutning; det bevisar inte
+  ett fel i webbplatsens funktion. Ingen omkörning har startats.
+- Jobbet **publish hoppades över**. Både SSH-läst servermarkör och HTTPS
+  bekräftar fortsatt publicerad commit
+  **`6b175c5636022420f6712f664c85209f88fea2d0`**, körning `42102526488`.
+  Aktiv `receiver.php` och `config.local.php` jämfördes byte för byte med
+  backupen efter stoppet och är oförändrade. Inga PHP-ändringar installerades.
+- **Noll syntetiska liveinskick** har gjorts i detta releaseförsök. Varken
+  primärmejl, besökarkopia eller redirect på den nya liveversionen har
+  därför leveransverifierats. Tidigare testbevis får inte användas som
+  bevis för denna ännu opublicerade funktion.
+
+### Verifierad backup och inaktiv kandidat
+
+Backup ligger privat på den befintliga Inleed-servern:
+`/home/s164937/hallpartner-leads/.release-issue29-20261105/backup`.
+Katalogen är 0700. Befintliga privata filer, inklusive konfigurationen,
+kopierades med bevarade rättigheter och verifierades med `cmp` och SHA-256.
+Konfigurationsvärden och lösenord skrevs aldrig ut. Avsändare, SMTP-login
+och mottagare verifierades som `kontakt@amelio.se`, korrekt preview-Origin
+och enbart V2 var tillåtna; inga värden ändrades.
+
+- Säkerhetskopierad aktiv receiver SHA-256:
+  `e528409deff905e6172725af351e47a65b0db977f2e7d1b514be46ff2e746a15`.
+- Privat råbackup `public-preview.tar` jämfördes mot dåvarande serverfiler
+  med `tar -d`, med oförändrad markör före och efter. SHA-256:
+  `f8cca732f726321cc454af07ce03dff07307a098c1d450c5f21e9c433f205cf7`.
+- Publik bootstrap är oförändrad med tidigare verifierad SHA-256
+  `7d252addd5378e98ddb42871934190800800e076318661b3d66c1a202a89e7ef`.
+- Kandidatarkivet överfördes endast till den privata, inaktiva `stage`-
+  katalogen. Dess bytekontroll mot råa Git-blobbar **nekade samtliga sju
+  filer**. Lokal undersökning bevisade att Windows `core.autocrlf=true`
+  hade gett arkivet CRLF i stället för Git-blobbarnas LF, utan andra
+  textskillnader. Ingen fil accepterades genom normaliserad hashkontroll.
+  Vid återupptagning ska ett nytt arkiv med exakta Git-bytes skapas och
+  byteverifieras innan syntax- och regressionstester körs på servern.
+
+### Tillfällig SSH-åtkomst avslutad
+
+Den nya Ed25519-nyckeln verifierades först med `BatchMode`, `IdentitiesOnly`
+och läsande kommandon mot konto `s164937`, server `ns15`, PHP 8.3.36.
+Nyckeln installerades med `restrict` och
+`expiry-time="20261106013202Z"` (fyra timmar från skapandet).
+Fingeravtryck: `SHA256:Mhcko2gRXkEQCI2hHOPctYRsga/lJZEjc8ngi0JJ9oQ`.
+
+Efter releasestoppet togs exakt en matchande nyckelrad bort atomiskt.
+Alla andra nyckelrader bevarades byte för byte; filrättigheten är 0600.
+Återläsning visade noll matchningar. En ny anslutning med enbart den
+tillfälliga nyckeln nekades med `Permission denied`, exit 255.
+De lokala privata och publika nyckelfilerna raderades efter verifieringen.
+
+**Nästa steg:** utred Chrome-startfelet och rätta kandidatartefaktens
+radslut innan ett nytt kontrollerat releaseförsök. Ingen SMTP-retry,
+installation eller publicering ska göras som en följd av denna
+dokumentationsuppdatering. Kundens WordPress, DNS, SMTP-inställningar,
+integritetshantering och framtida Inleed-konto har inte ändrats.
+
+---
+
+Nedan följer kandidatens tidigare implementation och releaseplan.
+
 ## Utgångsläge och gräns
 
 Arbetsmappen `C:\webbprojekt\hallpartner` var ren före grenbyte. `git fetch origin`
