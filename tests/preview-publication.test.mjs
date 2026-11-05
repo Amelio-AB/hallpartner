@@ -106,8 +106,8 @@ test('approval must be complete, preview-only and backed by a published privacy 
     ownerReleaseApprovedBy:'Andreas release approval', evidence:'docs/preview/approved-quote-release.md'
   };
   const enabled={...policy, mode:'enabled', recipient:'kontakt@amelio.se', approval:fields};
-  assert.throws(() => quoteRelease(enabled), /Privacy notice must be published/);
-  assert.deepEqual(quoteRelease(enabled, [...PAGES,'integritet/index.html']), { enabled:true });
+  assert.throws(() => quoteRelease(enabled, PAGES.filter(p => p !== 'integritet/index.html')), /Privacy notice must be published/);
+  assert.deepEqual(quoteRelease(enabled, PAGES), { enabled:true });
   for (const field of Object.keys(fields)) {
     assert.throws(() => quoteRelease({...enabled,approval:{...fields,[field]:null}},[...PAGES,'integritet/index.html']));
   }
