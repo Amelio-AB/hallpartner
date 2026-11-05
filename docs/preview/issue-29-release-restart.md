@@ -1,14 +1,14 @@
 # Issue #29 – tekniska releasegrindar och återstart
 
-**Senaste läge efter godkänd återstart:** PR #32 är mergad och `931e214` är
-publicerad med grön körning `42121351331`. PHP-aktiveringen stoppades före
-filinstallation eftersom den redan aktiva `validator.php` har CRLF och inte
-matchar kandidatens exakta Git-bytes. Kandidatarkivet är korrekt. Aktiv
-mottagare/konfiguration är oförändrade, inget liveinskick har gjorts och
-SSH-nyckeln är återkallad. Se
+**Slutförd release 2026-11-06 svensk tid:** `931e214` är publicerad med grön
+körning `42121351331`. Efter separat godkännande och verifiering av enbart
+CRLF/LF-skillnader är även Git-exakt validator och ny privat receiver
+installerade, med ny byteverifierad backup och återställningsväg för båda.
+Ett liveinskick gav referens `bd890a1c2bd661b183b91dd2` och rätt tacksida.
+Två separata mejl med samma referens och svenska svar verifierades i Gmail;
+Andreas bekräftade mottagningen. SSH-nyckeln är borttagen och återanslutning
+nekad. Ingen ny statisk publicering gjordes. Inga fler testinskick behövs. Se
 [aktuell checkpoint](../checkpoints/2026-11-05-issue-29-offert-confirmation.md).
-Nästa installation måste omfatta även Git-exakt validator med backup och
-återställning; ingen normaliserad hashjämförelse får ersätta detta.
 
 Nedan följer den tidigare återstartsplanen och dess tekniska bakgrund.
 

@@ -1,6 +1,82 @@
-# Issue #29 – publicerad frontend, stoppad PHP-aktivering
+# Issue #29 – slutförd release: tacksida och kundkopia
 
-## Aktuell releasestatus – återstart efter PR #32 (2026-11-05)
+## Slutligt leveransbevis – 2026-11-06 svensk tid
+
+**Releasen är genomförd och inkorgsleveransen bekräftad av Andreas.** Detta
+avsnitt ersätter de historiska stoppstatusarna nedan. Inga fler testinskick
+behövs. Ingen ny statisk publicering gjordes under den privata installationen.
+
+- Publicerad frontend och PHP-källversion är
+  **`931e2149d5477e33aaa4d19bbaa7ad264b04d320`**. Den tidigare gröna
+  [publiceringskörningen 42121351331](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351331)
+  kvarstår. Markör och alla 117 inventerade serveroriginal återverifierades
+  före installationen; main och preview hade inte ändrats.
+- Andreas godkände uttryckligen att även befintlig validator fick ersättas.
+  Färsk kontroll före backup och omedelbart före byte visade **enbart 266
+  CRLF/LF-skillnader**, inga andra kodskillnader. Den installerade ersättningen
+  kopierades från kandidatens råa Git-bytes. Normaliserad hash användes aldrig
+  för att godkänna kandidat eller installerad fil.
+- Ny privat backup finns i
+  `/home/s164937/hallpartner-leads/.release-issue29-final-20261105/backup`.
+  Berörda aktiva original och konfiguration kopierades med bevarade rättigheter
+  och verifierades med `cmp` och full SHA-256. Katalogen är 0700. Tidigare
+  backuper verifierades också. Vendor-filer fick en separat hashförteckning.
+  Ett byteverifierat `rollback.sh` i överordnad katalog kan återställa både
+  tidigare receiver och validator; ingen återställning behövde köras.
+- `messages.php`, `delivery.php` och `quote-fields.json` installerades först,
+  validatorn byttes atomiskt och receivern byttes atomiskt **sist**.
+  Aktiveringstid UTC: **2026-11-05T23:00:57Z**. Alla installerade källfiler matchar
+  Git exakt. PHP 8.3.36-syntax och laddning av PHPMailer/leveranskod passerade.
+  Aktiv receiver passerade dessutom ett CLI-test med tom indata: väntad 413
+  före SMTP, utan HTTP-anrop eller mejlsändning.
+- Installerad receiver SHA-256:
+  `eb4f2b5d1e1476cccdf247988dc8f889ed1982fb86526c48f68b3194be66548f`.
+  Installerad validator SHA-256:
+  `a7f9ddf4ee59636b8f52d943c72777d8f432118a525cc819b6673be13be42385`.
+  Stödfilernas hashar motsvarar det verifierade kandidatarkivet beskrivet nedan.
+  Konfiguration, SMTP-inställningar/lösenord, vendor, rate-cleanup och publik
+  bootstrap är oförändrade och återverifierades även efter liveinskicket.
+
+### Ett liveinskick och två separata mejl
+
+Exakt ett slutligt **Skicka förfrågan** gjordes i den verkliga publicerade
+sexstegsguiden, med `andreas@amelio.se` och uttrycklig märkning som syntetiskt
+releasetest, ingen verklig offertförfrågan. Ingen upprepning gjordes.
+
+- Referens: **`bd890a1c2bd661b183b91dd2`**. Mottagartid UTC i primärmejlet:
+  **2026-11-05 23:03:09**.
+- Webbläsaren omdirigerades till `/offert/tack/`, utan referens eller
+  personuppgifter i URL. Tacksidan visade rätt referens, att Amelio tagit emot
+  förfrågan och att kundkopian lämnats till e-posttjänsten. Visuell granskning
+  och skärmbild sparades lokalt i `reports/issue-29/final-thank-you.jpg`.
+- Gmail-kopplingen verifierade **två olika Gmail-ID och RFC Message-ID** i
+  samma inkorg. Originalet har ämnet `Ny hallförfrågan [referens]` och
+  `To: kontakt@amelio.se`; kundkopian har ämnet
+  `Kopia av din hallförfrågan [referens]` och `To: andreas@amelio.se`.
+  Båda innehåller exakt samma referens och de svenska svaren `Lager eller
+  förvaring`, `Jag behöver hjälp med storleken`, `Vet inte` och `Osäker`.
+  Detta är två separata mejl, inte två visningar av ett vidarebefordrat mejl.
+- Andreas bekräftade uttryckligen i chatten: **båda separata mejlen har kommit
+  med samma referens**. SMTP-acceptans hålls därför åtskild från den ytterligare
+  verifierade inkorgsleveransen. Befintlig gallring inom 30 dagar gäller båda
+  kopiorna och relevanta vidarebefordrings-/papperskorgskopior; inget nytt
+  gallrings- eller e-postflöde infördes.
+
+### Tillfällig åtkomst avslutad
+
+Nyckeln använde `restrict`, `expiry-time="20261106025712Z"` och fingeravtryck
+`SHA256:kIWnf1u/JKgJ1FMMA/zp21j0reljQ59FEm4YMh80rTo`. Efter inkorgsbekräftelsen
+togs exakt en nyckelrad bort atomiskt, med alla andra bytes bevarade och
+filrättighet 0600. En ny BatchMode-anslutning utan agent eller återanvänd
+anslutning nekades med exit 255. De lokala privata och publika nyckelfilerna
+är raderade. Privat backup och återställningsväg finns kvar på servern.
+
+Design, frågor, övriga funktioner, integritetshantering, SMTP, WordPress,
+DNS och kundens framtida hostingkonto har inte ändrats i installationen.
+
+---
+
+## Historisk releasestatus – återstart efter PR #32 (2026-11-05)
 
 Andreas godkände hela återstartsplanen, inklusive merge/publicering, privat
 installation och exakt ett syntetiskt liveinskick. Releasen stoppades vid
