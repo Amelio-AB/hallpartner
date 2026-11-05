@@ -1,0 +1,39 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import '../../styles/hallpartner-info.css';
+---
+
+<HallpartnerSiteLayout
+  title="Personuppgifter i testmiljön"
+  description="Information om hur offertförfrågningar hanteras på Amelios tillfälliga utvecklingspreview."
+>
+  <div class="hp-info">
+    <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Personuppgifter</span>
+    </nav>
+    <section class="hp-info__section hp-info__section--light" aria-labelledby="privacy-title">
+      <div class="hp-draft-rail" style="max-width: 860px">
+        <p class="hp-info__eyebrow">Amelios utvecklingspreview</p>
+        <h1 id="privacy-title">Hur uppgifter hanteras i offertguidens testmiljö</h1>
+        <p>Detta är en utvecklingsversion av Hallpartners nya webbplats på Amelios konto hos Inleed – inte Hallpartners ordinarie webbplats. Offertguidens eventuella inskick används för att testa funktionen och följa upp förfrågningar under utvecklingen.</p>
+
+        <h2>Vem tar emot uppgifterna?</h2>
+        <p>Amelio AB hanterar mottagningen i denna utvecklingsmiljö. Frågor om dina personuppgifter skickas till <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a>. Inskick till offertguiden tas emot på samma adress. Det går inte automatiskt vidare till Hallpartners kundinkorg.</p>
+
+        <h2>Vad samlas in och varför?</h2>
+        <p>När du använder offertguiden behandlas dina svar om hallbehov och projekt samt namn och e-postadress. Telefonnummer, företag och ytterligare projektuppgifter är frivilliga. Uppgifterna används för att besvara förfrågan och kontrollera att formulär och e-postmottagning fungerar. Skicka inte känsliga personuppgifter.</p>
+
+        <h2>Rättslig grund</h2>
+        <p>Den avsedda grunden är berättigat intresse enligt artikel 6.1 f i dataskyddsförordningen: att kunna besvara förfrågningar som besökare själva väljer att skicka och verifiera ett säkert offertflöde i denna testmiljö. Denna bedömning behöver vara godkänd av Amelio innan riktiga uppgifter tas emot.</p>
+
+        <h2>Lagring och åtkomst</h2>
+        <p>Uppgifterna skickas via Inleeds webbhotell och e-posttjänst till Amelios angivna inkorg. Endast behöriga personer som arbetar med testet ska ha åtkomst. Föreslagen gallring är att inkomna testförfrågningar raderas senast 30 dagar efter mottagandet. Gallringsrutinen ska vara fastställd innan formuläret aktiveras för verkliga personuppgifter.</p>
+
+        <h2>Dina rättigheter</h2>
+        <p>Du kan kontakta <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> för att begära tillgång till, rättelse eller radering av dina personuppgifter, eller för att invända mot behandlingen. Du kan även lämna klagomål till <a href="https://www.imy.se/">Integritetsskyddsmyndigheten (IMY)</a>.</p>
+
+        <p><a href="/offert/">Tillbaka till offertguiden</a></p>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>
