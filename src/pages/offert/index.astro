@@ -29,7 +29,7 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
     </div>
     <p class:list={['hp-leads-note', 'hp-quote-shell__notice', { 'hp-leads-note--review': !ready }]} id="hp-offert-notice">
       {ready
-        ? 'Din offertförfrågan skickas till vår mottagare när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter.'
+        ? <>Din offertförfrågan skickas till vår mottagare när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur vi hanterar dina uppgifter</a>.</>
         : filesReview
           ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
           : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
