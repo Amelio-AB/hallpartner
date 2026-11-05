@@ -1,5 +1,9 @@
 # Checkpoint – Hallpartner offertguide V2 och Inleed-preview (2026-11-05)
 
+**Återupptaget på projektägarens begäran:** se
+[fortsatt teknisk verifiering och återstående godkännanden](2026-11-05-offert-release-resumed.md).
+Pausen nedan dokumenterar det tidigare stoppet, inte ett nytt stoppbeslut.
+
 > **Arbetet är pausat på projektägarens begäran. Ingen aktivering, merge eller publik serverändring ska göras enbart med stöd av denna checkpoint.** Läs aktuell GitHub-HEAD, PR-status, Actions och fjärrbevis när arbetet återupptas. Denna checkpoint dokumenterar det vi faktiskt verifierade den 5 november och supersederar äldre statuspåståenden om att V2 enbart finns i Draft PR #22 eller att PHP bara accepterar V1.
 
 ## Målet och säkerhetsgränsen

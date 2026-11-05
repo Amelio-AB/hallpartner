@@ -37,6 +37,9 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
   assert(noindex, 'Missing noindex,nofollow: ' + page);
   if (page === 'kontakt/index.html') assert(contact, 'Contact disabled contract missing');
   if (page === 'offert/index.html') assert(quote, 'Quote mode does not match approved preview release');
+  if (page === 'offert/index.html' && quoteEnabled) {
+    assert(links.includes('/integritet/'), 'Active quote must link to the approved privacy notice');
+  }
   if (page === 'index.html') assert(html.includes('En hall börjar med ditt behov.'), 'Unexpected homepage');
   return { assets, links, scripts };
 }

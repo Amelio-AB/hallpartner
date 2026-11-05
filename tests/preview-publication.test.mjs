@@ -59,6 +59,14 @@ test('remote HTTP proof retries only transient read errors without changing any 
   assert.equal(calls,1,'503 must not be treated as a transient transport failure');
   assert.equal(status.status,503,'HTTP status must not be rewritten as success');
 
+  for (const status of [404, 503]) {
+    calls=0;
+    await assert.rejects(request(url,async()=>{
+      calls++;return {status,arrayBuffer:async()=>{throw transient;}};
+    },async()=>{throw Error('HTTP error must never retry, even with a broken body');}), /no verification claimed/);
+    assert.equal(calls,1,'A known HTTP error cannot be hidden by retrying its body');
+  }
+
   calls=0;
   await assert.rejects(request(url,async()=>{
     calls++;throw transient;
@@ -140,10 +148,11 @@ test('missing robots and active form contracts fail closed', () => {
 });
 test('preview form activation is limited to the exact quote host and approved mode', () => {
   const disabled = html + '<div id="hp-offert-guide" data-enabled="false"></div>';
-  const enabled = html + '<div id="hp-offert-guide" data-enabled="true"></div>';
+  const enabled = html + '<div id="hp-offert-guide" data-enabled="true"></div><a href="/integritet/">Personuppgifter</a>';
   inspectHtml(disabled, 'offert/index.html');
   assert.throws(() => inspectHtml(enabled, 'offert/index.html'));
   inspectHtml(enabled, 'offert/index.html', true);
+  assert.throws(() => inspectHtml(enabled.replace('href="/integritet/"', 'href="/kontakt/"'), 'offert/index.html', true), /privacy notice/);
   assert.throws(() => inspectHtml(disabled, 'offert/index.html', true));
   assert.throws(() => inspectHtml(html + '<form data-enabled="true"></form>', 'offert/index.html', true));
   assert.throws(() => inspectHtml(html + '<div id="hp-contact-form" data-enabled="true"></div>', 'kontakt/index.html', true));

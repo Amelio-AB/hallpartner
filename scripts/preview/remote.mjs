@@ -88,6 +88,7 @@ export async function request(url, send = fetch, wait = delay) {
   for (let redirect = 0; redirect < 4; redirect++) {
     let response, body;
     for (let attempt = 0; attempt < 3; attempt++) {
+      response = undefined;
       try {
         // Read the full response body inside the retry boundary; a half-read body
         // must never be accepted as valid remote content.
@@ -101,7 +102,7 @@ export async function request(url, send = fetch, wait = delay) {
         }
         break;
       } catch (error) {
-        if (!transientHttpReadError(error) || attempt === 2) {
+        if (response?.status >= 400 || !transientHttpReadError(error) || attempt === 2) {
           throw new Error('Preview HTTP read failed; no verification claimed (' +
             current.origin + current.pathname + ', attempt ' + (attempt + 1) + ')',
           { cause: error });

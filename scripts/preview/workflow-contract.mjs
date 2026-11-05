@@ -33,4 +33,5 @@ assert(transport?.with.path === 'reports/private-preview-backup.envelope.json' &
 assert(!deploy.jobs.publish.steps.some(s=>/approved-cleanup|private-backup/.test(s.run ?? '')), 'Automatic publication must never run maintenance');
 const liveBrowser = deploy.jobs.publish.steps.find(s=>s.name === 'Verify actual preview interactions in Chrome after publication');
 assert(liveBrowser?.run.includes('https://hallpartner-se.preview2.inleed.com/stalhallar/') && liveBrowser.run.includes('verify-hallpartner-amp006.mjs') && liveBrowser.run.includes('verify-hallpartner-gallery.mjs'), 'Missing real preview browser verification');
+assert(liveBrowser.run.includes('https://hallpartner-se.preview2.inleed.com/offert/'), 'Missing read-only live quote verification');
 console.log('Workflow structure/permissions/triggers/contracts: PASS');

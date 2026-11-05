@@ -55,6 +55,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
     'PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED=' + flag,
     'PUBLIC_HP_RECEIVER_VERIFIED=' + flag,
     'PUBLIC_HP_PRIVACY_APPROVED=' + flag,
+    'PUBLIC_HP_LEADS_ENABLED=false',
+    'PUBLIC_HP_QUOTE_FILES_REVIEW=false',
     ''
   ].join('\n'));
   console.log('Preview-only quote release mode: ' + (enabled ? 'enabled' : 'review-disabled'));

@@ -20,6 +20,9 @@ test('ordinary preview build gets all three quote submission flags false', () =>
       assert.ok(flags.includes(key+'=false\n'),key+' must remain disabled');
       assert.ok(!flags.includes(key+'=true'),key+' must never be active without approval');
     }
+    for(const key of ['PUBLIC_HP_LEADS_ENABLED','PUBLIC_HP_QUOTE_FILES_REVIEW']) {
+      assert.ok(flags.includes(key+'=false\n'),key+' must remain disabled independently of quote activation');
+    }
   } finally { rmSync(dir,{recursive:true,force:true}); }
 });
 

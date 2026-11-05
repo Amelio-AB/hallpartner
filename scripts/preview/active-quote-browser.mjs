@@ -1,7 +1,7 @@
 /** Local-only end-to-end Chrome regression. Never contacts the live receiver. */
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { readFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, existsSync, mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, extname } from 'node:path';
 import { spawn } from 'node:child_process';
@@ -10,14 +10,19 @@ import { setTimeout as pause } from 'node:timers/promises';
 const types={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript',
   '.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2'};
 let submitted=[];
+let responseCode=200;
+const output='reports/preview/active-quote';
+mkdirSync(output,{recursive:true});
+const results=[];
 const server=createServer(async(req,res)=>{
   try {
     const url=new URL(req.url,'http://localhost');
     if(req.method==='POST' && url.pathname==='/api/lead.php'){
       let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>16384)throw Error('Large payload');}
       submitted.push(JSON.parse(raw));
-      res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store'});
-      res.end(JSON.stringify({status:'success',requestId:'1234567890abcdef12345678'}));
+      res.writeHead(responseCode,{'Content-Type':'application/json','Cache-Control':'no-store'});
+      res.end(JSON.stringify(responseCode===200
+        ? {status:'success',requestId:'1234567890abcdef12345678'} : {status:'failed'}));
       return;
     }
     if(req.method!=='GET'){res.writeHead(405);res.end();return;}
@@ -76,6 +81,14 @@ try{
     return result.result?.value;
   };
   await call('Runtime.enable');await call('Page.enable');
+  for(const scenario of [
+    {width:390,code:200,status:'Förfrågan är mottagen.'},
+    {width:1440,code:200,status:'Förfrågan är mottagen.'},
+    {width:390,code:503,status:'Förfrågan togs inte emot. Du kan försöka skicka igen.'},
+    {width:1440,code:500,status:'Vi kan inte bekräfta om förfrågan kom fram. Skicka inte igen innan du har kontrollerat med mottagaren.'}
+  ]){
+  submitted=[];responseCode=scenario.code;
+  await call('Emulation.setDeviceMetricsOverride',{width:scenario.width,height:900,deviceScaleFactor:1,mobile:false});
   await call('Page.navigate',{url:origin+'/offert/'});
   let ready=false;
   for(let n=0;n<160;n++){
@@ -83,8 +96,9 @@ try{
     if(ready)break;await pause(100);
   }
   assert.ok(ready,'Offline active build did not mount the active quote guide');
+  assert.ok(await evaluate('!!document.querySelector("#hp-offert-notice a[href=\\"/integritet/\\"]")'));
   const advance=async()=>{
-    const state=await evaluate('(()=>{const b=document.querySelector(".qf-panel button[type=submit]");const heading=document.querySelector(".qf-step-heading h3")?.textContent;b.click();return {heading,disabled:b.disabled};})()');
+    const state=await evaluate('(()=>{const b=document.querySelector(".qf-panel button[type=submit]");const disabled=b.disabled;b.click();return {disabled};})()');
     assert.equal(state.disabled,false,'submit navigation must be enabled');
   };
   assert.ok(await evaluate('(()=>{const input=document.querySelector("input[name=\\"project.use\\"][value=\\"storage\\"]");input?.click();return input?.checked===true;})()'));
@@ -100,17 +114,24 @@ try{
   await advance();
   let success=false;
   for(let n=0;n<100;n++){
-    success=await evaluate('document.querySelector(".qf-status")?.textContent==="Förfrågan är mottagen."');
+    success=await evaluate('document.querySelector(".qf-status")?.textContent==='+JSON.stringify(scenario.status));
     if(success)break;await pause(100);
   }
-  assert.ok(success,'Browser did not show successful test submit');
+  assert.ok(success,'Browser did not show the expected outcome for HTTP '+scenario.code);
+  assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'No horizontal overflow');
+  if(scenario.code===500)assert.ok(await evaluate('document.querySelector(".qf-panel button[type=submit]")?.disabled===true'),'Uncertain delivery must prevent resubmission');
   assert.equal(submitted.length,1,'Exactly one local mock submission');
   assert.equal(submitted[0].configurationId,'hallpartner-offert-v2-review');
   assert.equal(submitted[0].contractVersion,1);
   assert.equal(submitted[0].answers['project.use'],'storage');
   assert.equal(submitted[0].answers['contact.name'],'Syntetisk Testperson');
   assert.equal(submitted[0].answers['contact.email'],'test@example.invalid');
-  console.log('OFFLINE ACTIVE CHROME: PASS; 6 steps, enabled button, 1 mock POST, success response; no live SMTP.');
+  const screenshot=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
+  writeFileSync(output+'/'+scenario.width+'-'+scenario.code+'.png',Buffer.from(screenshot.data,'base64'));
+  results.push({width:scenario.width,httpStatus:scenario.code,requests:submitted.length,status:'passed'});
+  }
+  writeFileSync(output+'/result.json',JSON.stringify({localMockOnly:true,results},null,2)+'\n');
+  console.log('OFFLINE ACTIVE CHROME: PASS; mobile/desktop, 6 steps, success/503/uncertain delivery; one local POST per case, no SMTP.');
 }finally{
   for(const pending of requests.values())pending.reject(Error('Browser closing'));
   if(socket)socket.close();

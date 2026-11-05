@@ -4,6 +4,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PAGES } from './preview/policy.mjs';
+import { inspectHtml } from './preview/payload.mjs';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const list = (prefix = '') => readdirSync(join(dist, prefix), { withFileTypes:true }).flatMap(entry => entry.isDirectory() ? list(prefix + entry.name + '/') : [prefix + entry.name]);
@@ -80,7 +81,7 @@ const contact=pages.get('kontakt/index.html');
 assert.ok(contact.includes('id="hp-contact-form"') && contact.includes('data-enabled="false"'));
 assert.ok(contact.includes('info@hallpartner.se') && contact.includes('054-820 04 90'));
 const offer=pages.get('offert/index.html');
-assert.ok(offer.includes('id="hp-offert-guide"') && offer.includes('data-enabled="false"'));
+inspectHtml(offer, 'offert/index.html');
 for (const name of ['Jimmy Gustafsson','Peter Fridland']) assert.ok(pages.get('om-oss/index.html').includes(name));
 assert.ok(pages.get('404.html').includes('Sidan kunde inte hittas | Hallpartner'));
 const sitemapFiles=built.filter(path=>/^sitemap.*\.xml$/.test(path));
@@ -89,4 +90,4 @@ for (const path of sitemapFiles) {
   const xml=readFileSync(join(dist,path),'utf8');
   for (const route of ['/prototype/','/demo/','/vision/','/projekt/','/roadmap/','/workshop/','/404.html','/404/','/offert/']) assert.ok(!xml.includes(route),path+': '+route);
 }
-console.log('Verified thirteen visitor pages: no retired routes, valid links/anchors, metadata, shared Header/Footer and inactive intake.');
+console.log('Verified '+PAGES.length+' visitor pages: valid links/anchors, metadata, shared Header/Footer and policy-bound intake.');
