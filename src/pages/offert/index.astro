@@ -28,9 +28,11 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
       <p>Beskriv vad hallen ska användas till och ungefär hur stor den behöver vara. Du behöver inte kunna alla tekniska detaljer – vi börjar med ditt behov.</p>
     </div>
     <p class:list={['hp-leads-note', 'hp-quote-shell__notice', { 'hp-leads-note--review': !ready }]} id="hp-offert-notice">
-      {filesReview
-        ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
-        : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
+      {ready
+        ? 'Din offertförfrågan skickas till vår mottagare när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter.'
+        : filesReview
+          ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
+          : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
     </p>
     <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)} data-files-review={String(filesReview)}
       aria-describedby="hp-offert-notice"></div>
