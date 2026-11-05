@@ -1,0 +1,49 @@
+---
+import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import '../../../styles/hallpartner-info.css';
+---
+
+<HallpartnerSiteLayout title="Din offertförfrågan" description="Bekräftelse för offertguiden i Amelios utvecklingspreview.">
+  <div class="hp-info">
+    <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><a href="/offert/">Offert</a><span aria-hidden="true">/</span><span aria-current="page">Bekräftelse</span>
+    </nav>
+    <section class="hp-info__section hp-info__section--light" aria-labelledby="receipt-title">
+      <div class="hp-draft-rail" style="max-width: 860px">
+        <p class="hp-info__eyebrow">Amelios utvecklingspreview</p>
+        <h1 id="receipt-title">Din offertförfrågan</h1>
+        <div id="receipt-neutral">
+          <p>Här visas bekräftelsen efter ett inskick via offertguiden. Det finns ingen aktuell bekräftelse att visa i den här fliken.</p>
+          <p>Har du redan skickat en förfrågan men är osäker på om den kom fram? Kontakta Amelio på <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> innan du skickar igen.</p>
+        </div>
+        <div id="receipt-confirmed" hidden>
+          <p>Din förfrågan har tagits emot av Amelio i denna testmiljö. Vi återkommer så snart vi kan.</p>
+          <p>Referens: <strong id="receipt-reference"></strong></p>
+          <p id="receipt-copy"></p>
+          <p>Du behöver inte skicka förfrågan igen. Vid frågor, kontakta <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> och ange referensen.</p>
+          <p>Detta är en bekräftelse på din förfrågan, inte en prisuppgift, bindande offert eller beställning.</p>
+        </div>
+        <p>För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
+        <p><a href="/">Till startsidan</a> · <a href="/integritet/">Så hanteras dina uppgifter</a></p>
+      </div>
+    </section>
+  </div>
+</HallpartnerSiteLayout>
+
+<script>
+  import { RECEIPT_KEY, parseReceipt } from '../../../lib/quote-confirmation';
+  try {
+    const raw = sessionStorage.getItem(RECEIPT_KEY);
+    sessionStorage.removeItem(RECEIPT_KEY);
+    const receipt = parseReceipt(raw ? JSON.parse(raw) : null);
+    if (receipt) {
+      document.querySelector('#receipt-title')!.textContent = 'Tack för din förfrågan!';
+      document.querySelector('#receipt-reference')!.textContent = receipt.requestId;
+      document.querySelector('#receipt-copy')!.textContent = receipt.customerCopy === 'accepted'
+        ? 'En kopia har lämnats till e-posttjänsten för leverans till den adress du angav. Kontrollera även skräpposten om den inte dyker upp.'
+        : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Amelio om du vill få en kopia. Skicka inte förfrågan igen.';
+      document.querySelector<HTMLElement>('#receipt-neutral')!.hidden = true;
+      document.querySelector<HTMLElement>('#receipt-confirmed')!.hidden = false;
+    }
+  } catch { /* Direct visits, expired receipts and blocked storage stay neutral. */ }
+</script>

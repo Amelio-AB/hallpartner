@@ -21,7 +21,7 @@ const hallDetails = [
   ['talthall', 'Tälthallar', ['talthall-utforande','talthall-anvandning','talthall-byggplats','talthall-fragor']],
 ];
 
-test('only the thirteen intended visitor pages can become Astro routes', () => {
+test('only explicitly allowed visitor pages can become Astro routes', () => {
   const actual = walk('src/pages').filter(path => path.endsWith('.astro')).sort();
   assert.deepEqual(actual, PAGES.map(path => path.replace(/\.html$/, '.astro')).sort());
   for (const path of actual) {

@@ -42,7 +42,8 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
 </HallpartnerSiteLayout>
 
 <script>
-  import { mountQuoteFlow, createJsonAdapter } from '@amelio/web-platform/quote-flow';
+  import { mountQuoteFlow } from '@amelio/web-platform/quote-flow';
+  import { createQuoteConfirmationAdapter, RECEIPT_KEY } from '../../lib/quote-confirmation';
   import type { Adapter, UploadIntegration } from '@amelio/web-platform/quote-flow';
   import { hallpartnerQuoteConfig } from '../../config/hallpartner-quote';
   import { hallpartnerQuoteAttachmentsReviewConfig } from '../../config/hallpartner-quote-attachments-review';
@@ -55,12 +56,18 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
       async upload() { throw new Error('Filuppladdningen är inte aktiverad.'); },
       async submit() { return { status: 'failed' }; }
     };
+    try { sessionStorage.removeItem(RECEIPT_KEY); } catch { /* Storage is optional. */ }
     const adapter: Adapter = host.dataset.enabled === 'true'
-      ? createJsonAdapter('/api/lead.php') : blocked;
+      ? createQuoteConfirmationAdapter(receipt => {
+        try {
+          if (receipt) sessionStorage.setItem(RECEIPT_KEY, JSON.stringify(receipt));
+        } catch { /* The thank-you page safely stays neutral without a receipt. */ }
+        window.location.replace('/offert/tack/');
+      }) : blocked;
     const instance = mountQuoteFlow(host,
       reviewFiles ? hallpartnerQuoteAttachmentsReviewConfig : hallpartnerQuoteConfig,
       adapter,
-      reviewFiles ? { timeoutMs: 15000, uploads: reviewOnlyUploads } : { timeoutMs: 15000 });
+      reviewFiles ? { timeoutMs: 15000, uploads: reviewOnlyUploads } : { timeoutMs: 60000 });
     const protect = () => {
       if (host.dataset.enabled === 'true') return;
       for (const button of host.querySelectorAll<HTMLButtonElement>('button[type="submit"]')) {
