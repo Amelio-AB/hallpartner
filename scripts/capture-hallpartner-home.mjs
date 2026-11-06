@@ -110,6 +110,24 @@ try {
     assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
     for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear'])assert.ok(metrics[field],width+': '+field);
     assert.equal(metrics.surface,expectedPath==='/'?'transparent':'solid');allTrue(metrics.logo,width+': logo');
+    if(/^\/stalhallar\/(lagerhall|maskinhall|ridhus|plathall|isolerad-hall|talthall)\/$/.test(expectedPath)) {
+      metrics.hallHeroRail=await run(function(){
+        const hero=document.querySelector('.hp-detail__hero-grid.hp-draft-rail');
+        const crumbs=document.querySelector('.hp-detail__crumbs.hp-draft-rail');
+        const copy=hero?.querySelector('.hp-detail__hero-copy');
+        if(!hero||!crumbs||!copy)return {structure:false};
+        const a=hero.getBoundingClientRect(),b=crumbs.getBoundingClientRect(),c=copy.getBoundingClientRect();
+        return {
+          structure:true,
+          alignedLeft:Math.abs(a.left-b.left)<=2,
+          alignedRight:Math.abs(a.right-b.right)<=2,
+          copyInside:c.left>=b.left-2&&c.right<=b.right+2,
+          minimumGutter:a.left>=Math.min(12,innerWidth*.03),
+          backgroundPhoto:!!document.querySelector('.hp-detail__hero-media img'),
+        };
+      });
+      allTrue(metrics.hallHeroRail,width+': hall hero rail aligned with breadcrumbs');
+    }
     if(width<=1024) {
       metrics.menu=await run(function(){
         const root=document.querySelector('header.hm'),button=root.querySelector('button.hm__mobile-toggle');
@@ -329,6 +347,48 @@ try {
     allTrue(await run(function(){const fallback=document.querySelector('#hp-amp-header-fallback');return {visible:!fallback.hidden&&getComputedStyle(fallback).display!=='none',nativeContact:!!fallback.querySelector('a[href="/kontakt/"]'),nativeHalls:!!fallback.querySelector('a[href="/stalhallar/"]'),noOverflow:document.documentElement.scrollWidth<=innerWidth+1};}),width+': no-JS fallback');
     await call('Emulation.setScriptExecutionDisabled',{value:false});
     Object.assign(entry,{filename,noJavaScript:'passed',status:'passed'});
+  }
+
+  // Ultrabreda skärmar: verifiera att hela den centralt placerade textkolumnen
+  // ligger under gradientens täta del. Undvik dyra 4K-screenshots.
+  if(new RegExp('^/stalhallar/(lagerhall|maskinhall|ridhus|plathall|isolerad-hall|talthall)/$').test(expectedPath)) {
+    for (const wideWidth of [1920,2560,3840]) {
+      await call('Emulation.setDeviceMetricsOverride',{
+        width:wideWidth,height:900,deviceScaleFactor:1,mobile:false
+      });
+      await call('Page.navigate',{url});
+      let isReady=false;
+      for(let attempt=0;attempt<120;attempt++){
+        try {
+          isReady=await evaluate('document.readyState==="complete" && document.body?.dataset.ampReady==="true" && location.pathname==='+JSON.stringify(expectedPath));
+        } catch { /* Chrome navigering byter JS-context. */ }
+        if(isReady)break;
+        await sleep(100);
+      }
+      assert.ok(isReady,'Hall hero did not load at '+wideWidth);
+      const wide=await run(function(){
+        const hero=document.querySelector('.hp-detail__hero.hp-detail__hero--illustrated');
+        const copy=hero?.querySelector('.hp-detail__hero-copy');
+        const rail=hero?.querySelector('.hp-detail__hero-grid.hp-draft-rail');
+        const crumbs=document.querySelector('.hp-detail__crumbs.hp-draft-rail');
+        const image=hero?.querySelector('.hp-detail__hero-media img');
+        if(!copy||!rail||!crumbs||!image)return {structure:false};
+        const copyBox=copy.getBoundingClientRect();
+        const railBox=rail.getBoundingClientRect();
+        const crumbBox=crumbs.getBoundingClientRect();
+        const rootFont=parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const opaqueEdge=innerWidth/2+6*rootFont;
+        return {
+          structure:true,
+          aligned:Math.abs(railBox.left-crumbBox.left)<=2,
+          copyBehindOpaqueGradient:copyBox.right<=opaqueEdge+2,
+          imageLoaded:image.complete&&image.naturalWidth>0,
+          noOverflow:document.documentElement.scrollWidth<=innerWidth+1
+        };
+      });
+      allTrue(wide,wideWidth+': centered 4K hero scrim');
+      report.push({viewport:{width:wideWidth,height:900},metrics:{wideHeroGradient:wide},status:'passed'});
+    }
   }
   assert.equal(browserErrors.length,0,'Browser errors: '+browserErrors.join('\n'));
   assert.equal(blockedSubmissions,0,'Read-only browser review attempted an API request');

@@ -1,3 +1,10 @@
+# LÄS FÖRST – checkpoint från 2026-11-06
+
+Senaste arbets-/releaseunderlaget är [helgcheckpointen](docs/checkpoints/2026-11-06-helg-hallar-bilder-omoss.md) och [överlämningsprompten](docs/checkpoints/2026-11-06-overlamningsprompt.md).
+Dokumenten skrevs som del av den samlade releasekandidaten efter PR #37 (sex hallundersidor och AI-bilder) och PR #38 (Om Hallpartner). Kontrollera aktuell `main`, release-PR:ens kommentarer och faktiska GitHub Actions/previewstatus **innan** du litar på historiska statusrader längre ned. Publicering till Inleed går endast via godkänt `main`; kundens WordPress och DNS får inte ändras.
+
+---
+
 # Aktuell leveranscheckpoint – offertguidens mottagning (2026-11-05)
 
 **Läs först** [checkpointen för V2 och Inleed-preview](docs/checkpoints/2026-11-05-offert-v2-inleed-preview.md)

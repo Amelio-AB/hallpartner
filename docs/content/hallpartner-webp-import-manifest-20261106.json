@@ -1,0 +1,74 @@
+{
+  "date": "2026-11-06",
+  "status": "imported-to-draft-preview-image-use-approved-awaiting-merge",
+  "origin": "Six original 2560x1440 AI PNG images supplied by Andreas as one ZIP in this conversation",
+  "target": "Draft PR #37, preview only after explicit owner approval",
+  "expectedWidth": 1920,
+  "expectedHeight": 1080,
+  "images": [
+    {
+      "slug": "isolerad-hall",
+      "path": "public/images/halls/hallpartner-isolerad-hall-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 170766,
+      "sha256": "6492fbde1bbc4ee3c00cf570f5aaf2ef772f0a351e4cbb0b98a7aaada3638df2",
+      "aiConcept": true,
+      "isReferenceProject": false
+    },
+    {
+      "slug": "talthall",
+      "path": "public/images/halls/hallpartner-talthall-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 338306,
+      "sha256": "b9a4be757e673784023c1825d970b92d089216e189ddcc599c5d3aa8893c1fa3",
+      "aiConcept": true,
+      "isReferenceProject": false
+    },
+    {
+      "slug": "ridhus",
+      "path": "public/images/halls/hallpartner-ridhus-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 293120,
+      "sha256": "8ee72e876338ab0d6076bb9044e5293ca5a05e80a1cb1b30f9161531294ab522",
+      "aiConcept": true,
+      "isReferenceProject": false
+    },
+    {
+      "slug": "plathall",
+      "path": "public/images/halls/hallpartner-plathall-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 172532,
+      "sha256": "1e115cee2f27e92a6a4712541feb6821b481f7561a75d39c1cea59673fb58799",
+      "aiConcept": true,
+      "isReferenceProject": false
+    },
+    {
+      "slug": "lagerhall",
+      "path": "public/images/halls/hallpartner-lagerhall-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 220924,
+      "sha256": "2b062b6e543fc56f393f4b5a4f568fab28397d1fc2e573ea9dc5cc866719e45f",
+      "aiConcept": true,
+      "isReferenceProject": false
+    },
+    {
+      "slug": "maskinhall",
+      "path": "public/images/halls/hallpartner-maskinhall-ai-koncept-v01.webp",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 361166,
+      "sha256": "4fcbf2f5f89ad30db1ccadc8b790a1dd5b0fcaa8e9b6db652c523abe0a2c2860",
+      "aiConcept": true,
+      "isReferenceProject": false
+    }
+  ],
+  "previewPublicationApproved": true,
+  "versionedInDraft": true,
+  "approvalScope": "https://hallpartner-se.preview2.inleed.com",
+  "approvalEvidence": "docs/preview/ai-hall-images-approval-20261106.md"
+}

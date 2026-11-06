@@ -1,5 +1,6 @@
 ---
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import HallConceptImage from '../../../components/HallConceptImage.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 import '../../../styles/hallpartner-hall-variants.css';
 
@@ -21,26 +22,34 @@ const faq = [
   { question: 'Vad menas med plåthall?', answer: 'Begreppet används ofta för hallar med plåt på väggar eller tak. Det beskriver främst ett utförande, medan själva hallen kan ha olika användningar.' },
   { question: 'Är en plåthall alltid oisolerad?', answer: 'Nej. Beklädnad och isoleringsbehov är olika frågor. Lämpliga material och tillgängliga system måste kontrolleras för det aktuella projektet.' },
   { question: 'Hur väljer jag mellan hallutföranden?', answer: 'Börja med användning, byggplats, åtkomst och inomhusmiljö. Det ger ett mer användbart underlag för att diskutera rätt konstruktion.' },
+  { question: 'Kan en plåthall levereras nyckelfärdig?', answer: 'Hallpartner kan erbjuda totalentreprenad med en driftklar hall när lösningen passar projektet. Exakt vad som ingår – exempelvis grundarbete, montage och installationer – framgår av offerten och avtalet.' },
 ] as const;
 ---
 
-<HallpartnerSiteLayout title="Plåthallar – utförande och alternativ" description="Vad är en plåthall? Läs om tak, väggar och praktiska val inför ett hallprojekt. Utforska möjliga användningar och vad som kan påverka utförandet.">
+<HallpartnerSiteLayout title="Plåthallar för lager och verksamhet | Hallpartner" description="Plåthall för lager, maskiner eller arbete? Se vilka val som påverkar stomme, tak och fasad. Hallpartner kan erbjuda en driftklar hall genom totalentreprenad enligt offert.">
   <div class="hp-detail hp-detail--plathall">
     <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
       <a href="/">Start</a><span aria-hidden="true">/</span><a href="/stalhallar/">Stålhallar</a>
       <span aria-hidden="true">/</span><span aria-current="page">Plåthallar</span>
     </nav>
-    <section class="hp-detail__hero" aria-labelledby="plathall-title">
+    <section class="hp-detail__hero hp-detail__hero--illustrated" aria-labelledby="plathall-title">
+      <HallConceptImage slug="plathall" alt="Grå plåtklädd hall med portar på en asfalterad gård." />
       <div class="hp-draft-rail hp-detail__hero-grid">
         <div class="hp-detail__hero-copy">
           <p class="hp-detail__eyebrow">Plåthallar / Utförande</p>
-          <h1 id="plathall-title">Plåthallar för <em>olika behov.</em></h1>
-          <p class="hp-detail__lead">Plåt beskriver hur en hall kan vara klädd – inte vad byggnaden ska användas till. Här får du en överblick över hur material, användning och praktiska krav hänger ihop.</p>
+          <h1 id="plathall-title">Plåthallar för <em>din verksamhet.</em></h1>
+          <p class="hp-detail__lead">En plåthall kan användas för lager, maskiner och andra verksamheter. Hallpartner hjälper dig att välja en hallösning där stomme, tak, väggar och portar passar användningen. Vill du ha en driftklar leverans kan vi även diskutera totalentreprenad med tydlig omfattning i offerten.</p>
           <div class="hp-detail__hero-actions">
             <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
-            <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+            <a class="hp-detail__text-link" href="/sa-gar-det-till/">Så går det till <span aria-hidden="true">→</span></a>
           </div>
         </div>
+        
+      </div>
+    </section>
+
+    <div class="hp-detail__summary-strip">
+      <div class="hp-draft-rail">
         <aside class="hp-detail__hero-aside" aria-label="Tre saker att skilja på">
           <p class="hp-detail__aside-title">En hall består av flera val.</p>
           <dl>
@@ -50,7 +59,8 @@ const faq = [
           </dl>
         </aside>
       </div>
-    </section>
+    </div>
+
     <nav class="hp-detail__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-detail__jump-inner">
         <span>På den här sidan</span>
@@ -75,8 +85,8 @@ const faq = [
       <div class="hp-draft-rail hp-detail__split">
         <div class="hp-detail__section-intro">
           <p class="hp-detail__eyebrow">Utgå från projektet</p>
-          <h2 id="plathall-decisions">Materialvalet är inte första frågan.</h2>
-          <p>En genomtänkt hall börjar med vad som ska få plats och hur byggnaden ska användas. Väggar, tak och öppningar behöver sedan passa de förutsättningarna.</p>
+          <h2 id="plathall-decisions">Det är mer än plåtbeklädnaden som ska fungera.</h2>
+          <p>Vi börjar med vad hallen ska användas till och vilka krav byggplatsen ställer. Därefter går vi igenom öppningar, önskad inomhusmiljö och om leveransen ska omfatta projektering, grundarbete, montage eller installationer.</p>
           <a href="/stalhallar/isolerad-hall/" class="hp-detail__text-link">Om isolering och inomhusmiljö <span aria-hidden="true">→</span></a>
         </div>
         <div class="hp-detail__stack">
@@ -108,7 +118,7 @@ const faq = [
     </section>
     <section class="hp-detail__end" aria-labelledby="plathall-next">
       <div class="hp-draft-rail hp-detail__end-inner">
-        <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="plathall-next">Berätta vad hallen ska användas till.</h2><p>Beskriv användning, ungefärligt platsbehov och byggort. Det ger en bra start inför diskussionen om utförande.</p></div>
+        <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="plathall-next">Få förslag på en plåthall som passar.</h2><p>Berätta vad hallen ska användas till, var den ska stå och om du önskar en nyckelfärdig leverans. Vi hjälper dig att gå vidare med rätt utförande.</p></div>
         <div class="hp-detail__end-actions">
           <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
           <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
