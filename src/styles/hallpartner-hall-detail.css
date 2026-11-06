@@ -8,8 +8,7 @@
 .hp-detail h1, .hp-detail h2, .hp-detail h3 { line-height: 1.12; letter-spacing: -.045em; }
 .hp-detail a { text-decoration: none; }
 .hp-detail a:hover { text-decoration: underline; text-underline-offset: .24em; }
-.hp-detail__crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; padding-block: 1rem; min-height: 3.5rem; font-size: .82rem; color: #385649; }
-.hp-detail__crumbs a { text-decoration: underline; text-underline-offset: .2em; }
+/* Shared breadcrumb surface is owned by hallpartner-draft.css. */
 .hp-detail__hero { padding-block: clamp(3rem, 6vw, 6.5rem); background: #EBEBE8; }
 .hp-detail__hero-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); align-items: center; gap: clamp(2.5rem, 7vw, 7rem); }
 .hp-detail__eyebrow { margin-bottom: 1.2rem; font-size: .75rem; letter-spacing: .12em; line-height: 1.4; font-weight: 700; text-transform: uppercase; color: var(--hp-link-on-light, #236F31); }

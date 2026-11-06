@@ -627,3 +627,35 @@
 @media (prefers-reduced-motion: reduce) {
   .hp-draft-header--overlay { transition: none; }
 }
+/* Shared visitor breadcrumb surface: all hall, information and quote pages.
+   Existing .hp-draft-rail still governs text alignment and gutters. */
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) {
+  position: relative;
+  isolation: isolate;
+  color: #F4F4F0;
+}
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs)::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset-block: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: #153129;
+}
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) a {
+  color: #DEEAE1;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) :is(a:hover, a:focus-visible),
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) [aria-current="page"] {
+  color: #FFF;
+}
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) [aria-hidden="true"] {
+  color: #ADC5B6;
+}
+.hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) a:focus-visible {
+  outline-color: #F4F4F0;
+}

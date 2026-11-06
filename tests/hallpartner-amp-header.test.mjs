@@ -61,3 +61,64 @@ test('retired header views and duplicate page shell are absent', () => {
     assert.equal(existsSync(join(root, path)), false, path);
   }
 });
+
+test('Hallpartner menu descriptions and local hall icons stay in mega panel', () => {
+  const css = read('src/styles/hallpartner-amp-header.css');
+  const halls = ampHeaderItems.find(item => item.label === 'Hallar');
+  assert.equal(halls?.groups?.length, 2);
+  const links = halls.groups.flatMap(group => group.links);
+  assert.equal(links.length, 6);
+  for (const item of links) {
+    assert.ok(item.description?.length > 12, item.label);
+    const slug = item.href.split('/').filter(Boolean).at(-1);
+    assert.ok(existsSync(join(root, 'public/icons/halls', slug + '.svg')), slug);
+    assert.ok(css.includes('/icons/halls/' + slug + '.svg'), slug);
+  }
+  assert.match(css, /\.hm__sublink:focus-visible/);
+  assert.match(css, /\.hm__groups--mega \.hm__sublink::before/);
+  assert.ok(css.includes('.hm__groups--mega .hm__sublink::after'));
+  assert.ok(css.includes('transform: scaleX(0)'));
+  assert.ok(css.includes('transform-origin: left center'));
+  assert.ok(css.includes('transition: transform .24s cubic-bezier(.25,.8,.25,1)'));
+  assert.ok(css.includes('transform: scaleX(1)'));
+  assert.ok(css.includes('background: transparent'));
+  assert.ok(!css.includes('background: #DAE6D9'));
+  assert.ok(css.includes('@media (prefers-reduced-motion: reduce)'));
+  // Breadcrumb palette is shared across every visitor page family.
+});
+
+test('header omits Startsida but logo and server fallback still link home', () => {
+  assert.equal(ampHeaderItems.some(item => item.label === 'Startsida'), false);
+  assert.equal(ampHeaderBrand.href, '/');
+  const header = read('src/components/SiteHeader.astro');
+  assert.ok(header.includes('href="/" aria-label="Hallpartner – startsida"'));
+  assert.ok(header.includes('ampHeaderItems.map('));
+});
+test('all breadcrumb variants use Hallpartners shared dark green background', () => {
+  const css = read('src/styles/hallpartner-draft.css');
+  for (const name of ['hp-detail__crumbs', 'hp-info__crumbs', 'hp-stal__crumbs']) {
+    assert.ok(css.includes('.' + name), name);
+  }
+  assert.ok(css.includes('background: #153129'));
+  assert.ok(css.includes('width: 100vw'));
+  assert.ok(css.includes('isolation: isolate'));
+  assert.ok(css.includes('outline-color: #F4F4F0'));
+  const pages = [
+    ...['lagerhall','maskinhall','ridhus','plathall','isolerad-hall','talthall']
+      .map(slug => 'src/pages/stalhallar/' + slug + '/index.astro'),
+    'src/pages/stalhallar/index.astro',
+    'src/pages/kontakt/index.astro',
+    'src/pages/om-oss/index.astro',
+    'src/pages/sa-gar-det-till/index.astro',
+    'src/pages/offert/index.astro',
+    'src/pages/offert/tack/index.astro',
+    'src/pages/integritet/index.astro',
+  ];
+  assert.equal(pages.length,13);
+  for (const page of pages) {
+    const markup = read(page);
+    assert.ok(markup.includes('aria-label="Brödsmulor"'), page);
+    assert.ok(/hp-(detail|info|stal)__crumbs/.test(markup), page);
+    assert.ok(markup.includes('href="/"'), page);
+  }
+});

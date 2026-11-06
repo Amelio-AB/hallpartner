@@ -5,7 +5,10 @@ import { existsSync } from 'node:fs';
 import { createChromeSession } from '../scripts/preview/chrome-session.mjs';
 
 const fixture = mode => ({
-  executable: process.execPath, timeoutMs: 1500,
+  // Windows CI can take longer than 1.5 s to spawn a second Node process.
+  // Keep the intentionally hung-process deadline short; only the exit/ready
+  // fixture gets extra scheduling headroom. Assertions remain unchanged.
+  executable: process.execPath, timeoutMs: mode === 'hang' ? 1500 : 8000,
   spawnProcess: (_executable, flags, options) => spawn(process.execPath, ['tests/fixtures/chrome-process.mjs', mode, ...flags], options),
 });
 test('missing Chrome executable fails as infrastructure, not a site assertion', async () => {
