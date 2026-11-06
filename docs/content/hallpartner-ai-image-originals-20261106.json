@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-11-06",
+  "scope": "Hallpartner Draft PR #37 – image pilot / documentation",
+  "status": "generated_in_runway_not_imported",
+  "supplier": "Runway",
+  "workspace": "Amelio",
+  "process": "AI concept photographs; not actual Hallpartner project references or technically verified products",
+  "defaultRatio": "16:9",
+  "generatedTier": "2K",
+  "expectedFormats": [
+    "png",
+    "webp"
+  ],
+  "finalRoot": "public/images/halls",
+  "publicRelease": "Do not publish unless the image bytes are committed, visually checked, usage recorded and approved.",
+  "images": [
+    {
+      "slug": "lagerhall",
+      "runwayTaskId": "e8b40de0-58f3-462d-9be2-d0309c29e78c",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa varuflöde, lastportar och lagerdrift i en realistisk svensk industrimiljö.",
+      "page": "/stalhallar/lagerhall/",
+      "anchor": "lagerbehov",
+      "expectedOriginal": "lagerhall.png",
+      "targetFile": "hallpartner-lagerhall-ai-koncept-v01.webp",
+      "altProposal": "Lagerhall med truck och lastportar",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    },
+    {
+      "slug": "maskinhall",
+      "runwayTaskId": "0fd8c645-0b3c-4bf5-b4d6-11f80aa8ea34",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa maskinstorlek, breda portar och praktiska arbetsytor.",
+      "page": "/stalhallar/maskinhall/",
+      "anchor": "maskinernas-behov",
+      "expectedOriginal": "maskinhall.png",
+      "targetFile": "hallpartner-maskinhall-ai-koncept-v01.webp",
+      "altProposal": "Maskinhall med traktor och arbetsmaskiner",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    },
+    {
+      "slug": "ridhus",
+      "runwayTaskId": "05deb1ad-bcc3-433a-9b0d-3e24fdfef93f",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa ridyta, ljus och naturlig skala snarare än bara fasad.",
+      "page": "/stalhallar/ridhus/",
+      "anchor": "ridhus-verksamhet",
+      "expectedOriginal": "ridhus.png",
+      "targetFile": "hallpartner-ridhus-ai-koncept-v01.webp",
+      "altProposal": "Ridhusinteriör med häst och ryttare",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    },
+    {
+      "slug": "plathall",
+      "runwayTaskId": "0a870454-771a-450e-81d4-ef4e436821d0",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa plåtbeklädnad och portlösning snarare än en specifik verksamhet.",
+      "page": "/stalhallar/plathall/",
+      "anchor": "plathall-begrepp",
+      "expectedOriginal": "plathall.png",
+      "targetFile": "hallpartner-plathall-ai-koncept-v01.webp",
+      "altProposal": "Plåtklädd hall med portar",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    },
+    {
+      "slug": "isolerad-hall",
+      "runwayTaskId": "ba1d130f-7e46-402b-b7ef-6d3533157b0e",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa inomhusmiljö med isolerat klimatskal utan att utlova energi- eller temperaturvärden.",
+      "page": "/stalhallar/isolerad-hall/",
+      "anchor": "isolering-behov",
+      "expectedOriginal": "isolerad-hall.png",
+      "targetFile": "hallpartner-isolerad-hall-ai-koncept-v01.webp",
+      "altProposal": "Interiör i isolerad verksamhetshall",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    },
+    {
+      "slug": "talthall",
+      "runwayTaskId": "a12bbe69-2d33-4184-b9aa-23e1a7b883e3",
+      "source": "AI-generated standalone 2K photograph",
+      "intent": "Visa dukbyggnad, port och praktisk användning med rimliga proportioner.",
+      "page": "/stalhallar/talthall/",
+      "anchor": "talthall-utforande",
+      "expectedOriginal": "talthall.png",
+      "targetFile": "hallpartner-talthall-ai-koncept-v01.webp",
+      "altProposal": "Dukklädd tälthall i lagerbruk",
+      "published": false,
+      "imported": false,
+      "replacedWithCustomerPhoto": false
+    }
+  ]
+}
