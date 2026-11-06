@@ -1,3 +1,9 @@
+# SENASTE ÖVERLÄMNING – kväll 2026-11-06
+
+Läs [uppdaterad överlämningsprompt](docs/checkpoints/2026-11-06-overlamningsprompt.md) och [kvällscheckpoint](docs/checkpoints/2026-11-06-kvall-navigation-release.md) före nya ändringar. De ersätter tidigare 6 november-överlämnings **status och arbetsordning**, men inte historiken. Verifiera verklig `main`, PR #43 och Actions före merge eller deploy. Dokumentationen ligger initialt på separat dokumentationsgren/PR och är **inte bevis för publicerad release**.
+
+---
+
 # LÄS FÖRST – checkpoint från 2026-11-06
 
 Senaste arbets-/releaseunderlaget är [helgcheckpointen](docs/checkpoints/2026-11-06-helg-hallar-bilder-omoss.md) och [överlämningsprompten](docs/checkpoints/2026-11-06-overlamningsprompt.md).
