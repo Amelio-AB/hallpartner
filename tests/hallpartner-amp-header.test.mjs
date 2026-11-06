@@ -61,3 +61,23 @@ test('retired header views and duplicate page shell are absent', () => {
     assert.equal(existsSync(join(root, path)), false, path);
   }
 });
+
+test('Hallpartner menu descriptions and local hall icons stay in mega panel', () => {
+  const css = read('src/styles/hallpartner-amp-header.css');
+  const halls = ampHeaderItems.find(item => item.label === 'Hallar');
+  assert.equal(halls?.groups?.length, 2);
+  const links = halls.groups.flatMap(group => group.links);
+  assert.equal(links.length, 6);
+  for (const item of links) {
+    assert.ok(item.description?.length > 12, item.label);
+    const slug = item.href.split('/').filter(Boolean).at(-1);
+    assert.ok(existsSync(join(root, 'public/icons/halls', slug + '.svg')), slug);
+    assert.ok(css.includes('/icons/halls/' + slug + '.svg'), slug);
+  }
+  assert.match(css, /\.hm__sublink:focus-visible/);
+  assert.match(css, /\.hm__groups--mega \.hm__sublink::before/);
+  const detail = read('src/styles/hallpartner-hall-detail.css');
+  assert.match(detail, /\.hp-detail__crumbs::before/);
+  assert.match(detail, /background: #153129/);
+  assert.match(detail, /width: 100vw/);
+});
