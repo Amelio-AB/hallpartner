@@ -18,6 +18,10 @@ DNS-/WordPress-ändring eller verklig offertförfrågan ingår.
   publiceringskörning `42236416685`. `main` hade redan gått vidare. Workflow
   `316932905` var **active**, med en pågående main-publicering. Statusen lämnades orörd.
   Bilderna här är lokala byggresultat, aldrig bevis för publicerad kandidat.
+  **Uppföljning 19:19 svensk tid:** markören och samtliga 88 publicerade filer
+  matchar nu `77d1b12`. Den första läsningen föregick markörbytet 19:09:27;
+  [utredningen med tidsordning och cache-/hashbevis](preview-version-check.md)
+  förklarar avvikelsen. Den godkända split-heron är oförändrad i AMP-002-grenen.
 - Öppna Hallpartner-PR:er vid inventeringen: #1, #2, #4, #6, #7, #9, #25 och #31.
   Äldre header-PR #7 ligger på den pensionerade utvecklingsbasen; ingen kod hämtas därifrån.
 
