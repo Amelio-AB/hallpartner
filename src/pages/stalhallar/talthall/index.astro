@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import tentPhoto from '../../../assets/images/legacy/talthall-1536x1152.jpg';
 import tentUsesPhoto from '../../../assets/images/legacy/talthall-LED.jpg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import HallConceptImage from '../../../components/HallConceptImage.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 import '../../../styles/hallpartner-hall-variants.css';
 
@@ -94,6 +95,8 @@ const faq = [
         </aside>
       </div>
     </section>
+
+    <HallConceptImage slug="talthall" alt="Dukklädd tälthall för materialförvaring i skogsnära miljö." />
 
     <nav class="hp-detail__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-detail__jump-inner">

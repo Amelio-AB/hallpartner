@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import storagePhoto from '../../../assets/images/legacy/lagerhall-med-enkelplat.jpg';
 import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro';
+import HallConceptImage from '../../../components/HallConceptImage.astro';
 import '../../../styles/hallpartner-hall-detail.css';
 
 // New content draft for the actual route. Business facts and available
@@ -72,6 +73,8 @@ const faq = [
         </aside>
       </div>
     </section>
+
+    <HallConceptImage slug="lagerhall" alt="Lagerhall med lastportar, pallager och truck på en industrigård." />
 
     <nav class="hp-detail__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-detail__jump-inner">

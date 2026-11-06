@@ -1,0 +1,41 @@
+---
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+
+const filenames = {
+  lagerhall: 'hallpartner-lagerhall-ai-koncept-v01.webp',
+  maskinhall: 'hallpartner-maskinhall-ai-koncept-v01.webp',
+  ridhus: 'hallpartner-ridhus-ai-koncept-v01.webp',
+  plathall: 'hallpartner-plathall-ai-koncept-v01.webp',
+  'isolerad-hall': 'hallpartner-isolerad-hall-ai-koncept-v01.webp',
+  talthall: 'hallpartner-talthall-ai-koncept-v01.webp',
+} as const;
+
+interface Props {
+  slug: keyof typeof filenames;
+  alt: string;
+}
+
+const { slug, alt } = Astro.props;
+const filename = filenames[slug];
+// Skydda både lokala tester och preview från trasiga bild-URL:er om originalen
+// ännu inte importerats. Statisk Astro-build kör från projektets rot.
+const available = existsSync(join(process.cwd(), 'public', 'images', 'halls', filename));
+---
+{available && (
+  <section class="hp-detail__concept-media" aria-label="Illustration av halltypen">
+    <div class="hp-draft-rail">
+      <figure>
+        <img
+          src={`/images/halls/${filename}`}
+          alt={alt}
+          width="1920"
+          height="1080"
+          loading="lazy"
+          decoding="async"
+        />
+        <figcaption>AI-genererad illustration. Bilden visar inte ett utfört Hallpartner-projekt.</figcaption>
+      </figure>
+    </div>
+  </section>
+)}

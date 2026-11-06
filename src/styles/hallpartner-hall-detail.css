@@ -125,3 +125,29 @@
   .hp-detail__hero-actions { align-items: flex-start; flex-direction: column; }
   .hp-detail__button { width: 100%; }
 }
+
+
+/* AI-konceptfoto: visas bara när den godkända WebP-filen finns i public/images/halls.
+   Enskild bildkälla per hallsida kan senare ersättas med kundens fotografi. */
+.hp-detail__concept-media {
+  background: #EBEBE8;
+  padding-block: clamp(1.4rem, 3.5vw, 3.3rem);
+}
+.hp-detail__concept-media figure {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.hp-detail__concept-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  border-radius: 5px;
+}
+.hp-detail__concept-media figcaption {
+  padding-block: .7rem 0;
+  color: #486051;
+  font-size: .78rem;
+  line-height: 1.5;
+}
