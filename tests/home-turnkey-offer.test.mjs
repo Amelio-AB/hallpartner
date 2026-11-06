@@ -16,6 +16,15 @@ test('startsidan presenterar nyckelfärdiga hallar och avtalsberoende totalentre
   assert.ok(index.includes('driftklara hallar'));
 });
 
+test('huvudknappen leder till offert och halltyper finns kvar i heron', () => {
+  const start = home.indexOf('<section class="hp-home-hero"');
+  const end = home.indexOf('</section>', start);
+  assert.ok(start >= 0 && end > start);
+  const hero = home.slice(start, end);
+  assert.ok(hero.includes('href={existingPages.offert}'));
+  assert.ok(hero.includes('href="#halltyper"'));
+});
+
 test('offert, kontakt och process är nåbara utan ny Javascriptfunktion', () => {
   assert.ok(home.includes("offert: '/offert/'"));
   assert.ok(home.includes("kontakt: '/kontakt/'"));
