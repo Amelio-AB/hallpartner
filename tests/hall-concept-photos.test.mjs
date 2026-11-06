@@ -58,3 +58,13 @@ test('light gradients on photo backgrounds preserve dark readable hero text', ()
   assert.ok(css.includes('@media (max-width: 640px)'));
   assert.ok(css.includes('hp-detail__summary-strip'));
 });
+
+test('hero text keeps the same centered content rail as breadcrumbs on all screen sizes', () => {
+  const css = readFileSync(new URL('src/styles/hallpartner-hall-detail.css', root), 'utf8');
+  const base = readFileSync(new URL('src/styles/hallpartner-draft.css', root), 'utf8');
+  const section = css.match(/\.hp-detail \.hp-detail__hero--illustrated \.hp-detail__hero-grid\s*\{([^}]+)\}/)?.[1];
+  assert.ok(section, 'Missing illustrated hero content rule');
+  assert.doesNotMatch(section, /(?:^|[;\n])\s*width\s*:/, 'Hero must not override .hp-draft-rail width');
+  assert.match(base, /\.hp-draft-rail\s*\{\s*width:\s*min\(/);
+  assert.match(base, /margin-inline:\s*auto/);
+});

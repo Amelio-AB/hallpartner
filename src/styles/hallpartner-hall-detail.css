@@ -144,7 +144,7 @@
   display: block;
   position: relative;
   z-index: 2;
-  width: 100%;
+  /* Do not override .hp-draft-rail's max-width/gutters and margin-inline:auto. */
 }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
   width: min(100%, 36rem);

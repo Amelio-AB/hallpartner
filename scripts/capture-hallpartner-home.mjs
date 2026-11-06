@@ -110,6 +110,24 @@ try {
     assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
     for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear'])assert.ok(metrics[field],width+': '+field);
     assert.equal(metrics.surface,expectedPath==='/'?'transparent':'solid');allTrue(metrics.logo,width+': logo');
+    if(/^\/stalhallar\/(lagerhall|maskinhall|ridhus|plathall|isolerad-hall|talthall)\/$/.test(expectedPath)) {
+      metrics.hallHeroRail=await run(function(){
+        const hero=document.querySelector('.hp-detail__hero-grid.hp-draft-rail');
+        const crumbs=document.querySelector('.hp-detail__crumbs.hp-draft-rail');
+        const copy=hero?.querySelector('.hp-detail__hero-copy');
+        if(!hero||!crumbs||!copy)return {structure:false};
+        const a=hero.getBoundingClientRect(),b=crumbs.getBoundingClientRect(),c=copy.getBoundingClientRect();
+        return {
+          structure:true,
+          alignedLeft:Math.abs(a.left-b.left)<=2,
+          alignedRight:Math.abs(a.right-b.right)<=2,
+          copyInside:c.left>=b.left-2&&c.right<=b.right+2,
+          minimumGutter:a.left>=Math.min(12,innerWidth*.03),
+          backgroundPhoto:!!document.querySelector('.hp-detail__hero-media img'),
+        };
+      });
+      allTrue(metrics.hallHeroRail,width+': hall hero rail aligned with breadcrumbs');
+    }
     if(width<=1024) {
       metrics.menu=await run(function(){
         const root=document.querySelector('header.hm'),button=root.querySelector('button.hm__mobile-toggle');
