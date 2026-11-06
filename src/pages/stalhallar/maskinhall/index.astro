@@ -26,12 +26,13 @@ const questions = [
   { question: 'Hur mäter jag behovet av en maskinhall?', answer: 'Utgå från de största maskinernas mått, men ta också med öppningar, körvägar, vändytor och plats för arbete runt utrustningen. Ett mått på själva maskinen räcker sällan som enda underlag.' },
   { question: 'Kan en maskinhall även användas som verkstad?', answer: 'Det är en fråga som behöver utredas utifrån hur arbetet ska gå till. Service, installationer och inomhusmiljö kan ställa andra krav än ren uppställning eller förvaring.' },
   { question: 'Behöver en maskinhall vara isolerad?', answer: 'Det beror på vad som sker i hallen och om maskiner, material eller personer behöver en viss inomhusmiljö. Isolering är en separat fråga från vilket användningsområde hallen har.' },
+  { question: 'Kan jag få en nyckelfärdig maskinhall?', answer: 'Ja, Hallpartner kan erbjuda en driftklar maskinhall genom totalentreprenad. Behöver du exempelvis belysning, el eller särskild ventilation går vi igenom funktionerna och specificerar vilka arbeten och installationer som ingår i offerten.' },
 ] as const;
 ---
 
 <HallpartnerSiteLayout
-  title="Maskinhallar – plats för maskiner och arbete"
-  description="Planerar du en maskinhall? Läs om portöppningar, frihöjd, körvägar, serviceytor och vad som är bra att veta inför ett hallprojekt."
+  title="Maskinhallar för maskiner och arbete | Hallpartner"
+  description="Maskinhall för uppställning, service eller arbete? Hallpartner hjälper dig planera portar, rörelseytor och en möjlig nyckelfärdig, driftklar hall genom totalentreprenad."
 >
   <div class="hp-detail hp-detail--machine">
     <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -46,15 +47,11 @@ const questions = [
       <div class="hp-draft-rail hp-detail__hero-grid">
         <div class="hp-detail__hero-copy">
           <p class="hp-detail__eyebrow">Maskinhallar / Arbetsytor</p>
-          <h1 id="hp-machine-page-title">Maskinhallar med <em>plats för arbetet.</em></h1>
-          <p class="hp-detail__lead">
-            En maskinhall handlar inte bara om att ställa maskiner under tak.
-            De ska kunna ta sig in, få plats och användas på det sätt verksamheten
-            kräver. Där börjar en bra planering.
-          </p>
+          <h1 id="hp-machine-page-title">Maskinhallar med plats för <em>rörelse och arbete.</em></h1>
+          <p class="hp-detail__lead">En maskinhall behöver fungera när maskinerna körs in, ställs upp och används. Hallpartner hjälper dig att planera portar, frihöjd och arbetsytor efter utrustningen. Vid behov kan vi erbjuda totalentreprenad med en driftklar hall och de installationer som avtalats.</p>
           <div class="hp-detail__hero-actions">
             <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
-            <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+            <a class="hp-detail__text-link" href="/sa-gar-det-till/">Så går det till <span aria-hidden="true">→</span></a>
           </div>
         </div>
         <aside class="hp-detail__hero-aside" aria-label="Tre frågor om maskinhallen">
@@ -163,11 +160,8 @@ const questions = [
       <div class="hp-draft-rail hp-detail__split">
         <div class="hp-detail__section-intro">
           <p class="hp-detail__eyebrow">Underlag inför första kontakten</p>
-          <h2 id="machine-prep-title">Du behöver inte ha valt hallens utförande.</h2>
-          <p>
-            Börja med användningen, måtten på utrustningen och var projektet
-            ska ligga. Andra frågor kan utredas när förutsättningarna är kända.
-          </p>
+          <h2 id="machine-prep-title">Du beskriver maskinerna – vi hjälper dig med hallen.</h2>
+          <p>Börja med utrustningens ungefärliga mått, hur den används och var hallen ska stå. Hallpartner kan därefter hjälpa till med hallösningen och, vid avtalad totalentreprenad, samordna projektet fram till en driftklar byggnad.</p>
         </div>
         <div class="hp-detail__note-list">
           <h3>Det här hjälper oss att förstå behovet</h3>
@@ -201,8 +195,8 @@ const questions = [
       <div class="hp-draft-rail hp-detail__end-inner">
         <div>
           <p class="hp-detail__eyebrow">Nästa steg</p>
-          <h2 id="machine-next-title">Berätta vad du behöver få plats med.</h2>
-          <p>Vilka maskiner ska användas, hur ska de förflyttas och var är hallen tänkt att stå? Med en sådan beskrivning kan samtalet börja.</p>
+          <h2 id="machine-next-title">Berätta vad din maskinhall ska klara.</h2>
+          <p>Vilka maskiner behöver plats, vad ska du kunna göra i hallen och var ligger byggplatsen? Vi hjälper dig att diskutera rätt lösning, med eller utan totalentreprenad.</p>
         </div>
         <div class="hp-detail__end-actions">
           <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>

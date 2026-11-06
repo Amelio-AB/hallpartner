@@ -54,12 +54,13 @@ const faq = [
     title: 'Kan man använda en tälthall året runt?',
     body: 'Användning under olika årstider kräver att det valda byggsystemet och förutsättningarna på platsen klarar kraven. Det går inte att avgöra utifrån ordet tälthall ensamt.',
   },
+  { title: 'Kan Hallpartner leverera en tälthall som komplett lösning?', body: 'Vi kan diskutera totalentreprenad när ett lämpligt utförande finns för projektet. Grund, förankring, montage och eventuella installationer bedöms utifrån användningen och specificeras i offerten. En tälthall är inte automatiskt bygglovsfri.' },
 ] as const;
 ---
 
 <HallpartnerSiteLayout
-  title="Tälthallar – användning och utförande"
-  description="Planerar du en tälthall? Läs om dukbeklädnad, användningsområden, byggplats, förankring och varför lovfrågor behöver utredas inför projektet."
+  title="Tälthallar för lager och väderskydd | Hallpartner"
+  description="Tälthallar för lager eller utrustning? Hallpartner hjälper dig att bedöma konstruktion, byggplats, förankring och en eventuell samordnad leverans enligt offert."
 >
   <div class="hp-detail hp-detail--talthall">
     <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -74,16 +75,12 @@ const faq = [
       <div class="hp-draft-rail hp-detail__hero-grid">
         <div class="hp-detail__hero-copy">
           <p class="hp-detail__eyebrow">Tälthallar / Dukutförande</p>
-          <h1 id="talthall-title">Tälthallar efter <em>användning och plats.</em></h1>
-          <p class="hp-detail__lead">
-            En tälthall kan vara ett alternativ att undersöka när du
-            planerar mer utrymme. Börja med vad den ska användas till
-            och var den ska stå – innan konstruktion och tekniska val bestäms.
-          </p>
+          <h1 id="talthall-title">Tälthallar för <em>lager och väderskydd.</em></h1>
+          <p class="hp-detail__lead">En tälthall kan vara ett alternativ när du behöver skydd för material, varor eller utrustning. Hallpartner hjälper dig att undersöka vilka mått, öppningar och byggplatsförutsättningar som gäller. Om lösningen passar kan vi diskutera en samordnad leverans med totalentreprenad och tydlig omfattning i offerten.</p>
           <div class="hp-detail__hero-actions">
             <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
-            <a class="hp-detail__text-link" href={contactHref}>
-              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            <a class="hp-detail__text-link" href="/sa-gar-det-till/">
+              Så går det till <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -197,13 +194,9 @@ const faq = [
         <div class="hp-detail__heading-row">
           <div>
             <p class="hp-detail__eyebrow">Inför ett riktigt projekt</p>
-            <h2 id="tent-site-heading">Byggplatsen behöver utredas.</h2>
+            <h2 id="tent-site-heading">Byggplatsen avgör mer än du tror.</h2>
           </div>
-          <p>
-            Ett lämpligt utförande beror inte bara på hallens mått.
-            Förutsättningarna på platsen och vad som ingår i projektet
-            behöver klarläggas.
-          </p>
+          <p>Markens förutsättningar, förankring och aktuella vind- och snökrav behöver prövas mot det valda systemet. Hallpartner kan samordna de arbeten som avtalats, men vi lovar inte att en tälthall är bygglovsfri eller passar varje plats.</p>
         </div>
         <ol class="hp-detail__movement">
           {planningSteps.map((item) => (
@@ -242,12 +235,8 @@ const faq = [
       <div class="hp-draft-rail hp-detail__end-inner">
         <div>
           <p class="hp-detail__eyebrow">Nästa steg</p>
-          <h2 id="talthall-next-heading">Beskriv vad hallen ska användas till.</h2>
-          <p>
-            Berätta vad som behöver få plats, ungefär hur stor hall
-            du har i åtanke och var den ska stå. Det ger oss
-            en utgångspunkt för ett första samtal.
-          </p>
+          <h2 id="talthall-next-heading">Berätta vad din tälthall behöver skydda.</h2>
+          <p>Vad ska rymmas, hur länge ska hallen användas och var ska den stå? Vi hjälper dig att bedöma vilka utföranden och vilken leveransomfattning som kan passa.</p>
         </div>
         <div class="hp-detail__end-actions">
           <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>

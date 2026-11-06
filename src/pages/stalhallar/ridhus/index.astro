@@ -70,12 +70,13 @@ const questions = [
     title: 'Kan ett ridhus byggas med olika hallutföranden?',
     body: 'Olika konstruktionsprinciper kan vara värda att undersöka. Vilka system som faktiskt passar ridverksamheten och kan levereras behöver bekräftas för projektet.',
   },
+  { title: 'Kan Hallpartner leverera ett nyckelfärdigt ridhus?', body: 'Ja, vi kan diskutera en totalentreprenad med ett driftklart ridhus. Omfattningen kan omfatta grundarbete, hallmontage och avtalade installationer. Vi tydliggör i offerten vad som ingår i just ditt projekt.' },
 ] as const;
 ---
 
 <HallpartnerSiteLayout
-  title="Ridhus och ridhallar – planera för ridverksamheten"
-  description="Planerar du ridhus eller ridhall? Läs om ridyta, tillträde, belysning och vilka frågor som behöver utredas inför ett ridhusprojekt."
+  title="Ridhus och ridhallar för ridverksamhet | Hallpartner"
+  description="Planerar du ridhus? Hallpartner hjälper dig med ridyta, tillträde och inomhusmiljö och kan erbjuda en nyckelfärdig anläggning genom totalentreprenad enligt offert."
 >
   <div class="hp-detail hp-detail--ridhus">
     <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -90,16 +91,12 @@ const questions = [
       <div class="hp-draft-rail hp-detail__hero-grid">
         <div class="hp-detail__hero-copy">
           <p class="hp-detail__eyebrow">Ridhus / Ridverksamhet</p>
-          <h1 id="ridhus-title">Ridhus med plats för <em>ridningen.</em></h1>
-          <p class="hp-detail__lead">
-            Ett ridhus ska fungera för aktiviteterna som ska ske där.
-            Hur ridytan används, hur hästar och människor rör sig och vad
-            som behövs runt omkring är en bra början på planeringen.
-          </p>
+          <h1 id="ridhus-title">Ridhus som fungerar <em>för ridningen.</em></h1>
+          <p class="hp-detail__lead">Ett bra ridhus ger plats för ridningen och fungerar i vardagen för hästar, ryttare och skötsel. Hallpartner hjälper dig att planera byggnaden efter verksamhetens behov. Vi kan också erbjuda totalentreprenad fram till en driftklar hall, med avtalad belysning och andra installationer.</p>
           <div class="hp-detail__hero-actions">
             <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
-            <a class="hp-detail__text-link" href={contactHref}>
-              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            <a class="hp-detail__text-link" href="/sa-gar-det-till/">
+              Så går det till <span aria-hidden="true">→</span>
             </a>
           </div>
         </div>
@@ -177,13 +174,9 @@ const questions = [
         <div class="hp-detail__heading-row hp-detail__heading-row--light">
           <div>
             <p class="hp-detail__eyebrow">För ridning i vardagen</p>
-            <h2 id="riding-climate-heading">Ljus och inomhusmiljö spelar roll.</h2>
+            <h2 id="riding-climate-heading">Ett ridhus ska fungera under hela året.</h2>
           </div>
-          <p>
-            Hur anläggningen används påverkar vilka frågor som behöver
-            utredas kring belysning, luft och byggplats. De tekniska
-            lösningarna ska väljas utifrån projektets förutsättningar.
-          </p>
+          <p>Ljus, luft, tillträde och markförhållanden påverkar hur ridhuset används. Hallpartner kan samordna byggprojektet och de delar av arbetet som avtalats, medan tekniska val och myndighetskrav fastställs för den aktuella anläggningen.</p>
         </div>
         <div class="hp-detail__considerations">
           {ridingClimate.map((item) => (
@@ -232,12 +225,8 @@ const questions = [
       <div class="hp-draft-rail hp-detail__end-inner">
         <div>
           <p class="hp-detail__eyebrow">När du vill gå vidare</p>
-          <h2 id="ridhus-next-heading">Berätta om ditt ridhusprojekt.</h2>
-          <p>
-            Vad ska ridhuset användas till, ungefär hur mycket plats
-            behövs och var är det tänkt att ligga? Det är en bra
-            utgångspunkt för ett första samtal.
-          </p>
+          <h2 id="ridhus-next-heading">Berätta hur du vill använda ditt ridhus.</h2>
+          <p>Beskriv ridverksamheten, ungefärlig ridyta och byggplatsen. Då kan vi diskutera hallens utformning och om du önskar en nyckelfärdig leverans.</p>
         </div>
         <div class="hp-detail__end-actions">
           <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>

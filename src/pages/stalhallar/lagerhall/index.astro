@@ -34,12 +34,13 @@ const faq = [
   { question: 'Hur stor lagerhall behöver jag?', answer: 'Börja med en uppskattning av det som ska förvaras och hur det hanteras. Frihöjd, gångar, portar och eventuellt framtida behov behöver också vägas in innan ett faktiskt mått bestäms.' },
   { question: 'Behöver en lagerhall vara isolerad?', answer: 'Det beror på vad som ska lagras och vilka krav som finns på temperatur och fukt. En del användningar behöver främst väderskydd, medan andra kan kräva särskild inomhusmiljö.' },
   { question: 'Vad påverkar priset på en lagerhall?', answer: 'Storlek, byggplats, stomme, tak och väggar, portar och eventuell isolering är relevanta delar. För att jämföra priser behöver du också veta vad som ingår i leveransen.' },
+  { question: 'Kan Hallpartner leverera en nyckelfärdig lagerhall?', answer: 'Ja, vi kan erbjuda totalentreprenad med en driftklar lagerhall. Vi går igenom vilka arbeten och installationer din verksamhet behöver och anger vad som ingår i den aktuella offerten.' },
 ] as const;
 ---
 
 <HallpartnerSiteLayout
-  title="Lagerhallar för förvaring och logistik"
-  description="Planerar du en lagerhall? Läs om förvaring, varuflöde, portar och inomhusmiljö. Få hjälp att förbereda ett första samtal om ditt lagerprojekt."
+  title="Lagerhallar för lager och logistik | Hallpartner"
+  description="Behöver du en lagerhall för förvaring och varuflöden? Hallpartner hjälper dig från planering till möjlig nyckelfärdig, driftklar lagerhall genom totalentreprenad."
 >
   <div class="hp-detail hp-detail--storage">
     <nav class="hp-detail__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -54,15 +55,11 @@ const faq = [
       <div class="hp-draft-rail hp-detail__hero-grid">
         <div class="hp-detail__hero-copy">
           <p class="hp-detail__eyebrow">Lagerhallar / Förvaring</p>
-          <h1 id="hp-storage-page-title">Lagerhallar – börja med <em>förvaringen.</em></h1>
-          <p class="hp-detail__lead">
-            En lagerhall ska ge plats åt mer än själva godset. Hur varor kommer in,
-            flyttas och hämtas ut påverkar vilka ytor som behövs.
-            Börja med användningen, så blir det lättare att diskutera hallens utförande.
-          </p>
+          <h1 id="hp-storage-page-title">Lagerhallar för <em>ett fungerande varuflöde.</em></h1>
+          <p class="hp-detail__lead">Behöver du mer plats för varor, material eller utrustning? Hallpartner hjälper dig att planera lagerhallen efter hur leveranser, förvaring och arbete ska fungera. Vi kan även erbjuda totalentreprenad fram till en driftklar lagerhall, med leveransen tydligt beskriven i offerten.</p>
           <div class="hp-detail__hero-actions">
             <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
-            <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+            <a class="hp-detail__text-link" href="/sa-gar-det-till/">Så går det till <span aria-hidden="true">→</span></a>
           </div>
         </div>
         <aside class="hp-detail__hero-aside" aria-label="Att fundera på inför en lagerhall">
@@ -152,13 +149,9 @@ const faq = [
         <div class="hp-detail__heading-row hp-detail__heading-row--light">
           <div>
             <p class="hp-detail__eyebrow">När lagerbehovet är tydligt</p>
-            <h2 id="storage-construction-title">Välj utförande efter användningen.</h2>
+            <h2 id="storage-construction-title">Från hallbyggnad till ett lager som fungerar.</h2>
           </div>
-          <p>
-            Plåt, dukbeklädnad och isolering beskriver olika val.
-            Vilken kombination som är lämplig beror på projektets
-            förutsättningar och behöver utredas innan den bestäms.
-          </p>
+          <p>Portar, golv, inomhusmiljö och installationer behöver fungera ihop med varuflödet. Vill du ha en nyckelfärdig lösning kan Hallpartner samordna projektering, grundarbete och montage samt de installationer som ingår i avtalet.</p>
         </div>
         <div class="hp-detail__related">
           <article>
@@ -199,11 +192,8 @@ const faq = [
       <div class="hp-draft-rail hp-detail__end-inner">
         <div>
           <p class="hp-detail__eyebrow">Nästa steg</p>
-          <h2 id="storage-next-title">Berätta hur ditt lager ska fungera.</h2>
-          <p>
-            Beskriv vad som ska förvaras, vilken plats du tror behövs och var hallen
-            är tänkt att stå. Då finns ett konkret underlag att börja med.
-          </p>
+          <h2 id="storage-next-title">Beskriv lagret du behöver – vi hjälper dig vidare.</h2>
+          <p>Berätta vad som ska förvaras, hur varor ska komma in och ut och var hallen ska byggas. Det räcker för att börja diskutera en lösning och omfattningen av en eventuell totalentreprenad.</p>
         </div>
         <div class="hp-detail__end-actions">
           <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
