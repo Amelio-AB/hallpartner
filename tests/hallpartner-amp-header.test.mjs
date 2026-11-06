@@ -76,14 +76,14 @@ test('Hallpartner menu descriptions and local hall icons stay in mega panel', ()
   }
   assert.match(css, /\.hm__sublink:focus-visible/);
   assert.match(css, /\.hm__groups--mega \.hm__sublink::before/);
-  assert.match(css, /\\.hm__groups--mega \\.hm__sublink::after/);
-  assert.match(css, /transform: scaleX\\(0\\)/);
-  assert.match(css, /transform-origin: left center/);
-  assert.match(css, /transition: transform \\.24s cubic-bezier\\(\\.25,\\.8,\\.25,1\\)/);
-  assert.match(css, /transform: scaleX\\(1\\)/);
-  assert.match(css, /background: transparent/);
-  assert.doesNotMatch(css, /background: #DAE6D9/);
-  assert.match(css, /@media \\(prefers-reduced-motion: reduce\\)/);
+  assert.ok(css.includes('.hm__groups--mega .hm__sublink::after'));
+  assert.ok(css.includes('transform: scaleX(0)'));
+  assert.ok(css.includes('transform-origin: left center'));
+  assert.ok(css.includes('transition: transform .24s cubic-bezier(.25,.8,.25,1)'));
+  assert.ok(css.includes('transform: scaleX(1)'));
+  assert.ok(css.includes('background: transparent'));
+  assert.ok(!css.includes('background: #DAE6D9'));
+  assert.ok(css.includes('@media (prefers-reduced-motion: reduce)'));
   const detail = read('src/styles/hallpartner-hall-detail.css');
   assert.match(detail, /\.hp-detail__crumbs::before/);
   assert.match(detail, /background: #153129/);
