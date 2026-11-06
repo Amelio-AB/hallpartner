@@ -163,3 +163,16 @@
 @media (max-width: 740px) {
   .hp-info--process .hp-info__resource-list { grid-template-columns: minmax(0, 1fr); }
 }
+
+
+/* About: preserve the primary quote route and a visible contact alternative. */
+.hp-info--about .hp-info__end-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  flex: 0 0 auto;
+}
+.hp-info--about .hp-info__end-actions .hp-info__textlink {
+  color: #F4F4F0 !important;
+}

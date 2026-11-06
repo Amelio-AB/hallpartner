@@ -1,3 +1,5 @@
+> **Senaste helgcheckpointen (2026-11-06):** [Hallundersidor, AI-bilder, Om Hallpartner och releaseöverlämning](docs/checkpoints/2026-11-06-helg-hallar-bilder-omoss.md). [Prompt för nästa agent](docs/checkpoints/2026-11-06-overlamningsprompt.md). Flera äldre beskrivningar nedan av inaktiv offertguide, antal rutter och Draft PR #22 är **historiska**. Använd verifierad `main`-HEAD, release-PR och Actions som nulägeskälla.
+
 # Hallpartner webbplats
 
 Kodbas för Hallpartners statiska Astro-webbplats. `main` är ordinarie
