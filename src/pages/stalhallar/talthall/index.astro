@@ -9,6 +9,7 @@ import '../../../styles/hallpartner-hall-variants.css';
 // A new content draft. Do not inherit earlier WordPress claims about
 // building permits, anchoring, rental, lifetime or guaranteed performance.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 
 const constructionQuestions = [
   {
@@ -80,9 +81,7 @@ const faq = [
             och var den ska stå – innan konstruktion och tekniska val bestäms.
           </p>
           <div class="hp-detail__hero-actions">
-            <a class="hp-detail__button" href="#talthall-utforande">
-              Utforska tälthallar <span aria-hidden="true">↓</span>
-            </a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-detail__text-link" href={contactHref}>
               Kontakta Hallpartner <span aria-hidden="true">→</span>
             </a>
@@ -250,9 +249,10 @@ const faq = [
             en utgångspunkt för ett första samtal.
           </p>
         </div>
-        <a class="hp-detail__button" href={contactHref}>
-          Kontakta Hallpartner <span aria-hidden="true">→</span>
-        </a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

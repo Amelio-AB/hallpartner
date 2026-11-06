@@ -12,6 +12,7 @@ const existingPages = {
   ridhus: '/stalhallar/ridhus/',
   isolerade: '/stalhallar/isolerad-hall/',
   kontakt: '/kontakt/',
+  offert: '/offert/',
 } as const;
 ---
 
@@ -37,12 +38,12 @@ const existingPages = {
           Här får du en överblick över olika halltyper och vad som är bra att tänka igenom.
         </p>
         <div class="hp-home-actions">
-          <a class="hp-home-button hp-home-button--primary" href="#halltyper">
-            Utforska halltyper
+          <a class="hp-home-button hp-home-button--primary" href={existingPages.offert}>
+            Be om offert
             <span aria-hidden="true">→</span>
           </a>
-          <a class="hp-home-textlink" href="#att-tanka-pa">
-            Vad behöver jag veta?
+          <a class="hp-home-textlink" href="#halltyper">
+            Utforska halltyper
             <span aria-hidden="true">↓</span>
           </a>
         </div>
@@ -178,9 +179,10 @@ const existingPages = {
         <h2 id="hp-home-final-title">Har du ett hallprojekt i tankarna?</h2>
         <p>Berätta vad du planerar och vilka förutsättningar du känner till. Du kan börja med en enkel beskrivning.</p>
       </div>
-      <a class="hp-home-button hp-home-button--primary" href={existingPages.kontakt}>
-        Kontakta oss <span aria-hidden="true">→</span>
-      </a>
+      <div class="hp-home-final__actions">
+        <a class="hp-home-button hp-home-button--primary" href={existingPages.offert}>Be om offert <span aria-hidden="true">→</span></a>
+        <a class="hp-home-textlink" href={existingPages.kontakt}>Ring eller mejla <span aria-hidden="true">→</span></a>
+      </div>
     </div>
   </section>
 </div>

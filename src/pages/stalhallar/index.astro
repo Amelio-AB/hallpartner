@@ -18,6 +18,7 @@ import '../../styles/hallpartner-stalhallar.css';
  * wizard and AMP-005 are not installed here; actual delivery facts are pending.
  */
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 // Motif descriptions only: none of these is a verified Hallpartner reference.
 const galleryImages = [
   { src: exterior, title: 'Plåtklädd exteriör', caption: 'Portar och fasad på en hallbyggnad.', alt: 'Grå plåtklädd hall med stor stängd port och dörr på gaveln.' },
@@ -146,9 +147,7 @@ const questions = [
             att ha med sig inför ett hallprojekt.
           </p>
           <div class="hp-stal__hero-actions">
-            <a class="hp-stal__button" href="#anvandningsomraden">
-              Utforska halltyper <span aria-hidden="true">↓</span>
-            </a>
+            <a class="hp-stal__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-stal__text-link" href={contactHref}>
               Beskriv ditt projekt <span aria-hidden="true">→</span>
             </a>
@@ -300,7 +299,10 @@ const questions = [
             som utgångspunkt för en första kontakt.
           </p>
         </div>
-        <a class="hp-stal__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-stal__final-actions">
+          <a class="hp-stal__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-stal__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

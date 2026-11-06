@@ -6,6 +6,7 @@ import '../../../styles/hallpartner-hall-variants.css';
 // New editorial draft. Actual products, technical performance and scope
 // must be confirmed with Hallpartner and its suppliers before launch.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 const distinctions = [
   { title: 'Stommen', body: 'Stommen bär byggnaden. Ordet plåthall anger inte i sig vilket stomsystem som används eller hur det dimensioneras.' },
   { title: 'Väggarna och taket', body: 'Plåt kan användas som tak- och väggbeklädnad. Öppningar, infästningar och takets utformning behöver prövas för projektet.' },
@@ -36,7 +37,7 @@ const faq = [
           <h1 id="plathall-title">Plåthallar för <em>olika behov.</em></h1>
           <p class="hp-detail__lead">Plåt beskriver hur en hall kan vara klädd – inte vad byggnaden ska användas till. Här får du en överblick över hur material, användning och praktiska krav hänger ihop.</p>
           <div class="hp-detail__hero-actions">
-            <a class="hp-detail__button" href="#plathall-begrepp">Utforska utförandet <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -108,7 +109,10 @@ const faq = [
     <section class="hp-detail__end" aria-labelledby="plathall-next">
       <div class="hp-draft-rail hp-detail__end-inner">
         <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="plathall-next">Berätta vad hallen ska användas till.</h2><p>Beskriv användning, ungefärligt platsbehov och byggort. Det ger en bra start inför diskussionen om utförande.</p></div>
-        <a href={contactHref} class="hp-detail__button">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>
