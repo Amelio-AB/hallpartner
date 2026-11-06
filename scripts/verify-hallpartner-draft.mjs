@@ -65,7 +65,7 @@ for (const [path,html] of pages) {
   for (const [,heading] of html.matchAll(/<h[1-6]\b[^>]*>([\s\S]*?)<\/h[1-6]>/gi)) assert.doesNotMatch(heading.replace(/<[^>]*>/g,''), /^\s*0[1-9]\b/,path+': decorative heading number');
 }
 const home = pages.get('index.html');
-assert.ok(home.includes('En hall börjar med ditt behov.'));
+assert.ok(home.includes('Nyckelfärdiga hallar.'));
 assert.ok(home.includes('src="/images/logo_text_white.png"') && home.includes('alt="Hallpartner – Hallar till alla"'));
 assert.ok((home.match(/<img(?:\s|>)/g) || []).length >= 4);
 for (const phrase of ['Visuell arbetsversion','För intern granskning','Intern arbetsprototyp','Ursprungligt fulltextutkast saknas','digital analys och vision']) assert.ok(!home.includes(phrase),phrase);
