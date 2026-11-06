@@ -8,14 +8,14 @@ export const ampHeaderItems: HeaderMenuConfig['items'] = [
     menuIntro: { heading: 'Utforska våra halltyper', description: 'Välj efter användningsområde eller byggnadens utförande.' },
     groups: [
       { heading: 'Användningsområden', links: [
-        { label: 'Lagerhallar', href: '/stalhallar/lagerhall/' },
-        { label: 'Maskinhallar', href: '/stalhallar/maskinhall/' },
-        { label: 'Ridhus', href: '/stalhallar/ridhus/' },
+        { label: 'Lagerhallar', href: '/stalhallar/lagerhall/', description: 'För lager, logistik och förvaring' },
+        { label: 'Maskinhallar', href: '/stalhallar/maskinhall/', description: 'För maskiner, fordon och verkstad' },
+        { label: 'Ridhus', href: '/stalhallar/ridhus/', description: 'För ridning, träning och hästverksamhet' },
       ]},
       { heading: 'Utföranden', links: [
-        { label: 'Plåthallar', href: '/stalhallar/plathall/' },
-        { label: 'Isolerade hallar', href: '/stalhallar/isolerad-hall/' },
-        { label: 'Tälthallar', href: '/stalhallar/talthall/' },
+        { label: 'Plåthallar', href: '/stalhallar/plathall/', description: 'Hallbyggnader med plåt som tak och väggar' },
+        { label: 'Isolerade hallar', href: '/stalhallar/isolerad-hall/', description: 'För verksamheter med klimatkrav' },
+        { label: 'Tälthallar', href: '/stalhallar/talthall/', description: 'Flexibla hallar med bågkonstruktion' },
       ]},
     ],
     featured: { label: 'Se alla hallar', href: '/stalhallar/' },
