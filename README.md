@@ -22,7 +22,9 @@ På den öppna Draft-grenen är `/offert/` en sexstegsarbetskandidat med **fem f
 ## Lokal start
 
 Använd **Node.js 24**. Privat `@amelio/web-platform` är låst till
-`4ee0a081c3d799cd30e3075247fdb98473aa49f6` (privat plattformskälla 1.5.0; AMP-001 P0).
+`2bde176de3509c2ceb4c1bebdf2e69c48120e4d9` (privat plattformskälla 1.5.0; AMP-002 Spacious).
+Se [integrationsgranskningen](docs/AMP_002_HEADER_REVIEW.md) för källjämförelse,
+bevarade AMP-produkter, browserkontroller och före-/efterbilder. Ingen ny paketrelease skapas.
 Git-inloggningen behöver läsåtkomst; använd befintlig Credential Manager.
 Lägg inga tokens i filer, kommandon eller Git-URL:er.
 

@@ -38,6 +38,7 @@ const { overlayHero = false } = Astro.props;
       // AMP-002 owns the menu, icon, focus, dialog, scroll lock and disclosure state.
       const instance = mountHeaderMenu(mountTarget, {
         variant: 'classic-mega-menu',
+        navigationAppearance: 'spacious',
         mobileToggleAppearance: 'icon',
         brand: ampHeaderBrand,
         items: ampHeaderItems,

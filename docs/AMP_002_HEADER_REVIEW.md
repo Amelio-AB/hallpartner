@@ -1,4 +1,17 @@
-# AMP-002 Header – avgränsad lokal granskning (2026-11-02)
+# AMP-002 Spacious – kandidatgranskning (2026-11-06)
+
+Aktuell integration och före-/efterbilder: [Spacious Navigation](reviews/amp002-spacious/README.md).
+Den riktiga besökarnavigationen använder nu uttryckligen `navigationAppearance: 'spacious'`
+och `classic-mega-menu`, från privat plattformskälla
+`2bde176de3509c2ceb4c1bebdf2e69c48120e4d9`. Paketets rotversion är fortfarande `1.5.0`.
+Detta är en utvecklingskandidat, inte en merge eller publicering.
+
+Dokumentet nedan bevaras som historik från tiden före webbplatskonsolideringen.
+Dess prototyprutter finns inte längre och ska inte återinföras.
+
+---
+
+# Historik: AMP-002 Header – avgränsad lokal granskning (2026-11-02)
 
 Status: ISOLERAD ARBETSPROTOTYP. Den godkända riktiga startsidan på /, dess Header och Hero är oförändrade. Ingen merge, FTP, DNS, Inleed-deploy eller noindex-ändring.
 

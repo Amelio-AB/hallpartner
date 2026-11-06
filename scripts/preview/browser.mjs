@@ -37,6 +37,7 @@ try {
   }
   await run('amp006','scripts/verify-hallpartner-amp006.mjs',{HP_PREVIEW_URL:origin + '/stalhallar/',HP_SCREENSHOT_DIR:output + '/amp006'});
   await run('gallery','scripts/verify-hallpartner-gallery.mjs',{HP_PREVIEW_URL:origin + '/stalhallar/',HP_SCREENSHOT_DIR:output + '/gallery'});
+  await run('amp002','scripts/verify-hallpartner-amp002.mjs',{HP_PREVIEW_ORIGIN:origin,HP_SCREENSHOT_DIR:output + '/amp002'});
   assert(apiRequests.length === 0, 'Payload attempted an API request');
   writeFileSync(output + '/result.json', JSON.stringify({ pages:PAGES.length, widths:[320,390,768,1024,1280,1440], apiRequests, status:'passed' },null,2));
 } finally { await new Promise(done => server.close(done)); }
