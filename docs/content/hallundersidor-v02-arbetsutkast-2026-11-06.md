@@ -169,6 +169,27 @@ Vad ska rymmas, hur länge ska hallen användas och var ska den stå? Vi hjälpe
 **Senare ersättning:** Bilden byts mot kundfoto från samma hallkategori, med licens, projektkoppling, alt-text och samma beskärningsyta.
 
 
+## Bildproduktion påbörjad – fristående konceptmotiv (2026-11-06)
+
+Andreas har godkänt textutkasten och bildriktningen. Sex nya, **separata** 16:9-bildgenerationer med 2K-upplösning har initierats. Tidigare felbeskurna bilder från montage ska **inte** användas.
+
+| Halltyp | Separat bild | Föreslagen alt-text efter visuell kontroll | Bildens uppgift |
+|---|---|---|---|
+| Lagerhall | `hallpartner-lagerhall-ai-koncept-v01.webp` | Lagerhall med lastportar och truck på industrigård | Visa användning och logistik |
+| Maskinhall | `hallpartner-maskinhall-ai-koncept-v01.webp` | Maskinhall med traktorer och plats för arbete | Förklara storlek, portar och arbetsyta |
+| Ridhus | `hallpartner-ridhus-ai-koncept-v01.webp` | Ridhus med ridbana och ryttare till häst | Visa ridverksamhet i naturlig skala |
+| Plåthall | `hallpartner-plathall-ai-koncept-v01.webp` | Plåtklädd hall med port och tak i stålplåt | Visa material och utförande |
+| Isolerad hall | `hallpartner-isolerad-hall-ai-koncept-v01.webp` | Interiör i isolerad verksamhetshall | Visa möjlig inomhusmiljö, inte verifierad prestanda |
+| Tälthall | `hallpartner-talthall-ai-koncept-v01.webp` | Dukklädd tälthall för materialförvaring | Visa konstruktionens karaktär |
+
+**Viktigt om genomförandet:**
+- Bildgenereringen är *påbörjad*, inte godkänd/monterad i webbplatsen. En lyckad bildgenerering är inte en verifierad lokal fil i GitHub.
+- Lägg färdiggranskade, fullstora WebP-original under `public/images/halls/`; använd inte tillfälliga, tidsbegränsade CDN-länkar som permanent bildkälla.
+- Bildfilerna kopplas först till Astro efter att de faktiskt lagrats i repot; undvik trasiga länkar och bevara befintliga bilder tills dess.
+- Enskilda AI-motiv kan innehålla missvisande byggnadskonstruktioner. Granska proportioner, takkonstruktion, förankring, portar och andra detaljer innan användning.
+- Varje använd AI-bild ska anges som **AI-genererad konceptillustration**, aldrig ett verkligt referensprojekt.
+- När kundens fotografier kommer ska filen bytas på **ett ställe per hallsida** och samma bildyta kunna återanvändas. Kontrollera foto- och projektkoppling innan dess.
+
 ## Gemensam bildpolicy
 - Bildmaterial som genereras med AI är konceptillustrationer, **inte** verkliga Hallpartner-projekt, leverantörsprodukter eller tekniska konstruktionsbesked.
 - Inga synliga företagslogotyper, falska säkerhetsmärkningar, påhittade referenskunder eller missvisande konstruktionsdetaljer.
