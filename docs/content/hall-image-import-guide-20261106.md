@@ -15,4 +15,4 @@ Runway-originalens uppgifts-ID och bildkoppling finns i [källmanifestet](hallpa
 2. Bildrättighetsregistret får sex SHA-bundna poster **enbart för Inleed-preview** efter användarens godkännande av bildanvändningen. Den nu röda rättighetskontrollen är en avsiktlig spärr, inte något att kringgå.
 3. Efter godkända tester och granskning kan Draft PR #37 tas upp till mergebeslut. Kundens WordPress och DNS får inte ändras.
 
-Original-PNG behövs normalt inte igen. De kan senare bytas ut mot verifierade Hallpartner-foton genom att uppdatera samma bildeftersom filnamn, alt-text och bildrättigheter per sida.
+Original-PNG behövs normalt inte igen. AI-bilderna kan senare ersättas med verifierade Hallpartner-foton genom att uppdatera bildfil, alt-text och bildrättigheter för respektive hallsida.
