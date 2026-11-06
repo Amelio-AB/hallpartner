@@ -127,51 +127,34 @@
 }
 
 
-/* Hallbilder som hero-bakgrund: genomgående ljus gradient för mörk läsbar text.
-   Varianten är avgränsad till dessa sex undersidor och ändrar inte AMP-Header. */
+/* Six hall detail pages share one split hero: a green text panel and a
+ * separate photograph. Gradient variations live ONLY on the text panel.
+ * No image overlays or fades. The outer page rail remains unchanged. */
 .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
+  --hp-hero-start: #29483D;
+  --hp-hero-end: #142C25;
+  --hp-hero-glow: rgba(88, 139, 108, .22);
   position: relative;
-  display: flex;
-  align-items: center;
   isolation: isolate;
   overflow: hidden;
-  min-height: clamp(36rem, 53vw, 48rem);
+  display: flex;
+  align-items: center;
+  min-height: clamp(36rem, 49vw, 47rem);
   padding-block: clamp(4rem, 7vw, 6rem);
-  background: var(--hp-offwhite, #EBEBE8);
-  color: #1A3025;
+  background: radial-gradient(ellipse at 15% 8%, var(--hp-hero-glow), transparent 62%),
+    linear-gradient(130deg, var(--hp-hero-start), var(--hp-hero-end));
+  color: #F4F4F0;
 }
-.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
-  display: block;
-  position: relative;
-  z-index: 2;
-  /* Do not override .hp-draft-rail's max-width/gutters and margin-inline:auto. */
-}
-.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
-  width: min(100%, 36rem);
-}
-.hp-detail .hp-detail__hero--illustrated h1 {
-  max-width: 16ch;
-  font-size: clamp(2.85rem, 4.2vw, 4.5rem);
-}
-.hp-detail .hp-detail__hero--illustrated h1 em,
-.hp-detail .hp-detail__hero--illustrated .hp-detail__eyebrow {
-  color: #326441;
-}
-.hp-detail .hp-detail__hero--illustrated .hp-detail__lead {
-  color: #243D2D;
-}
-.hp-detail .hp-detail__hero--illustrated .hp-detail__text-link {
-  color: #235F36 !important;
-}
-.hp-detail__hero-media {
+/* The entire right half is photo, with a hard edge at the center. */
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media {
   position: absolute;
+  inset: 0 0 0 50%;
   z-index: 0;
-  inset: 0;
   margin: 0;
   overflow: hidden;
   pointer-events: none;
 }
-.hp-detail__hero-media img {
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media img {
   display: block;
   position: absolute;
   inset: 0;
@@ -180,28 +163,12 @@
   object-fit: cover;
   object-position: center;
 }
-.hp-detail__hero-media::after {
-  content: '';
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media::after { display: none; }
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media figcaption {
   position: absolute;
-  z-index: 1;
-  inset: 0;
-  /* Textkolumnen är max 36rem och centrerad i sidans max 1220px rail.
-     En gradient som slutar vid 52 % av skärmen bleknar under texten på 4K.
-     Behåll breadcrumb-tonens täckning under hela texten och tona ut till höger. */
-  background: linear-gradient(90deg,
-    rgba(235,235,232,.97) 0%,
-    rgba(235,235,232,.96) calc(50% + 6rem),
-    rgba(235,235,232,.78) calc(50% + 13rem),
-    rgba(235,235,232,.38) calc(50% + 20rem),
-    rgba(235,235,232,0) calc(50% + 28rem)
-  );
-}
-.hp-detail__hero-media figcaption {
-  position: absolute;
-  z-index: 2;
-  right: clamp(1rem, 4.5vw, 4.5rem);
-  bottom: 1.15rem;
-  max-width: 24rem;
+  right: clamp(.75rem, 2vw, 2rem);
+  bottom: 1rem;
+  max-width: 23rem;
   padding: .4rem .65rem;
   border-radius: 3px;
   background: rgba(244,244,240,.94);
@@ -209,6 +176,44 @@
   font-size: .7rem;
   line-height: 1.4;
 }
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0;
+  align-items: center;
+  /* Preserve .hp-draft-rail width and centered gutters. */
+}
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
+  grid-column: 1;
+  min-width: 0;
+  width: 100%;
+  padding-right: clamp(1.5rem, 3.5vw, 4.5rem);
+}
+.hp-detail .hp-detail__hero--illustrated h1 {
+  max-width: 16ch;
+  font-size: clamp(2.55rem, 4vw, 4.4rem);
+}
+.hp-detail .hp-detail__hero--illustrated h1 em,
+.hp-detail .hp-detail__hero--illustrated .hp-detail__eyebrow {
+  color: #BFE6C8;
+}
+.hp-detail .hp-detail__hero--illustrated .hp-detail__lead { color: #E6EFE7; }
+.hp-detail .hp-detail__hero--illustrated .hp-detail__text-link { color: #F4F4F0 !important; }
+.hp-detail .hp-detail__hero--illustrated .hp-detail__button {
+  background: #F4F4F0;
+  color: #193C28 !important;
+}
+.hp-detail .hp-detail__hero--illustrated .hp-detail__button:hover { background: #DDE9DD; }
+/* Four reusable tonal variations, assigned to the existing page types. */
+.hp-detail--storage .hp-detail__hero--illustrated { --hp-hero-start: #305847; --hp-hero-end: #15372D; --hp-hero-glow: rgba(105,157,120,.20); }
+.hp-detail--machine .hp-detail__hero--illustrated { --hp-hero-start: #223F35; --hp-hero-end: #10271F; --hp-hero-glow: rgba(72,122,91,.24); }
+.hp-detail--ridhus .hp-detail__hero--illustrated { --hp-hero-start: #3C6252; --hp-hero-end: #234337; --hp-hero-glow: rgba(140,180,146,.18); }
+.hp-detail--plathall .hp-detail__hero--illustrated { --hp-hero-start: #2A5145; --hp-hero-end: #19352E; --hp-hero-glow: rgba(113,149,129,.16); }
+.hp-detail--insulated .hp-detail__hero--illustrated { --hp-hero-start: #345648; --hp-hero-end: #19392D; --hp-hero-glow: rgba(144,178,133,.19); }
+.hp-detail--talthall .hp-detail__hero--illustrated { --hp-hero-start: #3B6653; --hp-hero-end: #244436; --hp-hero-glow: rgba(142,184,153,.19); }
+
 /* Faktarutans innehåll finns kvar, men under heron så fotot inte täcks. */
 .hp-detail__summary-strip {
   padding-block: clamp(1.25rem, 2.7vw, 2.25rem);
@@ -253,54 +258,37 @@
   .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
     display: block;
     min-height: 0;
-    padding-block: 3.25rem clamp(14rem,48vw,20rem);
+    padding-block: 3.25rem 0;
+  }
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
+    display: block;
   }
   .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
+    max-width: 42rem;
+    padding: 0 0 3.25rem;
+  }
+  .hp-detail .hp-detail__hero--illustrated h1 { font-size: clamp(2.65rem, 5.6vw, 4.3rem); }
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media {
+    position: relative;
+    inset: auto;
+    height: clamp(17rem, 47vw, 27rem);
     width: 100%;
-    max-width: 37rem;
   }
-  .hp-detail .hp-detail__hero--illustrated h1 {
-    font-size: clamp(2.75rem,5.5vw,4.3rem);
-  }
-  .hp-detail__hero-media img {
-    inset: auto 0 0;
-    height: clamp(16rem,55vw,23rem);
-    object-position: center;
-  }
-  .hp-detail__hero-media::after {
-    top: auto;
-    bottom: 0;
-    height: clamp(16rem,55vw,23rem);
-    /* På mobil tonas samma breadcrumb-ton nedåt över bildens övre halva. */
-    background: linear-gradient(180deg,
-      rgba(235,235,232,.90) 0%,
-      rgba(235,235,232,.78) 17%,
-      rgba(235,235,232,.35) 38%,
-      rgba(235,235,232,0) 55%
-    );
-  }
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media img { position: absolute; inset: 0; }
   .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside {
     grid-template-columns: minmax(0,1fr);
     gap: 1rem;
   }
 }
 @media (max-width: 640px) {
-  .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
-    padding-top: 2.85rem;
-    padding-bottom: clamp(14rem,64vw,19rem);
-  }
-  .hp-detail .hp-detail__hero--illustrated h1 {
-    font-size: clamp(2.25rem,9.3vw,3.4rem);
-  }
-  .hp-detail__hero-media img,
-  .hp-detail__hero-media::after {
-    height: clamp(16rem,72vw,20rem);
-  }
+  .hp-detail .hp-detail__hero.hp-detail__hero--illustrated { padding-top: 2.85rem; }
+  .hp-detail .hp-detail__hero--illustrated h1 { font-size: clamp(2.25rem,9.3vw,3.4rem); }
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media { height: clamp(16rem, 72vw, 22rem); }
   .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dl {
     grid-template-columns: minmax(0,1fr);
     gap: .85rem;
   }
-  .hp-detail__hero-media figcaption {
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media figcaption {
     right: .65rem;
     bottom: .65rem;
     left: .65rem;
