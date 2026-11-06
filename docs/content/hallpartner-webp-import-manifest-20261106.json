@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "prepared-for-owner-import-to-draft",
+  "status": "imported-to-draft-awaits-visual-and-preview-rights-review",
   "origin": "Six original 2560x1440 AI PNG images supplied by Andreas as one ZIP in this conversation",
   "target": "Draft PR #37, preview only after explicit owner approval",
   "expectedWidth": 1920,
@@ -66,5 +66,7 @@
       "aiConcept": true,
       "isReferenceProject": false
     }
-  ]
+  ],
+  "previewPublicationApproved": false,
+  "versionedInDraft": true
 }

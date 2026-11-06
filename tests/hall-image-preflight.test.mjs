@@ -17,10 +17,12 @@ test('six unique named concept images are documented but not marked as published
   assert.equal(manifest.images.length, 6);
   assert.equal(new Set(manifest.images.map(x => x.slug)).size, 6);
   assert.equal(new Set(manifest.images.map(x => x.runwayTaskId)).size, 6);
-  assert.equal(manifest.status, 'generated_in_runway_not_imported');
+  assert.equal(manifest.status, 'runway_source_png_external_webp_imported_to_draft');
+  assert.equal(manifest.webpFilesVersionedOnDraft, true);
   for(const im of manifest.images) {
     assert.equal(im.published, false);
-    assert.equal(im.imported, false);
+    assert.equal(im.imported, false); // Source-PNG files are intentionally outside Git.
+    assert.equal(im.webpImportedToDraft, true);
     assert.match(im.targetFile, /^hallpartner-[a-z-]+-ai-koncept-v01\.webp$/);
   }
 });

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "updatedAt": "2026-11-06",
   "scope": "Hallpartner Draft PR #37 – image pilot / documentation",
-  "status": "generated_in_runway_not_imported",
+  "status": "runway_source_png_external_webp_imported_to_draft",
   "supplier": "Runway",
   "workspace": "Amelio",
   "process": "AI concept photographs; not actual Hallpartner project references or technically verified products",
@@ -13,7 +13,7 @@
     "webp"
   ],
   "finalRoot": "public/images/halls",
-  "publicRelease": "Do not publish unless the image bytes are committed, visually checked, usage recorded and approved.",
+  "publicRelease": "WebP copies are versioned on Draft PR #37, but preview publication remains blocked until a separate rights approval and final visual review.",
   "images": [
     {
       "slug": "lagerhall",
@@ -27,7 +27,8 @@
       "altProposal": "Lagerhall med truck och lastportar",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     },
     {
       "slug": "maskinhall",
@@ -41,7 +42,8 @@
       "altProposal": "Maskinhall med traktor och arbetsmaskiner",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     },
     {
       "slug": "ridhus",
@@ -55,7 +57,8 @@
       "altProposal": "Ridhusinteriör med häst och ryttare",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     },
     {
       "slug": "plathall",
@@ -69,7 +72,8 @@
       "altProposal": "Plåtklädd hall med portar",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     },
     {
       "slug": "isolerad-hall",
@@ -83,7 +87,8 @@
       "altProposal": "Interiör i isolerad verksamhetshall",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     },
     {
       "slug": "talthall",
@@ -97,7 +102,10 @@
       "altProposal": "Dukklädd tälthall i lagerbruk",
       "published": false,
       "imported": false,
-      "replacedWithCustomerPhoto": false
+      "replacedWithCustomerPhoto": false,
+      "webpImportedToDraft": true
     }
-  ]
+  ],
+  "sourcePngsVersioned": false,
+  "webpFilesVersionedOnDraft": true
 }
