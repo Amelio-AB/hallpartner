@@ -636,6 +636,78 @@
       "origin": "user-supplied-person-portrait",
       "approvalBasis": "User requested publication of supplied portrait on Hallpartner development preview",
       "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-isolerad-hall-ai-koncept-v01.webp",
+      "sourceSha256": "6492fbde1bbc4ee3c00cf570f5aaf2ef772f0a351e4cbb0b98a7aaada3638df2",
+      "outputSha256": "6492fbde1bbc4ee3c00cf570f5aaf2ef772f0a351e4cbb0b98a7aaada3638df2",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-talthall-ai-koncept-v01.webp",
+      "sourceSha256": "b9a4be757e673784023c1825d970b92d089216e189ddcc599c5d3aa8893c1fa3",
+      "outputSha256": "b9a4be757e673784023c1825d970b92d089216e189ddcc599c5d3aa8893c1fa3",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-ridhus-ai-koncept-v01.webp",
+      "sourceSha256": "8ee72e876338ab0d6076bb9044e5293ca5a05e80a1cb1b30f9161531294ab522",
+      "outputSha256": "8ee72e876338ab0d6076bb9044e5293ca5a05e80a1cb1b30f9161531294ab522",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-plathall-ai-koncept-v01.webp",
+      "sourceSha256": "1e115cee2f27e92a6a4712541feb6821b481f7561a75d39c1cea59673fb58799",
+      "outputSha256": "1e115cee2f27e92a6a4712541feb6821b481f7561a75d39c1cea59673fb58799",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-lagerhall-ai-koncept-v01.webp",
+      "sourceSha256": "2b062b6e543fc56f393f4b5a4f568fab28397d1fc2e573ea9dc5cc866719e45f",
+      "outputSha256": "2b062b6e543fc56f393f4b5a4f568fab28397d1fc2e573ea9dc5cc866719e45f",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/halls/hallpartner-maskinhall-ai-koncept-v01.webp",
+      "sourceSha256": "4fcbf2f5f89ad30db1ccadc8b790a1dd5b0fcaa8e9b6db652c523abe0a2c2860",
+      "outputSha256": "4fcbf2f5f89ad30db1ccadc8b790a1dd5b0fcaa8e9b6db652c523abe0a2c2860",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/ai-hall-images-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "temporary-ai-concept-runway-user-supplied",
+      "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
+      "externalLicenseEvidence": null
     }
   ]
 }

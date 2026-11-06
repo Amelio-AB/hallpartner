@@ -1,6 +1,6 @@
 {
   "date": "2026-11-06",
-  "status": "imported-to-draft-awaits-visual-and-preview-rights-review",
+  "status": "imported-to-draft-preview-image-use-approved-awaiting-merge",
   "origin": "Six original 2560x1440 AI PNG images supplied by Andreas as one ZIP in this conversation",
   "target": "Draft PR #37, preview only after explicit owner approval",
   "expectedWidth": 1920,
@@ -67,6 +67,8 @@
       "isReferenceProject": false
     }
   ],
-  "previewPublicationApproved": false,
-  "versionedInDraft": true
+  "previewPublicationApproved": true,
+  "versionedInDraft": true,
+  "approvalScope": "https://hallpartner-se.preview2.inleed.com",
+  "approvalEvidence": "docs/preview/ai-hall-images-approval-20261106.md"
 }
