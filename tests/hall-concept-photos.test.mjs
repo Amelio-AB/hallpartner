@@ -52,11 +52,13 @@ test('light gradients on photo backgrounds preserve dark readable hero text', ()
   assert.ok(component.includes('class="hp-detail__hero-media"'));
   assert.ok(component.includes('fetchpriority="high"'));
   assert.match(css, /background: linear-gradient\(90deg,/);
-  // Samma RGB-ton som breadcrumb-ytans --hp-offwhite, och max 90 % täckning.
+  // Off-white från breadcrumb, hög täckning genom textens centrerade rail.
   assert.match(css, /background: var\(--hp-offwhite, #EBEBE8\)/);
-  assert.ok(css.includes('rgba(235,235,232,.90) 0%'));
-  assert.ok(css.includes('rgba(235,235,232,0) 52%'));
-  assert.ok(css.includes('rgba(235,235,232,0) 55%'));
+  assert.ok(css.includes('rgba(235,235,232,.97) 0%'));
+  assert.ok(css.includes('rgba(235,235,232,.96) calc(50% + 6rem)'));
+  assert.ok(css.includes('rgba(235,235,232,.78) calc(50% + 13rem)'));
+  assert.ok(css.includes('rgba(235,235,232,0) calc(50% + 28rem)'));
+  assert.ok(css.includes('rgba(235,235,232,0) 55%')); // Mobil oförändrad.
   assert.doesNotMatch(css, /rgba\(235,235,232,1(?:\.0+)?\)/);
   assert.doesNotMatch(css, /#F4F4F0 0%/);
   assert.ok(css.includes('object-fit: cover'));
