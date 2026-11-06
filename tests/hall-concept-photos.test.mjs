@@ -15,6 +15,15 @@ test('en godkänd illustration är kopplad till var och en av de sex undersidorn
   for(const photo of pages) {
     const page = readFileSync(new URL('src/pages/stalhallar/' + photo.slug + '/index.astro', root),'utf8');
     assert.ok(page.includes('<HallConceptImage slug="' + photo.slug + '"'));
+    const heroStart = page.indexOf('<section class="hp-detail__hero hp-detail__hero--illustrated"');
+    const heroEnd = page.indexOf('</section>', heroStart);
+    const imageAt = page.indexOf('<HallConceptImage slug="' + photo.slug + '"', heroStart);
+    const summary = page.indexOf('class="hp-detail__summary-strip"', heroEnd);
+    const aside = page.indexOf('<aside class="hp-detail__hero-aside"', heroEnd);
+    const jump = page.indexOf('<nav class="hp-detail__jump"', heroEnd);
+    assert.ok(heroStart >= 0 && imageAt > heroStart && imageAt < heroEnd, 'background image in hero: ' + photo.slug);
+    assert.ok(summary > heroEnd && aside > summary && jump > aside, 'facts moved below hero: ' + photo.slug);
+    assert.equal(page.split('<HallConceptImage slug="' + photo.slug + '"').length - 1, 1);
     assert.ok(page.includes("href={quoteHref}"));
     assert.ok(page.includes('sa-gar-det-till'));
   }
@@ -36,4 +45,16 @@ test('bilderna är antingen ännu inte importerade eller alla sex exakt importer
     assert.equal(data.readUInt16LE(26) & 0x3fff, 1920);
     assert.equal(data.readUInt16LE(28) & 0x3fff, 1080);
   }
+});
+
+test('light gradients on photo backgrounds preserve dark readable hero text', () => {
+  const css = readFileSync(new URL('src/styles/hallpartner-hall-detail.css', root),'utf8');
+  assert.ok(component.includes('class="hp-detail__hero-media"'));
+  assert.ok(component.includes('fetchpriority="high"'));
+  assert.match(css, /background: linear-gradient\(90deg,/);
+  assert.ok(css.includes('rgba(244,244,240,.96)'));
+  assert.ok(css.includes('rgba(244,244,240,.90)'));
+  assert.ok(css.includes('object-fit: cover'));
+  assert.ok(css.includes('@media (max-width: 640px)'));
+  assert.ok(css.includes('hp-detail__summary-strip'));
 });

@@ -6,7 +6,9 @@
 
 ## Så fungerar den nya placeringen
 
-- Komponent: `src/components/HallConceptImage.astro`, en bild per hallsida direkt efter hero, innan sektionsnavigeringen.
+- Komponent: `src/components/HallConceptImage.astro`, ett foto **inne i hero** med ljus gradient bakom mörk text, utan separat stor bildsektion efter hero.
+- Den tidigare hero-faktarutan finns kvar direkt under hero i en kompakt informationsremsa, så den inte blockerar bilden.
+- Mobil använder ett synligt fotomotiv i nedre delen av heron och en ljus toning ovanför.
 - Bilden visas enbart om motsvarande WebP finns som **faktisk fil** i `public/images/halls/`. Därmed visas inga brutna bild-URL:er medan filöverföringen återstår.
 - Varje visad bild får en kort märkning: **AI-genererad illustration. Bilden visar inte ett utfört Hallpartner-projekt.**
 - Text, fotografier som redan ligger på andra delar av sidorna samt ankarlänkarna behålls.

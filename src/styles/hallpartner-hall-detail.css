@@ -127,27 +127,182 @@
 }
 
 
-/* AI-konceptfoto: visas bara när den godkända WebP-filen finns i public/images/halls.
-   Enskild bildkälla per hallsida kan senare ersättas med kundens fotografi. */
-.hp-detail__concept-media {
-  background: #EBEBE8;
-  padding-block: clamp(1.4rem, 3.5vw, 3.3rem);
+/* Hallbilder som hero-bakgrund: genomgående ljus gradient för mörk läsbar text.
+   Varianten är avgränsad till dessa sex undersidor och ändrar inte AMP-Header. */
+.hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
+  position: relative;
+  display: flex;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: clamp(36rem, 53vw, 48rem);
+  padding-block: clamp(4rem, 7vw, 6rem);
+  background: #F4F4F0;
+  color: #1A3025;
 }
-.hp-detail__concept-media figure {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-.hp-detail__concept-media img {
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
   display: block;
+  position: relative;
+  z-index: 2;
   width: 100%;
-  height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: contain;
-  border-radius: 5px;
 }
-.hp-detail__concept-media figcaption {
-  padding-block: .7rem 0;
-  color: #486051;
-  font-size: .78rem;
-  line-height: 1.5;
+.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
+  width: min(100%, 36rem);
+}
+.hp-detail .hp-detail__hero--illustrated h1 {
+  max-width: 16ch;
+  font-size: clamp(2.85rem, 4.2vw, 4.5rem);
+}
+.hp-detail .hp-detail__hero--illustrated h1 em,
+.hp-detail .hp-detail__hero--illustrated .hp-detail__eyebrow {
+  color: #326441;
+}
+.hp-detail .hp-detail__hero--illustrated .hp-detail__lead {
+  color: #243D2D;
+}
+.hp-detail .hp-detail__hero--illustrated .hp-detail__text-link {
+  color: #235F36 !important;
+}
+.hp-detail__hero-media {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hp-detail__hero-media img {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+.hp-detail__hero-media::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(90deg,
+    #F4F4F0 0%,
+    rgba(244,244,240,.99) 24%,
+    rgba(244,244,240,.96) 40%,
+    rgba(244,244,240,.76) 53%,
+    rgba(244,244,240,.30) 70%,
+    rgba(244,244,240,0) 86%
+  );
+}
+.hp-detail__hero-media figcaption {
+  position: absolute;
+  z-index: 2;
+  right: clamp(1rem, 4.5vw, 4.5rem);
+  bottom: 1.15rem;
+  max-width: 24rem;
+  padding: .4rem .65rem;
+  border-radius: 3px;
+  background: rgba(244,244,240,.94);
+  color: #264232;
+  font-size: .7rem;
+  line-height: 1.4;
+}
+/* Faktarutans innehåll finns kvar, men under heron så fotot inte täcks. */
+.hp-detail__summary-strip {
+  padding-block: clamp(1.25rem, 2.7vw, 2.25rem);
+  background: #E8EEE8;
+  border-bottom: 1px solid #C6D3C9;
+}
+.hp-detail .hp-detail__summary-strip .hp-detail__hero-aside {
+  display: grid;
+  grid-template-columns: minmax(10rem,.45fr) minmax(0,1fr);
+  align-items: start;
+  gap: clamp(1.3rem,3vw,3.5rem);
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #20372A;
+}
+.hp-detail .hp-detail__summary-strip .hp-detail__aside-title {
+  margin: 0;
+  font-size: clamp(1.05rem,1.65vw,1.3rem);
+  line-height: 1.3;
+}
+.hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dl {
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  align-items: start;
+  gap: 1.25rem;
+  margin: 0;
+}
+.hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dl > div {
+  border-top: 0;
+  border-left: 1px solid #B2C8B8;
+  padding: .1rem 0 .1rem .95rem;
+}
+.hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dt { color: #20372A; }
+.hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dd { color: #3F5847; }
+
+@media (max-width: 980px) {
+  .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
+    display: block;
+    min-height: 0;
+    padding-block: 3.25rem clamp(14rem,48vw,20rem);
+  }
+  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
+    width: 100%;
+    max-width: 37rem;
+  }
+  .hp-detail .hp-detail__hero--illustrated h1 {
+    font-size: clamp(2.75rem,5.5vw,4.3rem);
+  }
+  .hp-detail__hero-media img {
+    inset: auto 0 0;
+    height: clamp(16rem,55vw,23rem);
+    object-position: center;
+  }
+  .hp-detail__hero-media::after {
+    top: auto;
+    bottom: 0;
+    height: clamp(16rem,55vw,23rem);
+    background: linear-gradient(180deg,
+      #F4F4F0 0%,
+      rgba(244,244,240,.90) 17%,
+      rgba(244,244,240,.35) 42%,
+      rgba(244,244,240,0) 70%
+    );
+  }
+  .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside {
+    grid-template-columns: minmax(0,1fr);
+    gap: 1rem;
+  }
+}
+@media (max-width: 640px) {
+  .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
+    padding-top: 2.85rem;
+    padding-bottom: clamp(14rem,64vw,19rem);
+  }
+  .hp-detail .hp-detail__hero--illustrated h1 {
+    font-size: clamp(2.25rem,9.3vw,3.4rem);
+  }
+  .hp-detail__hero-media img,
+  .hp-detail__hero-media::after {
+    height: clamp(16rem,72vw,20rem);
+  }
+  .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dl {
+    grid-template-columns: minmax(0,1fr);
+    gap: .85rem;
+  }
+  .hp-detail__hero-media figcaption {
+    right: .65rem;
+    bottom: .65rem;
+    left: .65rem;
+    width: fit-content;
+    max-width: calc(100% - 1.3rem);
+    font-size: .67rem;
+  }
 }

@@ -23,19 +23,16 @@ const filename = filenames[slug];
 const available = existsSync(join(process.cwd(), 'public', 'images', 'halls', filename));
 ---
 {available && (
-  <section class="hp-detail__concept-media" aria-label="Illustration av halltypen">
-    <div class="hp-draft-rail">
-      <figure>
-        <img
-          src={`/images/halls/${filename}`}
-          alt={alt}
-          width="1920"
-          height="1080"
-          loading="lazy"
-          decoding="async"
-        />
-        <figcaption>AI-genererad illustration. Bilden visar inte ett utfört Hallpartner-projekt.</figcaption>
-      </figure>
-    </div>
-  </section>
+  <figure class="hp-detail__hero-media" data-hall={slug}>
+    <img
+      src={`/images/halls/${filename}`}
+      alt={alt}
+      width="1920"
+      height="1080"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <figcaption>AI-genererad illustration. Bilden visar inte ett utfört Hallpartner-projekt.</figcaption>
+  </figure>
 )}
