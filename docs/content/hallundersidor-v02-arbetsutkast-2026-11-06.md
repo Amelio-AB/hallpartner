@@ -148,7 +148,7 @@ Ska hallen användas för lager, verkstad eller något annat? Beskriv vad som be
 
 ### Hero
 **Rubrik:** Tälthallar för lager och väderskydd.  
-En tälthall kan vara ett alternativ när du behöver skydd för material, varor eller utrustning. Hallpartner hjälper dig att undersöka vilka mått, öppningar och byggplatsförutsättningar som gäller. Om lösningen passar kan vi diskutera en samordnad leverans med totalentreprenad och tydlig omfattning i offerten.
+En tälthall kan vara ett alternativ när du behöver skydd för material, varor eller utrustning. Hallpartner hjälper dig att undersöka vilka mått, öppningar och byggplatsförutsättningar som gäller. Om byggsystemet passar kan vi diskutera en driftklar leverans genom totalentreprenad, med tydlig omfattning i offerten.
 
 ### Fördjupande avsnitt
 **Byggplatsen avgör mer än du tror.**  
