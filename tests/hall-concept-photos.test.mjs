@@ -52,8 +52,13 @@ test('light gradients on photo backgrounds preserve dark readable hero text', ()
   assert.ok(component.includes('class="hp-detail__hero-media"'));
   assert.ok(component.includes('fetchpriority="high"'));
   assert.match(css, /background: linear-gradient\(90deg,/);
-  assert.ok(css.includes('rgba(244,244,240,.96)'));
-  assert.ok(css.includes('rgba(244,244,240,.90)'));
+  // Samma RGB-ton som breadcrumb-ytans --hp-offwhite, och max 90 % täckning.
+  assert.match(css, /background: var\(--hp-offwhite, #EBEBE8\)/);
+  assert.ok(css.includes('rgba(235,235,232,.90) 0%'));
+  assert.ok(css.includes('rgba(235,235,232,0) 52%'));
+  assert.ok(css.includes('rgba(235,235,232,0) 55%'));
+  assert.doesNotMatch(css, /rgba\(235,235,232,1(?:\.0+)?\)/);
+  assert.doesNotMatch(css, /#F4F4F0 0%/);
   assert.ok(css.includes('object-fit: cover'));
   assert.ok(css.includes('@media (max-width: 640px)'));
   assert.ok(css.includes('hp-detail__summary-strip'));

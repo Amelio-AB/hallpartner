@@ -137,7 +137,7 @@
   overflow: hidden;
   min-height: clamp(36rem, 53vw, 48rem);
   padding-block: clamp(4rem, 7vw, 6rem);
-  background: #F4F4F0;
+  background: var(--hp-offwhite, #EBEBE8);
   color: #1A3025;
 }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
@@ -185,13 +185,13 @@
   position: absolute;
   z-index: 1;
   inset: 0;
+  /* Samma off-white som breadcrumb: 90 % till 0 % inom halva bilden. */
   background: linear-gradient(90deg,
-    #F4F4F0 0%,
-    rgba(244,244,240,.99) 24%,
-    rgba(244,244,240,.96) 40%,
-    rgba(244,244,240,.76) 53%,
-    rgba(244,244,240,.30) 70%,
-    rgba(244,244,240,0) 86%
+    rgba(235,235,232,.90) 0%,
+    rgba(235,235,232,.86) 18%,
+    rgba(235,235,232,.68) 32%,
+    rgba(235,235,232,.32) 44%,
+    rgba(235,235,232,0) 52%
   );
 }
 .hp-detail__hero-media figcaption {
@@ -269,11 +269,12 @@
     top: auto;
     bottom: 0;
     height: clamp(16rem,55vw,23rem);
+    /* På mobil tonas samma breadcrumb-ton nedåt över bildens övre halva. */
     background: linear-gradient(180deg,
-      #F4F4F0 0%,
-      rgba(244,244,240,.90) 17%,
-      rgba(244,244,240,.35) 42%,
-      rgba(244,244,240,0) 70%
+      rgba(235,235,232,.90) 0%,
+      rgba(235,235,232,.78) 17%,
+      rgba(235,235,232,.35) 38%,
+      rgba(235,235,232,0) 55%
     );
   }
   .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside {
