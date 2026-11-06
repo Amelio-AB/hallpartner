@@ -28,7 +28,7 @@ test('en godkänd illustration är kopplad till var och en av de sex undersidorn
     assert.ok(page.includes('sa-gar-det-till'));
   }
   assert.ok(component.includes("existsSync(join(process.cwd(), 'public', 'images', 'halls', filename))"));
-  assert.ok(component.includes('AI-genererad illustration'));
+  assert.doesNotMatch(component, /<figcaption|AI-genererad illustration/);
 });
 
 test('bilderna är antingen ännu inte importerade eller alla sex exakt importerade', () => {
