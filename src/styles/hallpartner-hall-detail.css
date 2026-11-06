@@ -207,12 +207,12 @@
 }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__button:hover { background: #DDE9DD; }
 /* Four reusable tonal variations, assigned to the existing page types. */
-.hp-detail--storage .hp-detail__hero--illustrated { --hp-hero-start: #305847; --hp-hero-end: #15372D; --hp-hero-glow: rgba(105,157,120,.20); }
-.hp-detail--machine .hp-detail__hero--illustrated { --hp-hero-start: #223F35; --hp-hero-end: #10271F; --hp-hero-glow: rgba(72,122,91,.24); }
-.hp-detail--ridhus .hp-detail__hero--illustrated { --hp-hero-start: #3C6252; --hp-hero-end: #234337; --hp-hero-glow: rgba(140,180,146,.18); }
-.hp-detail--plathall .hp-detail__hero--illustrated { --hp-hero-start: #2A5145; --hp-hero-end: #19352E; --hp-hero-glow: rgba(113,149,129,.16); }
-.hp-detail--insulated .hp-detail__hero--illustrated { --hp-hero-start: #345648; --hp-hero-end: #19392D; --hp-hero-glow: rgba(144,178,133,.19); }
-.hp-detail--talthall .hp-detail__hero--illustrated { --hp-hero-start: #3B6653; --hp-hero-end: #244436; --hp-hero-glow: rgba(142,184,153,.19); }
+.hp-detail.hp-detail--storage .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #305847; --hp-hero-end: #15372D; --hp-hero-glow: rgba(105,157,120,.20); }
+.hp-detail.hp-detail--machine .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #223F35; --hp-hero-end: #10271F; --hp-hero-glow: rgba(72,122,91,.24); }
+.hp-detail.hp-detail--ridhus .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #3C6252; --hp-hero-end: #234337; --hp-hero-glow: rgba(140,180,146,.18); }
+.hp-detail.hp-detail--plathall .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #2A5145; --hp-hero-end: #19352E; --hp-hero-glow: rgba(113,149,129,.16); }
+.hp-detail.hp-detail--insulated .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #345648; --hp-hero-end: #19392D; --hp-hero-glow: rgba(144,178,133,.19); }
+.hp-detail.hp-detail--talthall .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #3B6653; --hp-hero-end: #244436; --hp-hero-glow: rgba(142,184,153,.19); }
 
 /* Faktarutans innehåll finns kvar, men under heron så fotot inte täcks. */
 .hp-detail__summary-strip {
@@ -256,12 +256,15 @@
 
 @media (max-width: 980px) {
   .hp-detail .hp-detail__hero.hp-detail__hero--illustrated {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     min-height: 0;
     padding-block: 3.25rem 0;
   }
   .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
     display: block;
+    order: 1;
   }
   .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-copy {
     max-width: 42rem;
@@ -270,6 +273,7 @@
   .hp-detail .hp-detail__hero--illustrated h1 { font-size: clamp(2.65rem, 5.6vw, 4.3rem); }
   .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media {
     position: relative;
+    order: 2;
     inset: auto;
     height: clamp(17rem, 47vw, 27rem);
     width: 100%;
