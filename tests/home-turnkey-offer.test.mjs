@@ -30,7 +30,8 @@ test('offert, kontakt och process är nåbara utan ny Javascriptfunktion', () =>
   assert.ok(home.includes("kontakt: '/kontakt/'"));
   assert.ok(home.includes("process: '/sa-gar-det-till/'"));
   assert.equal(count(home, 'href={existingPages.offert}'), 2);
-  assert.equal(count(home, 'href={existingPages.process}'), 2);
+  assert.equal(count(home, 'href={existingPages.process}'), 1);
+  assert.ok(home.includes('href="#att-tanka-pa"'));
   assert.ok(home.includes('href={existingPages.kontakt}'));
   assert.ok(home.includes('href="#halltyper"'));
 });
