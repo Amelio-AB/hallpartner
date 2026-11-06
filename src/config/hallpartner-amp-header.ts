@@ -2,7 +2,6 @@ import type { HeaderMenuConfig } from '@amelio/web-platform/header-menu';
 
 /** Hallpartner-owned navigation and theme for the shared visitor Header. */
 export const ampHeaderItems: HeaderMenuConfig['items'] = [
-  { label: 'Startsida', href: '/' },
   {
     label: 'Hallar', href: '/stalhallar/',
     menuIntro: { heading: 'Utforska våra halltyper', description: 'Välj efter användningsområde eller byggnadens utförande.' },
