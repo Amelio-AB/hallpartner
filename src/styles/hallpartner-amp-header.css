@@ -72,13 +72,43 @@
   color: #496052;
   opacity: 1;
 }
-.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:hover {
-  background: #DAE6D9;
+/* Match AMP-002's spacious header indicator: left-to-right underline.
+   Keep the surface neutral; no filled hover card or movement of the link. */
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink {
+  position: relative;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink::after {
+  content: '';
+  position: absolute;
+  left: 3.05rem;
+  bottom: .12rem;
+  width: min(25rem, calc(100% - 3.65rem));
+  height: 2px;
+  background: #4E7A5B;
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+  transition: transform .24s cubic-bezier(.25,.8,.25,1);
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:is(:hover, :focus-visible) {
+  background: transparent;
+  text-decoration: none;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:is(:hover, :focus-visible)::after {
+  transform: scaleX(1);
 }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:focus-visible {
-  background: #DAE6D9;
   outline: 2px solid #287B39;
   outline-offset: 2px;
+}
+/* Prevent the platform's current-page hover underline from competing with the indicator. */
+.hp-amp-site-header .hm .hm__submenu .hm__groups--mega .hm__sublink[aria-current="page"]:hover {
+  text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink::after {
+    transition: none;
+  }
 }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/lagerhall/"]::before { background-image: url('/icons/halls/lagerhall.svg'); }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/maskinhall/"]::before { background-image: url('/icons/halls/maskinhall.svg'); }
