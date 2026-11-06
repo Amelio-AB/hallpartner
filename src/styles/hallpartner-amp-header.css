@@ -24,3 +24,65 @@
   .hp-amp-site-header .hm__mobile-bar .hm__logo { max-width:min(9.5rem,100%); }
 }
 @media (prefers-reduced-motion:reduce) { .hp-amp-site-header * { scroll-behavior:auto; } }
+
+/* Hallpartner Hallar mega-panel: keep AMP-002 DOM, menu logic and ARIA.
+   Item illustrations are decorative CSS backgrounds from local reviewed SVGs. */
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega {
+  column-gap: clamp(1rem, 2.5vw, 2rem);
+  row-gap: .55rem;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__group {
+  gap: .15rem;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__group-heading {
+  margin-bottom: .35rem;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink {
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: .7rem;
+  row-gap: .12rem;
+  min-height: 3.5rem;
+  padding: .48rem .6rem;
+  border-radius: .4rem;
+  line-height: 1.3;
+  text-decoration: none;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink::before {
+  content: '';
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: block;
+  align-self: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink .hm__description {
+  grid-column: 2;
+  grid-row: 2;
+  display: block;
+  margin: 0;
+  font-size: .75rem;
+  line-height: 1.35;
+  color: #496052;
+  opacity: 1;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:hover {
+  background: #DAE6D9;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink:focus-visible {
+  background: #DAE6D9;
+  outline: 2px solid #287B39;
+  outline-offset: 2px;
+}
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/lagerhall/"]::before { background-image: url('/icons/halls/lagerhall.svg'); }
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/maskinhall/"]::before { background-image: url('/icons/halls/maskinhall.svg'); }
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/ridhus/"]::before { background-image: url('/icons/halls/ridhus.svg'); }
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/plathall/"]::before { background-image: url('/icons/halls/plathall.svg'); }
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/isolerad-hall/"]::before { background-image: url('/icons/halls/isolerad-hall.svg'); }
+.hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/talthall/"]::before { background-image: url('/icons/halls/talthall.svg'); }
