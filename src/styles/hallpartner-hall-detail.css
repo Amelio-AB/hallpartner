@@ -8,8 +8,39 @@
 .hp-detail h1, .hp-detail h2, .hp-detail h3 { line-height: 1.12; letter-spacing: -.045em; }
 .hp-detail a { text-decoration: none; }
 .hp-detail a:hover { text-decoration: underline; text-underline-offset: .24em; }
-.hp-detail__crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; padding-block: 1rem; min-height: 3.5rem; font-size: .82rem; color: #385649; }
-.hp-detail__crumbs a { text-decoration: underline; text-underline-offset: .2em; }
+/* Full-bleed dark green breadcrumb strip, one tone lighter than header #071A16.
+   Preserve the centered .hp-draft-rail instead of stretching its content. */
+.hp-detail__crumbs {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .65rem;
+  padding-block: 1rem;
+  min-height: 3.5rem;
+  font-size: .82rem;
+  color: #F4F4F0;
+}
+.hp-detail__crumbs::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset-block: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: #153129;
+}
+.hp-detail__crumbs a {
+  color: #DEEAE1;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.hp-detail__crumbs a:hover,
+.hp-detail__crumbs a:focus-visible { color: #FFF; }
+.hp-detail__crumbs [aria-current="page"] { color: #FFF; }
+.hp-detail__crumbs [aria-hidden="true"] { color: #ADC5B6; }
 .hp-detail__hero { padding-block: clamp(3rem, 6vw, 6.5rem); background: #EBEBE8; }
 .hp-detail__hero-grid { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); align-items: center; gap: clamp(2.5rem, 7vw, 7rem); }
 .hp-detail__eyebrow { margin-bottom: 1.2rem; font-size: .75rem; letter-spacing: .12em; line-height: 1.4; font-weight: 700; text-transform: uppercase; color: var(--hp-link-on-light, #236F31); }
