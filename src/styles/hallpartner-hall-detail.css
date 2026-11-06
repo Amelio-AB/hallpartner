@@ -164,18 +164,6 @@
   object-position: center;
 }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media::after { display: none; }
-.hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media figcaption {
-  position: absolute;
-  right: clamp(.75rem, 2vw, 2rem);
-  bottom: 1rem;
-  max-width: 23rem;
-  padding: .4rem .65rem;
-  border-radius: 3px;
-  background: rgba(244,244,240,.94);
-  color: #264232;
-  font-size: .7rem;
-  line-height: 1.4;
-}
 .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-grid {
   position: relative;
   z-index: 1;
@@ -291,13 +279,5 @@
   .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside dl {
     grid-template-columns: minmax(0,1fr);
     gap: .85rem;
-  }
-  .hp-detail .hp-detail__hero--illustrated .hp-detail__hero-media figcaption {
-    right: .65rem;
-    bottom: .65rem;
-    left: .65rem;
-    width: fit-content;
-    max-width: calc(100% - 1.3rem);
-    font-size: .67rem;
   }
 }
