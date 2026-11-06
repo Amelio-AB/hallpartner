@@ -708,6 +708,78 @@
       "origin": "temporary-ai-concept-runway-user-supplied",
       "approvalBasis": "User supplied six AI originals and approved the revised hall-page visual design for the Hallpartner preview; no production release",
       "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/lagerhall.svg",
+      "sourceSha256": "94d214198344fd7a825f195af4db0b5051728ef0735bfd44186c7343251c0d3d",
+      "outputSha256": "94d214198344fd7a825f195af4db0b5051728ef0735bfd44186c7343251c0d3d",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "lucide-icon-colored",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/maskinhall.svg",
+      "sourceSha256": "3500bac823d7b2aebf0b02dc16e8175c319f9f2fbd1b7c31a81c76ed3fe3e1b6",
+      "outputSha256": "3500bac823d7b2aebf0b02dc16e8175c319f9f2fbd1b7c31a81c76ed3fe3e1b6",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "lucide-icon-colored",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/ridhus.svg",
+      "sourceSha256": "59b2b0eff4e85f18b2d06c60a9f44f1b0dc77255300d1b619222401e232056f6",
+      "outputSha256": "59b2b0eff4e85f18b2d06c60a9f44f1b0dc77255300d1b619222401e232056f6",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "lucide-lab-horse-head-colored",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/plathall.svg",
+      "sourceSha256": "5ec4c1f3d6ba20577ff7ebbca5829885112d76984746ce7c7cda8f776baebbfb",
+      "outputSha256": "5ec4c1f3d6ba20577ff7ebbca5829885112d76984746ce7c7cda8f776baebbfb",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "lucide-icon-colored",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/isolerad-hall.svg",
+      "sourceSha256": "2347f591627207cd94114418906b8e8d5194823f3d7937845c1624bc8f2c0d7f",
+      "outputSha256": "2347f591627207cd94114418906b8e8d5194823f3d7937845c1624bc8f2c0d7f",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "lucide-icon-colored",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/icons/halls/talthall.svg",
+      "sourceSha256": "d30f91b5f350c74570c1f477b51d282f8b53ca21cd8debc696f38fda2348c623",
+      "outputSha256": "d30f91b5f350c74570c1f477b51d282f8b53ca21cd8debc696f38fda2348c623",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-hall-icons-approval-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "custom-from-user-supplied-reference",
+      "approvalBasis": "Project owner selected the six SVG icons and approved them for the Hallpartner preview mega-menu; no broader production approval",
+      "externalLicenseEvidence": null
     }
   ]
 }
