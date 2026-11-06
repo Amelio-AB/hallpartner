@@ -2,37 +2,100 @@
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
 
-// This page describes the customer's planning decisions, NOT verified
-// internal Hallpartner delivery stages. HP-009/010 must be confirmed first.
-const preparations = [
+// Kundbesked 2026-11-06: Hallpartner vill erbjuda totalentreprenad med helt
+// driftklar, nyckelfärdig hall. Stegens exakta ordning, projekteringsansvar,
+// avtal, garantier och försäkringar ska verifieras med Peter/Jimmy (HP-050/051)
+// innan sidan godkänns som slutlig produktionsinformation.
+const projectSteps = [
   {
-    title: 'Börja med användningen',
-    description: 'Vad ska finnas i byggnaden och vad behöver den fungera för? Lagring, maskiner och ridverksamhet kan ställa olika krav.',
+    title: 'Första kontakt',
+    hallpartner: 'Vi lyssnar på vad du vill kunna göra i hallen och vilket slutresultat du behöver.',
+    customer: 'Berätta vad hallen ska användas till. Du behöver inte ha en färdig ritning.',
   },
   {
-    title: 'Beskriv utrymmet',
-    description: 'Fundera på ungefärlig storlek, frihöjd, portar och hur människor eller maskiner ska röra sig i byggnaden.',
+    title: 'Behov och byggplats',
+    hallpartner: 'Vi går igenom halltyp, storlek, placering och sådant som kan påverka lösningen.',
+    customer: 'Dela de uppgifter du har om byggplatsen och hur byggnaden ska användas.',
   },
   {
-    title: 'Undersök byggplatsen',
-    description: 'Vilken ort gäller det och vilka markförutsättningar är kända? Tillstånd och konstruktion behöver bedömas för den enskilda platsen.',
+    title: 'Förslag och offert',
+    hallpartner: 'Vi tar fram ett förslag och beskriver omfattningen, inklusive vad som ska ingå för att hallen ska bli driftklar.',
+    customer: 'Ta ställning till förslaget och vilka funktioner och installationer du vill ha med.',
   },
   {
-    title: 'Klargör omfattningen',
-    description: 'Innan ett förslag kan jämföras behöver ni veta vad som ska ingå, vilka beslut som återstår och vem som ansvarar för respektive del.',
+    title: 'Avtal, projektering och bygglov',
+    hallpartner: 'När det ingår i uppdraget samordnar vi projekteringen och hjälper till med lovhandlingar och kontakten med kommunen.',
+    customer: 'Godkänn handlingar och bidra med uppgifter och beslut som behövs. Kommunen avgör bygglovsfrågan.',
+  },
+  {
+    title: 'Markarbete och grund',
+    hallpartner: 'Vi samordnar markarbete och grundläggning genom våra underentreprenörer när det ingår i leveransen.',
+    customer: 'Se till att vi har tillgång till byggplatsen och kan stämma av förutsättningarna.',
+  },
+  {
+    title: 'Leverans, montage och installationer',
+    hallpartner: 'Vi samordnar hallens leverans, montage och de installationer som avtalats för en driftklar byggnad.',
+    customer: 'Håll kontakt med oss om beslut behöver fattas under arbetets gång.',
+  },
+  {
+    title: 'Kontroll och överlämning',
+    hallpartner: 'Vi går igenom att de avtalade arbetena är utförda och förbereder överlämningen av den färdiga hallen.',
+    customer: 'Delta i avstämning och se till att eventuella myndighetsbesked, som slutbesked, finns innan hallen tas i bruk.',
   },
 ] as const;
 
-const openQuestions = [
-  { title: 'Lov och myndighetskrav', description: 'Vilka regler som gäller beror på projektet. Kontakta kommunen och relevanta sakkunniga vid behov.' },
-  { title: 'Grund, ritningar och montage', description: 'Det behöver framgå i projektets handlingar vem som gör vad. En generell webbsida avgör inte leveransomfattningen.' },
-  { title: 'Pris och tidsplan', description: 'Börja med att beskriva behovet, även om alla mått inte är klara. Ett prisförslag behöver bygga på hallens utförande och projektets förutsättningar – webbplatsen räknar inte fram något automatiskt pris.' },
+const deliveryQuestions = [
+  {
+    title: 'Vad betyder nyckelfärdig hos Hallpartner?',
+    description: 'Vi kan leverera en helt driftklar hall. Vilka byggnadsdelar och installationer som ingår bestäms utifrån din verksamhet och framgår av offerten.',
+  },
+  {
+    title: 'Hur fungerar totalentreprenad?',
+    description: 'Vid avtalad totalentreprenad omfattar entreprenörens ansvar både projektering och utförande inom uppdraget. Arbeten kan utföras av underentreprenörer. Omfattning, ansvar och villkor ska stå i avtalet.',
+  },
+  {
+    title: 'Vem ansvarar för bygglov och regler?',
+    description: 'Hallpartner kan hjälpa till med lovprocessen och myndighetskontakter enligt överenskommelse. Kommunen beslutar om lov och byggherren har kvar sitt lagstadgade ansvar.',
+  },
+  {
+    title: 'Hur regleras garantier och försäkringar?',
+    description: 'Garantier, försäkringar och ansvar behöver framgå av handlingarna för det aktuella projektet. Vi utgår inte från att samma villkor gäller alla leveranser.',
+  },
+] as const;
+
+// Kontrollerade externa informationskällor. Dessa organisationer har inte
+// granskat eller godkänt Hallpartner; länkarna är generell vägledning.
+const resources = [
+  {
+    title: 'Bygglov och handlingar',
+    source: 'Boverket',
+    description: 'Så fungerar ansökan och kommunens prövning av lov.',
+    href: 'https://www.boverket.se/sv/PBL-kunskapsbanken/lov--byggande/handlaggning/ansokan-om-lov-och-forhandsbesked/',
+  },
+  {
+    title: 'Byggherrens ansvar',
+    source: 'Boverket',
+    description: 'Vilket ansvar byggherren har enligt plan- och bygglagstiftningen.',
+    href: 'https://www.boverket.se/sv/PBL-kunskapsbanken/lov--byggande/byggprocessen/byggherrens-ansvar/',
+  },
+  {
+    title: 'Entreprenadformer och avtal',
+    source: 'Upphandlingsmyndigheten',
+    description: 'Om totalentreprenad och standardavtalet ABT 06. Ditt projektavtal avgör vilka villkor som gäller.',
+    href: 'https://www.upphandlingsmyndigheten.se/branscher/bygg-och-anlaggning/upphandlingar-under-ett-byggnadsverks-liv/bygga',
+  },
+  {
+    title: 'Arbetsmiljö vid byggprojekt',
+    source: 'Arbetsmiljöverket',
+    description: 'Om ansvarsfördelning och roller som Bas-P och Bas-U.',
+    href: 'https://www.av.se/produktion-industri-och-logistik/bygg/vem-ar-ansvarig-for-vad-i-ett-byggprojekt/',
+  },
 ] as const;
 ---
 
 <HallpartnerSiteLayout
-  title="Så går det till"
-  description="Inför ett hallprojekt är det bra att reda ut användning, utrymme, byggplats och ansvar. Här finns frågor att förbereda innan du kontaktar Hallpartner."
+  title="Från idé till nyckelfärdig hall"
+  description="Så kan ett hallprojekt gå till hos Hallpartner, från första kontakt till en nyckelfärdig, driftklar hall. Läs om totalentreprenad, bygglov och vad som behöver avtalas."
 >
   <div class="hp-info hp-info--process">
     <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -42,30 +105,32 @@ const openQuestions = [
     <section class="hp-info__hero" aria-labelledby="process-title">
       <div class="hp-draft-rail hp-info__hero-grid">
         <div class="hp-info__intro">
-          <p class="hp-info__eyebrow">Inför ditt hallprojekt</p>
-          <h1 id="process-title">Från idé till <em>ett tydligare behov.</em></h1>
+          <p class="hp-info__eyebrow">Så går det till hos Hallpartner</p>
+          <h1 id="process-title">Från idé till <em>nyckelfärdig hall.</em></h1>
           <p class="hp-info__lead">
-            Ett hallprojekt väcker ofta frågor om utrymme, byggplats och
-            utförande. Här får du en översikt över vad som är bra att
-            förbereda, så att det första samtalet kan handla om rätt saker.
+            Du berättar vad du behöver. Hallpartner kan erbjuda totalentreprenad
+            med en helt driftklar hall, där vi samordnar arbetet från planering
+            till färdig byggnad. Vad som ingår anpassas efter ditt projekt och
+            tydliggörs i offerten.
           </p>
           <div class="hp-info__hero-actions">
-            <a class="hp-info__button" href="#projekt-forberedelser">
-              Börja planera <span aria-hidden="true">↓</span>
+            <a class="hp-info__button" href="/offert/">
+              Be om offert <span aria-hidden="true">→</span>
             </a>
-            <a class="hp-info__textlink" href="/kontakt/">
-              Kontakta Hallpartner <span aria-hidden="true">→</span>
+            <a class="hp-info__textlink" href="#projekt-forberedelser">
+              Se hur det går till <span aria-hidden="true">↓</span>
             </a>
           </div>
         </div>
-        <aside class="hp-info__guide" aria-label="Vilka frågor är bra att ha med sig?">
-          <p class="hp-info__guide-title">Det är användningen som styr.</p>
+
+        <aside class="hp-info__guide" aria-labelledby="process-guide-title">
+          <h2 class="hp-info__guide-title" id="process-guide-title">En kontaktväg genom projektet.</h2>
           <p>
-            En lagerhall, en maskinhall och ett ridhus kan behöva
-            helt olika utrymmen och lösningar. Börja där, inte med
-            ett på förhand bestämt utförande.
+            Vi hjälper till att hålla ihop de arbeten som ingår i din leverans,
+            även när olika underentreprenörer utför delar av projektet.
+            Du ska veta vem du har kontakt med och vad som är överenskommet.
           </p>
-          <a href="/stalhallar/">Jämför olika halltyper <span aria-hidden="true">→</span></a>
+          <a href="/stalhallar/">Utforska våra halltyper <span aria-hidden="true">→</span></a>
         </aside>
       </div>
     </section>
@@ -73,8 +138,9 @@ const openQuestions = [
     <nav class="hp-info__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-info__jump-inner">
         <span>På den här sidan</span>
-        <a href="#projekt-forberedelser">Förberedelser</a>
-        <a href="#projekt-ansvar">Ansvar och nästa steg</a>
+        <a href="#projekt-forberedelser">Projektets steg</a>
+        <a href="#projekt-ansvar">Omfattning och ansvar</a>
+        <a href="#projekt-regler">Regler och avtal</a>
       </div>
     </nav>
 
@@ -82,38 +148,50 @@ const openQuestions = [
       <div class="hp-draft-rail">
         <div class="hp-info__heading-row">
           <div>
-            <p class="hp-info__eyebrow">Fyra planeringsfrågor</p>
-            <h2 id="project-steps-heading">Det här är bra att reda ut.</h2>
+            <p class="hp-info__eyebrow">Från första samtalet till överlämning</p>
+            <h2 id="project-steps-heading">Så kan ett hallprojekt gå till.</h2>
           </div>
           <p>
-            Punkterna är ett underlag inför ett samtal, inte en utlovad
-            leveransprocess eller en färdig projektering.
+            Vi anpassar upplägget efter ditt projekt. Alla uppdrag innehåller
+            inte samma arbeten och ordningen kan skilja sig åt.
           </p>
         </div>
         <ol class="hp-info__steps">
-          {preparations.map((item) => (
+          {projectSteps.map((step) => (
             <li>
-              <h3>{item.title}</h3>
-              <p>{item.description}</p>
+              <h3>{step.title}</h3>
+              <p><strong>Hallpartner:</strong> {step.hallpartner}</p>
+              <p><strong>Du som kund:</strong> {step.customer}</p>
             </li>
           ))}
         </ol>
+        <p class="hp-info__steps-note">
+          Behöver byggnaden startbesked och slutbesked måste de förutsättningarna vara
+          uppfyllda innan den får tas i bruk.
+          <a href="https://www.boverket.se/sv/PBL-kunskapsbanken/lov--byggande/byggprocessen/slutbesked/">Läs om slutbesked hos Boverket</a>.
+        </p>
       </div>
     </section>
 
     <section class="hp-info__section hp-info__section--soft" id="projekt-ansvar" aria-labelledby="project-responsibility-heading">
       <div class="hp-draft-rail hp-info__split">
         <div>
-          <p class="hp-info__eyebrow">Innan projektets omfattning bestäms</p>
-          <h2 id="project-responsibility-heading">Vem ansvarar för vad?</h2>
+          <p class="hp-info__eyebrow">Vad ingår i leveransen?</p>
+          <h2 id="project-responsibility-heading">Nyckelfärdigt börjar med ett tydligt avtal.</h2>
           <p>
-            Projektering, tillstånd, grundläggning och montage är frågor
-            som behöver avtalas för det enskilda projektet.
-            De ingår inte automatiskt bara för att en hall diskuteras.
+            En helt driftklar hall kan behöva fler delar än grund, stomme och montage.
+            Vi går därför igenom vilka funktioner och installationer din verksamhet
+            behöver, vad Hallpartner ska leverera och vilka frågor du som byggherre
+            fortsatt ansvarar för.
+          </p>
+          <p>
+            Totalentreprenad handlar om ansvar för projektering och utförande
+            inom det avtalade uppdraget, inte om att varje tänkbart arbete
+            automatiskt ingår.
           </p>
         </div>
         <div class="hp-info__stack">
-          {openQuestions.map((item) => (
+          {deliveryQuestions.map((item) => (
             <article>
               <h3>{item.title}</h3>
               <p>{item.description}</p>
@@ -123,17 +201,54 @@ const openQuestions = [
       </div>
     </section>
 
+    <section class="hp-info__section hp-info__section--light" id="projekt-regler" aria-labelledby="process-rules-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Läs vidare hos källan</p>
+            <h2 id="process-rules-heading">Regler och avtal för ditt hallprojekt.</h2>
+          </div>
+          <p>
+            Det är bra att skilja på vad vi kommer överens om i avtalet och vad
+            lagstiftningen kräver. Här hittar du vägledning direkt hos
+            myndigheter och en offentlig upphandlingsmyndighet.
+          </p>
+        </div>
+        <ul class="hp-info__resource-list">
+          {resources.map((resource) => (
+            <li>
+              <p class="hp-info__resource-source">{resource.source}</p>
+              <h3>{resource.title}</h3>
+              <p>{resource.description}</p>
+              <a href={resource.href}>
+                Läs mer hos {resource.source} <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="hp-info__resource-note">
+          Länkarna är allmän information och innebär inte att organisationerna
+          har granskat eller godkänt Hallpartner. För ditt projekt gäller
+          tillämpliga myndighetsbeslut och de villkor som avtalas.
+        </p>
+      </div>
+    </section>
+
     <section class="hp-info__end" aria-labelledby="project-contact-heading">
       <div class="hp-draft-rail hp-info__end-inner">
         <div>
-          <p class="hp-info__eyebrow">Ta första kontakten</p>
-          <h2 id="project-contact-heading">Berätta vad du planerar.</h2>
+          <p class="hp-info__eyebrow">Ta första steget</p>
+          <h2 id="project-contact-heading">Vad behöver din färdiga hall kunna göra?</h2>
           <p>
-            Beskriv hallens användning, ungefärliga mått och var projektet
-            ska ligga. Det ger en bra start även om allt inte är bestämt.
+            Berätta vad den ska användas till och var den ska stå.
+            Vi hjälper dig att diskutera en möjlig lösning och vilken
+            omfattning som behövs för en driftklar leverans.
           </p>
         </div>
-        <a class="hp-info__button" href="/kontakt/">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-info__end-actions">
+          <a class="hp-info__button" href="/offert/">Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-info__textlink" href="/kontakt/">Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>
