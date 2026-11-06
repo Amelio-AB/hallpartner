@@ -28,7 +28,7 @@ test('en godkänd illustration är kopplad till var och en av de sex undersidorn
     assert.ok(page.includes('sa-gar-det-till'));
   }
   assert.ok(component.includes("existsSync(join(process.cwd(), 'public', 'images', 'halls', filename))"));
-  assert.ok(component.includes('AI-genererad illustration'));
+  assert.doesNotMatch(component, /<figcaption|AI-genererad illustration/);
 });
 
 test('bilderna är antingen ännu inte importerade eller alla sex exakt importerade', () => {
@@ -47,23 +47,23 @@ test('bilderna är antingen ännu inte importerade eller alla sex exakt importer
   }
 });
 
-test('light gradients on photo backgrounds preserve dark readable hero text', () => {
+test('split hero uses separate photo and green panel without image fade', () => {
   const css = readFileSync(new URL('src/styles/hallpartner-hall-detail.css', root),'utf8');
   assert.ok(component.includes('class="hp-detail__hero-media"'));
   assert.ok(component.includes('fetchpriority="high"'));
-  assert.match(css, /background: linear-gradient\(90deg,/);
-  // Off-white från breadcrumb, hög täckning genom textens centrerade rail.
-  assert.match(css, /background: var\(--hp-offwhite, #EBEBE8\)/);
-  assert.ok(css.includes('rgba(235,235,232,.97) 0%'));
-  assert.ok(css.includes('rgba(235,235,232,.96) calc(50% + 6rem)'));
-  assert.ok(css.includes('rgba(235,235,232,.78) calc(50% + 13rem)'));
-  assert.ok(css.includes('rgba(235,235,232,0) calc(50% + 28rem)'));
-  assert.ok(css.includes('rgba(235,235,232,0) 55%')); // Mobil oförändrad.
-  assert.doesNotMatch(css, /rgba\(235,235,232,1(?:\.0+)?\)/);
-  assert.doesNotMatch(css, /#F4F4F0 0%/);
-  assert.ok(css.includes('object-fit: cover'));
-  assert.ok(css.includes('@media (max-width: 640px)'));
+  assert.match(css, /inset: 0 0 0 50%/);
+  assert.match(css, /grid-template-columns: minmax\(0, 1fr\) minmax\(0, 1fr\)/);
+  assert.match(css, /background: radial-gradient\(/);
+  assert.match(css, /linear-gradient\(130deg, var\(--hp-hero-start\), var\(--hp-hero-end\)\)/);
+  assert.match(css, /hero-media::after \{ display: none; \}/);
+  assert.match(css, /object-fit: cover/);
+  assert.match(css, /@media \(max-width: 980px\)/);
+  assert.match(css, /position: relative;\s*order: 2;\s*inset: auto;\s*height: clamp\(17rem/);
   assert.ok(css.includes('hp-detail__summary-strip'));
+  for (const name of ['storage','machine','ridhus','plathall','insulated','talthall']) {
+    assert.ok(css.includes('.hp-detail.hp-detail--' + name + ' .hp-detail__hero.hp-detail__hero--illustrated'));
+  }
+  assert.doesNotMatch(css, /rgba\(235,235,232/);
 });
 
 test('hero text keeps the same centered content rail as breadcrumbs on all screen sizes', () => {

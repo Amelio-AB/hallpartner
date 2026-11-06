@@ -27,3 +27,7 @@ De sex granskade filerna finns i `public/images/halls/` på Draft PR #37. Exakt 
 Registret `config/preview-image-rights.json` tillför exakt sex SHA-bundna poster: källa, källhash, outputhash, preview-URL, godkännare och evidens. Ingen ändring görs i `scripts/preview/payload.mjs` eller publiceringsspärrens logik.
 
 **Avstämning innan senare merge:** GitHub Actions ska godkänna exakt PR-HEAD, inklusive bildrättighetskontrollen, efter att dessa poster är inlagda. Andreas granskar resultatet före merge, vilket är ett separat beslut.
+
+## Tillägg – visning utan bildskylt (2026-11-06)
+
+Användaren har därefter uttryckligen valt att illustrationerna ska visas utan synlig AI-skylt i heron. I PR #40 har den bildnära `figcaption` därför tagits bort på samtliga sex sidor. Den tidigare punkten ovan beskriver historisk utformning, inte gällande komponent efter denna ändring. Ursprung, filhashar och preview-begränsning dokumenteras fortsatt i bildregistret. Bilderna får fortfarande inte presenteras som utförda referensprojekt eller certifierade system. Detta tillägg ändrar inte publiceringsbehörighet eller licensbedömning.
