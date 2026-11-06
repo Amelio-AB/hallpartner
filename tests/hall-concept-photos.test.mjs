@@ -58,10 +58,10 @@ test('split hero uses separate photo and green panel without image fade', () => 
   assert.match(css, /hero-media::after \{ display: none; \}/);
   assert.match(css, /object-fit: cover/);
   assert.match(css, /@media \(max-width: 980px\)/);
-  assert.match(css, /position: relative;\s*inset: auto;\s*height: clamp\(17rem/);
+  assert.match(css, /position: relative;\s*order: 2;\s*inset: auto;\s*height: clamp\(17rem/);
   assert.ok(css.includes('hp-detail__summary-strip'));
   for (const name of ['storage','machine','ridhus','plathall','insulated','talthall']) {
-    assert.ok(css.includes('.hp-detail--' + name + ' .hp-detail__hero--illustrated'));
+    assert.ok(css.includes('.hp-detail.hp-detail--' + name + ' .hp-detail__hero.hp-detail__hero--illustrated'));
   }
   assert.doesNotMatch(css, /rgba\(235,235,232/);
 });
