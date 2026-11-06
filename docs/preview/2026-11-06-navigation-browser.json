@@ -1,0 +1,877 @@
+{
+  "checkedAt": "2026-11-06T22:12:26.944Z",
+  "origin": "https://hallpartner-se.preview2.inleed.com",
+  "rows": [
+    {
+      "page": "index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "404.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "kontakt/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "offert/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "offert/tack/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "integritet/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "om-oss/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "sa-gar-det-till/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/lagerhall/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/maskinhall/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/plathall/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/isolerad-hall/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/ridhus/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/talthall/index.html",
+      "width": 390,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": null
+    },
+    {
+      "page": "404.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": null
+    },
+    {
+      "page": "kontakt/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "offert/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "offert/tack/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "integritet/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "om-oss/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "sa-gar-det-till/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/lagerhall/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/maskinhall/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/plathall/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/isolerad-hall/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/ridhus/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/talthall/index.html",
+      "width": 1440,
+      "fontScale": 1,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": true,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "404.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "kontakt/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "offert/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "offert/tack/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "integritet/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "om-oss/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "sa-gar-det-till/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/lagerhall/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/maskinhall/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/plathall/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/isolerad-hall/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/ridhus/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "stalhallar/talthall/index.html",
+      "width": 390,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 390,
+        "viewport": 390
+      }
+    },
+    {
+      "page": "index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "404.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": null
+    },
+    {
+      "page": "kontakt/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "offert/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "offert/tack/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "integritet/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "om-oss/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "sa-gar-det-till/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/lagerhall/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/maskinhall/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/plathall/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/isolerad-hall/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/ridhus/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    },
+    {
+      "page": "stalhallar/talthall/index.html",
+      "width": 1440,
+      "fontScale": 2,
+      "headerCount": 1,
+      "noStartsida": true,
+      "logoHome": true,
+      "noindex": "noindex,nofollow",
+      "desktop": false,
+      "crumbs": {
+        "background": "rgb(21, 49, 41)",
+        "width": 1440,
+        "viewport": 1440
+      }
+    }
+  ],
+  "errors": [],
+  "apiRequests": [],
+  "status": "passed"
+}

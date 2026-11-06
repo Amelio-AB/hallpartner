@@ -13,26 +13,23 @@ Fortsätt utvecklingen av Hallpartners Astro-webbplats i `Amelio-AB/hallpartner`
 4. `docs/preview/hallpartner-hall-icons-approval-20261106.md` på PR #43 och `config/preview-image-rights.json` samt `scripts/preview/payload.mjs`.
 5. Den äldre `docs/TODO.md` och `docs/PROJECT_DECISIONS.md` ligger i **Draft PR #2**, inte i `main`. Läs dem som historiska planeringsregister och jämför mot aktuell kod och [GitHub Issue #41](https://github.com/Amelio-AB/hallpartner/issues/41) före förslag om konsolidering.
 
-## 1. Första åtgärden: fastställ release- och previewstatus
+## 1. Aktuell release och första åtgärd
 
-**Senast verifierat under kvällens kontroll** var `main` = `15a607f24f088c75f69dab71a765c576a3e4ed88` med de sex SVG-ikonerna, men **utan PR #43**. Senaste granskade PR #43-HEAD var `4fcd587f818dfd0f0fc94dd309d7f1bfd23664f3`. På denna HEAD var CI, Footer och Linux/Windows release tooling gröna. [Preview candidate #42290034192](https://github.com/Amelio-AB/hallpartner/actions/runs/42290034192) var fortfarande `in_progress` i Chrome-regressionen när denna överlämning skrevs. Detta kan ha ändrats när du läser dokumentet.
+**Navigationens release är slutförd.** PR #43 är mergad och både main och faktisk Inleed-preview är `53afac8c3d1d7d990605db65c51f59ee838ca640`. [Publicering #42300087820](https://github.com/Amelio-AB/hallpartner/actions/runs/42300087820) är grön inklusive publish. 94 filer, samtliga 15 besökarsidor och live-Chrome har verifierats; ingen senare publicering var köad. [Kvällscheckpointen](2026-11-06-kvall-navigation-release.md) länkar till manifest-/markörbevis, browserkontroller och kvarvarande begränsningar. Kontrollera ändå aktuell HEAD och preview innan ett nytt arbete påbörjas.
 
-- Läs **nuvarande** `origin/main`, PR #43 och GitHub Actions på exakt HEAD. Verifiera att inga nya commits tillkommit.
-- Om alla obligatoriska kontroller på PR #43 är gröna och ägarens tidigare uttryckliga releasegodkännande fortfarande gäller samma ändringar: squash-merga en gång till `main` med förväntad HEAD-SHA. Undvik dubbel merge. Om grinden är röd/pågår, felsök utan att kringgå den och rapportera öppet.
-- Efter merge: kontrollera nya `main`-SHA, workflow `.github/workflows/deploy-production.yml` inklusive `publish`, bildrättigheter, FTPS/HTTP och slutlig Chrome-verifiering. *En grön PR eller merge räcker inte som bevis på publicerad preview.*
-- Jämför cacheförbikopplad preview och versionsmarkör med faktiskt käll-SHA. Ingen ny FTP-uppladdning enbart på grund av gammal cache eller ett läst historiskt versionsnummer.
-- Kontrollera på riktig preview: startsida, `/stalhallar/`, alla sex `/stalhallar/<typ>/`, `/om-oss/`, `/kontakt/`, `/sa-gar-det-till/`, `/offert/` och `/integritet/`. Bekräfta att noindex finns kvar. Om extern browseråtkomst inte finns, säg det och använd dokumenterad Actions-verifiering.
+Den tidigare FTPS/HTTPS-blockeringen är förklarad: en samtidig ompublicering av samma commit skrev om en JSON-markör mellan kontrollens två läsningar. 143/144 filer matchade; endast markören avvek. Hasharna identifierar exakt föregående och ny markör. [Utredningen](../preview/release-navigation-20261106.md) visar även concurrency-gränsen. Oförändrad PR-HEAD kördes om med stilla publicerare och blev helt grön före merge. Ingen säkerhetsspärr eller design ändrades.
 
-### Vad PR #43 ska leverera
-- En mörkgrön **fullbredds-breadcrumb** `#153129` på de 13 sidor där brödsmulor används. Texten ligger kvar på gemensam centrerad rail.
-- **”Startsida” tas bort från Header-menyn**, men logotypen fortsätter att länka till `/`. Breadcrumb-länken ”Start” bevaras.
-- För Hallar-megamenyn: sex gröna lokala SVG-ikoner i `public/icons/halls/`, rubrik + en kort beskrivning per länk, tätare avstånd.
-- Hover **variant C**: tunn grön understrykning som animeras vänster → höger med samma 240 ms-kurva som AMP-002, utan grön hoverplatta. Behåll tillgänglig fokusram och reduced-motion.
-- Ingen ändring i AMP-002:s paket/runtime, offertguiden, split-hero eller kundens drift.
+### Återstående separata PR:er
 
-**En sen separat favicon-commit** `9bcb8ed` inkluderades tillfälligt i PR #43 och orsakade fel i bildrättighetsgrinden (PNG saknade godkännande och deklarerades med SVG-MIME). Den återställdes i commit `1675a016`; det ursprungliga favicon-arbetet finns kvar i Git-historiken men är **inte** del av den godkända releasen. Återinför det inte slentrianmässigt. Om favicon ska hanteras, använd en separat PR med rätt MIME och dokumenterade rättigheter.
+- **[Favicon PR #46](https://github.com/Amelio-AB/hallpartner/pull/46) är Draft**, inte mergad/publicerad. Den återställer användarens PNG byteexakt, sätter `image/png` i båda layouts och tar bort konkurrerande SVG-/ICO-referenser. Lokal build/lint/122 Node-tester och faktisk Chrome-avkodning är godkända. Följ dess aktuella Actions separat; navigationens gröna release verifierar inte framtida favicon-publicering.
+- Före favicon-release behövs ett specifikt beslut att bevara endast den nu orefererade serverfilen `favicon.svg`, med SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Releasepolicyn stoppar annars korrekt. Ingen serverradering eller generell undantagsregel ingår. Den befintliga ICO-filen har redan ett separat retentionbeslut. Läs PR #46:s dokumenterade förslag och registrera aldrig ett godkännande som inte finns.
+- **PR #44 för denna dokumentation ska förbli separat och Draft. Merga den inte automatiskt:** även en dokumentationsmerge kan utlösa ny main-publicering.
 
-**Teknisk testnotering:** Windows workflow hade ett intermittent syntetiskt Chrome-starttest med 1,5 sekunders deadline. Endast testfixturens timeout för exit/ready (inte hängtest eller faktiska webbläsarkrav) ökades i PR #43 commit `4fcd587`; därefter passerade Linux och Windows release tooling. Ingen säkerhetsgrind får försvagas.
+### Bevara godkänd navigation
+
+Alla 13 breadcrumb-rader har `#153129` över full bredd och centrerad innehållsrail. Startsida är borta ur huvudmenyn; logotyp och breadcrumbs länkar hem. Hallar-megamenyn har sex gröna ikoner, beskrivningar och godkänd 240 ms-understrykning. AMP-002 Spacious, mobilmeny, fokus och reduced-motion är verifierade. Split-hero, AMP-runtime och formulärlägen ändrades inte.
+
+Den godkända previewn är fortfarande noindex och är inte en produktionslansering. WordPress, DNS och SMTP är orörda. Nästa innehållsspår ska utgå från verifierade kundfakta om totalentreprenad och processen från första kontakt till färdig hall; genomför inga nya designändringar utan uppdrag.
 
 ## 2. Bevara kvällens redan färdiga arbete
 

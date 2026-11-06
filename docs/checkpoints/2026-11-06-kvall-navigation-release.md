@@ -2,6 +2,43 @@
 
 **Omfattning:** arbete efter den första helgcheckpointen, med särskilt fokus på split-hero, AMP-002, SVG-ikoner, breadcrumb och megameny. Detta dokument är en **tidsstämplad avstämning**, inte automatiskt bevis på aktuell deployment.
 
+## Verifierat releaseutfall – 6 november 2026
+
+Detta block ersätter tidigare statusuppgifter i kvällens avstämning. Historiken och designbesluten nedan bevaras.
+
+| Kontroll | Faktiskt utfall |
+|---|---|
+| PR #43 | **Mergad** 21:51:09 UTC med förväntad HEAD `4fcd587f818dfd0f0fc94dd309d7f1bfd23664f3`, utan nya kodändringar |
+| main | [`53afac8c3d1d7d990605db65c51f59ee838ca640`](https://github.com/Amelio-AB/hallpartner/commit/53afac8c3d1d7d990605db65c51f59ee838ca640) |
+| Inleed-preview | Samma SHA via global/commitspecifik markör och inventory; markörens verifieringstid 22:10:02.662 UTC |
+| Publiceringskörning | [#42300087820](https://github.com/Amelio-AB/hallpartner/actions/runs/42300087820) **SUCCESS**, både validate och publish |
+| Publiceringsbevis | [Artifact 13545271107](https://github.com/Amelio-AB/hallpartner/actions/runs/42300087820/artifacts/13545271107): FTPS/HTTPS, marker/inventory-readback, sex matchande produktionskontroller och live-Chrome |
+| Oberoende efterkontroll | **94/94 filer**, 15/15 cacheförbikopplade sidor, stabil markör före/efter; [filbevis](../preview/2026-11-06-navigation-live-files.json) |
+| Navigation i faktisk preview | 60 Chrome-fall: 15 sidor × 390/1440 px × 100/200 % text. 13 fullbredds-breadcrumbs, meny/fokus/reduced-motion, logotyp hem, inga Startsida-menylänkar eller API-anrop; [browserbevis](../preview/2026-11-06-navigation-browser.json) |
+| Senare publicering | Ingen senare köad/pågående publicering vid efterkontrollen |
+| Favicon | [Separat Draft PR #46](https://github.com/Amelio-AB/hallpartner/pull/46), HEAD `5e63a45746f2ff21725a340a27471365b4a13ed9`; inte mergad/publicerad. Lokal build, lint, 122 Node-tester och PNG-/Chrome-kontroll godkända. [Full Actions-validering](https://github.com/Amelio-AB/hallpartner/actions/runs/42303934012) är separat från navigationens release. |
+| PR #44 | Separat dokumentation, fortsatt **Draft**, inte mergad; även dokumentationsmerge skulle trigga publicering |
+
+### Förklarad FTPS/HTTPS-avvikelse
+
+En samtidig ompublicering av `15a607f` ersatte dess commitspecifika JSON-markör mellan PR-kontrollens FTPS-läsning och HTTPS-läsning. **143/144 filer matchade; endast markören skilde sig.** FTPS-hashen är exakt föregående markör och HTTPS-hashen exakt den nya körningens markör. Oförändrad PR-HEAD kördes om när publiceraren var stilla: 144/144 matchningar och alla obligatoriska kontroller gröna före merge.
+
+Se [utredning med tidslinje, hashvärden och begränsningar](../preview/release-navigation-20261106.md) och [maskinläsbart hashbevis](../preview/2026-11-06-release-investigation.json). Ingen verifieringsgrind, cachejämförelse eller releasepolicy försvagades. Publiceraren och PR-läsningen delar inte lås; framtida samtidighet kan därför ge nya säkra stopp. Ett lås måste utformas separat så att återanvändbar validering inte väntar på publicerarens eget lås.
+
+### Kvarvarande gränser
+
+- Favicon-PR:n behöver ett separat, exakt retentionbeslut för orefererad `favicon.svg`, SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Ny PNG och rätt MIME fungerar; befintlig serverfil får inte raderas eller undantas från grinden. Beslutsförslag finns i PR #46. Ingen ny post har påståtts godkänd utan beslut.
+- Lokal Windows-build av favicon-kandidaten har en befintlig CRLF/LF-hashskillnad i `talthall.svg`; Git-/Linux-bytes är oförändrade. PNG-hashen matchar exakt. Full Linux-bildgrind måste vara godkänd före release; ingen normalisering införs i verifieringen.
+- Det tidigare dokumenterade problemet med stora rubriker/hero-copy vid 200 % text på smal mobil följs upp separat. Godkänd split-hero ändrades inte.
+- Noindex/robots, kontakt/offert-flaggor, AMP-001/002/003/006 och använda bilder är bevarade. Inga WordPress-, DNS-, SMTP- eller produktionsändringar gjordes. Inga testförfrågningar skickades från livegranskningen.
+- Lokal ospårad `public/icons/halls/README.txt` är kvar med SHA-256 `842cbbcda274943c37faeff46c2461a4ac432d8e7f186c77fa1d117fee5305c8`. Inga nya worktrees skapades.
+
+**Nästa innehållsuppgift:** bekräfta kundens faktiska totalentreprenad och steg från första kontakt till färdig hall med Peter/Jimmy: ansvar, bygglov/myndighetskontakt, mark/grund, installationer, avtal och garantier. Därefter kan `/sa-gar-det-till/` och offertvägar granskas mot underlaget. Inga sådana innehålls- eller designändringar ingår här.
+
+## Historisk avstämning före release
+
+Följande avsnitt beskriver läget när checkpointen först skrevs. Det verifierade utfallet ovan har företräde.
+
 ## 1. GitHub och releasekedja
 
 | Leverans | Status vid avstämningen | Källor |
@@ -30,7 +67,7 @@ En gammal previewmarkör `f855a02` lästes tidigare under pågående publicering
 
 ## 3. Favicon och releasegräns
 
-En **sen separat favicon-commit** `9bcb8ed2` lades till i PR #43 efter de första godkända testerna. Den lade in `public/favicon.png` och angav felaktigt `image/svg+xml` som MIME i layouts. Den blev blockerad av bildrättighetsgrinden (PNG saknade SHA-godkännande). Commit `1675a016` återställde de tre ändringarna, men bevarade historiken. Git-trädet vid `1675a016` är exakt samma som vid den tidigare godkända `e9c48b75`: `4c720d5bc9fc652449d4811047f0be4fcea8bc6f`. Faviconen ingår **inte** i godkänd PR #43-release. Ny separat PR behövs om den ska tas vidare.
+En **sen separat favicon-commit** `9bcb8ed2` lades till i PR #43 efter de första godkända testerna. Den lade in `public/favicon.png` och angav felaktigt `image/svg+xml` som MIME i layouts. Den blev blockerad av bildrättighetsgrinden (PNG saknade SHA-godkännande). Commit `1675a016` återställde de tre ändringarna, men bevarade historiken. Git-trädet vid `1675a016` är exakt samma som vid den tidigare godkända `e9c48b75`: `4c720d5bc9fc652449d4811047f0be4fcea8bc6f`. Faviconen ingår **inte** i godkänd PR #43-release. Arbetet har därefter tagits vidare separat i Draft PR #46; se aktuellt releaseutfall ovan.
 
 Ett återkommande Windows-test för syntetisk Chrome-fixture gav ibland `Chrome startup deadline exceeded` i stället för förväntad tidig exit vid 1500 ms. PR #43 HEAD `4fcd587` ger endast exit/ready-fixturen 8000 ms och behåller hängtestets 1500 ms samt samma assertions. Release tooling på Linux/Windows blev gröna; ingen verifieringsgrind för faktisk browser/site sänktes.
 
