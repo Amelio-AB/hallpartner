@@ -13,6 +13,7 @@ const existingPages = {
   isolerade: '/stalhallar/isolerad-hall/',
   kontakt: '/kontakt/',
   offert: '/offert/',
+  process: '/sa-gar-det-till/',
 } as const;
 ---
 
@@ -31,11 +32,12 @@ const existingPages = {
     <div class="hp-home-hero__overlay" aria-hidden="true"></div>
     <div class="hp-draft-rail hp-home-hero__grid">
       <div class="hp-home-hero__copy">
-        <p class="hp-home-kicker"><span class="hp-home-kicker__line" aria-hidden="true"></span> Hallpartner / Hallar</p>
-        <h1 id="hp-home-title">En hall börjar med ditt behov.</h1>
+        <p class="hp-home-kicker"><span class="hp-home-kicker__line" aria-hidden="true"></span> Hallpartner / Totalentreprenad</p>
+        <h1 id="hp-home-title">Nyckelfärdiga hallar.</h1>
         <p class="hp-home-hero__lead">
-          Lager, maskiner eller en plats för verksamheten? Börja med användningen.
-          Här får du en överblick över olika halltyper och vad som är bra att tänka igenom.
+          Berätta vad hallen ska användas till. Hallpartner kan erbjuda totalentreprenad
+          med en helt driftklar hall – från planering och grundarbete till montage och
+          de installationer som ingår i offerten.
         </p>
         <div class="hp-home-actions">
           <a class="hp-home-button hp-home-button--primary" href={existingPages.offert}>
@@ -54,10 +56,10 @@ const existingPages = {
 
   <div class="hp-home-overview" aria-label="Välj ingång">
     <div class="hp-draft-rail hp-home-overview__inner">
-      <p>Utgå från verksamheten</p>
+      <p>Från behov till färdig hall</p>
       <span aria-hidden="true" class="hp-home-overview__line"></span>
-      <a href="#halltyper">Se användningsområden <span aria-hidden="true">↓</span></a>
-      <a href="#att-tanka-pa">Förbered dina frågor <span aria-hidden="true">↓</span></a>
+      <a href="#halltyper">Se halltyper <span aria-hidden="true">↓</span></a>
+      <a href={existingPages.process}>Så går det till <span aria-hidden="true">→</span></a>
     </div>
   </div>
 
@@ -69,8 +71,8 @@ const existingPages = {
           <h2 id="hp-home-types-title">Vad ska hallen användas till?</h2>
         </div>
         <p class="hp-home-section-lead">
-          Börja med användningsområdet. Material, isolering och andra tekniska val
-          hör hemma längre fram i diskussionen.
+          Lager, maskiner och ridverksamhet har olika behov. Vi börjar med
+          användningen och hjälper dig att hitta ett passande utförande.
         </p>
       </div>
       <div class="hp-home-type-grid">
@@ -82,7 +84,7 @@ const existingPages = {
             <div class="hp-home-type__body">
               <div>
                 <h3>Lagerhallar</h3>
-                <p>För dig som planerar plats för förvaring, varuflöden och åtkomst.</p>
+                <p>För lagring av varor, med utrymme för in- och utleveranser.</p>
               </div>
               <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
@@ -96,7 +98,7 @@ const existingPages = {
             <div class="hp-home-type__body">
               <div>
                 <h3>Maskinhallar</h3>
-                <p>För verksamheter som behöver ta hänsyn till maskinernas storlek och hur de används.</p>
+                <p>För maskiner och fordon, med plats för portar, rörelser och arbete.</p>
               </div>
               <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
@@ -117,7 +119,7 @@ const existingPages = {
             <div class="hp-home-type__body">
               <div>
                 <h3>Ridhus</h3>
-                <p>För dig som vill undersöka planering av en hall för ridverksamhet.</p>
+                <p>För ridverksamhet, där ridyta, tillträde och ljus behöver fungera.</p>
               </div>
               <span class="hp-home-type__arrow" aria-hidden="true">→</span>
             </div>
@@ -134,19 +136,21 @@ const existingPages = {
   <section class="hp-home-perspective" aria-labelledby="hp-home-perspective-title">
     <div class="hp-draft-rail hp-home-perspective__grid">
       <div class="hp-home-perspective__statement">
-        <p class="hp-home-kicker hp-home-kicker--dark">En bättre utgångspunkt</p>
-        <h2 id="hp-home-perspective-title">Först funktionen.<br /><em>Sedan utförandet.</em></h2>
+        <p class="hp-home-kicker hp-home-kicker--dark">Totalentreprenad när du vill ha helheten</p>
+        <h2 id="hp-home-perspective-title">En kontaktväg.<br /><em>En driftklar hall.</em></h2>
       </div>
       <div class="hp-home-perspective__text">
         <p>
-          En lagerhall kan behöva andra lösningar än ett ridhus. Samtidigt kan samma
-          typ av konstruktion passa flera användningsområden.
+          Med totalentreprenad kan Hallpartner hålla ihop projektering, grundarbete,
+          leverans, montage och installationer. Vi anlitar underentreprenörer för
+          de delar av arbetet som utförs av andra företag.
         </p>
         <p>
-          Det är därför bra att skilja på vad hallen ska användas till,
-          hur den kan byggas och vilka egenskaper som behöver undersökas.
+          Vi kan också hjälpa till med bygglovsprocessen och kontakten med kommunen.
+          Vilka arbeten som ingår och vilket ansvar Hallpartner tar framgår av
+          offerten och avtalet för ditt projekt.
         </p>
-        <a href={existingPages.isolerade}>Läs om isolering som egenskap <span aria-hidden="true">→</span></a>
+        <a href={existingPages.process}>Se vägen till en färdig hall <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -155,8 +159,8 @@ const existingPages = {
     <div class="hp-draft-rail hp-home-planning__grid">
       <div class="hp-home-planning__intro">
         <p class="hp-home-kicker">Inför första samtalet</p>
-        <h2 id="hp-home-planning-title">Tre frågor som gör det lättare att komma vidare.</h2>
-        <p>Du behöver inte kunna konstruktion eller dimensionering. Det räcker att börja beskriva behoven.</p>
+        <h2 id="hp-home-planning-title">Du behöver inte ha en färdig ritning.</h2>
+        <p>Beskriv vad du vill ha, ungefär hur mycket plats som behövs och var hallen ska stå. Vi hjälper dig vidare därifrån.</p>
       </div>
       <ul class="hp-home-planning__list">
         <li>
@@ -176,8 +180,8 @@ const existingPages = {
     <div class="hp-draft-rail hp-home-final__inner">
       <div>
         <p class="hp-home-kicker hp-home-kicker--dark">Nästa steg</p>
-        <h2 id="hp-home-final-title">Har du ett hallprojekt i tankarna?</h2>
-        <p>Berätta vad du planerar och vilka förutsättningar du känner till. Du kan börja med en enkel beskrivning.</p>
+        <h2 id="hp-home-final-title">Vad behöver din färdiga hall klara?</h2>
+        <p>Berätta hur du vill använda hallen. Vi går igenom vilken lösning och vilka arbeten som behövs för en driftklar leverans.</p>
       </div>
       <div class="hp-home-final__actions">
         <a class="hp-home-button hp-home-button--primary" href={existingPages.offert}>Be om offert <span aria-hidden="true">→</span></a>
