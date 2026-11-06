@@ -21,7 +21,7 @@ test('six unique named concept images are documented but not marked as published
   for(const im of manifest.images) {
     assert.equal(im.published, false);
     assert.equal(im.imported, false);
-    assert.match(im.targetFile, /^hallpartner-[a-z-]+-ai-koncept-v01\\.webp$/);
+    assert.match(im.targetFile, /^hallpartner-[a-z-]+-ai-koncept-v01\.webp$/);
   }
 });
 
