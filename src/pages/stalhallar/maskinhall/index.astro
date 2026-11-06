@@ -7,6 +7,7 @@ import '../../../styles/hallpartner-hall-detail.css';
 // A new, needs-first draft. Supplier claims, specifications and delivery
 // responsibility are not yet customer-verified.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 
 const movement = [
   { title: 'In i hallen', body: 'Vilka maskiner ska passera porten? Ta med både själva maskinens mått och hur den behöver manövreras på väg in.' },
@@ -52,7 +53,7 @@ const questions = [
             kräver. Där börjar en bra planering.
           </p>
           <div class="hp-detail__hero-actions">
-            <a class="hp-detail__button" href="#maskinernas-behov">Planera maskinhallen <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -203,7 +204,10 @@ const questions = [
           <h2 id="machine-next-title">Berätta vad du behöver få plats med.</h2>
           <p>Vilka maskiner ska användas, hur ska de förflyttas och var är hallen tänkt att stå? Med en sådan beskrivning kan samtalet börja.</p>
         </div>
-        <a class="hp-detail__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

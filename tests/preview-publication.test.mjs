@@ -271,14 +271,14 @@ test('verified payload rejects changed bytes, forbidden additions and forged act
     const manifest={commit:'a'.repeat(40),files:[],images:[]};
     for(const page of PAGES){
       const quote='<div id="hp-offert-guide" data-enabled="'+quoteReleasePolicy().enabled+'"></div><a href="/integritet/">Personuppgifter</a>';
-      const body=html+'En hall börjar med ditt behov.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?quote:'');
+      const body=html+'Nyckelfärdiga hallar.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?quote:'');
       mkdirSync(dirname(root+'/'+page),{recursive:true});writeFileSync(root+'/'+page,body);manifest.files.push({path:page,sha256:sha256(body)});
     }
     const robots='User-agent: *\nDisallow: /\n';writeFileSync(root+'/robots.txt',robots);manifest.files.push({path:'robots.txt',sha256:sha256(robots)});
     verifyPayload(root,manifest);
     writeFileSync(root+'/extra.php','<?php echo "no";');assert.throws(()=>verifyPayload(root,manifest));rmSync(root+'/extra.php');
     writeFileSync(root+'/index.html','tampered');assert.throws(()=>verifyPayload(root,manifest));
-    const body=html+'En hall börjar med ditt behov.<form data-enabled="true"></form>';writeFileSync(root+'/index.html',body);manifest.files.find(x=>x.path==='index.html').sha256=sha256(body);assert.throws(()=>verifyPayload(root,manifest));
+    const body=html+'Nyckelfärdiga hallar.<form data-enabled="true"></form>';writeFileSync(root+'/index.html',body);manifest.files.find(x=>x.path==='index.html').sha256=sha256(body);assert.throws(()=>verifyPayload(root,manifest));
   } finally {rmSync(root,{recursive:true,force:true});}
 });
 

@@ -40,7 +40,7 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
   if (page === 'offert/index.html' && quoteEnabled) {
     assert(links.includes('/integritet/'), 'Active quote must link to the approved privacy notice');
   }
-  if (page === 'index.html') assert(html.includes('En hall börjar med ditt behov.'), 'Unexpected homepage');
+  if (page === 'index.html') assert(html.includes('Nyckelfärdiga hallar.'), 'Unexpected homepage');
   return { assets, links, scripts };
 }
 function cssRefs(text) {

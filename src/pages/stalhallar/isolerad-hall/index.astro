@@ -6,6 +6,7 @@ import '../../../styles/hallpartner-hall-variants.css';
 // New editorial draft; no unverified U-values, technical product
 // specifications, project imagery, delivery scope or cost claims.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 const needs = [
   { title: 'Temperatur', body: 'Vad ska hallen användas till och vilken temperatur behöver kunna hållas? Börja med verksamhetens behov.' },
   { title: 'Fukt och luft', body: 'Kondens, ventilation och luftväxling kan behöva utredas. Isolering är inte hela lösningen för en god inomhusmiljö.' },
@@ -37,7 +38,7 @@ const faq = [
           <h1 id="insulated-title">Isolerade hallar för <em>rätt inomhusmiljö.</em></h1>
           <p class="hp-detail__lead">Ska hallen användas för förvaring, maskiner eller arbete? Börja med vad som behöver fungera inomhus. Det gör det lättare att bedöma om och hur byggnaden behöver isoleras.</p>
           <div class="hp-detail__hero-actions">
-            <a href="#isolering-behov" class="hp-detail__button">Undersök behovet <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a href={contactHref} class="hp-detail__text-link">Kontakta Hallpartner <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -96,7 +97,10 @@ const faq = [
     <section class="hp-detail__end" aria-labelledby="insulated-next">
       <div class="hp-draft-rail hp-detail__end-inner">
         <div><p class="hp-detail__eyebrow">När du vill gå vidare</p><h2 id="insulated-next">Berätta vad som är viktigt inomhus.</h2><p>Beskriv verksamheten, om hallen behöver värmas upp och vilka förutsättningar som finns på platsen. Där kan samtalet börja.</p></div>
-        <a class="hp-detail__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

@@ -144,3 +144,22 @@
   .hp-info__person--contact { flex-direction:column; }
   .hp-info__person--contact .hp-info__person-photo { width:100%; height:auto; aspect-ratio: 4 / 3; }
 }
+
+
+/* Avgränsad vidareutveckling av sidan Så går det till: källor och driftklar leverans. */
+.hp-info--process .hp-info__steps li p + p { margin-top: .8rem; }
+.hp-info--process .hp-info__steps strong { color: #203F2D; }
+.hp-info--process .hp-info__steps-note { margin: 1.5rem 0 0; max-width: 52rem; line-height: 1.7; color: #3A5143; }
+.hp-info--process .hp-info__steps-note a { color: #236F31 !important; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
+.hp-info--process .hp-info__resource-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; padding: 0; margin: 0; list-style: none; }
+.hp-info--process .hp-info__resource-list li { min-width: 0; background: #fff; border: 1px solid #CDD7CD; padding: clamp(1.5rem, 2.5vw, 2.3rem); }
+.hp-info--process .hp-info__resource-list h3 { margin-bottom: .8rem; font-size: 1.4rem; }
+.hp-info--process .hp-info__resource-list p:not(.hp-info__resource-source) { line-height: 1.65; color: #3A5143; }
+.hp-info--process .hp-info__resource-source { font-weight: 700; font-size: .77rem; letter-spacing: .08em; text-transform: uppercase; color: #32723C; }
+.hp-info--process .hp-info__resource-list a { display: inline-flex; gap: .65rem; align-items: center; margin-top: .5rem; color: #236F31 !important; font-weight: 700; text-decoration: underline; text-underline-offset: .2em; }
+.hp-info--process .hp-info__resource-note { max-width: 52rem; margin: 1.6rem 0 0; color: #3A5143; line-height: 1.7; }
+.hp-info--process .hp-info__end-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; flex: 0 0 auto; }
+.hp-info--process .hp-info__end-actions .hp-info__textlink { color: #F4F4F0 !important; }
+@media (max-width: 740px) {
+  .hp-info--process .hp-info__resource-list { grid-template-columns: minmax(0, 1fr); }
+}

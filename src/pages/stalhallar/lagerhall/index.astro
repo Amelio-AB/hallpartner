@@ -7,6 +7,7 @@ import '../../../styles/hallpartner-hall-detail.css';
 // New content draft for the actual route. Business facts and available
 // construction options still require Hallpartner / supplier verification.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 
 const storageNeeds = [
   {
@@ -60,7 +61,7 @@ const faq = [
             Börja med användningen, så blir det lättare att diskutera hallens utförande.
           </p>
           <div class="hp-detail__hero-actions">
-            <a class="hp-detail__button" href="#lagerbehov">Planera lagerbehovet <span aria-hidden="true">↓</span></a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-detail__text-link" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
           </div>
         </div>
@@ -204,7 +205,10 @@ const faq = [
             är tänkt att stå. Då finns ett konkret underlag att börja med.
           </p>
         </div>
-        <a class="hp-detail__button" href={contactHref}>Kontakta Hallpartner <span aria-hidden="true">→</span></a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

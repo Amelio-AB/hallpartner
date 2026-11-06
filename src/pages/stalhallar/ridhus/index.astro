@@ -6,6 +6,7 @@ import '../../../styles/hallpartner-hall-variants.css';
 // New editorial draft, not a recovered, previously customer-approved text.
 // No unsupported reference projects, product dimensions or supplier claims.
 const contactHref = '/kontakt/';
+const quoteHref = '/offert/';
 
 const riderNeeds = [
   {
@@ -96,9 +97,7 @@ const questions = [
             som behövs runt omkring är en bra början på planeringen.
           </p>
           <div class="hp-detail__hero-actions">
-            <a class="hp-detail__button" href="#ridhus-verksamhet">
-              Planera ridhuset <span aria-hidden="true">↓</span>
-            </a>
+            <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
             <a class="hp-detail__text-link" href={contactHref}>
               Kontakta Hallpartner <span aria-hidden="true">→</span>
             </a>
@@ -240,9 +239,10 @@ const questions = [
             utgångspunkt för ett första samtal.
           </p>
         </div>
-        <a class="hp-detail__button" href={contactHref}>
-          Kontakta Hallpartner <span aria-hidden="true">→</span>
-        </a>
+        <div class="hp-detail__end-actions">
+          <a class="hp-detail__button" href={quoteHref}>Be om offert <span aria-hidden="true">→</span></a>
+          <a class="hp-detail__text-link" href={contactHref}>Ring eller mejla <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
   </div>

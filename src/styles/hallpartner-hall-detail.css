@@ -77,6 +77,8 @@
 .hp-detail__end p:not(.hp-detail__eyebrow) { margin-top: 1.3rem; margin-bottom: 0; max-width: 36rem; color: #D1DFD4; line-height: 1.7; }
 .hp-detail__end .hp-detail__eyebrow { color: #A7D0AE; }
 .hp-detail__end .hp-detail__button { flex: 0 0 auto; }
+.hp-detail__end-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+.hp-detail__end .hp-detail__text-link { color: #F4F4F0 !important; }
 .hp-detail__fact-panel { padding: clamp(1.6rem,3vw,3rem); background: #E6ECE4; border-top: 4px solid var(--hp-cta); }
 .hp-detail__fact-panel h3, .hp-detail__note-list h3 { font-size: 1.5rem; margin-bottom: 1.2rem; }
 .hp-detail__fact-panel ul { padding-left: 1.25rem; margin-bottom: 0; line-height: 1.75; }

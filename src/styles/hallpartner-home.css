@@ -555,9 +555,8 @@
   line-height: 1.7;
 }
 
-.hp-home-final__inner > a {
-  flex: 0 0 auto;
-}
+.hp-home-final__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; flex: 0 0 auto; }
+.hp-home-final__actions .hp-home-textlink { color: var(--hp-link-on-light, #236F31) !important; }
 
 .hp-home-final__disclaimer {
   margin-top: clamp(3.6rem, 6vw, 6.2rem);

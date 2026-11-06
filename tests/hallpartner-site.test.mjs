@@ -34,7 +34,7 @@ test('only explicitly allowed visitor pages can become Astro routes', () => {
 test('the accepted home composition is now a site component with native links', () => {
   assert.match(read('src/pages/index.astro'), /components\/home\/HallpartnerHome\.astro/);
   assert.doesNotMatch(home, /variant|isSite|\/prototype\/|Intern arbetsprototyp/);
-  assert.match(home, /En hall börjar med ditt behov\./);
+  assert.match(home, /Nyckelfärdiga hallar\./);
   assert.match(home, /src="\/images\/hallpartner-hero-temporary\.webp"/);
   assert.match(home, /data-hero-tone="dark"/);
   assert.match(home, /fetchpriority="high"/);
