@@ -8,10 +8,18 @@
 .hp-amp-site-header .hm--classic-mega-menu .hm__mobile-bar { max-width:1268px; margin-inline:auto; }
 .hp-amp-site-header .hm--classic-mega-menu .hm__desktop { padding-inline:24px; }
 .hp-amp-site-header .hm .hm__brand { max-width:12rem; }
+/* Keep keyboard focus as legible as the label on both dark header surfaces. */
+.hp-amp-site-header .hm__desktop .hm__nav-item > :is(a,button):focus-visible { outline-color:currentColor; }
 .hp-amp-site-header[data-header-mode="solid"][data-amp-ready="true"] .hp-draft-main { padding-top:var(--hp-header-height,4.875rem); }
 @media (max-width:64rem) {
   .hp-amp-site-header .hm__mobile-bar { padding-inline:1.15rem; }
   .hp-amp-site-header[data-header-mode="solid"][data-amp-ready="true"] .hp-draft-main { padding-top:var(--hp-header-height,4.35rem); }
 }
-@media (max-width:420px) { .hp-amp-site-header .hm__mobile-bar .hm__logo { max-width:9.5rem; } }
+@media (max-width:420px) { .hp-amp-site-header .hm__mobile-bar .hm__logo { max-width:min(9.5rem,100%); } }
+/* Respect AMP's narrow effective viewport layout at enlarged default text size.
+   The site logo/rail overrides must not push its existing icon out of reach. */
+@media (max-width:15rem) {
+  .hp-amp-site-header .hm__mobile-bar { padding-inline:.35rem; }
+  .hp-amp-site-header .hm .hm__mobile-bar .hm__brand { max-width:calc(100% - 3.2rem); }
+}
 @media (prefers-reduced-motion:reduce) { .hp-amp-site-header * { scroll-behavior:auto; } }

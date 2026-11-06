@@ -6,7 +6,7 @@ export const PREVIEW = 'https://hallpartner-se.preview2.inleed.com';
 export const PRODUCTION = ['https://hallpartner.se', 'https://www.hallpartner.se'];
 export const PROBE_FILE = 'hp-preview-probe-20261103-6de487a.txt';
 export const PROBE = 'HALLPARTNER_INLEED_PREVIEW_PROBE_20261103_6de487a';
-export const AMP_SHA = '4ee0a081c3d799cd30e3075247fdb98473aa49f6';
+export const AMP_SHA = '2bde176de3509c2ceb4c1bebdf2e69c48120e4d9';
 export const PAGES = ['index.html', '404.html', 'kontakt/index.html', 'offert/index.html', 'offert/tack/index.html', 'integritet/index.html',
   'om-oss/index.html', 'sa-gar-det-till/index.html', 'stalhallar/index.html',
   ...['lagerhall','maskinhall','plathall','isolerad-hall','ridhus','talthall'].map(x => 'stalhallar/' + x + '/index.html')];

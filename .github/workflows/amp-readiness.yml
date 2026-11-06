@@ -73,7 +73,7 @@ jobs:
           const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
           const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
           const pkg=JSON.parse(readFileSync('package.json','utf8'));
-          const sha='4ee0a081c3d799cd30e3075247fdb98473aa49f6';
+          const sha='2bde176de3509c2ceb4c1bebdf2e69c48120e4d9';
           if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.5.0'
              ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.5.0'
              ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
@@ -152,7 +152,7 @@ jobs:
           const manifest=JSON.parse(readFileSync('node_modules/@amelio/web-platform/package.json','utf8'));
           const lock=JSON.parse(readFileSync('package-lock.json','utf8'));
           const pkg=JSON.parse(readFileSync('package.json','utf8'));
-          const sha='4ee0a081c3d799cd30e3075247fdb98473aa49f6';
+          const sha='2bde176de3509c2ceb4c1bebdf2e69c48120e4d9';
           if(manifest.name!=='@amelio/web-platform'||manifest.version!=='1.5.0'
              ||lock.packages['node_modules/@amelio/web-platform']?.version!=='1.5.0'
              ||pkg.dependencies['@amelio/web-platform']!=='github:Amelio-AB/amelio-web-platform#'+sha
