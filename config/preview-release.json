@@ -4,6 +4,14 @@
   "targetEvidence": "docs/preview/publication-fix-20261104.md",
   "retainedFiles": [
     {
+      "path": "favicon.svg",
+      "sha256": "a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13",
+      "approvedBy": "Andreas",
+      "approvedOn": "2026-11-07",
+      "evidence": "docs/preview/hallpartner-favicon-20261106.md#godkänt-bevarande-2026-11-07",
+      "purpose": "Preserve only these existing unreferenced SVG bytes during the PNG favicon migration; no upload or deletion"
+    },
+    {
       "path": "_astro/BaseLayout.9miOOxgp.css",
       "sha256": "c48ba466d900f9669e68d25fba8bb3747248541126f4eaa136a30555ded4a6b8",
       "approvedBy": "Andreas",
