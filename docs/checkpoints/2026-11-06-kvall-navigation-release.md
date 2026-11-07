@@ -16,7 +16,7 @@ Detta block ersätter tidigare statusuppgifter i kvällens avstämning. Historik
 | Oberoende efterkontroll | **94/94 filer**, 15/15 cacheförbikopplade sidor, stabil markör före/efter; [filbevis](../preview/2026-11-06-navigation-live-files.json) |
 | Navigation i faktisk preview | 60 Chrome-fall: 15 sidor × 390/1440 px × 100/200 % text. 13 fullbredds-breadcrumbs, meny/fokus/reduced-motion, logotyp hem, inga Startsida-menylänkar eller API-anrop; [browserbevis](../preview/2026-11-06-navigation-browser.json) |
 | Senare publicering | Ingen senare köad/pågående publicering vid efterkontrollen |
-| Favicon | [Separat Draft PR #46](https://github.com/Amelio-AB/hallpartner/pull/46), HEAD `5e63a45746f2ff21725a340a27471365b4a13ed9`; inte mergad/publicerad. Lokal build, lint, 122 Node-tester och PNG-/Chrome-kontroll godkända. [Full Actions-validering](https://github.com/Amelio-AB/hallpartner/actions/runs/42303934012) är separat från navigationens release. |
+| Favicon | [Separat Draft PR #46](https://github.com/Amelio-AB/hallpartner/pull/46), uppdaterad HEAD `94127cc4d5ed69d60a8aaf7aef05017817651a35`; inte mergad/publicerad. Exakt SVG-retention godkänd och registrerad 2026-11-07. Den tidigare [fullständiga kandidatvalideringen](https://github.com/Amelio-AB/hallpartner/actions/runs/42303934012) var grön; uppdaterad HEAD ska kontrolleras i PR:ns senaste Actions. |
 | PR #44 | Separat dokumentation, fortsatt **Draft**, inte mergad; även dokumentationsmerge skulle trigga publicering |
 
 ### Förklarad FTPS/HTTPS-avvikelse
@@ -27,7 +27,7 @@ Se [utredning med tidslinje, hashvärden och begränsningar](../preview/release-
 
 ### Kvarvarande gränser
 
-- Favicon-PR:n behöver ett separat, exakt retentionbeslut för orefererad `favicon.svg`, SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Ny PNG och rätt MIME fungerar; befintlig serverfil får inte raderas eller undantas från grinden. Beslutsförslag finns i PR #46. Ingen ny post har påståtts godkänd utan beslut.
+- **Uppdatering 2026-11-07:** Andreas svarade ”Godkänn exakt bevarande” för orefererad `favicon.svg`, SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. PR #46 registrerar nu endast denna fil/hash i befintlig retentionpolicy. Färsk HTTPS-hash och inventorybaserad migreringskontroll matchar; 122 Node-tester passerar. Beslutet omfattar uttryckligen ingen radering, merge eller publicering. PR #46 förblir Draft och dess uppdaterade HEAD måste ha gröna slutkontroller inför ett separat releasebeslut.
 - Lokal Windows-build av favicon-kandidaten har en befintlig CRLF/LF-hashskillnad i `talthall.svg`; Git-/Linux-bytes är oförändrade. PNG-hashen matchar exakt. Full Linux-bildgrind måste vara godkänd före release; ingen normalisering införs i verifieringen.
 - Det tidigare dokumenterade problemet med stora rubriker/hero-copy vid 200 % text på smal mobil följs upp separat. Godkänd split-hero ändrades inte.
 - Noindex/robots, kontakt/offert-flaggor, AMP-001/002/003/006 och använda bilder är bevarade. Inga WordPress-, DNS-, SMTP- eller produktionsändringar gjordes. Inga testförfrågningar skickades från livegranskningen.

@@ -22,7 +22,7 @@ Den tidigare FTPS/HTTPS-blockeringen är förklarad: en samtidig ompublicering a
 ### Återstående separata PR:er
 
 - **[Favicon PR #46](https://github.com/Amelio-AB/hallpartner/pull/46) är Draft**, inte mergad/publicerad. Den återställer användarens PNG byteexakt, sätter `image/png` i båda layouts och tar bort konkurrerande SVG-/ICO-referenser. Lokal build/lint/122 Node-tester och faktisk Chrome-avkodning är godkända. Följ dess aktuella Actions separat; navigationens gröna release verifierar inte framtida favicon-publicering.
-- Före favicon-release behövs ett specifikt beslut att bevara endast den nu orefererade serverfilen `favicon.svg`, med SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Releasepolicyn stoppar annars korrekt. Ingen serverradering eller generell undantagsregel ingår. Den befintliga ICO-filen har redan ett separat retentionbeslut. Läs PR #46:s dokumenterade förslag och registrera aldrig ett godkännande som inte finns.
+- **Retentionbeslutet är godkänt 2026-11-07:** Andreas svarade ”Godkänn exakt bevarande” för endast den orefererade serverfilen `favicon.svg`, SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Det är registrerat på PR #46 i `94127cc4d5ed69d60a8aaf7aef05017817651a35`; den tidigare saknade retentionauktorisationen ska inte begäras igen. Exakt hashkontroll kvarstår. Beslutet omfattar ingen radering, merge eller publicering. Kontrollera gröna Actions på uppdaterad HEAD inför ett separat releasebeslut; båda PR:erna förblir Draft.
 - **PR #44 för denna dokumentation ska förbli separat och Draft. Merga den inte automatiskt:** även en dokumentationsmerge kan utlösa ny main-publicering.
 
 ### Bevara godkänd navigation
