@@ -1,4 +1,242 @@
-# Issue #29 – tacksida och kundkopia, kandidat för godkännande
+# Issue #29 – slutförd release: tacksida och kundkopia
+
+## Slutligt leveransbevis – 2026-11-06 svensk tid
+
+**Releasen är genomförd och inkorgsleveransen bekräftad av Andreas.** Detta
+avsnitt ersätter de historiska stoppstatusarna nedan. Inga fler testinskick
+behövs. Ingen ny statisk publicering gjordes under den privata installationen.
+
+- Publicerad frontend och PHP-källversion är
+  **`931e2149d5477e33aaa4d19bbaa7ad264b04d320`**. Den tidigare gröna
+  [publiceringskörningen 42121351331](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351331)
+  kvarstår. Markör och alla 117 inventerade serveroriginal återverifierades
+  före installationen; main och preview hade inte ändrats.
+- Andreas godkände uttryckligen att även befintlig validator fick ersättas.
+  Färsk kontroll före backup och omedelbart före byte visade **enbart 266
+  CRLF/LF-skillnader**, inga andra kodskillnader. Den installerade ersättningen
+  kopierades från kandidatens råa Git-bytes. Normaliserad hash användes aldrig
+  för att godkänna kandidat eller installerad fil.
+- Ny privat backup finns i
+  `/home/s164937/hallpartner-leads/.release-issue29-final-20261105/backup`.
+  Berörda aktiva original och konfiguration kopierades med bevarade rättigheter
+  och verifierades med `cmp` och full SHA-256. Katalogen är 0700. Tidigare
+  backuper verifierades också. Vendor-filer fick en separat hashförteckning.
+  Ett byteverifierat `rollback.sh` i överordnad katalog kan återställa både
+  tidigare receiver och validator; ingen återställning behövde köras.
+- `messages.php`, `delivery.php` och `quote-fields.json` installerades först,
+  validatorn byttes atomiskt och receivern byttes atomiskt **sist**.
+  Aktiveringstid UTC: **2026-11-05T23:00:57Z**. Alla installerade källfiler matchar
+  Git exakt. PHP 8.3.36-syntax och laddning av PHPMailer/leveranskod passerade.
+  Aktiv receiver passerade dessutom ett CLI-test med tom indata: väntad 413
+  före SMTP, utan HTTP-anrop eller mejlsändning.
+- Installerad receiver SHA-256:
+  `eb4f2b5d1e1476cccdf247988dc8f889ed1982fb86526c48f68b3194be66548f`.
+  Installerad validator SHA-256:
+  `a7f9ddf4ee59636b8f52d943c72777d8f432118a525cc819b6673be13be42385`.
+  Stödfilernas hashar motsvarar det verifierade kandidatarkivet beskrivet nedan.
+  Konfiguration, SMTP-inställningar/lösenord, vendor, rate-cleanup och publik
+  bootstrap är oförändrade och återverifierades även efter liveinskicket.
+
+### Ett liveinskick och två separata mejl
+
+Exakt ett slutligt **Skicka förfrågan** gjordes i den verkliga publicerade
+sexstegsguiden, med `andreas@amelio.se` och uttrycklig märkning som syntetiskt
+releasetest, ingen verklig offertförfrågan. Ingen upprepning gjordes.
+
+- Referens: **`bd890a1c2bd661b183b91dd2`**. Mottagartid UTC i primärmejlet:
+  **2026-11-05 23:03:09**.
+- Webbläsaren omdirigerades till `/offert/tack/`, utan referens eller
+  personuppgifter i URL. Tacksidan visade rätt referens, att Amelio tagit emot
+  förfrågan och att kundkopian lämnats till e-posttjänsten. Visuell granskning
+  och skärmbild sparades lokalt i `reports/issue-29/final-thank-you.jpg`.
+- Gmail-kopplingen verifierade **två olika Gmail-ID och RFC Message-ID** i
+  samma inkorg. Originalet har ämnet `Ny hallförfrågan [referens]` och
+  `To: kontakt@amelio.se`; kundkopian har ämnet
+  `Kopia av din hallförfrågan [referens]` och `To: andreas@amelio.se`.
+  Båda innehåller exakt samma referens och de svenska svaren `Lager eller
+  förvaring`, `Jag behöver hjälp med storleken`, `Vet inte` och `Osäker`.
+  Detta är två separata mejl, inte två visningar av ett vidarebefordrat mejl.
+- Andreas bekräftade uttryckligen i chatten: **båda separata mejlen har kommit
+  med samma referens**. SMTP-acceptans hålls därför åtskild från den ytterligare
+  verifierade inkorgsleveransen. Befintlig gallring inom 30 dagar gäller båda
+  kopiorna och relevanta vidarebefordrings-/papperskorgskopior; inget nytt
+  gallrings- eller e-postflöde infördes.
+
+### Tillfällig åtkomst avslutad
+
+Nyckeln använde `restrict`, `expiry-time="20261106025712Z"` och fingeravtryck
+`SHA256:kIWnf1u/JKgJ1FMMA/zp21j0reljQ59FEm4YMh80rTo`. Efter inkorgsbekräftelsen
+togs exakt en nyckelrad bort atomiskt, med alla andra bytes bevarade och
+filrättighet 0600. En ny BatchMode-anslutning utan agent eller återanvänd
+anslutning nekades med exit 255. De lokala privata och publika nyckelfilerna
+är raderade. Privat backup och återställningsväg finns kvar på servern.
+
+Design, frågor, övriga funktioner, integritetshantering, SMTP, WordPress,
+DNS och kundens framtida hostingkonto har inte ändrats i installationen.
+
+---
+
+## Historisk releasestatus – återstart efter PR #32 (2026-11-05)
+
+Andreas godkände hela återstartsplanen, inklusive merge/publicering, privat
+installation och exakt ett syntetiskt liveinskick. Releasen stoppades vid
+en strikt bytekontroll **före någon privat filinstallation**. Inget inskick
+gjordes. PR #31 ligger kvar som Draft; ingen ny publicering följer av denna
+dokumentationsuppdatering.
+
+### Mergat, publicerat och verifierat
+
+- PR #32:s exakta HEAD `e4e7945bcf712bc10ec401a8260120eb91cdc4eb` hade alla
+  kontroller gröna. Main och preview var oförändrade före merge. PR #32
+  mergades till **`931e2149d5477e33aaa4d19bbaa7ad264b04d320`**.
+- Ny ordinarie main-körning
+  [42121351331](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351331)
+  är helt grön: validering, publicering, original-/HTTP-kontroller och
+  läsande live-Chrome. Vanlig CI
+  [42121351071](https://github.com/Amelio-AB/hallpartner/actions/runs/42121351071)
+  är också grön. Den gamla misslyckade körningen startades inte om.
+- SSH och HTTPS bekräftar publicerad commit `931e214` och rätt run-ID.
+  Alla **117 originalfiler** i publiceringsinventeringen verifierades
+  med full SHA-256 via SSH. Markörens `verifiedAt` är
+  `2026-11-05T22:45:29.998Z`. Inventeringens SHA-256:
+  `19a3e34a54434650ab845973405ab7e360c4080af71cc1e79493527542852d87`.
+  Manifestets SHA-256:
+  `9884cb94e43be4bd00abb644709855661e340903bd61b47d3ce4a286de296a88`.
+- Backupen nedan verifierades före merge mot samtliga berörda privata
+  original och dåvarande statiska preview. Den behövde inte tas om.
+
+### Korrekt kandidatarkiv, men avvikande installerad validator
+
+- Arkivet för exakt publicerad commit har SHA-256
+  `d1c1a36416f081f825c78246e007e2ae60dee5a0f59f7ff0576a4ef2f84be9f0`.
+  Alla sju filer matchar råa Git-blobbar byte för byte. Arkivhash och
+  samtliga filhashar verifierades efter överföring och uppackning på servern.
+  PHP 8.3.36-syntax, oberoende validerings-/rate-limit-test samt svensk
+  sammanfattning och laddning av delivery-koden passerade utan SMTP.
+- Inaktiv staging finns i
+  `/home/s164937/hallpartner-leads/.release-issue29-restart-20261105`.
+  Det tidigare nekade CRLF-arkivet användes inte.
+- Aktiveringsskriptet antog att befintlig `validator.php` redan hade exakt
+  samma bytes som Git och skulle därför lämnas orörd. Den strikta `cmp`-
+  kontrollen nekade filen **innan stödfiler eller receiver installerades**.
+  Den aktiva filen är 12 091 byte med 266 CRLF-radslut och SHA-256
+  `39fd8ffac6ad078c70394b4cb9f647f2f0aef67c9ffbba342959328a9d7751f0`.
+  Git-kandidaten är 11 825 byte med LF och SHA-256
+  `a7f9ddf4ee59636b8f52d943c72777d8f432118a525cc819b6673be13be42385`.
+  Läsande diagnostik visade enbart radslutsskillnader; detta användes
+  **inte** som accepterad byte-/hashkontroll och inga filer normaliserades.
+  `rate-cleanup.php` är däremot redan exakt byteidentisk med Git.
+- Efter stoppet verifierades aktiv receiver, validator, rate-cleanup,
+  konfiguration, composer-filer, smtp-smoke och publik bootstrap mot backupen.
+  De är oförändrade. `messages.php`, `delivery.php` och `quote-fields.json`
+  saknas fortfarande i aktiv katalog. Ingen receiver-temporärfil skapades.
+
+Den nya statiska frontendversionen är publicerad, men den tidigare privata
+mottagaren är fortsatt aktiv. Frontenden är kompatibel med dess äldre svar:
+saknad kundkopiestatus visas som obekräftad. **Kundkopian är inte installerad
+eller liveverifierad. Noll syntetiska liveinskick gjordes i återstarten.**
+
+### Åtkomst avslutad och återstående arbete
+
+Nyckeln hade `restrict`, `expiry-time="20261106022032Z"` och fingeravtryck
+`SHA256:Or8486MyZtci0Cl3DPoCHSSq/gzli29xy1waqNHypZ0`. Efter stoppet togs exakt
+dess rad bort atomiskt; övriga bytes bevarades, filrättighet 0600. En ny
+BatchMode-anslutning med enbart denna nyckel nekades med exit 255. Lokala
+privata och publika nyckelfiler är raderade.
+
+Nästa kontrollerade installation behöver även omfatta **Git-exakt
+`validator.php`**, med verifierad backup av den befintliga CRLF-filen och
+återställning av båda filerna vid ett fel efter byte. Ersätt filen med den
+verifierade kandidatens bytes; acceptera inte en normaliserad hash eller
+ändra aktiv fil på plats. Ingen ny statisk publicering behövs enbart för
+denna installationsrättning om main, preview och kandidat fortfarande är
+oförändrade. Därefter återstår exakt ett liveinskick, redirect/tacksida,
+två separata mejl med samma referens, Andreas inkorgsbekräftelse och ny
+åtkomststängning. Ingen testförfrågan ska skickas som följd av denna checkpoint.
+
+Design, frågor, SMTP-inställningar/lösenord, integritet, WordPress och DNS
+har inte ändrats i återstarten.
+
+---
+
+## Historisk releasestatus – första stoppet före publicering (2026-11-05)
+
+Andreas godkände uttryckligen merge, kontrollerad previewrelease, privat
+PHP-installation och **ett enda** syntetiskt inskick med besökaradressen
+`andreas@amelio.se`. Godkännandet ersätter kandidatens tidigare väntan på
+godkännande nedan. Vid ett kritiskt fel ska releasen stoppas och den fungerande
+versionen säkras, utan upprepade testinskick.
+
+- Arbetsmappen var ren. PR #30:s exakta HEAD
+  `de8569b7a513eaec8edc8ca5ca1e6ac8cf8b2f48` hade fortsatt gröna CI-,
+  Footer- och previewkontroller. PR #30 mergades med SHA-kontroll till
+  **`4e9d1f7c6c71e5b1e439292710ded649f2d2ead6`**.
+- Vanlig main-CI [42114236938](https://github.com/Amelio-AB/hallpartner/actions/runs/42114236938)
+  är grön. Den automatiska publiceringskörningen
+  [42114236597](https://github.com/Amelio-AB/hallpartner/actions/runs/42114236597)
+  **stoppades i valideringen**: `Chrome debugging target unavailable` vid
+  första sidan, `index-html`, 2026-11-05T21:38:43Z. Node-, PHP-, isolerade
+  SMTP-, bygg-, säkerhets- och HTML-kontroller hade passerat. Felet visar
+  att Chrome-testet inte fick en debugging-anslutning; det bevisar inte
+  ett fel i webbplatsens funktion. Ingen omkörning har startats.
+- Jobbet **publish hoppades över**. Både SSH-läst servermarkör och HTTPS
+  bekräftar fortsatt publicerad commit
+  **`6b175c5636022420f6712f664c85209f88fea2d0`**, körning `42102526488`.
+  Aktiv `receiver.php` och `config.local.php` jämfördes byte för byte med
+  backupen efter stoppet och är oförändrade. Inga PHP-ändringar installerades.
+- **Noll syntetiska liveinskick** har gjorts i detta releaseförsök. Varken
+  primärmejl, besökarkopia eller redirect på den nya liveversionen har
+  därför leveransverifierats. Tidigare testbevis får inte användas som
+  bevis för denna ännu opublicerade funktion.
+
+### Verifierad backup och inaktiv kandidat
+
+Backup ligger privat på den befintliga Inleed-servern:
+`/home/s164937/hallpartner-leads/.release-issue29-20261105/backup`.
+Katalogen är 0700. Befintliga privata filer, inklusive konfigurationen,
+kopierades med bevarade rättigheter och verifierades med `cmp` och SHA-256.
+Konfigurationsvärden och lösenord skrevs aldrig ut. Avsändare, SMTP-login
+och mottagare verifierades som `kontakt@amelio.se`, korrekt preview-Origin
+och enbart V2 var tillåtna; inga värden ändrades.
+
+- Säkerhetskopierad aktiv receiver SHA-256:
+  `e528409deff905e6172725af351e47a65b0db977f2e7d1b514be46ff2e746a15`.
+- Privat råbackup `public-preview.tar` jämfördes mot dåvarande serverfiler
+  med `tar -d`, med oförändrad markör före och efter. SHA-256:
+  `f8cca732f726321cc454af07ce03dff07307a098c1d450c5f21e9c433f205cf7`.
+- Publik bootstrap är oförändrad med tidigare verifierad SHA-256
+  `7d252addd5378e98ddb42871934190800800e076318661b3d66c1a202a89e7ef`.
+- Kandidatarkivet överfördes endast till den privata, inaktiva `stage`-
+  katalogen. Dess bytekontroll mot råa Git-blobbar **nekade samtliga sju
+  filer**. Lokal undersökning bevisade att Windows `core.autocrlf=true`
+  hade gett arkivet CRLF i stället för Git-blobbarnas LF, utan andra
+  textskillnader. Ingen fil accepterades genom normaliserad hashkontroll.
+  Vid återupptagning ska ett nytt arkiv med exakta Git-bytes skapas och
+  byteverifieras innan syntax- och regressionstester körs på servern.
+
+### Tillfällig SSH-åtkomst avslutad
+
+Den nya Ed25519-nyckeln verifierades först med `BatchMode`, `IdentitiesOnly`
+och läsande kommandon mot konto `s164937`, server `ns15`, PHP 8.3.36.
+Nyckeln installerades med `restrict` och
+`expiry-time="20261106013202Z"` (fyra timmar från skapandet).
+Fingeravtryck: `SHA256:Mhcko2gRXkEQCI2hHOPctYRsga/lJZEjc8ngi0JJ9oQ`.
+
+Efter releasestoppet togs exakt en matchande nyckelrad bort atomiskt.
+Alla andra nyckelrader bevarades byte för byte; filrättigheten är 0600.
+Återläsning visade noll matchningar. En ny anslutning med enbart den
+tillfälliga nyckeln nekades med `Permission denied`, exit 255.
+De lokala privata och publika nyckelfilerna raderades efter verifieringen.
+
+**Nästa steg:** utred Chrome-startfelet och rätta kandidatartefaktens
+radslut innan ett nytt kontrollerat releaseförsök. Ingen SMTP-retry,
+installation eller publicering ska göras som en följd av denna
+dokumentationsuppdatering. Kundens WordPress, DNS, SMTP-inställningar,
+integritetshantering och framtida Inleed-konto har inte ändrats.
+
+---
+
+Nedan följer kandidatens tidigare implementation och releaseplan.
 
 ## Utgångsläge och gräns
 
