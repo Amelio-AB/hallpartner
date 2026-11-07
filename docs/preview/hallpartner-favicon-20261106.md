@@ -19,6 +19,10 @@ När SVG-referensen försvinner ur HTML ingår `favicon.svg` inte längre i den 
 
 Den faktiskt publicerade SVG-filen har SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`, verifierad i publiceringen av `53afac8`. Lokal CRLF ger ett annat hashvärde och får inte användas som serverbevis.
 
-Föreslaget minsta beslut före favicon-release: bevara **endast** `favicon.svg` med denna exakta serverhash som en orefererad äldre fil, utan uppladdning, radering eller favicon-prioritet. `favicon.ico` har redan ett separat hashbundet retentionbeslut och dess gamla layoutreferens tas bort här. Inget wildcard eller förändrad verifieringslogik behövs.
+### Godkänt bevarande 2026-11-07
 
-Ingen ny retentionpost har registrerats som godkänd innan ett konkret beslut finns. Kandidaten lämnas som Draft om beslutet saknas. En grön PR-validering ska inte beskrivas som full publiceringsberedskap om detta villkor återstår.
+Andreas svarade **”Godkänn exakt bevarande”** på frågan om att registrera fortsatt bevarande av den orefererade serverfilen `favicon.svg`, exakt SHA-256 `a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13`. Frågan avgränsade uttryckligen beslutet: ingen radering, merge eller publicering av PR #46.
+
+`config/preview-release.json` registrerar därför **endast** denna fil och hash som en orefererad äldre fil, utan uppladdning, radering eller favicon-prioritet. `favicon.ico` har redan ett separat hashbundet retentionbeslut och dess gamla layoutreferens tas bort i kandidaten. Inget wildcard eller förändrad verifieringslogik införs. Befintlig FTPS-återläsning måste fortfarande matcha den registrerade hashen byteexakt.
+
+Det tidigare saknade retentionbeslutet är därmed registrerat. PR #46 förblir Draft; godkännandet omfattar inte merge eller publicering. Slutlig kandidat- och servervalidering ska vara grön på den uppdaterade HEAD:en inför ett eventuellt senare releasebeslut.
