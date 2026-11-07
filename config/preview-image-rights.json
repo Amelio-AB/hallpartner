@@ -785,12 +785,12 @@
       "source": "public/images/hero/hallpartner-sa-gar-det-till-hero.webp",
       "sourceSha256": "67785d6385916bf2f14d1815ef35961aece631103a461a3c34c1e4c72e7bde74",
       "outputSha256": "67785d6385916bf2f14d1815ef35961aece631103a461a3c34c1e4c72e7bde74",
-      "scope": "local-review-only",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
       "approvedBy": "Andreas",
-      "evidence": "docs/preview/hallpartner-process-hero-local-review-20261107.md",
+      "evidence": "docs/preview/hallpartner-process-hero-preview-approval-20261107.md",
       "approvedOn": "2026-11-07",
       "origin": "user-created-ai-concept-illustration",
-      "approvalBasis": "User supplied the AI-generated concept illustration for local visual review; later Inleed preview use requires separate visual approval",
+      "approvalBasis": "Project owner approved the reviewed hero design and this exact user-created AI concept illustration for the existing Amelio Inleed development preview only; no production, merge or deployment approval",
       "externalLicenseEvidence": null
     }
   ]

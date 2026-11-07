@@ -38,7 +38,7 @@ test('gamla ankarmål bevaras och källsektionen fungerar på mobil', () => {
   assert.match(css, /max-width: 740px/);
 });
 
-test('processherons konceptillustration är sidavgränsad och endast registrerad för lokal granskning', () => {
+test('processherons konceptillustration är sidavgränsad och godkänd endast för Inleed-previewn', () => {
   const image = '/images/hero/hallpartner-sa-gar-det-till-hero.webp';
   assert.match(css, /\.hp-info--process \.hp-info__hero/);
   assert.ok(css.includes(`url('${image}')`));
@@ -61,7 +61,10 @@ test('processherons konceptillustration är sidavgränsad och endast registrerad
   const approval = rights.approvals.find((entry) => entry.source.endsWith('hallpartner-sa-gar-det-till-hero.webp'));
   assert.equal(approval?.sourceSha256, sha256);
   assert.equal(approval?.outputSha256, sha256);
-  assert.equal(approval?.scope, 'local-review-only');
+  assert.equal(approval?.scope, 'https://hallpartner-se.preview2.inleed.com');
+  assert.equal(approval?.evidence, 'docs/preview/hallpartner-process-hero-preview-approval-20261107.md');
+  assert.equal(approval?.approvedOn, '2026-11-07');
+  assert.match(approval?.approvalBasis ?? '', /no production, merge or deployment approval/);
   assert.equal(approval?.origin, 'user-created-ai-concept-illustration');
   assert.equal(approval?.externalLicenseEvidence, null);
 });
