@@ -43,7 +43,14 @@ test('processherons konceptillustration är sidavgränsad och endast registrerad
   assert.match(css, /\.hp-info--process \.hp-info__hero/);
   assert.ok(css.includes(`url('${image}')`));
   assert.match(css, /background-size: cover/);
-  assert.match(css, /background-position: center, right 56%/);
+  assert.match(css, /background-position: 62% center/);
+  assert.match(css, /background-position: 68% center/);
+  assert.match(css, /background-position: 72% center/);
+  assert.doesNotMatch(css, /\.hp-info--process \.hp-info__hero\s*\{[^}]*linear-gradient/);
+  assert.match(css, /\.hp-info--process \.hp-info__hero::before\s*\{[\s\S]*inset: 0;[\s\S]*background: rgba\(255, 255, 255, \.15\);/);
+  assert.match(css, /\.hp-info--process \.hp-info__hero-grid \{ position: relative; z-index: 1; \}/);
+  assert.match(css, /\.hp-info--process \.hp-info__hero \.hp-info__textlink\s*\{[\s\S]*color: #F4F4F0 !important;[\s\S]*text-shadow:/);
+  assert.equal((css.match(/\.hp-info--process \.hp-info__hero::before/g) ?? []).length, 1);
   assert.match(css, /\.hp-info--process \.hp-info__intro h1 em \{[\s\S]*overflow-wrap: anywhere;/);
   assert.match(css, /@media \(max-width: 980px\)/);
   assert.match(css, /@media \(max-width: 520px\)/);

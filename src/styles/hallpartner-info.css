@@ -148,18 +148,26 @@
 
 /* Avgränsad vidareutveckling av sidan Så går det till: källor och driftklar leverans. */
 .hp-info--process .hp-info__hero {
+  position: relative;
+  isolation: isolate;
   background-color: #E8EDE6;
-  background-image:
-    linear-gradient(90deg,
-      rgba(241, 244, 237, .99) 0%,
-      rgba(241, 244, 237, .97) 37%,
-      rgba(241, 244, 237, .86) 52%,
-      rgba(241, 244, 237, .28) 70%,
-      rgba(241, 244, 237, 0) 84%),
-    url('/images/hero/hallpartner-sa-gar-det-till-hero.webp');
-  background-position: center, right 56%;
+  background-image: url('/images/hero/hallpartner-sa-gar-det-till-hero.webp');
+  background-position: 62% center;
   background-repeat: no-repeat;
   background-size: cover;
+}
+.hp-info--process .hp-info__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, .15);
+  pointer-events: none;
+}
+.hp-info--process .hp-info__hero-grid { position: relative; z-index: 1; }
+.hp-info--process .hp-info__hero .hp-info__textlink {
+  color: #F4F4F0 !important;
+  text-shadow: 0 1px 2px rgba(7, 26, 22, .8);
 }
 .hp-info--process .hp-info__intro { position: relative; z-index: 1; }
 .hp-info--process .hp-info__intro h1,
@@ -192,14 +200,7 @@
 
 @media (max-width: 980px) {
   .hp-info--process .hp-info__hero {
-    background-image:
-      linear-gradient(180deg,
-        rgba(241, 244, 237, .98) 0%,
-        rgba(241, 244, 237, .95) 54%,
-        rgba(241, 244, 237, .66) 78%,
-        rgba(241, 244, 237, .42) 100%),
-      url('/images/hero/hallpartner-sa-gar-det-till-hero.webp');
-    background-position: center, 70% center;
+    background-position: 68% center;
   }
   .hp-info--process .hp-info__guide {
     justify-self: stretch;
@@ -210,14 +211,7 @@
 
 @media (max-width: 520px) {
   .hp-info--process .hp-info__hero {
-    background-image:
-      linear-gradient(180deg,
-        rgba(241, 244, 237, .99) 0%,
-        rgba(241, 244, 237, .97) 62%,
-        rgba(241, 244, 237, .72) 82%,
-        rgba(241, 244, 237, .52) 100%),
-      url('/images/hero/hallpartner-sa-gar-det-till-hero.webp');
-    background-position: center, 73% center;
+    background-position: 72% center;
   }
   .hp-info--process .hp-info__guide { background: rgba(7, 26, 22, .94); }
 }
