@@ -147,6 +147,40 @@
 
 
 /* Avgränsad vidareutveckling av sidan Så går det till: källor och driftklar leverans. */
+.hp-info--process .hp-info__hero {
+  position: relative;
+  isolation: isolate;
+  background-color: #E8EDE6;
+  background-image: url('/images/hero/hallpartner-sa-gar-det-till-hero.webp');
+  background-position: 62% center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.hp-info--process .hp-info__hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, .15);
+  pointer-events: none;
+}
+.hp-info--process .hp-info__hero-grid { position: relative; z-index: 1; }
+.hp-info--process .hp-info__hero .hp-info__textlink {
+  color: #F4F4F0 !important;
+  text-shadow: 0 1px 2px rgba(7, 26, 22, .8);
+}
+.hp-info--process .hp-info__intro { position: relative; z-index: 1; }
+.hp-info--process .hp-info__intro h1,
+.hp-info--process .hp-info__intro h1 em {
+  overflow-wrap: anywhere;
+}
+.hp-info--process .hp-info__guide {
+  justify-self: end;
+  max-width: 27rem;
+  background: rgba(7, 26, 22, .92);
+  border: 1px solid rgba(244, 244, 240, .22);
+  box-shadow: 0 1.25rem 3.5rem rgba(7, 26, 22, .18);
+}
 .hp-info--process .hp-info__steps li p + p { margin-top: .8rem; }
 .hp-info--process .hp-info__steps strong { color: #203F2D; }
 .hp-info--process .hp-info__steps-note { margin: 1.5rem 0 0; max-width: 52rem; line-height: 1.7; color: #3A5143; }
@@ -162,6 +196,24 @@
 .hp-info--process .hp-info__end-actions .hp-info__textlink { color: #F4F4F0 !important; }
 @media (max-width: 740px) {
   .hp-info--process .hp-info__resource-list { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 980px) {
+  .hp-info--process .hp-info__hero {
+    background-position: 68% center;
+  }
+  .hp-info--process .hp-info__guide {
+    justify-self: stretch;
+    width: 100%;
+    max-width: 42rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .hp-info--process .hp-info__hero {
+    background-position: 72% center;
+  }
+  .hp-info--process .hp-info__guide { background: rgba(7, 26, 22, .94); }
 }
 
 
