@@ -792,6 +792,18 @@
       "origin": "user-created-ai-concept-illustration",
       "approvalBasis": "Project owner approved the reviewed hero design and this exact user-created AI concept illustration for the existing Amelio Inleed development preview only; no production, merge or deployment approval",
       "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/favicon.png",
+      "sourceSha256": "902f586b43dd7b013339c0f9869f098e48ca1ceee851117a3cc8a68a67ace8a1",
+      "outputSha256": "902f586b43dd7b013339c0f9869f098e48ca1ceee851117a3cc8a68a67ace8a1",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "docs/preview/hallpartner-favicon-20261106.md",
+      "approvedOn": "2026-11-06",
+      "origin": "user-created-hallpartner-symbol",
+      "approvalBasis": "User states authorship and requests this exact favicon for the existing preview in a separate verified PR; merge/publication remains separate",
+      "externalLicenseEvidence": null
     }
   ]
 }
