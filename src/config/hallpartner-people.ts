@@ -7,8 +7,9 @@ export const hallpartnerContact = {
   // Confirm the contracting entity before customer go-live (HP-015).
   legalName: 'Fridland Consulting AB',
   organisationNumber: '559071-8549',
-  // A registered/postal address is not proof of a public Hallpartner office.
-  visitAddress: null as string | null,
+  // Confirmed by Hallpartner project owner on 2026-11-08 as the visiting address.
+  // Use the address supplied for Fridland Consulting AB; do not replace the shared telephone.
+  visitAddress: 'Zakrisdalsvägen 26 A, 653 36 Karlstad',
 } as const;
 
 export const hallpartnerPeople = [
