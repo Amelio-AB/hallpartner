@@ -11,7 +11,7 @@ return [
     'privacy_approved' => false,
     // Explicitly opt into contact only after separate privacy and recipient approval.
     'allowed_configurations' => ['hallpartner-offert-v2-review'],
-    'allowed_origin' => 'https://hallpartner.se',
+    'allowed_origin' => 'https://hallpartner-se.preview2.inleed.com',
     'smtp_host' => 'mail.inleed.com',
     'smtp_port' => 587,
     'smtp_username' => '',   // e.g. confirmed sending mailbox
