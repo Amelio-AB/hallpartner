@@ -92,8 +92,17 @@ test('overview keeps every hall destination and the approved image-card integrat
 test('contact guard stays in its component and cannot report false success', () => {
   const contact=read('src/pages/kontakt/index.astro');
   const component=read('src/components/ContactForm.astro');
-  assert.match(contact,/ContactForm/);
+  assert.equal((contact.match(/<ContactForm \/>/g) ?? []).length,1,'one contact form');
+  assert.ok(contact.indexOf('<ContactForm />') < contact.indexOf('id="personer"'),'form must be in hero');
+  assert.match(contact,/hallpartner-contact-hero\.css/);
+  assert.match(contact,/hp-contact-hero__actions/);
+  assert.match(contact,/href=\{contactPhoneHref\}/);
+  assert.match(contact,/href=\{'mailto:' \+ contactEmail\}/);
   assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
+  assert.match(component,/<aside class="hp-info__contact-panel hp-contact-hero__panel"/);
+  assert.match(component,/fieldset class="hp-contact-hero__fieldset" disabled=\{!enabled\}/);
+  assert.doesNotMatch(component,/name="contact\.company"/);
+  assert.match(component,/href="\/offert\/"/);
   assert.match(component,/type="submit" disabled/);
   assert.match(component,/response.status === 200 && body\?\.status === 'success'/);
   assert.match(component,/response.status === 503 && body\?\.status === 'failed'/);
