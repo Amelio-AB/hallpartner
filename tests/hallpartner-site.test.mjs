@@ -105,7 +105,11 @@ test('contact guard stays in its component and cannot report false success', () 
   assert.match(contact,/href=\{'mailto:' \+ contactEmail\}/);
   assert.match(contact,/person\.directPhone/);
   assert.match(contact,/person\.directEmail/);
-  assert.match(contact,/via växeln/);
+  assert.match(contact,/href=\{hallpartnerContact.phoneHref\} aria-label=\{`Ring Hallpartners gemensamma växel/);
+  assert.match(contact,/href=\{'mailto:' \+ hallpartnerContact.email\}/);
+  assert.match(contact,/\{hallpartnerContact.phone\}<\/a>/);
+  assert.match(contact,/\{hallpartnerContact.email\}<\/a>/);
+  assert.doesNotMatch(contact,/Kontakta \{person.firstName\} via växeln/);
   assert.doesNotMatch(contact,/<iframe/);
   assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
   assert.match(component,/<aside class="hp-info__contact-panel hp-contact-hero__panel"/);
