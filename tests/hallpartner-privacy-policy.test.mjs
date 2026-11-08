@@ -14,6 +14,7 @@ test('Hallpartner and temporary Amelio preview have separate privacy routes', ()
   assert.match(policy, /personuppgiftsansvarig.*hallpartners ordinarie webbplats/i);
   assert.match(policy, /hallpartnerContact\.legalName/);
   assert.match(policy, /24 månader/);
+  assert.doesNotMatch(policy, /Särskilt om Amelios testmiljö|utvecklingspreview har en separat mottagning/);
   assert.match(policy, /(?:saknar|saknas) regelbunden gallring/);
   assert.match(policy, /Google Analytics/);
   assert.match(policy, /samtycke/);
