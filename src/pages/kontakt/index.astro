@@ -1,6 +1,7 @@
 ---
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
+import '../../styles/hallpartner-contact-hero.css';
 import ContactForm from '../../components/ContactForm.astro';
 import { hallpartnerPeople } from '../../config/hallpartner-people';
 
@@ -8,7 +9,6 @@ import { hallpartnerPeople } from '../../config/hallpartner-people';
 // Customer verification of ownership, recipient and current phone is still
 // required before launch (HP-015 and HP-007). No backend or form is implied.
 const contactEmail = 'info@hallpartner.se';
-const contactPhone = '054-820 04 90';
 const contactPhoneHref = 'tel:+46548200490';
 
 const preparations = [
@@ -37,27 +37,20 @@ const preparations = [
             Börja med att beskriva vad du har i åtanke. Du behöver inte ha
             alla detaljer klara för att ta den första kontakten.
           </p>
-          <a class="hp-info__textlink" href="#infor-kontakt">
+          <nav class="hp-contact-hero__actions" aria-label="Snabbkontakt">
+            <a class="hp-contact-hero__action" href={contactPhoneHref}>
+              Ring oss <span aria-hidden="true">→</span>
+            </a>
+            <a class="hp-contact-hero__action" href={'mailto:' + contactEmail}>
+              Skriv ett mejl <span aria-hidden="true">→</span>
+            </a>
+          </nav>
+          <a class="hp-info__textlink hp-contact-hero__prep-link" href="#infor-kontakt">
             Vad behöver jag förbereda? <span aria-hidden="true">↓</span>
           </a>
         </div>
 
-        <aside class="hp-info__contact-panel" aria-labelledby="contact-channels-heading">
-          <h2 id="contact-channels-heading">Kontakta Hallpartner</h2>
-          <div class="hp-info__contact-channel">
-            <span class="hp-info__channel-label">E-post</span>
-            <a href={'mailto:' + contactEmail}>{contactEmail}</a>
-            <p>Skicka gärna med en kort beskrivning av ditt projekt.</p>
-          </div>
-          <div class="hp-info__contact-channel">
-            <span class="hp-info__channel-label">Telefon</span>
-            <a href={contactPhoneHref}>{contactPhone}</a>
-            <p>Ring om du hellre vill börja med ett samtal.</p>
-          </div>
-          <a class="hp-info__button" href={'mailto:' + contactEmail}>
-            Skriv ett mejl <span aria-hidden="true">→</span>
-          </a>
-        </aside>
+        <ContactForm />
       </div>
     </section>
 
@@ -65,7 +58,6 @@ const preparations = [
       <div class="hp-draft-rail hp-info__jump-inner">
         <span>På den här sidan</span>
         <a href="#personer">Peter och Jimmy</a>
-        <a href="#kontaktformular">Kontaktformulär</a>
         <a href="#infor-kontakt">Förbered din fråga</a>
         <a href="#nasta-steg">Nästa steg</a>
       </div>
@@ -101,8 +93,6 @@ const preparations = [
         </div>
       </div>
     </section>
-
-    <ContactForm />
 
     <section class="hp-info__section hp-info__section--light" id="infor-kontakt" aria-labelledby="contact-preparation-heading">
       <div class="hp-draft-rail">

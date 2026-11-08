@@ -179,8 +179,22 @@ try {
     }
     if(expectedPath==='/kontakt/')allTrue(await run(function(){
       const form=document.querySelector('#hp-contact-form');
-      return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
-    }),width+': inactive contact');
+      const panel=document.querySelector('.hp-info__hero #kontaktformular');
+      const actions=[...document.querySelectorAll('.hp-contact-hero__action')].map(a=>a.getAttribute('href'));
+      return {
+        found:!!form,
+        hero:!!panel && panel.contains(form),
+        onlyOneForm:document.querySelectorAll('#hp-contact-form').length===1,
+        inactive:form?.dataset.enabled==='false',
+        fieldsDisabled:!!form?.querySelector('fieldset[disabled]') && [...form.querySelectorAll('input,textarea')].every(input=>input.matches(':disabled')),
+        submitDisabled:form?.querySelector('button[type="submit"]')?.disabled===true,
+        status:!!form?.querySelector('[role="status"]'),
+        notice:!!document.querySelector('.hp-contact-hero__notice--review'),
+        quote:!!panel?.querySelector('a[href="/offert/"]'),
+        phone:actions.includes('tel:+46548200490'),
+        email:actions.includes('mailto:info@hallpartner.se')
+      };
+    }),width+': safe contact form in hero');
 
     if(expectedPath==='/offert/') {
       await evaluate('window.hpExpectedQuoteEnabled='+JSON.stringify(quoteEnabled));
