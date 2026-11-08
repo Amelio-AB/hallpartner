@@ -96,8 +96,17 @@ test('contact guard stays in its component and cannot report false success', () 
   assert.ok(contact.indexOf('<ContactForm />') < contact.indexOf('id="personer"'),'form must be in hero');
   assert.match(contact,/hallpartner-contact-hero\.css/);
   assert.match(contact,/hp-contact-hero__actions/);
-  assert.match(contact,/href=\{contactPhoneHref\}/);
+  assert.match(contact,/href="#hallpartner-telefon"/);
+  assert.match(contact,/href="#hallpartner-epost"/);
+  assert.match(contact,/id="kontaktuppgifter"/);
+  assert.match(contact,/id="hallpartner-telefon"/);
+  assert.match(contact,/id="hallpartner-epost"/);
+  assert.match(contact,/href=\{hallpartnerContact.phoneHref\}/);
   assert.match(contact,/href=\{'mailto:' \+ contactEmail\}/);
+  assert.match(contact,/person\.directPhone/);
+  assert.match(contact,/person\.directEmail/);
+  assert.match(contact,/via växeln/);
+  assert.doesNotMatch(contact,/<iframe/);
   assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
   assert.match(component,/<aside class="hp-info__contact-panel hp-contact-hero__panel"/);
   assert.match(component,/fieldset class="hp-contact-hero__fieldset" disabled=\{!enabled\}/);
