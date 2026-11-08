@@ -133,12 +133,12 @@ const preparations = [
                   {person.directPhone && person.directPhoneHref ? (
                     <a href={person.directPhoneHref} aria-label={`Ring ${person.firstName} direkt`}>{person.directPhone}</a>
                   ) : (
-                    <a href="#hallpartner-telefon" aria-label={`Visa växeln för att nå ${person.firstName}`}>Kontakta {person.firstName} via växeln</a>
+                    <a href={hallpartnerContact.phoneHref} aria-label={`Ring Hallpartners gemensamma växel för att nå ${person.firstName}`}>{hallpartnerContact.phone}</a>
                   )}
                   {person.directEmail ? (
                     <a href={'mailto:' + person.directEmail} aria-label={`Mejla ${person.firstName} direkt`}>{person.directEmail}</a>
                   ) : (
-                    <a href="#hallpartner-epost" aria-label={`Visa Hallpartners e-post för att kontakta ${person.firstName}`}>Mejla Hallpartner om {person.firstName}</a>
+                    <a href={'mailto:' + hallpartnerContact.email} aria-label={`Mejla Hallpartner angående ${person.firstName} via gemensam e-post`}>{hallpartnerContact.email}</a>
                   )}
                 </div>
                 <a class="hp-info__person-more" href={`/om-oss/#${person.id}`}>Läs mer om {person.firstName} <span aria-hidden="true">→</span></a>
