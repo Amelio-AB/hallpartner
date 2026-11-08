@@ -62,3 +62,16 @@ test('contact and quote use one PHP endpoint with different explicit configurati
   assert.match(contactForm, /href="\/integritet\/"/);
   assert.match(contactForm, /allowRetry = false/);
 });
+
+test('live upload payload is sealed before offline-only active contact browser builds', () => {
+  const workflow = readFileSync('.github/workflows/preview-validation.yml','utf8');
+  const seal = workflow.indexOf('- name: Save verified payload');
+  const activeQuote = workflow.indexOf('- name: Chrome regression for future active quote with local mock only');
+  const activeContact = workflow.indexOf('- name: Chrome regression for future active contact with local mock only');
+  assert.ok(seal >= 0 && activeQuote > seal && activeContact > activeQuote,
+    'Active mock build must never be packaged as the public preview payload');
+  assert.ok(workflow.includes('node scripts/preview/active-contact-browser.mjs'),
+    'Missing offline browser submission test');
+  assert.match(workflow, /PUBLIC_HP_LEADS_ENABLED: 'true'/);
+  assert.match(workflow, /node scripts\/preview\/active-quote-browser\.mjs/);
+});
