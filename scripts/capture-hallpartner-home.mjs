@@ -186,7 +186,7 @@ try {
         hero:!!panel && panel.contains(form),
         onlyOneForm:document.querySelectorAll('#hp-contact-form').length===1,
         inactive:form?.dataset.enabled==='false',
-        fieldsDisabled:!!form && [...form.querySelectorAll('input,textarea')].every(input=>input.disabled),
+        fieldsDisabled:!!form?.querySelector('fieldset[disabled]') && [...form.querySelectorAll('input,textarea')].every(input=>input.matches(':disabled')),
         submitDisabled:form?.querySelector('button[type="submit"]')?.disabled===true,
         status:!!form?.querySelector('[role="status"]'),
         notice:!!document.querySelector('.hp-contact-hero__notice--review'),
