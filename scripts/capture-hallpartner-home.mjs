@@ -110,6 +110,43 @@ try {
     assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
     for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear'])assert.ok(metrics[field],width+': '+field);
     assert.equal(metrics.surface,expectedPath==='/'?'transparent':'solid');allTrue(metrics.logo,width+': logo');
+    // AMP-006 must enhance on a fine-pointer desktop. CSS-only/no-JS/touch
+    // fallback intentionally keeps all descriptions visible at equal widths.
+    if(expectedPath==='/stalhallar/') {
+      metrics.amp006=await run(function(){
+        const root=document.getElementById('stalhallar-use-cards');
+        const row=root?.querySelector('.ecg__row');
+        const cards=[...(row?.children??[])].filter(card=>card.matches('.ecg__card'));
+        const fine=matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches;
+        const active=!!root?.hasAttribute('data-ecg-enhanced');
+        const details=cards.every(card=>!!card.querySelector('.ecg__details'));
+        return {
+          root:!!root&&root.matches('.ecg[data-ecg]'),
+          allCards:cards.length===3,
+          descriptions:details,
+          correctMode:fine?active:!active,
+        };
+      });
+      allTrue(metrics.amp006,width+': AMP-006 enhanced desktop or readable fallback');
+      if(width>=901) {
+        const fine=await evaluate("matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches");
+        if(fine){
+          await evaluate("document.querySelector('#stalhallar-use-cards .ecg__card')?.focus()");
+          await sleep(550);
+          metrics.amp006Focus=await run(function(){
+            const grid=document.getElementById('stalhallar-use-cards');
+            const cards=[...grid.querySelector('.ecg__row').children].filter(card=>card.matches('.ecg__card'));
+            const sizes=cards.map(card=>card.getBoundingClientRect().width);
+            return {
+              active:cards[0].getAttribute('data-ecg-active')==='true',
+              focus:document.activeElement===cards[0],
+              wideFirst:sizes[0]>sizes[1]*1.5&&sizes[0]>sizes[2]*1.5,
+            };
+          });
+          allTrue(metrics.amp006Focus,width+': AMP-006 expands first card on keyboard focus');
+        }
+      }
+    }
     if(/^\/stalhallar\/(lagerhall|maskinhall|ridhus|plathall|isolerad-hall|talthall)\/$/.test(expectedPath)) {
       metrics.hallHeroRail=await run(function(){
         const hero=document.querySelector('.hp-detail__hero-grid.hp-draft-rail');
@@ -117,12 +154,18 @@ try {
         const copy=hero?.querySelector('.hp-detail__hero-copy');
         if(!hero||!crumbs||!copy)return {structure:false};
         const a=hero.getBoundingClientRect(),b=crumbs.getBoundingClientRect(),c=copy.getBoundingClientRect();
+        const crumbStyle=getComputedStyle(crumbs);
         return {
           structure:true,
           alignedLeft:Math.abs(a.left-b.left)<=2,
           alignedRight:Math.abs(a.right-b.right)<=2,
           copyInside:c.left>=b.left-2&&c.right<=b.right+2,
           minimumGutter:a.left>=Math.min(12,innerWidth*.03),
+          breadcrumbFlex:crumbStyle.display==='flex'&&crumbStyle.alignItems==='center',
+          breadcrumbWrap:crumbStyle.flexWrap==='wrap',
+          breadcrumbGap:parseFloat(crumbStyle.columnGap)>=8,
+          breadcrumbHeight:b.height>=48,
+          breadcrumbContents:crumbs.children.length===5&&[...crumbs.querySelectorAll('span[aria-hidden="true"]')].filter(s=>s.textContent.trim()==='/').length===2,
           backgroundPhoto:!!document.querySelector('.hp-detail__hero-media img'),
         };
       });
@@ -179,10 +222,50 @@ try {
     }
     if(expectedPath==='/kontakt/')allTrue(await run(function(){
       const form=document.querySelector('#hp-contact-form');
-      return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
-    }),width+': inactive contact');
+      const panel=document.querySelector('.hp-info__hero #kontaktformular');
+      const actions=[...document.querySelectorAll('.hp-contact-hero__action')].map(a=>a.getAttribute('href'));
+      return {
+        found:!!form,
+        hero:!!panel && panel.contains(form),
+        onlyOneForm:document.querySelectorAll('#hp-contact-form').length===1,
+        inactive:form?.dataset.enabled==='false',
+        fieldsDisabled:!!form?.querySelector('fieldset[disabled]') && [...form.querySelectorAll('input,textarea')].every(input=>input.matches(':disabled')),
+        submitDisabled:form?.querySelector('button[type="submit"]')?.disabled===true,
+        status:!!form?.querySelector('[role="status"]'),
+        notice:!!document.querySelector('.hp-contact-hero__notice--review'),
+        quote:!!panel?.querySelector('a[href="/offert/"]'),
+        phone:actions.includes('#hallpartner-telefon'),
+        email:actions.includes('#hallpartner-epost'),
+        directoryBeforePeople:(document.querySelector('#kontaktuppgifter')?.compareDocumentPosition(document.querySelector('#personer')) & Node.DOCUMENT_POSITION_FOLLOWING)!==0,
+        phoneVisible:!!document.querySelector('#hallpartner-telefon')?.parentElement.querySelector('a[href="tel:+46548200490"]'),
+        emailVisible:!!document.querySelector('#hallpartner-epost')?.parentElement.querySelector('a[href="mailto:info@hallpartner.se"]'),
+        mobilePortraitsFit:innerWidth>460 || (() => {
+          const portraits=[...document.querySelectorAll('.hp-info__person--contact .hp-info__person-photo')];
+          return portraits.length===2 && portraits.every(photo=>{
+            const rect=photo.getBoundingClientRect();
+            return rect.width>=180 && rect.height>=rect.width*.70;
+          });
+        })(),
+        noUnapprovedMap:!document.querySelector('#kontaktuppgifter iframe')
+      };
+    }),width+': safe contact form in hero');
 
     if(expectedPath==='/offert/') {
+      metrics.quoteBreadcrumb=await run(function(){
+        const shell=document.querySelector('.hp-quote-shell');
+        const crumb=shell?.querySelector('nav.hp-info__crumbs');
+        if(!shell||!crumb)return {present:false};
+        const a=shell.getBoundingClientRect(),b=crumb.getBoundingClientRect();
+        const paddingTop=parseFloat(getComputedStyle(shell).paddingTop);
+        return {
+          present:true,
+          noTopPadding:paddingTop<=1,
+          flushInsideShell:Math.abs(a.top-b.top)<=2,
+          greenBackground:getComputedStyle(crumb,'::before').backgroundColor==='rgb(21, 49, 41)',
+          readableHeight:b.height>=48
+        };
+      });
+      allTrue(metrics.quoteBreadcrumb,width+': quote breadcrumb flush without pale strip');
       await evaluate('window.hpExpectedQuoteEnabled='+JSON.stringify(quoteEnabled));
       allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide');

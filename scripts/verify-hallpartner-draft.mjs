@@ -24,7 +24,7 @@ const expectedAnchors = {
   'stalhallar/isolerad-hall/index.html':['isolering-behov','isolering-samspel','isolering-anvandning','isolering-fragor'],
   'stalhallar/ridhus/index.html':['ridhus-verksamhet','ridhus-ridyta','ridhus-miljo','ridhus-fragor'],
   'stalhallar/talthall/index.html':['talthall-utforande','talthall-anvandning','talthall-byggplats','talthall-fragor'],
-  'kontakt/index.html':['infor-kontakt','nasta-steg'],
+  'kontakt/index.html':['kontaktuppgifter','hallpartner-telefon','hallpartner-epost','personer','infor-kontakt','nasta-steg'],
   'sa-gar-det-till/index.html':['projekt-forberedelser','projekt-ansvar'],
   'om-oss/index.html':['teamet','om-inriktning','om-kontakt'],
 };
@@ -79,7 +79,18 @@ for (const slug of ['lagerhall','maskinhall','plathall','isolerad-hall','ridhus'
 }
 const contact=pages.get('kontakt/index.html');
 assert.ok(contact.includes('id="hp-contact-form"') && contact.includes('data-enabled="false"'));
+assert.ok(contact.includes('id="kontaktformular"') && contact.includes('hp-contact-hero__panel'));
+assert.ok(contact.indexOf('id="hp-contact-form"') < contact.indexOf('id="personer"'),
+  'Contact form must appear in the hero before the team section');
+for (const href of ['/offert/', 'tel:+46548200490', 'mailto:info@hallpartner.se']) {
+  assert.ok(contact.includes('href="' + href + '"'), 'Missing safe contact route: ' + href);
+}
 assert.ok(contact.includes('info@hallpartner.se') && contact.includes('054-820 04 90'));
+assert.ok(contact.indexOf('id="kontaktuppgifter"') < contact.indexOf('id="personer"'),
+  'Shared contact section must be before Peter/Jimmy');
+assert.ok(contact.includes('href="#hallpartner-telefon"') && contact.includes('href="#hallpartner-epost"'),
+  'Hero buttons must lead to shared contacts');
+assert.ok(!contact.includes('<iframe'), 'No Google Maps iframe before office location and privacy review');
 const offer=pages.get('offert/index.html');
 inspectHtml(offer, 'offert/index.html');
 for (const name of ['Jimmy Gustafsson','Peter Fridland']) assert.ok(pages.get('om-oss/index.html').includes(name));

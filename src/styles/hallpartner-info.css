@@ -9,6 +9,11 @@
 .hp-info__crumbs { display:flex; align-items:center; gap:.65rem; flex-wrap:wrap; padding-block:1rem; min-height:3.6rem; font-size:.83rem; color:#385649; }
 .hp-info__crumbs a { text-decoration:underline; text-underline-offset:.24em; }
 .hp-info__hero { background:#E6ECE5; padding-block:clamp(3.5rem,6vw,6.5rem); }
+.hp-info--contact .hp-info__hero {
+  background-image: linear-gradient(90deg, #E6ECE5 0%, rgba(230, 236, 229, .98) 28%, rgba(230, 236, 229, .72) 44%, rgba(230, 236, 229, .08) 65%, transparent 80%), url('/images/hero/hallpartner-kontakt-hero-illustration.webp');
+  background-position: center, 55% center;
+  background-size: cover;
+}
 .hp-info__hero-grid { display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); gap:clamp(2rem,7vw,7rem); align-items:center; }
 .hp-info__eyebrow { font-size:.77rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:#236F31; line-height:1.45; margin-bottom:1.2rem; }
 .hp-info__intro h1 { max-width:13ch; font-size:clamp(3rem,5.4vw,5.7rem); font-weight:700; margin-bottom:1.5rem; text-wrap:balance; }
@@ -73,6 +78,10 @@
   .hp-info__heading-row { align-items:flex-start; flex-direction:column; }
   .hp-info__jump-inner > span { flex-basis:100%; }
   .hp-info__hero { padding-block:3rem 3.5rem; }
+  .hp-info--contact .hp-info__hero {
+    background-image: linear-gradient(180deg, rgba(230, 236, 229, .92), rgba(230, 236, 229, .78) 42%, rgba(230, 236, 229, .12) 75%), url('/images/hero/hallpartner-kontakt-hero-illustration.webp');
+    background-position: center, 54% center;
+  }
 }
 @media(max-width:410px) {
   .hp-info__intro h1 { font-size:clamp(2.35rem,10.4vw,3.1rem); }
@@ -142,7 +151,7 @@
 }
 @media(max-width:460px) {
   .hp-info__person--contact { flex-direction:column; }
-  .hp-info__person--contact .hp-info__person-photo { width:100%; height:auto; aspect-ratio: 4 / 3; }
+  .hp-info__person--contact .hp-info__person-photo { flex-basis:auto; width:100%; height:auto; aspect-ratio: 4 / 3; }
 }
 
 
