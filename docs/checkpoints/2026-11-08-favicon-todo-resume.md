@@ -12,6 +12,10 @@
 
 **Bevisgräns:** GitHub Actions rapporterar godkänd publicering och live-interaktionstester. Denna genomgång har inte etablerat en separat, aktuell manuell webbläsarobservation av faviconens utseende. Kundens WordPress, DNS, SMTP och skarpa produktionssajt har inte ändrats av checkpointarbetet.
 
+## Tillägg 2026-11-08 – nytt försäljningsmandat
+
+Andreas har efter denna checkpoints första avstämning meddelat att Peter och Jimmy har gett AI mandat att utforma den säljprocess och webbkundresa som bedöms mest affärsdrivande. Se [HPD-031](../PROJECT_DECISIONS.md) och [arbetsmodellen för försäljning](2026-11-08-saljmandat-och-affarsflode.md). **HP-051 är nu Klar som webb-/processupplägg, HP-005 är Klar för V2-frågorna på previewn och HP-010 är aktivt Utreds, inte passivt Väntar på kund.** Bindande sak-, avtals- och leveransfakta måste fortfarande vara korrekta. Punkterna nedan dokumenterar läget *innan* detta tillägg där de avviker.
+
 ## Avstämning av öppna uppgifter
 
 - **Färdigt som previewfunktion:** favicon (inget eget HP-ID); HP-048 header-CTA `Be om offert` → `/offert/`; HP-038 Node 24/AMP-gate; HP-040 det befintliga, riktiga `main`→Inleed-previewflödet. HP-050 totalentreprenad/nyckelfärdigt är redan markerad `Klar` efter tidigare ägarbeslut.
