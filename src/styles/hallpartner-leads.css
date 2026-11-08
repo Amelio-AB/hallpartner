@@ -23,6 +23,26 @@
 .hp-contact-form__website { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
 @media (max-width:650px) { .hp-contact-form { grid-template-columns:1fr; } }
 
+/* When contact submission is off, show real paths instead of a dead form.
+   Reuse the established info-page cards and CTA, limited to /kontakt/. */
+.hp-info--contact .hp-contact-choices { grid-template-columns:repeat(2,minmax(0,1fr)); }
+.hp-info--contact .hp-contact-choices .hp-info__card {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:.9rem;
+}
+.hp-info--contact .hp-contact-choices .hp-info__card p { margin:0; }
+.hp-info--contact .hp-contact-choices .hp-info__related-links,
+.hp-info--contact .hp-contact-choices .hp-info__button { margin-top:auto; }
+.hp-info--contact .hp-contact-choices .hp-info__related-links a {
+  overflow-wrap:anywhere;
+  line-height:1.6;
+}
+@media (max-width:740px) {
+  .hp-info--contact .hp-contact-choices { grid-template-columns:minmax(0,1fr); }
+}
+
 
 /* Offertguide – Hallpartners visuella tolkning av referensbilderna.
    Uses the REAL visitor-site Inter font and hp-site CTA, not the reference client's serif.
