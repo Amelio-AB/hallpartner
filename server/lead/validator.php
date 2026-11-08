@@ -217,6 +217,17 @@ function hp_validate_lead(mixed $input): array
     return ['valid' => true, 'kind' => $kind, 'answers' => $values];
 }
 
+/** Contact intake is an independent server-side opt-in, not a public HTML flag.
+ * Existing quote handling retains its previously approved policy. */
+function hp_configuration_allowed(string $kind, array $config): bool
+{
+    $allowed = $config['allowed_configurations'] ?? null;
+    if ($kind === 'hallpartner-contact-v1') {
+        return is_array($allowed) && in_array($kind, $allowed, true);
+    }
+    return $allowed === null || (is_array($allowed) && in_array($kind, $allowed, true));
+}
+
 /**
  * Rate counting stores only a keyed digest of the address; no raw IP or PII.
  * Directory must be private and writable, outside public_html.
