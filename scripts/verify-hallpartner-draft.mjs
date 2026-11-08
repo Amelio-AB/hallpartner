@@ -78,7 +78,13 @@ for (const slug of ['lagerhall','maskinhall','plathall','isolerad-hall','ridhus'
   assert.ok(pages.get('stalhallar/index.html').includes('href="/stalhallar/'+slug+'/"'),slug);
 }
 const contact=pages.get('kontakt/index.html');
-assert.ok(contact.includes('id="hp-contact-form"') && contact.includes('data-enabled="false"'));
+assert.ok(contact.includes('id="kontaktformular"') && contact.includes('href="#kontaktformular"'));
+assert.ok(contact.includes('data-contact-alternatives') && contact.includes('Kontaktvägar'));
+for (const href of ['/offert/', 'tel:+46548200490', 'mailto:info@hallpartner.se']) {
+  assert.ok(contact.includes('href="' + href + '"'), 'Missing contact option: ' + href);
+}
+assert.ok(!contact.includes('id="hp-contact-form"') && !contact.includes('name="contact.message"'),
+  'Disabled contact form must not appear in the public preview HTML');
 assert.ok(contact.includes('info@hallpartner.se') && contact.includes('054-820 04 90'));
 const offer=pages.get('offert/index.html');
 inspectHtml(offer, 'offert/index.html');
