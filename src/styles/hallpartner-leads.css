@@ -39,7 +39,8 @@
   --hp-quote-heading: #071A16;
   background: var(--hp-quote-paper);
   color: var(--hp-quote-heading);
-  padding-block: 1.15rem clamp(3rem, 5vw, 5.5rem);
+  /* Keep the green breadcrumb flush with the header, as on other visitor pages. */
+  padding-block: 0 clamp(3rem, 5vw, 5.5rem);
 }
 .hp-quote-shell__lead {
   max-width: 58rem;
