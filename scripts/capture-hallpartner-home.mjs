@@ -117,12 +117,18 @@ try {
         const copy=hero?.querySelector('.hp-detail__hero-copy');
         if(!hero||!crumbs||!copy)return {structure:false};
         const a=hero.getBoundingClientRect(),b=crumbs.getBoundingClientRect(),c=copy.getBoundingClientRect();
+        const crumbStyle=getComputedStyle(crumbs);
         return {
           structure:true,
           alignedLeft:Math.abs(a.left-b.left)<=2,
           alignedRight:Math.abs(a.right-b.right)<=2,
           copyInside:c.left>=b.left-2&&c.right<=b.right+2,
           minimumGutter:a.left>=Math.min(12,innerWidth*.03),
+          breadcrumbFlex:crumbStyle.display==='flex'&&crumbStyle.alignItems==='center',
+          breadcrumbWrap:crumbStyle.flexWrap==='wrap',
+          breadcrumbGap:parseFloat(crumbStyle.columnGap)>=8,
+          breadcrumbHeight:b.height>=48,
+          breadcrumbContents:crumbs.children.length===5&&[...crumbs.querySelectorAll('span[aria-hidden="true"]')].filter(s=>s.textContent.trim()==='/').length===2,
           backgroundPhoto:!!document.querySelector('.hp-detail__hero-media img'),
         };
       });
