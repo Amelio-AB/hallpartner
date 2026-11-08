@@ -4,6 +4,7 @@ import { readFile, access } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import { AMP003_APPROVED_VERSION, hallpartnerFooterConfig as config } from '../src/config/hallpartner-footer.mjs';
+import { hallpartnerContact } from '../src/config/hallpartner-people.ts';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const allLinks = config.groups.flatMap(group => group.links);
@@ -27,8 +28,10 @@ test('every AMP Footer link reaches a real visitor Astro page', async () => {
 });
 test('AMP Footer contact values still match the visitor contact page', async () => {
   const contact = await readFile(join(root, 'src/pages/kontakt/index.astro'), 'utf8');
-  assert.ok(contact.includes(config.contact.email));
-  assert.ok(contact.includes(config.contact.phone));
+  assert.equal(config.contact.email, hallpartnerContact.email);
+  assert.equal(config.contact.phone, hallpartnerContact.phone);
+  assert.ok(contact.includes('hallpartnerContact.email'));
+  assert.ok(contact.includes('hallpartnerContact.phone'));
 });
 test('AMP-003 is the default and its explicit rollback still fails closed on missing packages', async () => {
   const layout = await readFile(join(root, 'src/layouts/HallpartnerSiteLayout.astro'), 'utf8');

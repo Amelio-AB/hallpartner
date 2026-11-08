@@ -3,11 +3,21 @@ export const hallpartnerContact = {
   email: 'info@hallpartner.se',
   phone: '054-820 04 90',
   phoneHref: 'tel:+46548200490',
+  // The legal name and number appear on Hallpartner's existing website.
+  // Confirm the contracting entity before customer go-live (HP-015).
+  legalName: 'Fridland Consulting AB',
+  organisationNumber: '559071-8549',
+  // A registered/postal address is not proof of a public Hallpartner office.
+  visitAddress: null as string | null,
 } as const;
 
 export const hallpartnerPeople = [
   {
     id: 'jimmy-gustafsson',
+    // Reserved for verified, explicitly publishable personal direct contacts.
+    directPhone: null as string | null,
+    directPhoneHref: null as string | null,
+    directEmail: null as string | null,
     firstName: 'Jimmy',
     name: 'Jimmy Gustafsson',
     role: 'Säljare och projektledare för hallar',
@@ -17,6 +27,10 @@ export const hallpartnerPeople = [
   },
   {
     id: 'peter-fridland',
+    // Reserved for verified, explicitly publishable personal direct contacts.
+    directPhone: null as string | null,
+    directPhoneHref: null as string | null,
+    directEmail: null as string | null,
     firstName: 'Peter',
     name: 'Peter Fridland',
     role: 'Säljare och projektledare för hallar',

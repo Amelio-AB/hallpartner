@@ -6,22 +6,19 @@ import '../styles/hallpartner-leads.css';
 const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
 ---
 
-<section class="hp-info__section hp-info__section--light" id="kontaktformular" aria-labelledby="hp-contact-form-heading">
-  <div class="hp-draft-rail">
-    <div class="hp-info__heading-row">
-      <div>
-        <p class="hp-info__eyebrow">Direkt kontakt</p>
-        <h2 id="hp-contact-form-heading">Skicka en fråga till Hallpartner.</h2>
-      </div>
-      <p>Det räcker med namn, e-post och ett kort meddelande. Du kan också använda telefon eller mejl ovan.</p>
-    </div>
-    <p class:list={['hp-leads-note', { 'hp-leads-note--review': !enabled }]} id="hp-form-notice">
-      {enabled
-        ? 'Uppgifterna används för att besvara din förfrågan. Skicka inte känsliga personuppgifter.'
-        : 'Arbetsversion: formuläret kan granskas men tar inte emot uppgifter ännu. Kontakta Hallpartner via telefon eller e-post tills mottagningen har testats.'}
-    </p>
-    <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
-      aria-describedby="hp-form-notice">
+<aside class="hp-info__contact-panel hp-contact-hero__panel" id="kontaktformular"
+  aria-labelledby="hp-contact-form-heading">
+  <h2 id="hp-contact-form-heading">Skicka ett meddelande</h2>
+  <p class="hp-contact-hero__intro">Har du en fråga? Beskriv kort vad du undrar över så hjälper vi dig vidare.</p>
+  <p class:list={['hp-contact-hero__notice', { 'hp-contact-hero__notice--review': !enabled }]}
+    id="hp-form-notice">
+    {enabled
+      ? 'Uppgifterna används för att besvara din fråga. Skicka inte känsliga personuppgifter.'
+      : 'Förhandsvisning – kontaktformuläret är ännu inte aktivt. Ring eller mejla Hallpartner om du vill få svar.'}
+  </p>
+  <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
+    aria-describedby="hp-form-notice">
+    <fieldset class="hp-contact-hero__fieldset" disabled={!enabled}>
       <div class="hp-contact-form__field">
         <label for="hp-form-name">Namn *</label>
         <input id="hp-form-name" name="contact.name" autocomplete="name" minlength="2" maxlength="120" required />
@@ -31,17 +28,12 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
         <input id="hp-form-email" type="email" name="contact.email" autocomplete="email" maxlength="254" required />
       </div>
       <div class="hp-contact-form__field">
-        <label for="hp-form-phone">Telefon</label>
+        <label for="hp-form-phone">Telefon (frivilligt)</label>
         <input id="hp-form-phone" name="contact.phone" type="tel" autocomplete="tel" maxlength="22" />
-      </div>
-      <div class="hp-contact-form__field">
-        <label for="hp-form-company">Företag</label>
-        <input id="hp-form-company" name="contact.company" autocomplete="organization" maxlength="120" />
       </div>
       <div class="hp-contact-form__field hp-contact-form__field--wide">
         <label for="hp-form-message">Vad gäller din fråga? *</label>
-        <textarea id="hp-form-message" name="contact.message" rows="5" minlength="10" maxlength="4000" required></textarea>
-        <p class="hp-contact-form__hint">Beskriv gärna vad du planerar. Skicka inga känsliga personuppgifter.</p>
+        <textarea id="hp-form-message" name="contact.message" rows="4" minlength="10" maxlength="4000" required></textarea>
       </div>
       <div class="hp-contact-form__website" aria-hidden="true">
         <label for="hp-form-website">Lämna fältet tomt</label>
@@ -50,10 +42,13 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
       <div class="hp-contact-form__field hp-contact-form__field--wide">
         <button class="hp-contact-form__submit" type="submit" disabled>Skicka meddelande</button>
       </div>
-      <p class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite"></p>
-    </form>
-  </div>
-</section>
+    </fieldset>
+    <p class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite"></p>
+  </form>
+  <p class="hp-contact-hero__quote">
+    Gäller det en ny hall? <a href="/offert/">Använd vår offertguide</a>.
+  </p>
+</aside>
 
 <script>
   const form = document.querySelector<HTMLFormElement>('#hp-contact-form');
