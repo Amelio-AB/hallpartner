@@ -110,6 +110,43 @@ try {
     assert.equal(metrics.ampFooter,process.env.HALLPARTNER_FOOTER_MODE!=='legacy');
     for(const field of ['noindex','fallbackHidden','noOverflow','images','headingClear'])assert.ok(metrics[field],width+': '+field);
     assert.equal(metrics.surface,expectedPath==='/'?'transparent':'solid');allTrue(metrics.logo,width+': logo');
+    // AMP-006 must enhance on a fine-pointer desktop. CSS-only/no-JS/touch
+    // fallback intentionally keeps all descriptions visible at equal widths.
+    if(expectedPath==='/stalhallar/') {
+      metrics.amp006=await run(function(){
+        const root=document.getElementById('stalhallar-use-cards');
+        const row=root?.querySelector('.ecg__row');
+        const cards=[...(row?.children??[])].filter(card=>card.matches('.ecg__card'));
+        const fine=matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches;
+        const active=!!root?.hasAttribute('data-ecg-enhanced');
+        const details=cards.every(card=>!!card.querySelector('.ecg__details'));
+        return {
+          root:!!root&&root.matches('.ecg[data-ecg]'),
+          allCards:cards.length===3,
+          descriptions:details,
+          correctMode:fine?active:!active,
+        };
+      });
+      allTrue(metrics.amp006,width+': AMP-006 enhanced desktop or readable fallback');
+      if(width>=901) {
+        const fine=await evaluate("matchMedia('(hover: hover) and (pointer: fine) and (min-width: 901px)').matches");
+        if(fine){
+          await evaluate("document.querySelector('#stalhallar-use-cards .ecg__card')?.focus()");
+          await sleep(550);
+          metrics.amp006Focus=await run(function(){
+            const grid=document.getElementById('stalhallar-use-cards');
+            const cards=[...grid.querySelector('.ecg__row').children].filter(card=>card.matches('.ecg__card'));
+            const sizes=cards.map(card=>card.getBoundingClientRect().width);
+            return {
+              active:cards[0].getAttribute('data-ecg-active')==='true',
+              focus:document.activeElement===cards[0],
+              wideFirst:sizes[0]>sizes[1]*1.5&&sizes[0]>sizes[2]*1.5,
+            };
+          });
+          allTrue(metrics.amp006Focus,width+': AMP-006 expands first card on keyboard focus');
+        }
+      }
+    }
     if(/^\/stalhallar\/(lagerhall|maskinhall|ridhus|plathall|isolerad-hall|talthall)\/$/.test(expectedPath)) {
       metrics.hallHeroRail=await run(function(){
         const hero=document.querySelector('.hp-detail__hero-grid.hp-draft-rail');
