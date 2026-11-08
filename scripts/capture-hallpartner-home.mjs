@@ -191,8 +191,12 @@ try {
         status:!!form?.querySelector('[role="status"]'),
         notice:!!document.querySelector('.hp-contact-hero__notice--review'),
         quote:!!panel?.querySelector('a[href="/offert/"]'),
-        phone:actions.includes('tel:+46548200490'),
-        email:actions.includes('mailto:info@hallpartner.se')
+        phone:actions.includes('#hallpartner-telefon'),
+        email:actions.includes('#hallpartner-epost'),
+        directoryBeforePeople:(document.querySelector('#kontaktuppgifter')?.compareDocumentPosition(document.querySelector('#personer')) & Node.DOCUMENT_POSITION_FOLLOWING)!==0,
+        phoneVisible:!!document.querySelector('#hallpartner-telefon')?.parentElement.querySelector('a[href="tel:+46548200490"]'),
+        emailVisible:!!document.querySelector('#hallpartner-epost')?.parentElement.querySelector('a[href="mailto:info@hallpartner.se"]'),
+        noUnapprovedMap:!document.querySelector('#kontaktuppgifter iframe')
       };
     }),width+': safe contact form in hero');
 
