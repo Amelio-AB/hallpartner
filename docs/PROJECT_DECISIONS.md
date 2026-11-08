@@ -52,6 +52,10 @@
 
 ## Försäljningsprocess och mandat, 2026-11-08
 
+**Prioriteringsbeslut senare den 8 november 2026:** Andreas har klargjort att **webbplatsen ska färdigställas först**. HPD-031 ger fortsatt mandat att optimera hemsidans offertvägar och kundresa, men arbetet med ett *internt* säljdokument, CRM, uppföljningsrutiner och försäljningsmallar är pausat tills hemsidan är klar (HP-052). Detta ändrar arbetsordningen, inte det tidigare delegerade mandatet. Webbplatsens lanseringskritiska faktakontroller är fortfarande aktuella.
+
+
+
 | ID / datum | Beslut | Motiv | Status | Beroenden / källa |
 |---|---|---|---|---|
 | HPD-031 · 2026-11-08 | **Delegerat mandat för försäljningsupplägg:** Andreas meddelar att Peter och Jimmy har bekräftat att AI får välja hur Hallpartners säljprocess, webbcopy, CTA, offertfrågor och kundresa bör utformas för att vinna fler affärer. Hallpartner är berett att anpassa arbetssättet efter den bästa föreslagna modellen. Behåll de sju redan publicerade processtegen som redaktionell grund, den enkla AMP-001-offertguiden och tydlig väg till offert utan krav på färdiga ritningar. Ingen separat kundgranskning krävs av **redaktionell ordning och säljutformning**. | Hindra att redan implementerad webbprocess fastnar i upprepade godkännandeloopar. Fokusera på fler relevanta förfrågningar och faktiskt vunna affärer; uppföljning av dessa utfall avgör förbättringar. | **Beslutat mandat för sälj- och webbmetod**, enligt Andreas uppgift om Peter/Jimmys bekräftelse; inte bevis för operativa eller juridiska förhållanden | Andreas projektbesked 2026-11-08; [HP-005/010/051](TODO.md); [process på main](../src/pages/sa-gar-det-till/index.astro); [utförlig arbetsmodell](checkpoints/2026-11-08-saljmandat-och-affarsflode.md) |
