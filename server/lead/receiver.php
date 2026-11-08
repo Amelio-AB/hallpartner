@@ -64,8 +64,7 @@ try {
 }
 $validation = hp_validate_lead($input);
 if (!$validation['valid']) hp_reply(422, ['status' => 'validation-error', 'fields' => $validation['errors']]);
-if (isset($config['allowed_configurations']) &&
-    (!is_array($config['allowed_configurations']) || !in_array($validation['kind'], $config['allowed_configurations'], true))) {
+if (!hp_configuration_allowed($validation['kind'], $config)) {
     hp_reply(403, ['status' => 'failed']);
 }
 
