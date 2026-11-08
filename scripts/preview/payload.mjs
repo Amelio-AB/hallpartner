@@ -8,7 +8,7 @@ import { quoteReleasePolicy } from './quote-release.mjs';
 
 const ROBOTS = 'User-agent: *\nDisallow: /\n';
 export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enabled) {
-  const assets = []; const links = []; const scripts = []; let noindex = false; let contact = false; let quote = false;
+  const assets = []; const links = []; const scripts = []; let noindex = false; let quote = false;
   walkSync(parse(html), node => {
     if (!node.name) return;
     const a = node.attributes;
@@ -22,8 +22,11 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
       assert(a['data-enabled'] === (permitted ? 'true' : 'false'),
         'Unapproved form activation or mismatched quote release: ' + page);
     }
-    if (node.name === 'form') assert(a['data-enabled'] === 'false' && !a.action, 'Active form in ' + page);
-    if (a.id === 'hp-contact-form') contact = a['data-enabled'] === 'false';
+    if (node.name === 'form') {
+      assert(a['data-enabled'] === 'false' && !a.action, 'Active form in ' + page);
+      assert(page !== 'kontakt/index.html', 'Contact form must not be shipped in preview');
+    }
+    assert(a.id !== 'hp-contact-form', 'Contact form element must not be shipped in preview');
     if (a.id === 'hp-offert-guide') quote = a['data-enabled'] === (quoteEnabled ? 'true' : 'false');
     if (a.src) assets.push(a.src);
     if (a.poster) assets.push(a.poster);
@@ -35,7 +38,13 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
     if (node.name === 'style') assets.push(...cssRefs(node.children.map(x => x.value ?? '').join('')));
   });
   assert(noindex, 'Missing noindex,nofollow: ' + page);
-  if (page === 'kontakt/index.html') assert(contact, 'Contact disabled contract missing');
+  if (page === 'kontakt/index.html') {
+    assert(html.includes('data-contact-alternatives') && html.includes('id="kontaktformular"'),
+      'Contact alternatives missing from preview');
+    for (const href of ['/offert/', 'tel:+46548200490', 'mailto:info@hallpartner.se']) {
+      assert(links.includes(href), 'Missing usable contact path: ' + href);
+    }
+  }
   if (page === 'offert/index.html') assert(quote, 'Quote mode does not match approved preview release');
   if (page === 'offert/index.html' && quoteEnabled) {
     assert(links.includes('/integritet/'), 'Active quote must link to the approved privacy notice');
