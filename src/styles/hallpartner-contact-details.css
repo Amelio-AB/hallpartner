@@ -88,6 +88,27 @@
   font-size: clamp(1.65rem,2.6vw,2.5rem);
   margin-bottom: .75rem;
 }
+.hp-info--contact .hp-contact-directory__address {
+  font-style: normal;
+  font-size: clamp(1.05rem, 1.9vw, 1.3rem);
+  line-height: 1.6;
+  font-weight: 700;
+  color: #143F2C;
+}
+.hp-info--contact .hp-contact-directory__directions {
+  display: inline-flex;
+  gap: .5rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  color: #17472C;
+  font-weight: 750;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+.hp-info--contact .hp-contact-directory__directions:focus-visible {
+  outline: 3px solid #287B39;
+  outline-offset: 4px;
+}
 .hp-info--contact .hp-contact-directory__pending {
   padding-top: 1rem;
   border-top: 1px solid #C6D3C7;
