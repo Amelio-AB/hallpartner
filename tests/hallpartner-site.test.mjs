@@ -93,7 +93,14 @@ test('contact guard stays in its component and cannot report false success', () 
   const contact=read('src/pages/kontakt/index.astro');
   const component=read('src/components/ContactForm.astro');
   assert.match(contact,/ContactForm/);
+  assert.match(contact,/href="#kontaktformular">Kontaktvägar<\/a>/);
   assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
+  assert.match(component,/\{enabled \? \(/);
+  assert.match(component,/data-contact-alternatives/);
+  assert.match(component,/href="\/offert\/"/);
+  assert.match(component,/href="tel:\+46548200490"/);
+  assert.match(component,/href="mailto:info@hallpartner\.se"/);
+  assert.match(component,/if \(form && message && button && form\.dataset\.enabled === 'true'\)/);
   assert.match(component,/type="submit" disabled/);
   assert.match(component,/response.status === 200 && body\?\.status === 'success'/);
   assert.match(component,/response.status === 503 && body\?\.status === 'failed'/);
