@@ -178,9 +178,22 @@ try {
       });allTrue(metrics.hero,width+': hero and anchors');
     }
     if(expectedPath==='/kontakt/')allTrue(await run(function(){
-      const form=document.querySelector('#hp-contact-form');
-      return {found:!!form,inactive:form?.dataset.enabled==='false',disabled:form?.querySelector('button[type="submit"]')?.disabled===true,status:!!form?.querySelector('[role="status"]'),notice:!!document.querySelector('.hp-leads-note--review')};
-    }),width+': inactive contact');
+      const section=document.querySelector('#kontaktformular');
+      const alternatives=section?.querySelector('[data-contact-alternatives]');
+      const links=[...(alternatives?.querySelectorAll('a[href]') ?? [])].map(a=>a.getAttribute('href'));
+      const jump=document.querySelector('a[href="#kontaktformular"]');
+      return {
+        section:!!section,
+        alternatives:!!alternatives,
+        visible:!!alternatives && alternatives.getBoundingClientRect().width>200,
+        jump:jump?.textContent.trim()==='Kontaktvägar',
+        noForm:!document.querySelector('#hp-contact-form'),
+        noDisabledSubmit:!section?.querySelector('button[type="submit"]'),
+        quote:links.includes('/offert/'),
+        phone:links.includes('tel:+46548200490'),
+        email:links.includes('mailto:info@hallpartner.se'),
+      };
+    }),width+': usable contact alternatives');
 
     if(expectedPath==='/offert/') {
       await evaluate('window.hpExpectedQuoteEnabled='+JSON.stringify(quoteEnabled));
