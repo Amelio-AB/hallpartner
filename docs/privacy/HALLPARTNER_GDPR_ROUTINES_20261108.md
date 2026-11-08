@@ -18,7 +18,7 @@
 - Oavslutade förfrågningar utan affär eller pågående projekt: högst **24 månader från senaste relevanta kontakt**, men radera tidigare om ändamålet upphört.
 - Pågående offerter/projekt: årlig bedömning av behov, separat bevarandetid när projekt avslutas.
 - Avtal, fakturor och redovisningsunderlag: gallra enligt aktuella rättsliga skyldigheter och dokumenterade rättsliga behov; en bokföringshandling får inte raderas bara för att 24 månader passerat.
-- Gå igenom Outlooks Inkorg, Skickat, Arkiv, mappar och eventuella delade brevlådor minst **var tredje månad**. Pröva behov och radera relevanta kopior. Kontrollera vilken e-posttjänst som ligger bakom Outlook, leverantörens papperskorg, backup och retention.
+- Gå igenom e-postsystemets Inkorg, Skickat, Arkiv, mappar och eventuella delade brevlådor minst **var tredje månad**. Pröva behov och radera relevanta kopior. Kontrollera vilken leverantör som lagrar e-posten samt leverantörens papperskorg, säkerhetskopior och lagringsregler.
 - Dokumentera datum, genomförd gallring och ansvarig utan att skapa listor över alla registrerades personuppgifter.
 - Äldre mejl före rutinens införande måste inventeras och bedömas vid första gallringen. Ingen automatisk radering har installerats av Amelio.
 - För att undvika falska löften: innan klienten verkligen utför rutinen ska den publika policyn beskriva målsättningen och nuläget korrekt. **Publicering av ett framtida löfte gör inte den faktiska behandlingen laglig.**
@@ -32,7 +32,7 @@
 
 ## 5. Behörighet, leverantörer och incidenter
 - Endast personer med arbetsbehov får åtkomst till kundkontakter. Använd individuella konton, multifaktorautentisering när möjligt och regelbunden behörighetskontroll.
-- Identifiera verklig e-posthost, webbhotell, mottagare och eventuella tredjelandsöverföringar. Outlook är ett klientprogram och räcker inte som leverantörsbeskrivning.
+- Identifiera verklig e-posthost, webbhotell, mottagare och eventuella tredjelandsöverföringar. E-postprogrammet är inte i sig en tillräcklig beskrivning av lagringsleverantören.
 - Kontrollera personuppgiftsbiträdesavtal där leverantörer behandlar uppgifter åt bolaget. Dokumentera vilka leverantörer som är aktuella.
 - Vid misstänkt incident: stoppa fortsatt exponering, utred vad som hänt, dokumentera och bedöm skyndsamt om IMY-anmälan (i tillämpliga fall inom 72 timmar) och information till berörda krävs.
 
