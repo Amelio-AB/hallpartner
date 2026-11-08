@@ -32,3 +32,32 @@ Den privata koden i `server/lead` hanterar gemensam validering, Origin, HTTPS, r
 ## Övrig releasekontext
 
 Tidigare kontakt-PR #54 är mergad på `main`, men Inleed-workflow #42496108781 blev rött på extern WordPress-HTTPS-kontroll efter att previewfilerna verifierats. Denna PR försöker **inte** ändra publiceringens säkerhetsgrindar. Kontaktaktivering sker inte förrän hela releaseprocessen kan verifieras enligt separat beslut.
+
+## SSH-inventering 2026-11-08 – faktisk serverstatus (läsning, ingen driftändring)
+
+Projektägaren fick en läsande inventering utförd via återställd SSH-åtkomst till `ns15.inleed.net:2020`, användare `s164937`. **Ingen hemlighet, kunduppgift eller privat filinnehåll har kopierats till GitHub.** De fyra lokala ändringarna hos användaren lämnades orörda.
+
+| Kontroll | Observerat |
+| --- | --- |
+| PHP / PHPMailer | PHP 8.3.36; PHPMailer 7.1.1 laddas; installerade PHP-källor klarar syntaxkontroll |
+| Origin och SMTP-adresser | `allowed_origin` pekar på Inleed-preview; SMTP-avsändare, användare och mottagare är `kontakt@amelio.se` |
+| Tillåtna kontrakt | Privat `allowed_configurations` innehåller **endast** `hallpartner-offert-v2-review`; `hallpartner-contact-v1` är **inte** tillåtet |
+| TLS / privat lagring | Publik GET mot API ger väntat 405 via TLS; privata kataloger har 700 och konf.fil 600; rate-katalog skrivbar utanför `public_html` |
+| Rate-limit | Kod för fem försök/timme och HMAC-baserad IP-identifierare finns; faktiska rate-postar/limiten ej provkörd |
+| SMTP | Nätverksport nåbar; **ingen autentisering eller faktisk mejlleverans testad** |
+| Installerade filhashar | `delivery.php`, `messages.php`, `rate-cleanup.php` överensstämmer med jämförelseunderlaget; `receiver.php`, `validator.php`, `public/api/lead.php` avviker |
+
+**Viktig skillnad:** GitHub `main` och denna Draft-PR har redan samma `public/api/lead.php`, som kräver en explicit `HP_LEAD_PRIVATE_DIR` och annars svarar 503. Den *installerade* publika API-filen använder enligt inventeringen fortfarande en fallback för privat sökväg. **Byt inte ut den publika filen** före en separat kontroll att webbservern faktiskt tillhandahåller miljövariabeln i PHP-processen; annars kan befintliga offertinskick brytas. Den installerade serverkoden är ett externt driftläge, inte automatiskt identisk med GitHub.
+
+### Säkra steg före aktivering
+
+1. **Läsande jämförelse, utan att visa privata hemligheter:** jämför semantiska skillnader i installerad `receiver.php`, `validator.php` och `api/lead.php` mot den granskade kandidaten. Det räcker inte att notera att hash skiljer; avvikelser kan gälla driftanpassningar. Kontrollera endast om `HP_LEAD_PRIVATE_DIR` finns i **webb-PHP:s** miljö (ja/nej), utan att skriva ut värdet eller vägen.
+2. Säkerställ att det finns **återställningsbara, rättighetsskyddade byte-exakta säkerhetskopior** och att rollback har testats med ofarlig läsning. Bevara fungerande `hallpartner-offert-v2-review`, `allowed_origin`, SMTP-konfiguration och privat katalog hela tiden. Skicka inte privata filer eller arkiv till GitHub.
+3. Verifiera att `validator.php` och `receiver.php` från exakt godkänd kodversion är kompatibla **tillsammans**. Uppdatera inte `receiver.php` till en variant som anropar `hp_configuration_allowed` innan dess funktion verkligen är installerad och provad i `validator.php`; planera övergång/rollback mot samma privatkatalog. `config.local.php` ändras inte i detta steg.
+4. Om, och endast om, den publika bootstrappens nödvändiga miljövariabel faktiskt finns i PHP-processen, kan en separat genomgången flytt från fallback till explicit sökväg planeras. Publicerad offertguide måste fortsatt svara normalt; ett 405 på GET bevisar **inte** att POST och SMTP fungerar.
+5. **Separat aktiveringsbeslut:** bekräfta aktuell mottagning hos `kontakt@amelio.se`, integritetstext och gallringsansvar. Lägg därefter till `hallpartner-contact-v1` i privata allowlisten utan att ta bort offertkontraktet. Följ aktuell Draft-policy `review` tills alla grindar är passerade och offline-tester är gröna.
+6. Efter verifierad Inleed-release: kör **högst ett syntetiskt kontaktärende** med påhittade uppgifter och kontrollera både mottagarens svar och faktisk leverans i Amelios inkorg. Skicka inte riktiga kunddata som test. Kontrollera också att offertguidens fungerande inskicksflöde inte har regresserat.
+
+**Nuläge för webbpublicering:** `main` har senare uppdaterats till `d9dc75502c3415170ff657148e794a94f4758798`; [GitHub-run #42516568710](https://github.com/Amelio-AB/hallpartner/actions/runs/42516568710) är verifierat grön, inklusive uppladdning och Chrome-test efter publicering. Den nya `/integritetspolicy/` på `main` gäller Hallpartners ordinarie kundkontakt; `/integritet/` beskriver i stället Amelios utvecklingspreview. PR #57 behöver synkas mot aktuell `main` och båda texterna hållas korrekt avgränsade innan merge. [HP-055 / Issue #58](https://github.com/Amelio-AB/hallpartner/issues/58) beskriver tidigare opålitlighet i extern WordPress-HTTPS-kontroll, men den senaste releasen lyckades utan ändring av skyddsgrindarna.
+
+**Ingen merge, privat serverändring, allowlist-aktivering eller ny publicering ingår i denna dokumentationsuppdatering.**
