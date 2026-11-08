@@ -1,5 +1,7 @@
 # Hallpartner – delegerat säljmandat och rekommenderat affärsflöde (2026-11-08)
 
+> **Prioriteringsändring 2026-11-08:** Detta dokument bevaras som **framtida underlag**. Andreas har beslutat att Hallpartners **hemsida ska färdigställas först**. Implementera därför inte intern försäljningsprocess, CRM, uppföljningsmallar eller separat säljhandbok nu. HP-052 är Pausad till efter webbplatsen är klar. Mandatet att förbättra själva webbplatsens offertvägar och kundresa gäller fortsatt, liksom lanseringskrav för korrekta produktfakta och mottagning.
+
 > **Beslutsunderlag i Draft PR #2, inte en ny kodrelease.** Andreas uppger den 8 november 2026 att Peter och Jimmy har bekräftat att AI får välja det arbetssätt för webbplats och försäljning som bedöms ge bäst möjlighet att vinna affärer, och att de är beredda att anpassa sig efter det. Detta är en uppgift förmedlad av Andreas; inget separat avtal eller signerat underlag har hämtats in. Beslutet är registrerat som HPD-031.
 
 ## Mål och mandat
