@@ -113,8 +113,9 @@ test('all breadcrumb variants use Hallpartners shared dark green background', ()
     'src/pages/offert/index.astro',
     'src/pages/offert/tack/index.astro',
     'src/pages/integritet/index.astro',
+    'src/pages/integritetspolicy/index.astro',
   ];
-  assert.equal(pages.length,13);
+  assert.equal(pages.length,14);
   for (const page of pages) {
     const markup = read(page);
     assert.ok(markup.includes('aria-label="Brödsmulor"'), page);
