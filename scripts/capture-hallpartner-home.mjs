@@ -251,6 +251,21 @@ try {
     }),width+': safe contact form in hero');
 
     if(expectedPath==='/offert/') {
+      metrics.quoteBreadcrumb=await run(function(){
+        const shell=document.querySelector('.hp-quote-shell');
+        const crumb=shell?.querySelector('nav.hp-info__crumbs');
+        if(!shell||!crumb)return {present:false};
+        const a=shell.getBoundingClientRect(),b=crumb.getBoundingClientRect();
+        const paddingTop=parseFloat(getComputedStyle(shell).paddingTop);
+        return {
+          present:true,
+          noTopPadding:paddingTop<=1,
+          flushInsideShell:Math.abs(a.top-b.top)<=2,
+          greenBackground:getComputedStyle(crumb,'::before').backgroundColor==='rgb(21, 49, 41)',
+          readableHeight:b.height>=48
+        };
+      });
+      allTrue(metrics.quoteBreadcrumb,width+': quote breadcrumb flush without pale strip');
       await evaluate('window.hpExpectedQuoteEnabled='+JSON.stringify(quoteEnabled));
       allTrue(await run(function(){
         const host=document.querySelector('#hp-offert-guide');
