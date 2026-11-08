@@ -50,6 +50,14 @@
 | HPD-022 · 2026-10-31 (dokumenterat) | Skilj **användningsområde** (lager, maskin, ridhus) från **konstruktion/utförande** (tälthall, plåt, isolering). | Samma hall kan tillhöra flera beskrivningar; undviker överlapp i navigation och formulär. | Godkänd arbetsriktning | Kräver sortiments- och SEO-granskning; [URL-arbete][url], [reducering][reduction] |
 | HPD-023 · 2026-10-02 | **Verksamhetsuppgifter måste styrkas av Peter/Jimmy**; nuvarande publicerade WordPress-claims är inte bevis och legacy-bilder är inte automatiskt referenser. | Undviker fel om montage, garantier, pris, erfarenhet och leverans. | Slutligt beslutat (redaktionell regel) | [Researchlog][researchlog], [claims] |
 
+## Försäljningsprocess och mandat, 2026-11-08
+
+| ID / datum | Beslut | Motiv | Status | Beroenden / källa |
+|---|---|---|---|---|
+| HPD-031 · 2026-11-08 | **Delegerat mandat för försäljningsupplägg:** Andreas meddelar att Peter och Jimmy har bekräftat att AI får välja hur Hallpartners säljprocess, webbcopy, CTA, offertfrågor och kundresa bör utformas för att vinna fler affärer. Hallpartner är berett att anpassa arbetssättet efter den bästa föreslagna modellen. Behåll de sju redan publicerade processtegen som redaktionell grund, den enkla AMP-001-offertguiden och tydlig väg till offert utan krav på färdiga ritningar. Ingen separat kundgranskning krävs av **redaktionell ordning och säljutformning**. | Hindra att redan implementerad webbprocess fastnar i upprepade godkännandeloopar. Fokusera på fler relevanta förfrågningar och faktiskt vunna affärer; uppföljning av dessa utfall avgör förbättringar. | **Beslutat mandat för sälj- och webbmetod**, enligt Andreas uppgift om Peter/Jimmys bekräftelse; inte bevis för operativa eller juridiska förhållanden | Andreas projektbesked 2026-11-08; [HP-005/010/051](TODO.md); [process på main](../src/pages/sa-gar-det-till/index.astro); [utförlig arbetsmodell](checkpoints/2026-11-08-saljmandat-och-affarsflode.md) |
+
+**Begränsning:** AI-mandatet ersätter inte fakta om vad Hallpartner eller underentreprenörer kan leverera i ett visst projekt. Offert, avtal, juridisk ansvarsfördelning, bygglov, tekniska dimensioneringsdata, garantier, försäkringar och personuppgiftsansvar måste fortfarande vara korrekta och möjliga att fullgöra. ”Vi kan erbjuda totalentreprenad” är kundbekräftad inriktning; ”allt ingår alltid” är **inte** bekräftat. Sätt inte löften om svarstid eller leveranstid utan operativ verifiering.
+
 ## URL-struktur och migrering
 
 | ID / datum | Beslut | Motiv | Status | Beroenden / källa |
@@ -60,7 +68,7 @@
 
 ## Öppna avgränsningar – inte beslut
 
-- **Montage:** uppgift om externa montagesamarbeten är **obekräftad**. Påstå inte ”egna montörer”, ”totalentreprenad” eller fast leveransomfattning utan fakta (HP-009–010).
+- **Montage och leveransomfattning:** Hallpartner har bekräftat inriktningen att kunna erbjuda totalentreprenad och nyckelfärdig/driftklar hall, men **inte** att varje moment alltid ingår eller att ett visst montageteam finns. Den äldre invändningen mot ordet ”totalentreprenad” gäller inte längre som generell spärr. Faktisk ansvarsfördelning, garanti, försäkring och utlovat omfattning styrs av projektets offert/avtal (HP-010–011/015). Separat organisationsinventering HP-009 är pausad.
 - **Kalkylator, Priser och Köp:** extern konfigurator och e-handel ingår **inte** i v1. Eventuell framtida lösning, prislogik och köpvillkor är fortfarande okända och får inte påstås finnas eller styra sidans CTA (HPD-010, HP-001–003).
 - **Regelverk:** snö-/vindlast, bygglov och teknisk dimensionering kräver aktuella officiella källor och vid behov sakkunnig; dokumenterade öppna frågor ersätter inte sådan prövning (HP-021–027).
 - **Plattformsstatus:** Amelio Web Platform **1.1.0 är produktgodkänd i sitt repo**, men inte automatiskt integrerad eller produktionsgodkänd på Hallpartner.se. Nodekrav och CI måste granskas (HP-037–040).
