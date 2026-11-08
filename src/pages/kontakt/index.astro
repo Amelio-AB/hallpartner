@@ -2,14 +2,14 @@
 import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
 import '../../styles/hallpartner-info.css';
 import '../../styles/hallpartner-contact-hero.css';
+import '../../styles/hallpartner-contact-details.css';
 import ContactForm from '../../components/ContactForm.astro';
-import { hallpartnerPeople } from '../../config/hallpartner-people';
+import { hallpartnerContact, hallpartnerPeople } from '../../config/hallpartner-people';
 
 // Published on the former Hallpartner WordPress footer (2026-11-01 review).
 // Customer verification of ownership, recipient and current phone is still
 // required before launch (HP-015 and HP-007). No backend or form is implied.
-const contactEmail = 'info@hallpartner.se';
-const contactPhoneHref = 'tel:+46548200490';
+const contactEmail = hallpartnerContact.email;
 
 const preparations = [
   { title: 'Vad hallen ska användas till', description: 'Beskriv gärna verksamheten och vad som behöver få plats – exempelvis varor, maskiner eller annan utrustning.' },
@@ -38,11 +38,11 @@ const preparations = [
             alla detaljer klara för att ta den första kontakten.
           </p>
           <nav class="hp-contact-hero__actions" aria-label="Snabbkontakt">
-            <a class="hp-contact-hero__action" href={contactPhoneHref}>
-              Ring oss <span aria-hidden="true">→</span>
+            <a class="hp-contact-hero__action" href="#hallpartner-telefon">
+              Visa telefonnummer <span aria-hidden="true">↓</span>
             </a>
-            <a class="hp-contact-hero__action" href={'mailto:' + contactEmail}>
-              Skriv ett mejl <span aria-hidden="true">→</span>
+            <a class="hp-contact-hero__action" href="#hallpartner-epost">
+              Visa e-postadress <span aria-hidden="true">↓</span>
             </a>
           </nav>
           <a class="hp-info__textlink hp-contact-hero__prep-link" href="#infor-kontakt">
@@ -57,11 +57,58 @@ const preparations = [
     <nav class="hp-info__jump" aria-label="På den här sidan">
       <div class="hp-draft-rail hp-info__jump-inner">
         <span>På den här sidan</span>
+        <a href="#kontaktuppgifter">Kontaktuppgifter</a>
         <a href="#personer">Peter och Jimmy</a>
         <a href="#infor-kontakt">Förbered din fråga</a>
         <a href="#nasta-steg">Nästa steg</a>
       </div>
     </nav>
+
+    <section class="hp-info__section hp-info__section--soft hp-contact-directory" id="kontaktuppgifter"
+      aria-labelledby="hallpartner-contact-details-heading">
+      <div class="hp-draft-rail">
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Gemensam kontakt</p>
+            <h2 id="hallpartner-contact-details-heading">Kontakta Hallpartner.</h2>
+          </div>
+          <p>Vill du ringa eller mejla? Här hittar du företagets gemensamma kontaktvägar. Längre ned kan du läsa mer om Peter och Jimmy.</p>
+        </div>
+        <div class="hp-contact-directory__grid">
+          <div class="hp-contact-directory__card">
+            <div class="hp-contact-directory__entry">
+              <h3 id="hallpartner-telefon" tabindex="-1">Telefon · växel</h3>
+              <a class="hp-contact-directory__value" href={hallpartnerContact.phoneHref}>{hallpartnerContact.phone}</a>
+              <p>Ring om du vill diskutera ditt hallprojekt med oss.</p>
+            </div>
+            <div class="hp-contact-directory__entry">
+              <h3 id="hallpartner-epost" tabindex="-1">E-post · gemensam</h3>
+              <a class="hp-contact-directory__value" href={'mailto:' + contactEmail}>{contactEmail}</a>
+              <p>Beskriv gärna kort vad du behöver hjälp med.</p>
+            </div>
+            <div class="hp-contact-directory__company">
+              <h3>Företagsuppgifter</h3>
+              <p>{hallpartnerContact.legalName}</p>
+              <p>Organisationsnummer: {hallpartnerContact.organisationNumber}</p>
+            </div>
+          </div>
+          <div class="hp-contact-directory__visit" aria-labelledby="hallpartner-visit-heading">
+            <p class="hp-info__eyebrow">Besök och vägbeskrivning</p>
+            <h3 id="hallpartner-visit-heading">Hitta till oss.</h3>
+            {hallpartnerContact.visitAddress ? (
+              <p>{hallpartnerContact.visitAddress}</p>
+            ) : (
+              <>
+                <p>Vill du komma förbi? Kontakta oss för att boka ett besök.</p>
+                <p class="hp-contact-directory__pending">
+                  Vi visar karta och vägbeskrivning här när Hallpartners besöksadress är bekräftad.
+                </p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
 
     <section class="hp-info__section hp-info__section--light hp-info__team-contact" id="personer" aria-labelledby="contact-people-heading">
       <div class="hp-draft-rail">
@@ -83,8 +130,16 @@ const preparations = [
                 <h3 id={person.id + '-kontakt-namn'}>{person.name}</h3>
                 <p class="hp-info__person-role">{person.role}</p>
                 <div class="hp-info__person-contact-links">
-                  <a href="tel:+46548200490" aria-label={`Ring Hallpartners gemensamma nummer för att nå ${person.firstName}`}>054-820 04 90</a>
-                  <a href="mailto:info@hallpartner.se" aria-label={`Mejla Hallpartner angående ${person.firstName}`}>info@hallpartner.se</a>
+                  {person.directPhone && person.directPhoneHref ? (
+                    <a href={person.directPhoneHref} aria-label={`Ring ${person.firstName} direkt`}>{person.directPhone}</a>
+                  ) : (
+                    <a href="#hallpartner-telefon" aria-label={`Visa växeln för att nå ${person.firstName}`}>Kontakta {person.firstName} via växeln</a>
+                  )}
+                  {person.directEmail ? (
+                    <a href={'mailto:' + person.directEmail} aria-label={`Mejla ${person.firstName} direkt`}>{person.directEmail}</a>
+                  ) : (
+                    <a href="#hallpartner-epost" aria-label={`Visa Hallpartners e-post för att kontakta ${person.firstName}`}>Mejla Hallpartner om {person.firstName}</a>
+                  )}
                 </div>
                 <a class="hp-info__person-more" href={`/om-oss/#${person.id}`}>Läs mer om {person.firstName} <span aria-hidden="true">→</span></a>
               </div>
