@@ -6,6 +6,8 @@
 
 ## Lägesavstämning 2026-11-08 – verifierad preview, inte produktionslansering
 
+Detaljerad checkpoint: [2026-11-08-favicon-todo-resume.md](checkpoints/2026-11-08-favicon-todo-resume.md). Historiska statusrader nedan har korrigerats där aktuellt GitHub-bevis finns.
+
 - **Favicon avslutad (inget eget HP-ID):** PR [#46](https://github.com/Amelio-AB/hallpartner/pull/46) är mergad. Samtliga kontroller passerade på `3bb6f470`; `main` blev `7ec2956accbfa16545101f7dfb600aeebca0f705`. [Inleed-publiceringen #42413633236](https://github.com/Amelio-AB/hallpartner/actions/runs/42413633236) är grön inklusive `publish` och Chrome-kontroll av publicerad preview. Ingen ny favicon-PR eller blind ompublicering behövs. Befintlig `favicon.svg` får fortsatt ligga kvar byteexakt enligt separat godkänt retentionbeslut. Denna GitHub-verifiering är inte ett manuellt visuellt webbläsarintyg.
 - **Andra färdiga webbändringar:** processheron via [PR #47](https://github.com/Amelio-AB/hallpartner/pull/47), de sju publicerade processtegen, och headerns `Be om offert` → `/offert/`. **HP-050 är redan Klar**, HP-048 kan stängas för preview, medan **HP-051 fortfarande kräver Peter/Jimmys faktagranskning** före kundens produktionslansering.
 - **Pausat enligt ägarbeslut:** HP-001–003 kalkylator, HP-009 separat montörsinventering och HP-017 referensprojekt (inga färdiga kundcase). Återuppta inte utan nytt sakligt underlag.
