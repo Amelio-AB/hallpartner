@@ -196,6 +196,13 @@ try {
         directoryBeforePeople:(document.querySelector('#kontaktuppgifter')?.compareDocumentPosition(document.querySelector('#personer')) & Node.DOCUMENT_POSITION_FOLLOWING)!==0,
         phoneVisible:!!document.querySelector('#hallpartner-telefon')?.parentElement.querySelector('a[href="tel:+46548200490"]'),
         emailVisible:!!document.querySelector('#hallpartner-epost')?.parentElement.querySelector('a[href="mailto:info@hallpartner.se"]'),
+        mobilePortraitsFit:innerWidth>460 || (() => {
+          const portraits=[...document.querySelectorAll('.hp-info__person--contact .hp-info__person-photo')];
+          return portraits.length===2 && portraits.every(photo=>{
+            const rect=photo.getBoundingClientRect();
+            return rect.width>=180 && rect.height>=rect.width*.70;
+          });
+        })(),
         noUnapprovedMap:!document.querySelector('#kontaktuppgifter iframe')
       };
     }),width+': safe contact form in hero');
