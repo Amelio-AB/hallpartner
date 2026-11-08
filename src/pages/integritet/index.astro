@@ -5,7 +5,7 @@ import '../../styles/hallpartner-info.css';
 
 <HallpartnerSiteLayout
   title="Personuppgifter i testmiljön"
-  description="Information om hur offertförfrågningar hanteras på Amelios tillfälliga utvecklingspreview."
+  description="Information om hur offert- och kontaktförfrågningar hanteras på Amelios tillfälliga utvecklingspreview."
 >
   <div class="hp-info">
     <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
@@ -14,7 +14,7 @@ import '../../styles/hallpartner-info.css';
     <section class="hp-info__section hp-info__section--light" aria-labelledby="privacy-title">
       <div class="hp-draft-rail" style="max-width: 860px">
         <p class="hp-info__eyebrow">Amelios utvecklingspreview</p>
-        <h1 id="privacy-title">Hur uppgifter hanteras i offertguidens testmiljö</h1>
+        <h1 id="privacy-title">Så hanteras förfrågningar i testmiljön</h1>
         <p>Detta är Hallpartners tillfälliga utvecklingspreview på Amelios konto hos Inleed. Förfrågningar som du skickar här tas emot av Amelio för återkoppling under utvecklingen. För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
 
         <h2>Vem tar emot uppgifterna?</h2>
@@ -22,6 +22,7 @@ import '../../styles/hallpartner-info.css';
 
         <h2>Vad samlas in och varför?</h2>
         <p>När du väljer Skicka förfrågan överförs de svar du lämnat om hallbehov och projekt samt ditt namn och din e-postadress. Användningsområde, namn och e-post behövs för att skicka förfrågan. Övriga uppgifter är frivilliga, men väljer du återkoppling via telefon behöver du ange ett telefonnummer. Inga filer kan skickas.</p>
+        <p>Kontaktformuläret på <a href="/kontakt/">kontaktsidan</a> är avstängt tills det har fått ett separat godkännande. När det aktiveras används samma privata PHP-/SMTP-mottagare som offertguiden, med en separat godkänd formulärtyp. Kontaktformuläret tar emot namn, e-post, ett frivilligt telefonnummer och ett meddelande. Uppgifterna går till Amelios mottagning i utvecklingspreviewn och skickas inte automatiskt till Hallpartner. Till skillnad från offertguiden skickas ingen separat mejlkopia till den som frågar.</p>
         <p>Vi använder uppgifterna för att läsa och besvara din förfrågan. Tekniska funktionstester görs med påhittade testuppgifter. Skicka inte känsliga personuppgifter, personnummer eller uppgifter om andra personer. Guiden sparar inte dina svar på servern innan du väljer att skicka.</p>
         <p>Efter mottagandet försöker vi skicka en separat bekräftelse med en kopia av dina inskickade svar till den e-postadress du angav. Kontrollera därför adressen innan du skickar. Ett fel i e-postkopian påverkar inte en redan mottagen förfrågan.</p>
 
