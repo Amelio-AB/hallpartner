@@ -5,9 +5,10 @@ import { parse, walkSync } from 'ultrahtml';
 import { init, parse as parseJS } from 'es-module-lexer';
 import { PAGES, PREVIEW, IMAGE, safePath, files, json, sha256, assert, assertAmp } from './policy.mjs';
 import { quoteReleasePolicy } from './quote-release.mjs';
+import { contactReleasePolicy } from './contact-release.mjs';
 
 const ROBOTS = 'User-agent: *\nDisallow: /\n';
-export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enabled) {
+export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enabled, contactEnabled = contactReleasePolicy().enabled) {
   const assets = []; const links = []; const scripts = []; let noindex = false; let contact = false; let quote = false;
   walkSync(parse(html), node => {
     if (!node.name) return;
@@ -18,12 +19,15 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
     }
     assert(!['iframe','object','embed','base'].includes(node.name), 'Unexpected active embed/base in ' + page);
     if (a['data-enabled'] !== undefined) {
-      const permitted = page === 'offert/index.html' && a.id === 'hp-offert-guide' && quoteEnabled;
+      const permitted = (page === 'offert/index.html' && a.id === 'hp-offert-guide' && quoteEnabled) ||
+        (page === 'kontakt/index.html' && a.id === 'hp-contact-form' && contactEnabled);
       assert(a['data-enabled'] === (permitted ? 'true' : 'false'),
-        'Unapproved form activation or mismatched quote release: ' + page);
+        'Unapproved form activation or mismatched form release: ' + page);
     }
-    if (node.name === 'form') assert(a['data-enabled'] === 'false' && !a.action, 'Active form in ' + page);
-    if (a.id === 'hp-contact-form') contact = a['data-enabled'] === 'false';
+    if (node.name === 'form') assert(page === 'kontakt/index.html' && a.id === 'hp-contact-form' &&
+      a['data-enabled'] === (contactEnabled ? 'true' : 'false') && !a.action,
+      'Unexpected form transport or unapproved activation in ' + page);
+    if (a.id === 'hp-contact-form') contact = a['data-enabled'] === (contactEnabled ? 'true' : 'false');
     if (a.id === 'hp-offert-guide') quote = a['data-enabled'] === (quoteEnabled ? 'true' : 'false');
     if (a.src) assets.push(a.src);
     if (a.poster) assets.push(a.poster);
@@ -35,7 +39,10 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
     if (node.name === 'style') assets.push(...cssRefs(node.children.map(x => x.value ?? '').join('')));
   });
   assert(noindex, 'Missing noindex,nofollow: ' + page);
-  if (page === 'kontakt/index.html') assert(contact, 'Contact disabled contract missing');
+  if (page === 'kontakt/index.html') {
+    assert(contact, 'Contact release mode mismatch');
+    if (contactEnabled) assert(links.includes('/integritet/'), 'Active contact form needs privacy notice');
+  }
   if (page === 'offert/index.html') assert(quote, 'Quote mode does not match approved preview release');
   if (page === 'offert/index.html' && quoteEnabled) {
     assert(links.includes('/integritet/'), 'Active quote must link to the approved privacy notice');
