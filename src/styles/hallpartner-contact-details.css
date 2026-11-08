@@ -2,6 +2,17 @@
    No third-party map or guessed office location is loaded. */
 .hp-info--contact .hp-contact-directory {
   scroll-margin-top: 7rem;
+  /* Reference green: lighter upper-left, gently deepening to lower-right. */
+  background: linear-gradient(135deg, #4A6250 0%, #435B4B 52%, #394F41 100%);
+}
+.hp-info--contact .hp-contact-directory > .hp-draft-rail > .hp-info__heading-row h2 {
+  color: #F4F4F0;
+}
+.hp-info--contact .hp-contact-directory > .hp-draft-rail > .hp-info__heading-row .hp-info__eyebrow {
+  color: #DCE9DB;
+}
+.hp-info--contact .hp-contact-directory > .hp-draft-rail > .hp-info__heading-row > p {
+  color: #F0F4ED;
 }
 .hp-info--contact .hp-contact-directory__grid {
   display: grid;
