@@ -8,53 +8,81 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
 
 <section class="hp-info__section hp-info__section--light" id="kontaktformular" aria-labelledby="hp-contact-form-heading">
   <div class="hp-draft-rail">
-    <div class="hp-info__heading-row">
-      <div>
-        <p class="hp-info__eyebrow">Direkt kontakt</p>
-        <h2 id="hp-contact-form-heading">Skicka en fråga till Hallpartner.</h2>
-      </div>
-      <p>Det räcker med namn, e-post och ett kort meddelande. Du kan också använda telefon eller mejl ovan.</p>
-    </div>
-    <p class:list={['hp-leads-note', { 'hp-leads-note--review': !enabled }]} id="hp-form-notice">
-      {enabled
-        ? 'Uppgifterna används för att besvara din förfrågan. Skicka inte känsliga personuppgifter.'
-        : 'Arbetsversion: formuläret kan granskas men tar inte emot uppgifter ännu. Kontakta Hallpartner via telefon eller e-post tills mottagningen har testats.'}
-    </p>
-    <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
-      aria-describedby="hp-form-notice">
-      <div class="hp-contact-form__field">
-        <label for="hp-form-name">Namn *</label>
-        <input id="hp-form-name" name="contact.name" autocomplete="name" minlength="2" maxlength="120" required />
-      </div>
-      <div class="hp-contact-form__field">
-        <label for="hp-form-email">E-post *</label>
-        <input id="hp-form-email" type="email" name="contact.email" autocomplete="email" maxlength="254" required />
-      </div>
-      <div class="hp-contact-form__field">
-        <label for="hp-form-phone">Telefon</label>
-        <input id="hp-form-phone" name="contact.phone" type="tel" autocomplete="tel" maxlength="22" />
-      </div>
-      <div class="hp-contact-form__field">
-        <label for="hp-form-company">Företag</label>
-        <input id="hp-form-company" name="contact.company" autocomplete="organization" maxlength="120" />
-      </div>
-      <div class="hp-contact-form__field hp-contact-form__field--wide">
-        <label for="hp-form-message">Vad gäller din fråga? *</label>
-        <textarea id="hp-form-message" name="contact.message" rows="5" minlength="10" maxlength="4000" required></textarea>
-        <p class="hp-contact-form__hint">Beskriv gärna vad du planerar. Skicka inga känsliga personuppgifter.</p>
-      </div>
-      <div class="hp-contact-form__website" aria-hidden="true">
-        <label for="hp-form-website">Lämna fältet tomt</label>
-        <input id="hp-form-website" name="website" tabindex="-1" autocomplete="off" />
-      </div>
-      <div class="hp-contact-form__field hp-contact-form__field--wide">
-        <button class="hp-contact-form__submit" type="submit" disabled>Skicka meddelande</button>
-      </div>
-      <p class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite"></p>
-    </form>
+    {enabled ? (
+      <>
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Direkt kontakt</p>
+            <h2 id="hp-contact-form-heading">Skicka en fråga till Hallpartner.</h2>
+          </div>
+          <p>Det räcker med namn, e-post och ett kort meddelande. Du kan också använda telefon eller mejl ovan.</p>
+        </div>
+        <p class="hp-leads-note" id="hp-form-notice">
+          Uppgifterna används för att besvara din förfrågan. Skicka inte känsliga personuppgifter.
+        </p>
+        <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
+          aria-describedby="hp-form-notice">
+          <div class="hp-contact-form__field">
+            <label for="hp-form-name">Namn *</label>
+            <input id="hp-form-name" name="contact.name" autocomplete="name" minlength="2" maxlength="120" required />
+          </div>
+          <div class="hp-contact-form__field">
+            <label for="hp-form-email">E-post *</label>
+            <input id="hp-form-email" type="email" name="contact.email" autocomplete="email" maxlength="254" required />
+          </div>
+          <div class="hp-contact-form__field">
+            <label for="hp-form-phone">Telefon</label>
+            <input id="hp-form-phone" name="contact.phone" type="tel" autocomplete="tel" maxlength="22" />
+          </div>
+          <div class="hp-contact-form__field">
+            <label for="hp-form-company">Företag</label>
+            <input id="hp-form-company" name="contact.company" autocomplete="organization" maxlength="120" />
+          </div>
+          <div class="hp-contact-form__field hp-contact-form__field--wide">
+            <label for="hp-form-message">Vad gäller din fråga? *</label>
+            <textarea id="hp-form-message" name="contact.message" rows="5" minlength="10" maxlength="4000" required></textarea>
+            <p class="hp-contact-form__hint">Beskriv gärna vad du planerar. Skicka inga känsliga personuppgifter.</p>
+          </div>
+          <div class="hp-contact-form__website" aria-hidden="true">
+            <label for="hp-form-website">Lämna fältet tomt</label>
+            <input id="hp-form-website" name="website" tabindex="-1" autocomplete="off" />
+          </div>
+          <div class="hp-contact-form__field hp-contact-form__field--wide">
+            <button class="hp-contact-form__submit" type="submit" disabled>Skicka meddelande</button>
+          </div>
+          <p class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite"></p>
+        </form>
+      </>
+    ) : (
+      <>
+        <div class="hp-info__heading-row">
+          <div>
+            <p class="hp-info__eyebrow">Välj kontaktväg</p>
+            <h2 id="hp-contact-form-heading">Hur vill du gå vidare?</h2>
+          </div>
+          <p>Du behöver inte ha en färdig ritning för att börja. Välj det sätt som passar dig.</p>
+        </div>
+        <div class="hp-info__cards hp-contact-choices">
+          <article class="hp-info__card">
+            <h3>Berätta om ditt hallprojekt</h3>
+            <p>Beskriv kort vad du behöver i offertguiden. Du kan lämna mått och andra detaljer senare.</p>
+            <a class="hp-info__button" href="/offert/">
+              Be om offert <span aria-hidden="true">→</span>
+            </a>
+          </article>
+          <article class="hp-info__card">
+            <h3>Vill du hellre prata direkt?</h3>
+            <p>Ring eller mejla Hallpartner så kan ni börja diskutera projektet tillsammans.</p>
+            <div class="hp-info__related-links">
+              <a href="tel:+46548200490">Ring 054-820 04 90 <span aria-hidden="true">→</span></a>
+              <a href="mailto:info@hallpartner.se">Mejla info@hallpartner.se <span aria-hidden="true">→</span></a>
+            </div>
+          </article>
+        </div>
+      </>
+    )}
   </div>
 </section>
-
 <script>
   const form = document.querySelector<HTMLFormElement>('#hp-contact-form');
   const message = document.querySelector<HTMLElement>('#hp-form-status');
