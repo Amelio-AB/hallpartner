@@ -1,0 +1,80 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import { hallpartnerContact } from '../../config/hallpartner-people';
+import '../../styles/hallpartner-info.css';
+---
+<HallpartnerSiteLayout
+  title="Integritetspolicy"
+  description="Läs hur Hallpartner behandlar personuppgifter när du kontaktar oss och vilka rättigheter du har enligt GDPR."
+>
+  <article class="hp-info hp-privacy">
+    <nav class="hp-draft-rail hp-info__crumbs" aria-label="Brödsmulor">
+      <a href="/">Start</a><span aria-hidden="true">/</span><span aria-current="page">Integritetspolicy</span>
+    </nav>
+    <div class="hp-info__section hp-info__section--light">
+      <div class="hp-draft-rail hp-privacy__content">
+        <p class="hp-info__eyebrow">Om dina personuppgifter</p>
+        <h1>Integritetspolicy</h1>
+        <p class="hp-privacy__lead">När du kontaktar Hallpartner behöver vi ibland behandla personuppgifter för att kunna besvara din fråga eller diskutera ett projekt. Här förklarar vi vad det innebär och hur du kan kontakta oss.</p>
+        <p class="hp-privacy__updated">Senast uppdaterad: 8 november 2026</p>
+
+        <section aria-labelledby="hp-privacy-controller">
+          <h2 id="hp-privacy-controller">Vem ansvarar för uppgifterna?</h2>
+          <p>Hallpartner är webbplatsens varumärke. Personuppgiftsansvarig för Hallpartners ordinarie webbplats och kundkontakt är <strong>{hallpartnerContact.legalName}</strong>, organisationsnummer {hallpartnerContact.organisationNumber}. Registrerad adress: Zakrisdalsvägen 26 A, 653 36 Karlstad. Adressen är företagets registrerade adress.</p>
+          <p>Frågor om personuppgifter kan skickas till <a href={'mailto:' + hallpartnerContact.email}>{hallpartnerContact.email}</a>.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-data">
+          <h2 id="hp-privacy-data">Vilka personuppgifter behandlas?</h2>
+          <p>Om du kontaktar oss via e-post eller telefon kan vi behandla ditt namn, din e-postadress, ditt telefonnummer och de uppgifter du själv lämnar om din fråga eller ditt projekt. Vi använder uppgifterna för att kunna ta emot och besvara kontakten samt vid behov följa upp ett påbörjat affärssamtal.</p>
+          <p>Lämna inte personnummer eller känsliga personuppgifter i en vanlig förfrågan.</p>
+          <p>Kontakt- och offertformulär på den nya webbplatsen är ännu inte aktiverade för Hallpartners ordinarie mottagning. Tills vidare kan du kontakta oss via telefon eller e-post på <a href="/kontakt/">kontaktsidan</a>.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-basis">
+          <h2 id="hp-privacy-basis">Varför får vi behandla uppgifterna?</h2>
+          <p>Vi behandlar kontaktuppgifter för att kunna besvara frågor och följa upp förfrågningar som du själv skickar till oss. För detta stödjer vi oss på vårt berättigade intresse enligt artikel 6.1 f i dataskyddsförordningen (GDPR), efter en avvägning mot ditt integritetsintresse. Om kontakten gäller åtgärder du begär innan ett avtal ingås kan artikel 6.1 b användas. Uppgifter som enligt lag måste bevaras behandlas med stöd av artikel 6.1 c.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-storage">
+          <h2 id="hp-privacy-storage">Hur länge sparas uppgifterna?</h2>
+          <p>Vår policy för förfrågningar som inte leder till ett avtal eller ett pågående projekt är att uppgifterna ska tas bort senast 24 månader efter den senaste relevanta kontakten. Uppgifterna ska tas bort tidigare om de inte längre behövs. Uppgifter om pågående projekt, avtal och handlingar som vi måste behålla enligt lag sparas så länge som det är nödvändigt för respektive ändamål. När ändamålet upphör ska de raderas eller avidentifieras, om ingen annan rättslig skyldighet kräver fortsatt lagring.</p>
+          <p>Denna policy anger den gallringsrutin som Hallpartner ska införa för den nya webbplatsen. Den tidigare e-posthanteringen behöver gås igenom och omfattas av samma bedömning. Rutinen får inte beskrivas som redan genomförd innan företaget har börjat tillämpa den.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-vendors">
+          <h2 id="hp-privacy-vendors">Vem kan få tillgång till uppgifterna?</h2>
+          <p>Endast behöriga personer hos Hallpartner får tillgång till kundförfrågningar. Uppgifterna hanteras via företagets e-postsystem. Leverantörer för e-post och webbhosting kan behandla personuppgifter för att tillhandahålla sina tjänster.</p>
+          <p>Vilken e-postleverantör som används och om uppgifter överförs till länder utanför EU/EES behöver fortfarande klarläggas. Informationen kompletteras när dessa förhållanden har verifierats.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-cookies">
+          <h2 id="hp-privacy-cookies">Cookies och besöksstatistik</h2>
+          <p>Vi planerar att använda Google Analytics för besöksstatistik. Innan detta aktiveras behöver informationen om statistik och cookies kompletteras och samtyckeshanteringen testas. Statistikspårning ska inte starta innan du har lämnat nödvändigt samtycke.</p>
+          <p>Du kan också hantera cookies via inställningarna i din webbläsare. När en samtyckesbanner finns installerad kommer du att kunna ändra eller återkalla ditt val via webbplatsen.</p>
+        </section>
+
+        <section aria-labelledby="hp-privacy-rights">
+          <h2 id="hp-privacy-rights">Dina rättigheter enligt GDPR</h2>
+          <p>Du kan bland annat begära information om vilka uppgifter vi behandlar om dig, få felaktiga uppgifter rättade och i vissa fall begära radering eller begränsning av behandlingen. Du kan också invända mot behandling som grundas på berättigat intresse. I vissa situationer har du rätt till dataportabilitet. Rätten till radering är inte absolut, exempelvis om vi behöver behålla uppgifter på grund av lag.</p>
+          <p>Kontakta <a href={'mailto:' + hallpartnerContact.email}>{hallpartnerContact.email}</a> om du vill använda någon av dina rättigheter. Ange gärna vilken uppgift eller kontakt det gäller, men skicka inte personnummer eller känsliga handlingar i onödan. Vi ska besvara din begäran utan onödigt dröjsmål, normalt senast inom en månad. Om identiteten är osäker kan vi behöva be om ytterligare uppgifter för att skydda dina personuppgifter.</p>
+          <p>Om vi inte kan genomföra en begärd radering förklarar vi varför. Du har rätt att lämna klagomål till <a href="https://www.imy.se/" rel="noopener noreferrer">Integritetsskyddsmyndigheten (IMY)</a>.</p>
+        </section>
+
+      </div>
+    </div>
+  </article>
+</HallpartnerSiteLayout>
+<style>
+  .hp-privacy__content { max-width: 940px; margin-inline:auto; }
+  .hp-privacy__content h1 { font-size:clamp(2.6rem,5vw,4.6rem); margin-bottom:1.25rem; }
+  .hp-privacy__lead { font-size:clamp(1.07rem,1.5vw,1.25rem); line-height:1.75; max-width:65ch; }
+  .hp-privacy__updated { font-size:.84rem; color:#476351; margin-top:1.2rem; }
+  .hp-privacy__content section { border-top:1px solid #c9d5ca; padding-block:clamp(1.65rem,3vw,2.5rem); }
+  .hp-privacy__content section:first-of-type { margin-top:2.5rem; }
+  .hp-privacy__content h2 { font-size:clamp(1.5rem,2.3vw,2rem); margin-bottom:.9rem; }
+  .hp-privacy__content section p { max-width:75ch; line-height:1.8; margin-bottom:.8rem; }
+  .hp-privacy__content section p:last-child { margin-bottom:0; }
+  .hp-privacy__content a { color:#236f31; text-decoration:underline; text-underline-offset:.2em; overflow-wrap:anywhere; }
+  .hp-privacy__content a:focus-visible { outline:3px solid #236f31; outline-offset:3px; }
+</style>

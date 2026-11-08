@@ -56,6 +56,6 @@ export const hallpartnerFooterConfig = {
       accentText: '#071A16',
     },
   },
-  // No fictitious address, company registration, cookie settings or legal links.
-  // Add these only after the customer has provided verified information and routes.
+  legalLinks: [{ label: 'Integritetspolicy', href: '/integritetspolicy/' }],
+  // Company details and processing facts must be verified before go-live.
 };
