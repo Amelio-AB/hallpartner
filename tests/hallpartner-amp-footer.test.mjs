@@ -9,7 +9,7 @@ import { hallpartnerContact } from '../src/config/hallpartner-people.ts';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const allLinks = config.groups.flatMap(group => group.links);
 
-test('AMP-003 remains one compact shared footer without invented legal features', () => {
+test('AMP-003 remains compact with only the verified privacy policy legal link', () => {
   assert.equal(AMP003_APPROVED_VERSION, '1.5.0');
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
@@ -17,10 +17,11 @@ test('AMP-003 remains one compact shared footer without invented legal features'
   assert.ok(config.groups.every(group => group.links.length > 0));
   assert.equal(config.contact.primary.href, '/kontakt/');
   assert.equal(new Set(allLinks.map(link => link.href)).size, allLinks.length);
-  for (const key of ['cookieSettings', 'legalName', 'legalLinks']) assert.ok(!(key in config));
+  for (const key of ['cookieSettings', 'legalName']) assert.ok(!(key in config));
+  assert.deepEqual(config.legalLinks, [{ label: 'Integritetspolicy', href: '/integritetspolicy/' }]);
 });
 test('every AMP Footer link reaches a real visitor Astro page', async () => {
-  for (const link of [{ href:config.brand.homeHref }, config.contact.primary, ...allLinks]) {
+  for (const link of [{ href:config.brand.homeHref }, config.contact.primary, ...allLinks, ...config.legalLinks]) {
     assert.match(link.href, /^\/(?:[a-z0-9/-]*\/)?$/);
     await access(join(root, 'src/pages', link.href === '/' ? 'index.astro' : link.href.slice(1) + 'index.astro'));
   }
