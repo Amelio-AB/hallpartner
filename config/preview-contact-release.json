@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "scope": "amelio-inleed-development-preview-only",
+  "targetOrigin": "https://hallpartner-se.preview2.inleed.com",
+  "mode": "enabled",
+  "configurationId": "hallpartner-contact-v1",
+  "sender": "kontakt@amelio.se",
+  "recipient": "kontakt@amelio.se",
+  "approval": {
+    "customerPrivacyNoticePath": "/integritet/",
+    "privacyApprovedBy": "Andreas, 2026-11-09 project chat: Amelio preview recipient/controller; Andreas accepts 30-day deletion duty across Inleed and Gmail",
+    "recipientVerifiedBy": "Andreas, 2026-11-09: confirmed preview contact@amelio.se recipient; 2026-11-08 Inleed private config read confirmed sender/recipient; final inbox receipt not yet verified",
+    "receiverVerifiedBy": "Andreas, 2026-11-09 SSH: PHP 8.3.36, validator recognizes contact, receiver allowlist enforced before SMTP, quote and contact explicitly allowed; no live SMTP receipt yet",
+    "ownerReleaseApprovedBy": "Andreas, project chat 2026-11-09: explicitly requests immediate activation of contact form on Amelio's existing Inleed preview",
+    "evidence": "docs/preview/hp054-contact-activation-20261109.md"
+  }
+}

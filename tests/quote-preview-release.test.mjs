@@ -22,12 +22,14 @@ test('preview build flags follow the reviewed policy; review fixtures always dis
       assert.ok(flags.includes(key+'='+expected+'\n'),key+' must follow the verified policy');
     }
     const policy=JSON.parse(readFileSync('config/preview-quote-release.json','utf8'));
-    const review=quoteBuildEnvironment({...policy,mode:'review',approval:{}});
+    const contactPolicy=JSON.parse(readFileSync('config/preview-contact-release.json','utf8'));
+    const review=quoteBuildEnvironment({...policy,mode:'review',approval:{}}, {...contactPolicy,mode:'review',approval:{}});
     assert.ok(Object.values(review).every(value=>value==='false'));
     assert.throws(()=>quoteBuildEnvironment({...policy,mode:'enabled',approval:{}}));
-    for(const key of ['PUBLIC_HP_LEADS_ENABLED','PUBLIC_HP_QUOTE_FILES_REVIEW']) {
-      assert.ok(flags.includes(key+'=false\n'),key+' must remain disabled independently of quote activation');
-    }
+    assert.ok(flags.includes('PUBLIC_HP_LEADS_ENABLED='+String(contactPolicy.mode==='enabled')+'\n'),
+      'Contact flag must follow its independently approved policy');
+    assert.ok(flags.includes('PUBLIC_HP_QUOTE_FILES_REVIEW=false\n'),
+      'Quote file uploads must remain disabled');
   } finally { rmSync(dir,{recursive:true,force:true}); }
 });
 

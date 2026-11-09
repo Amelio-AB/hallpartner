@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PAGES } from './preview/policy.mjs';
 import { inspectHtml } from './preview/payload.mjs';
+import { contactReleasePolicy } from './preview/contact-release.mjs';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const list = (prefix = '') => readdirSync(join(dist, prefix), { withFileTypes:true }).flatMap(entry => entry.isDirectory() ? list(prefix + entry.name + '/') : [prefix + entry.name]);
@@ -78,7 +79,11 @@ for (const slug of ['lagerhall','maskinhall','plathall','isolerad-hall','ridhus'
   assert.ok(pages.get('stalhallar/index.html').includes('href="/stalhallar/'+slug+'/"'),slug);
 }
 const contact=pages.get('kontakt/index.html');
-assert.ok(contact.includes('id="hp-contact-form"') && contact.includes('data-enabled="false"'));
+assert.ok(contact.includes('id="hp-contact-form"') &&
+  contact.includes('data-enabled="' + String(contactReleasePolicy().enabled) + '"'),
+  'Contact form mode must match its independent preview release policy');
+if (contactReleasePolicy().enabled) assert.ok(contact.includes('href="/integritet/"'),
+  'Active contact form must link to Amelio preview privacy notice');
 assert.ok(contact.includes('id="kontaktformular"') && contact.includes('hp-contact-hero__panel'));
 assert.ok(contact.indexOf('id="hp-contact-form"') < contact.indexOf('id="personer"'),
   'Contact form must appear in the hero before the team section');

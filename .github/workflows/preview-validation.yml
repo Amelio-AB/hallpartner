@@ -192,6 +192,18 @@ jobs:
           # The previously archived preview-payload remains fail-closed.
           npm run build
           node scripts/preview/active-quote-browser.mjs
+      - name: Chrome regression for future active contact with local mock only
+        env:
+          NODE_ENV: production
+          PUBLIC_HP_LEADS_ENABLED: 'true'
+          PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED: 'true'
+          PUBLIC_HP_RECEIVER_VERIFIED: 'true'
+          PUBLIC_HP_PRIVACY_APPROVED: 'true'
+        run: |-
+          # A separate offline-only build. The archived upload payload remains
+          # contact-disabled; this step must never call the live PHP receiver.
+          npm run build
+          node scripts/preview/active-contact-browser.mjs
       - name: Save manifest and evidence even on failure
         if: always()
         uses: actions/upload-artifact@v4

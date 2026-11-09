@@ -6,6 +6,7 @@ import { dirname } from 'node:path';
 import { PREVIEW, PROBE, PAGES, safePath, sha256 } from '../scripts/preview/policy.mjs';
 import { inspectHtml, rightsStatus, verifyPayload } from '../scripts/preview/payload.mjs';
 import { quoteRelease, quoteReleasePolicy } from '../scripts/preview/quote-release.mjs';
+import { contactReleasePolicy } from '../scripts/preview/contact-release.mjs';
 import { endpoint, credentials, lftpScript, assertAbsent, publicProof, assertPublishContext, retainedFiles, productionSnapshot, verifyProduction, remoteInventory, deliveryStatus, assertDelivery, verifyPublished, request, transientHttpReadError } from '../scripts/preview/remote.mjs';
 import { expectedHttpBytes, fingerprint } from '../scripts/preview/delivery.mjs';
 
@@ -145,7 +146,7 @@ test('missing robots and active form contracts fail closed', () => {
   assert.throws(()=>inspectHtml(html+'<iframe src="https://example.com"></iframe>','other.html'));
   assert.throws(()=>inspectHtml(html,'kontakt/index.html'));
   assert.throws(()=>inspectHtml(html,'offert/index.html'));
-  inspectHtml(html+'<form id="hp-contact-form" data-enabled="false"></form>','kontakt/index.html');
+  inspectHtml(html+'<form id="hp-contact-form" data-enabled="false"></form>','kontakt/index.html',false,false);
   inspectHtml(html+'<div id="hp-offert-guide" data-enabled="false"></div>','offert/index.html',false);
 });
 test('preview form activation is limited to the exact quote host and approved mode', () => {
@@ -272,7 +273,9 @@ test('verified payload rejects changed bytes, forbidden additions and forged act
     const manifest={commit:'a'.repeat(40),files:[],images:[]};
     for(const page of PAGES){
       const quote='<div id="hp-offert-guide" data-enabled="'+quoteReleasePolicy().enabled+'"></div><a href="/integritet/">Personuppgifter</a>';
-      const body=html+'Nyckelfärdiga hallar.'+(page==='kontakt/index.html'?'<form id="hp-contact-form" data-enabled="false"></form>':'')+(page==='offert/index.html'?quote:'');
+      const contact='<form id="hp-contact-form" data-enabled="'+contactReleasePolicy().enabled+'"></form>' +
+        (contactReleasePolicy().enabled?'<a href="/integritet/">Integritet</a>':'');
+      const body=html+'Nyckelfärdiga hallar.'+(page==='kontakt/index.html'?contact:'')+(page==='offert/index.html'?quote:'');
       mkdirSync(dirname(root+'/'+page),{recursive:true});writeFileSync(root+'/'+page,body);manifest.files.push({path:page,sha256:sha256(body)});
     }
     const robots='User-agent: *\nDisallow: /\n';writeFileSync(root+'/robots.txt',robots);manifest.files.push({path:'robots.txt',sha256:sha256(robots)});

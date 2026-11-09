@@ -21,6 +21,11 @@ $contact = [
 $valid = hp_validate_lead($contact);
 must($valid['valid'] === true, 'valid contact accepted');
 must(($valid['kind'] ?? '') === 'hallpartner-contact-v1', 'kind');
+must(hp_configuration_allowed('hallpartner-contact-v1', []) === false, 'contact must be denied without private allowlist');
+must(hp_configuration_allowed('hallpartner-contact-v1', ['allowed_configurations' => ['hallpartner-offert-v2-review']]) === false, 'quote approval does not enable contact');
+must(hp_configuration_allowed('hallpartner-contact-v1', ['allowed_configurations' => ['hallpartner-contact-v1','hallpartner-offert-v2-review']]) === true, 'private allowlist enables contact');
+must(hp_configuration_allowed('hallpartner-offert-v2-review', []) === true, 'existing quote allowlisting policy stays unchanged');
+
 $invalid = $contact;
 $invalid['answers']['contact.email'] = "attacker@example.invalid\r\nBcc: injected@example.invalid";
 must(hp_validate_lead($invalid)['valid'] === false, 'email header injection denied');

@@ -5,10 +5,12 @@ import { join, resolve } from 'node:path';
 import { setTimeout as sleep } from 'node:timers/promises';
 import { createChromeSession, openChromeSocket } from './preview/chrome-session.mjs';
 import { quoteReleasePolicy } from './preview/quote-release.mjs';
+import { contactReleasePolicy } from './preview/contact-release.mjs';
 
 const url=process.env.HP_PREVIEW_URL||'http://127.0.0.1:4321/';
 const expectedPath=new URL(url).pathname;
 const quoteEnabled=quoteReleasePolicy().enabled;
+const contactEnabled=contactReleasePolicy().enabled;
 const output=resolve(process.env.HP_SCREENSHOT_DIR||'visual-review');
 const prefix=process.env.HP_SCREENSHOT_PREFIX||'validated';
 const sections=(process.env.HP_SCREENSHOT_SECTIONS||'').split(',').filter(Boolean);
@@ -220,7 +222,9 @@ try {
         return {initial,fullWidth,cover,imageLoaded,solid,returned,planning,anchors:anchors.every(Boolean),skip:document.querySelector('#main-content').tabIndex===-1};
       });allTrue(metrics.hero,width+': hero and anchors');
     }
-    if(expectedPath==='/kontakt/')allTrue(await run(function(){
+    if(expectedPath==='/kontakt/') {
+      await evaluate('window.hpExpectedContactEnabled='+JSON.stringify(contactEnabled));
+      allTrue(await run(function(){
       const form=document.querySelector('#hp-contact-form');
       const panel=document.querySelector('.hp-info__hero #kontaktformular');
       const actions=[...document.querySelectorAll('.hp-contact-hero__action')].map(a=>a.getAttribute('href'));
@@ -228,11 +232,15 @@ try {
         found:!!form,
         hero:!!panel && panel.contains(form),
         onlyOneForm:document.querySelectorAll('#hp-contact-form').length===1,
-        inactive:form?.dataset.enabled==='false',
-        fieldsDisabled:!!form?.querySelector('fieldset[disabled]') && [...form.querySelectorAll('input,textarea')].every(input=>input.matches(':disabled')),
-        submitDisabled:form?.querySelector('button[type="submit"]')?.disabled===true,
+        releaseMode:form?.dataset.enabled===String(window.hpExpectedContactEnabled),
+        fieldsMatchMode:window.hpExpectedContactEnabled
+          ? !form?.querySelector('fieldset[disabled]')
+          : !!form?.querySelector('fieldset[disabled]') && [...form.querySelectorAll('input,textarea')].every(input=>input.matches(':disabled')),
+        safeSubmit:window.hpExpectedContactEnabled || form?.querySelector('button[type="submit"]')?.disabled===true,
         status:!!form?.querySelector('[role="status"]'),
-        notice:!!document.querySelector('.hp-contact-hero__notice--review'),
+        notice:window.hpExpectedContactEnabled
+          ? !!panel?.querySelector('a[href="/integritet/"]')
+          : !!document.querySelector('.hp-contact-hero__notice--review'),
         quote:!!panel?.querySelector('a[href="/offert/"]'),
         phone:actions.includes('#hallpartner-telefon'),
         email:actions.includes('#hallpartner-epost'),
@@ -249,6 +257,7 @@ try {
         noUnapprovedMap:!document.querySelector('#kontaktuppgifter iframe')
       };
     }),width+': safe contact form in hero');
+    }
 
     if(expectedPath==='/offert/') {
       metrics.quoteBreadcrumb=await run(function(){

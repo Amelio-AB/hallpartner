@@ -13,7 +13,7 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
   <p class:list={['hp-contact-hero__notice', { 'hp-contact-hero__notice--review': !enabled }]}
     id="hp-form-notice">
     {enabled
-      ? 'Uppgifterna används för att besvara din fråga. Skicka inte känsliga personuppgifter.'
+      ? <>I Amelios utvecklingspreview tas meddelandet emot av Amelio för återkoppling, inte direkt av Hallpartner. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur dina uppgifter hanteras</a>.</>
       : 'Förhandsvisning – kontaktformuläret är ännu inte aktivt. Ring eller mejla Hallpartner om du vill få svar.'}
   </p>
   <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
