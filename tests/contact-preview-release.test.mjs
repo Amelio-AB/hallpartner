@@ -8,10 +8,10 @@ import { inspectHtml } from '../scripts/preview/payload.mjs';
 const contact = JSON.parse(readFileSync('config/preview-contact-release.json', 'utf8'));
 const quote = JSON.parse(readFileSync('config/preview-quote-release.json', 'utf8'));
 
-test('contact remains disabled independently of the working quote guide', () => {
-  assert.equal(contactReleasePolicy().enabled, false);
+test('contact activation is independent of the working quote guide', () => {
+  assert.equal(contactReleasePolicy().enabled, true);
   const flags = quoteBuildEnvironment(quote, contact);
-  assert.equal(flags.PUBLIC_HP_LEADS_ENABLED, 'false');
+  assert.equal(flags.PUBLIC_HP_LEADS_ENABLED, 'true');
   assert.equal(flags.PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED, 'true');
   assert.equal(flags.PUBLIC_HP_RECEIVER_VERIFIED, 'true');
   assert.equal(flags.PUBLIC_HP_PRIVACY_APPROVED, 'true');
