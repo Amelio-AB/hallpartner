@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { formatLeadReference } from '../src/lib/lead-reference.ts';
 
 test('a verified server requestId gets a stable short case label', () => {
-  assert.equal(formatLeadReference('2cc8631da93ef7422c21a32f'), 'HP-2CC8631DA9');
+  assert.equal(formatLeadReference('abcdef0123456789abcdef01'), 'HP-ABCDEF0123');
   assert.equal(formatLeadReference('1234567890abcdef12345678'), 'HP-1234567890');
   assert.equal(formatLeadReference('0000000000abcdef12345678'), 'HP-0000000000');
 });
