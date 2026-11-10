@@ -2,8 +2,8 @@ import { createJsonAdapter } from '@amelio/web-platform/quote-flow';
 import type { Adapter } from '@amelio/web-platform/quote-flow';
 import {
   buildQuoteReceiptSummary, parseQuoteReceiptSummary
-} from './quote-receipt-summary';
-import type { QuoteSummaryValue } from './quote-receipt-summary';
+} from './quote-receipt-summary.ts';
+import type { QuoteSummaryValue } from './quote-receipt-summary.ts';
 
 export const RECEIPT_KEY = 'hp-quote-receipt';
 const MAX_AGE_MS = 30 * 60 * 1000;
