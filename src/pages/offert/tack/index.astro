@@ -18,7 +18,10 @@ import '../../../styles/hallpartner-info.css';
         </div>
         <div id="receipt-confirmed" hidden>
           <p>Din förfrågan har tagits emot av Amelio i denna testmiljö. Vi återkommer så snart vi kan.</p>
-          <p>Referens: <strong id="receipt-reference"></strong></p>
+          <div class="hp-receipt-case" aria-label="Ärendenummer">
+            <p class="hp-receipt-case__label">Ditt ärendenummer</p>
+            <strong id="receipt-reference"></strong>
+          </div>
           <p id="receipt-copy"></p>
           <p>Du behöver inte skicka förfrågan igen. Vid frågor, kontakta <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> och ange referensen.</p>
           <p>Detta är en bekräftelse på din förfrågan, inte en prisuppgift, bindande offert eller beställning.</p>
@@ -32,13 +35,15 @@ import '../../../styles/hallpartner-info.css';
 
 <script>
   import { RECEIPT_KEY, parseReceipt } from '../../../lib/quote-confirmation';
+  import { formatLeadReference } from '../../../lib/lead-reference';
   try {
     const raw = sessionStorage.getItem(RECEIPT_KEY);
     sessionStorage.removeItem(RECEIPT_KEY);
     const receipt = parseReceipt(raw ? JSON.parse(raw) : null);
     if (receipt) {
       document.querySelector('#receipt-title')!.textContent = 'Tack för din förfrågan!';
-      document.querySelector('#receipt-reference')!.textContent = receipt.requestId;
+      document.querySelector('#receipt-reference')!.textContent =
+        formatLeadReference(receipt.requestId) ?? receipt.requestId;
       document.querySelector('#receipt-copy')!.textContent = receipt.customerCopy === 'accepted'
         ? 'En kopia har lämnats till e-posttjänsten för leverans till den adress du angav. Kontrollera även skräpposten om den inte dyker upp.'
         : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Amelio om du vill få en kopia. Skicka inte förfrågan igen.';
@@ -47,3 +52,28 @@ import '../../../styles/hallpartner-info.css';
     }
   } catch { /* Direct visits, expired receipts and blocked storage stay neutral. */ }
 </script>
+
+<style>
+  .hp-receipt-case {
+    margin: 1.2rem 0;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid #C5D7C6;
+    border-inline-start: 4px solid #287B39;
+    border-radius: 5px;
+    background: #F1F6F0;
+    color: #173D28;
+  }
+  .hp-receipt-case__label {
+    margin: 0 0 .4rem;
+    color: #34553E;
+    font-size: .9rem;
+    font-weight: 650;
+  }
+  #receipt-reference {
+    display: block;
+    font-size: clamp(1.4rem, 3vw, 1.9rem);
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+</style>
