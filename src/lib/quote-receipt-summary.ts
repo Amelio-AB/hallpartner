@@ -1,4 +1,4 @@
-import { hallpartnerQuoteConfig } from '../config/hallpartner-quote';
+import { hallpartnerQuoteConfig } from '../config/hallpartner-quote.ts';
 
 /**
  * Only a small selection of project facts crosses the redirect. Never store
