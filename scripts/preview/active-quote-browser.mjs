@@ -139,7 +139,7 @@ try{
   assert.equal(await evaluate('location.search+location.hash'),'','no receipt or PII in URL');
   if(scenario.copy){
     assert.ok(await evaluate('document.querySelector("#receipt-confirmed")?.hidden===false'));
-    assert.equal(await evaluate('document.querySelector("#receipt-reference")?.textContent'),'1234567890abcdef12345678');
+    assert.equal(await evaluate('document.querySelector("#receipt-reference")?.textContent'),'HP-1234567890');
     assert.ok(await evaluate('document.querySelector("#receipt-copy").textContent.includes('+JSON.stringify(scenario.copy==='accepted'?'lämnats till e-posttjänsten':'kan inte bekräfta')+')'));
   }
   assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'No horizontal overflow');
