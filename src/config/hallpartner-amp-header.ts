@@ -32,5 +32,5 @@ export const ampHeaderTheme: NonNullable<HeaderMenuConfig['theme']> = {
     headerBg: '#10251C', headerText: '#F7F7F2', submenuBg: '#F5F5F0',
     submenuText: '#10251C', accent: '#F7F7F2', ctaText: '#10251C',
   },
-  font: 'Inter, system-ui, sans-serif',
+  font: 'Manrope, system-ui, sans-serif',
 };
