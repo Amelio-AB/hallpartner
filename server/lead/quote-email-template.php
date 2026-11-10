@@ -31,6 +31,8 @@ function hp_quote_mail_rows(array $answers): array
     if (!is_array($fields)) throw new RuntimeException('Invalid quote fields');
     $result = [];
     foreach ($fields as $key => $field) {
+        // Contact.message belongs only to contact/V1, never the V2 quote contract.
+        if ($key === 'contact.message') continue;
         $raw = $answers[$key] ?? null;
         if (!is_string($raw) || trim($raw) === '') continue;
         $value = $field['options'][$raw] ?? $raw;
