@@ -21,7 +21,12 @@ export type QuoteSummaryId = typeof fields[number]['id'];
 export type QuoteSummaryValue = { id: QuoteSummaryId; value: string };
 export type QuoteSummaryRow = { label: string; value: string };
 
-const configFields = hallpartnerQuoteConfig.steps.flatMap(step => step.fields);
+type ConfigOption = { value: string; label: string };
+type ConfigField = { id: string; options?: ConfigOption[] };
+const configFields: ConfigField[] = [];
+for (const step of hallpartnerQuoteConfig.steps) {
+  for (const field of step.fields) configFields.push(field as ConfigField);
+}
 
 function cleanValue(id: QuoteSummaryId, input: unknown): string | null {
   if (typeof input !== 'string') return null;
@@ -40,7 +45,7 @@ function cleanValue(id: QuoteSummaryId, input: unknown): string | null {
     return value;
   }
   const configField = configFields.find(item => item.id === id);
-  if (!configField || !('options' in configField)) return null;
+  if (!configField || !Array.isArray(configField.options)) return null;
   return configField.options?.some(option => option.value === value) ? value : null;
 }
 
@@ -76,7 +81,7 @@ export function displayQuoteReceiptSummary(values: QuoteSummaryValue[]): QuoteSu
     const field = fields.find(field => field.id === item.id)!;
     let value = item.value;
     if (field.kind === 'option') {
-      if (!configField || !('options' in configField)) return [];
+      if (!configField || !Array.isArray(configField.options)) return [];
       value = configField.options?.find(option => option.value === value)?.label ?? '';
       if (!value) return [];
     } else if (field.kind === 'metres') {
