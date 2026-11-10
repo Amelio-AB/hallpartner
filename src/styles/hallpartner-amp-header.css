@@ -2,7 +2,7 @@
 .hp-amp-site-header #hp-amp-header-fallback[hidden] { display:none !important; }
 .hp-amp-site-header #hp-amp-header-fallback:not([hidden]) { z-index:110; }
 .hp-amp-site-header #hp-amp-header-fallback:not([hidden]) .hp-draft-nav { flex-wrap:wrap; }
-.hp-amp-site-header .hm { --hm-font: Inter, system-ui, sans-serif; }
+.hp-amp-site-header .hm { --hm-font: Manrope, system-ui, sans-serif; }
 .hp-amp-site-header .hm__logo { max-width:min(11.5rem,100%); height:auto; }
 .hp-amp-site-header .hm--classic-mega-menu .hm__desktop,
 .hp-amp-site-header .hm--classic-mega-menu .hm__mobile-bar { max-width:1268px; margin-inline:auto; }
