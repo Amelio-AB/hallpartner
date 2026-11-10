@@ -29,8 +29,8 @@ export const ampHeaderBrand: HeaderMenuConfig['brand'] = {
 export const ampHeaderCTA: NonNullable<HeaderMenuConfig['cta']> = { label: 'Be om offert', href: '/offert/' };
 export const ampHeaderTheme: NonNullable<HeaderMenuConfig['theme']> = {
   colors: {
-    headerBg: '#071A16', headerText: '#F4F4F0', submenuBg: '#EBEBE8',
-    submenuText: '#202427', accent: '#287B39', ctaText: '#FFFFFF',
+    headerBg: '#10251C', headerText: '#F7F7F2', submenuBg: '#F5F5F0',
+    submenuText: '#10251C', accent: '#F7F7F2', ctaText: '#10251C',
   },
   font: 'Inter, system-ui, sans-serif',
 };
