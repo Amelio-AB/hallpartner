@@ -91,10 +91,10 @@ try{
   };
   await call('Runtime.enable');await call('Page.enable');
   for(const scenario of [
-    {width:390,code:200,copy:'accepted',status:'Tack för din förfrågan!'},
-    {width:1440,code:200,copy:'accepted',status:'Tack för din förfrågan!'},
-    {width:390,code:200,copy:'unconfirmed',status:'Tack för din förfrågan!'},
-    {width:1440,code:200,copy:'unconfirmed',status:'Tack för din förfrågan!'},
+    {width:390,code:200,copy:'accepted',status:'Tack för din offertförfrågan!'},
+    {width:1440,code:200,copy:'accepted',status:'Tack för din offertförfrågan!'},
+    {width:390,code:200,copy:'unconfirmed',status:'Tack för din offertförfrågan!'},
+    {width:1440,code:200,copy:'unconfirmed',status:'Tack för din offertförfrågan!'},
     {width:390,code:422,status:'Kontrollera e-postadressen.'},
     {width:390,code:200,mode:'false-success',status:'Vi kan inte bekräfta om förfrågan kom fram. Skicka inte igen innan du har kontrollerat med mottagaren.'},
     {width:390,code:200,mode:'disconnect',status:'Vi kan inte bekräfta om förfrågan kom fram. Skicka inte igen innan du har kontrollerat med mottagaren.'},
