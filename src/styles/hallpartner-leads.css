@@ -25,7 +25,7 @@
 
 
 /* Offertguide – Hallpartners visuella tolkning av referensbilderna.
-   Uses the REAL visitor-site Inter font and hp-site CTA, not the reference client's serif.
+   Uses the visitor-site Manrope font and hp-site CTA, not the reference client's serif.
    Only /offert/ is affected. AMP-001 markup, logic, contact form and backend are untouched.
    Muted surfaces are fixed colors: no contrast changes against varying page backgrounds. */
 .hp-quote-shell {
@@ -69,7 +69,7 @@
   max-width: 20ch;
   margin: 0 0 1rem;
   color: var(--hp-quote-heading);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(2.3rem, 4.3vw, 4rem);
   line-height: 1.1;
   font-weight: 700;
@@ -120,7 +120,7 @@
   --quote-radius-sm: 6px;
   --quote-radius-md: 8px;
   --quote-radius-lg: 10px;
-  --quote-font-body: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --quote-font-body: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --quote-font-heading: var(--quote-font-body);
   max-width: 67rem;
   margin-inline: auto;
