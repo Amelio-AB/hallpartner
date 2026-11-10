@@ -145,6 +145,11 @@ try{
     assert.ok(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card")).boxShadow!=="none"'));
     assert.ok(await evaluate('document.querySelector("#receipt-success-icon")?.hidden===false'));
     assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-case")).backgroundColor'),'rgb(40, 82, 61)');
+    assert.ok(await evaluate('document.querySelector("#receipt-summary")?.hidden===false'), 'Confirmed quote must display its limited project summary');
+    assert.ok(await evaluate('document.querySelector("#receipt-summary-rows")?.textContent.includes("Lager eller förvaring")'));
+    assert.ok(await evaluate('!document.querySelector("#receipt-summary-rows")?.textContent.includes("test@example.invalid")'));
+    assert.ok(await evaluate('!document.querySelector("#receipt-summary-rows")?.textContent.includes("Syntetisk Testperson")'));
+    assert.equal(await evaluate('sessionStorage.getItem("hp-quote-receipt")'), null, 'Receipt must be consumed and removed');
     assert.ok(await evaluate('document.querySelector("#receipt-copy").textContent.includes('+JSON.stringify(scenario.copy==='accepted'?'lämnats till e-posttjänsten':'kan inte bekräfta')+')'));
   }
   assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'No horizontal overflow');
