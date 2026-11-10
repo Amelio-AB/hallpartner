@@ -110,9 +110,60 @@
   color: #F4F4F0;
   opacity: 1;
 }
+/* A receipt must remain readable on the translucent, dark-green hero panel. */
 .hp-info--contact .hp-contact-hero__panel .hp-contact-form__status {
-  margin-top: .8rem;
+  margin-top: 1rem;
   min-height: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.hp-info--contact .hp-contact-hero__panel .hp-contact-form__status[hidden] {
+  display: none;
+}
+.hp-info--contact .hp-contact-hero__panel .hp-contact-form__status[data-state="pending"] {
+  color: #F4F4F0;
+}
+.hp-info--contact .hp-contact-hero__panel .hp-contact-form__status:is([data-state="success"],[data-state="error"]) {
+  padding: clamp(1rem, 2vw, 1.3rem);
+  border-radius: 5px;
+  border: 1px solid #C5D7C6;
+  border-inline-start: 4px solid #287B39;
+  background: #F1F6F0;
+  color: #173D28;
+  box-shadow: 0 4px 16px rgba(7,26,22,.12);
+}
+.hp-info--contact .hp-contact-hero__panel .hp-contact-form__status[data-state="success"] {
+  display: grid;
+  gap: .55rem;
+}
+.hp-info--contact .hp-contact-hero__panel .hp-contact-form__status[data-state="error"] {
+  background: #FFF1EB;
+  border-color: #E6BBAE;
+  border-inline-start-color: #9A3327;
+  color: #732719;
+}
+.hp-info--contact .hp-contact-form__status-title {
+  display: block;
+  color: #173D28;
+  font-size: clamp(1rem, 1.35vw, 1.13rem);
+  line-height: 1.4;
+}
+.hp-info--contact .hp-contact-form__status-label {
+  margin-top: .35rem;
+  color: #34553E;
+  font-size: .83rem;
+  font-weight: 600;
+}
+.hp-info--contact .hp-contact-form__status-reference {
+  color: #173D28;
+  font-size: clamp(1.35rem, 2vw, 1.65rem);
+  letter-spacing: .025em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.hp-info--contact .hp-contact-form__status-help {
+  color: #34553E;
+  font-size: .85rem;
 }
 .hp-info--contact .hp-contact-hero__quote {
   padding-top: .95rem;
