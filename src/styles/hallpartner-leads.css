@@ -69,7 +69,7 @@
   max-width: 20ch;
   margin: 0 0 1rem;
   color: var(--hp-quote-heading);
-  font-family: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Saira', Manrope, system-ui, sans-serif;
   font-size: clamp(2.3rem, 4.3vw, 4rem);
   line-height: 1.1;
   font-weight: 700;
@@ -121,7 +121,7 @@
   --quote-radius-md: 8px;
   --quote-radius-lg: 10px;
   --quote-font-body: Manrope, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --quote-font-heading: var(--quote-font-body);
+  --quote-font-heading: 'Saira', Manrope, system-ui, sans-serif;
   max-width: 67rem;
   margin-inline: auto;
   padding: 0;
