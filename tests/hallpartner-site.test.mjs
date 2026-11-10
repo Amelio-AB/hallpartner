@@ -55,10 +55,12 @@ test('site shell retains noindex, canonical identity, skip link and disabled lau
 test('existing color roles and their contrast constraints are preserved', () => {
   for (const [role,hex] of Object.entries({graphite:hallpartnerPalette.graphite,deep:hallpartnerPalette.deepGraphite,offwhite:hallpartnerPalette.offWhite,concrete:hallpartnerPalette.concrete,green:hallpartnerPalette.green,cta:hallpartnerPalette.ctaGreen,'cta-hover':hallpartnerPalette.ctaHover,'text-light':hallpartnerPalette.lightText,'action-text':hallpartnerActionText})) assert.ok(stylesheet.includes(`--hp-${role}: ${hex};`));
   const siteColors = stylesheet.match(/\.hp-site\s*\{([\s\S]*?)\}/)?.[1] ?? '';
-  for (const [role,hex] of Object.entries({graphite:hallpartnerPaletteTrial.graphite,deep:hallpartnerPaletteTrial.deepGraphite,green:hallpartnerPaletteTrial.green,cta:hallpartnerPaletteTrial.ctaGreen,'cta-hover':hallpartnerPaletteTrial.ctaHover,'link-on-light':hallpartnerPaletteTrial.linkOnLight})) assert.ok(siteColors.includes(`--hp-${role}: ${hex};`));
+  // Visitor-site color pilot intentionally overrides the legacy moodboard trial.
+  const pilot = {graphite:'#10251C',deep:'#10251C',offwhite:'#F5F5F0',green:'#8CAE96',cta:'#10251C','cta-hover':'#244536','link-on-light':'#214A34','button-on-dark':'#F7F7F2','button-on-dark-text':'#10251C','button-on-dark-hover':'#E7EBE4'};
+  for (const [role,hex] of Object.entries(pilot)) assert.ok(siteColors.includes(`--hp-${role}: ${hex};`), role);
   const luminance = hex => [1,3,5].map(offset => parseInt(hex.slice(offset,offset+2),16)/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((sum,v,i) => sum + v*[.2126,.7152,.0722][i],0);
   const contrast = (a,b) => { const [dark,light]=[luminance(a),luminance(b)].sort((x,y)=>x-y); return (light+.05)/(dark+.05); };
-  for (const [a,b] of [['#FFFFFF',hallpartnerPaletteTrial.ctaGreen],['#FFFFFF',hallpartnerPaletteTrial.ctaHover],[hallpartnerPaletteTrial.linkOnLight,hallpartnerPaletteTrial.concrete],[hallpartnerPaletteTrial.linkOnLight,hallpartnerPaletteTrial.offWhite],[hallpartnerPaletteTrial.green,hallpartnerPaletteTrial.deepGraphite]]) assert.ok(contrast(a,b)>=4.5,`${a}/${b}`);
+  for (const [a,b] of [['#F7F7F2','#10251C'],['#F7F7F2','#244536'],['#FFFFFF',hallpartnerPaletteTrial.ctaGreen],['#FFFFFF',hallpartnerPaletteTrial.ctaHover],[hallpartnerPaletteTrial.linkOnLight,hallpartnerPaletteTrial.concrete],[hallpartnerPaletteTrial.linkOnLight,hallpartnerPaletteTrial.offWhite],[hallpartnerPaletteTrial.green,hallpartnerPaletteTrial.deepGraphite]]) assert.ok(contrast(a,b)>=4.5,`${a}/${b}`);
   const css = read('src/styles/hallpartner-home.css');
   assert.match(css, /\.hp-site \.hp-home-hero__overlay\s*\{/);
   assert.match(css, /rgba\(7,26,22,\.94\)/);
