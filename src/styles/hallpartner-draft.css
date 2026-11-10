@@ -676,3 +676,10 @@
 .hp-site .hp-draft-nav .hp-draft-nav__cta:hover {
   background: var(--hp-button-on-dark-hover);
 }
+
+/* Typography pilot: Saira SemiBold for visitor-page headings only.
+   Keep Manrope for body copy, navigation, buttons and the existing logo. */
+.hp-site :is(h1, h2, h3) {
+  font-family: 'Saira', Manrope, system-ui, sans-serif;
+  font-weight: 600;
+}
