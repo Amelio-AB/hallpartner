@@ -48,7 +48,9 @@ export function createQuoteConfirmationAdapter(
     if (result.status === 'success' && !context.signal.aborted) {
       // Storage/navigation failures must never turn an accepted enquiry into a retry.
       const summary = buildQuoteReceiptSummary(submission.answers);
-      const confirmed = receipt && summary.length ? { ...receipt, summary } : receipt;
+      const accepted = receipt as Receipt | null;
+      const confirmed: Receipt | null = accepted && summary.length
+        ? Object.assign({}, accepted, { summary }) : accepted;
       try { onSuccess(confirmed); } catch { /* AMP still shows its confirmed success. */ }
     }
     return result;
