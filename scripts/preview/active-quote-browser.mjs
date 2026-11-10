@@ -147,6 +147,10 @@ try{
     assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-case")).backgroundColor'),'rgb(40, 82, 61)');
     assert.ok(await evaluate('document.querySelector("#receipt-summary")?.hidden===false'), 'Confirmed quote must display its limited project summary');
     assert.ok(await evaluate('document.querySelector("#receipt-summary-rows")?.textContent.includes("Lager eller förvaring")'));
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card__summary-row")).display'), 'grid', 'Dynamic summary rows receive Astro styles');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card__summary-row dd")).color'), 'rgb(255, 255, 255)', 'Summary values stay white on dark green');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card__summary-row dt")).color'), 'rgb(197, 215, 202)', 'Summary labels have legible contrast');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card__summary-row")).gridTemplateColumns.split(" ").length'), scenario.width === 390 ? 1 : 2, 'Responsive project summary: one column on mobile, two on desktop');
     assert.ok(await evaluate('!document.querySelector("#receipt-summary-rows")?.textContent.includes("test@example.invalid")'));
     assert.ok(await evaluate('!document.querySelector("#receipt-summary-rows")?.textContent.includes("Syntetisk Testperson")'));
     assert.equal(await evaluate('sessionStorage.getItem("hp-quote-receipt")'), null, 'Receipt must be consumed and removed');
