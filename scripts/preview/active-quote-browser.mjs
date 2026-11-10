@@ -140,6 +140,11 @@ try{
   if(scenario.copy){
     assert.ok(await evaluate('document.querySelector("#receipt-confirmed")?.hidden===false'));
     assert.equal(await evaluate('document.querySelector("#receipt-reference")?.textContent'),'HP-1234567890');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card")).backgroundColor'),'rgb(25, 59, 46)');
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card")).color'),'rgb(244, 248, 244)');
+    assert.ok(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-card")).boxShadow!=="none"'));
+    assert.ok(await evaluate('document.querySelector("#receipt-success-icon")?.hidden===false'));
+    assert.equal(await evaluate('getComputedStyle(document.querySelector(".hp-receipt-case")).backgroundColor'),'rgb(40, 82, 61)');
     assert.ok(await evaluate('document.querySelector("#receipt-copy").textContent.includes('+JSON.stringify(scenario.copy==='accepted'?'lämnats till e-posttjänsten':'kan inte bekräfta')+')'));
   }
   assert.ok(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),'No horizontal overflow');
