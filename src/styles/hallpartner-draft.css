@@ -52,12 +52,18 @@
  * Only color roles change. Typography, layout and motion are unchanged.
  */
 .hp-site {
-  --hp-graphite: #132822;
-  --hp-deep: #071A16;
-  --hp-green: #72BF7B;
-  --hp-cta: #287B39;
-  --hp-cta-hover: #1D6529;
-  --hp-link-on-light: #236F31;
+  /* Hallpartner dark-green pilot: explicit button roles by surface. */
+  --hp-graphite: #10251C;
+  --hp-deep: #10251C;
+  --hp-offwhite: #F5F5F0;
+  --hp-text-light: #F7F7F2;
+  --hp-green: #8CAE96;
+  --hp-cta: #10251C;
+  --hp-cta-hover: #244536;
+  --hp-link-on-light: #214A34;
+  --hp-button-on-dark: #F7F7F2;
+  --hp-button-on-dark-text: #10251C;
+  --hp-button-on-dark-hover: #E7EBE4;
 }
 
 .hp-site .hp-draft-nav a:hover,
@@ -642,7 +648,7 @@
   left: 50%;
   width: 100vw;
   transform: translateX(-50%);
-  background: #153129;
+  background: #10251C;
 }
 .hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) a {
   color: #DEEAE1;
