@@ -665,3 +665,14 @@
 .hp-site :is(.hp-detail__crumbs, .hp-info__crumbs, .hp-stal__crumbs) a:focus-visible {
   outline-color: #F4F4F0;
 }
+
+
+/* Color-pilot fallback: the AMP header uses its own theme above.
+   Keep the server-rendered fallback CTA legible on the dark header. */
+.hp-site .hp-draft-nav .hp-draft-nav__cta {
+  background: var(--hp-button-on-dark);
+  color: var(--hp-button-on-dark-text) !important;
+}
+.hp-site .hp-draft-nav .hp-draft-nav__cta:hover {
+  background: var(--hp-button-on-dark-hover);
+}
