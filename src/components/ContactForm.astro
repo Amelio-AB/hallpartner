@@ -43,7 +43,7 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
         <button class="hp-contact-form__submit" type="submit" disabled>Skicka meddelande</button>
       </div>
     </fieldset>
-    <p class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite"></p>
+    <div class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
   </form>
   <p class="hp-contact-hero__quote">
     Gäller det en ny hall? <a href="/offert/">Använd vår offertguide</a>.
@@ -51,17 +51,25 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
 </aside>
 
 <script>
+  import { formatLeadReference } from '../lib/lead-reference';
+
   const form = document.querySelector<HTMLFormElement>('#hp-contact-form');
   const message = document.querySelector<HTMLElement>('#hp-form-status');
   const button = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+  const setStatus = (state: 'pending' | 'error', text: string) => {
+    if (!message) return;
+    message.replaceChildren();
+    message.hidden = false;
+    message.dataset.state = state;
+    message.textContent = text;
+  };
   if (form && message && button && form.dataset.enabled === 'true') {
     button.disabled = false;
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
       button.disabled = true;
-      message.dataset.state = '';
-      message.textContent = 'Skickar meddelandet…';
+      setStatus('pending', 'Skickar meddelandet…');
       const answers = Object.fromEntries(new FormData(form).entries());
       const controller = new AbortController();
       const timeout = window.setTimeout(() => controller.abort(), 15000);
@@ -79,28 +87,42 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
           signal: controller.signal,
         });
         const body = await response.json();
-        if (response.status === 200 && body?.status === 'success' && /^[a-f0-9]{16,32}$/.test(body.requestId ?? '')) {
+        const reference = typeof body?.requestId === 'string'
+          ? formatLeadReference(body.requestId) : null;
+        if (response.status === 200 && body?.status === 'success' && reference) {
+          const headline = document.createElement('strong');
+          headline.className = 'hp-contact-form__status-title';
+          headline.textContent = 'Tack! Vi har tagit emot ditt meddelande.';
+          const explanation = document.createElement('span');
+          explanation.textContent = 'Mottagarsystemet har tagit emot meddelandet för Amelios utvecklingspreview.';
+          const referenceLabel = document.createElement('span');
+          referenceLabel.className = 'hp-contact-form__status-label';
+          referenceLabel.textContent = 'Ditt ärendenummer';
+          const referenceNumber = document.createElement('strong');
+          referenceNumber.className = 'hp-contact-form__status-reference';
+          referenceNumber.textContent = reference;
+          const help = document.createElement('span');
+          help.className = 'hp-contact-form__status-help';
+          help.textContent = 'Spara gärna numret om du behöver kontakta oss om ditt meddelande.';
+          message.replaceChildren(headline, explanation, referenceLabel, referenceNumber, help);
+          message.hidden = false;
           message.dataset.state = 'success';
-          message.textContent = 'Mottagarsystemet har tagit emot ditt meddelande. Referens: ' + body.requestId + '.';
           form.reset();
           allowRetry = false;
+          message.focus();
         } else if (response.status === 422 && body?.status === 'validation-error') {
-          message.dataset.state = 'error';
-          message.textContent = 'Kontrollera uppgifterna i formuläret.';
+          setStatus('error', 'Kontrollera uppgifterna i formuläret.');
           const first = Object.keys(body.fields ?? {})[0];
           const field = first ? form.elements.namedItem(first) : null;
           if (field instanceof HTMLElement) field.focus();
         } else if (response.status === 503 && body?.status === 'failed') {
-          message.dataset.state = 'error';
-          message.textContent = 'Mottagningen är inte tillgänglig. Meddelandet skickades inte. Använd telefon eller mejl ovan.';
+          setStatus('error', 'Mottagningen är inte tillgänglig. Meddelandet skickades inte. Använd telefon eller mejl ovan.');
         } else {
-          message.dataset.state = 'error';
-          message.textContent = 'Det är oklart om meddelandet kom fram. Kontakta Hallpartner innan du skickar igen.';
+          setStatus('error', 'Det är oklart om meddelandet kom fram. Kontakta Hallpartner innan du skickar igen.');
           allowRetry = false;
         }
       } catch {
-        message.dataset.state = 'error';
-        message.textContent = 'Det går inte att bekräfta mottagningen. Kontakta Hallpartner innan du försöker igen.';
+        setStatus('error', 'Det går inte att bekräfta mottagningen. Kontakta Hallpartner innan du försöker igen.');
         allowRetry = false;
       } finally {
         window.clearTimeout(timeout);
