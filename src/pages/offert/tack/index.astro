@@ -36,6 +36,11 @@ import '../../../styles/hallpartner-info.css';
               <p class="hp-receipt-case__help">Ange numret om du kontaktar oss om förfrågan.</p>
             </div>
 
+            <section class="hp-receipt-card__summary" id="receipt-summary" aria-labelledby="receipt-summary-title" hidden>
+              <h2 id="receipt-summary-title">Sammanfattning</h2>
+              <dl id="receipt-summary-rows"></dl>
+            </section>
+
             <section class="hp-receipt-card__next" aria-labelledby="receipt-next-title">
               <h2 id="receipt-next-title">Vad händer nu?</h2>
               <p>Vi går igenom din förfrågan och kontaktar dig om nästa steg. Du behöver inte skicka in uppgifterna igen.</p>
@@ -61,6 +66,7 @@ import '../../../styles/hallpartner-info.css';
 <script>
   import { RECEIPT_KEY, parseReceipt } from '../../../lib/quote-confirmation';
   import { formatLeadReference } from '../../../lib/lead-reference';
+  import { displayQuoteReceiptSummary } from '../../../lib/quote-receipt-summary';
 
   try {
     const raw = sessionStorage.getItem(RECEIPT_KEY);
@@ -71,6 +77,21 @@ import '../../../styles/hallpartner-info.css';
       document.querySelector<HTMLElement>('#receipt-success-icon')!.hidden = false;
       document.querySelector('#receipt-reference')!.textContent =
         formatLeadReference(receipt.requestId) ?? receipt.requestId;
+      const rows = displayQuoteReceiptSummary(receipt.summary ?? []);
+      if (rows.length) {
+        const list = document.querySelector<HTMLElement>('#receipt-summary-rows')!;
+        for (const { label, value } of rows) {
+          const item = document.createElement('div');
+          item.className = 'hp-receipt-card__summary-row';
+          const term = document.createElement('dt');
+          term.textContent = label;
+          const definition = document.createElement('dd');
+          definition.textContent = value;
+          item.append(term, definition);
+          list.append(item);
+        }
+        document.querySelector<HTMLElement>('#receipt-summary')!.hidden = false;
+      }
       document.querySelector('#receipt-copy')!.textContent = receipt.customerCopy === 'accepted'
         ? 'En kopia har lämnats till e-posttjänsten för leverans till den adress du angav. Kontrollera även skräpposten om den inte dyker upp.'
         : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Amelio om du vill få en kopia. Skicka inte förfrågan igen.';
@@ -188,6 +209,37 @@ import '../../../styles/hallpartner-info.css';
     color: #D3E1D4 !important;
     font-size: .86rem;
   }
+  .hp-receipt-card__summary {
+    margin: 1.6rem 0;
+  }
+  .hp-receipt-card__summary[hidden] {
+    display: none;
+  }
+  .hp-receipt-card__summary h2 {
+    color: #FFFFFF;
+    margin: 0 0 .85rem;
+    font-size: clamp(1.2rem, 2.3vw, 1.4rem);
+  }
+  .hp-receipt-card__summary dl {
+    margin: 0;
+  }
+  .hp-receipt-card__summary-row {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: .5rem 1.3rem;
+    border-bottom: 1px solid #476B56;
+    padding: .75rem 0;
+  }
+  .hp-receipt-card__summary-row dt {
+    color: #C5D7CA;
+    font-size: .92rem;
+  }
+  .hp-receipt-card__summary-row dd {
+    color: #FFFFFF;
+    font-weight: 650;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
   .hp-receipt-card__next {
     padding-top: .5rem;
   }
@@ -235,6 +287,10 @@ import '../../../styles/hallpartner-info.css';
     outline-offset: 4px;
   }
   @media (max-width: 520px) {
+    .hp-receipt-card__summary-row {
+      grid-template-columns: 1fr;
+      gap: .15rem;
+    }
     .hp-receipt-card {
       border-radius: 12px;
     }
