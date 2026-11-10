@@ -91,7 +91,7 @@ try{
   };
   await call('Runtime.enable');await call('Page.enable');
   const scenarios=[
-    {width:390,code:200,expected:'Referens: 1234567890abcdef12345678',retry:false},
+    {width:390,code:200,expected:'HP-1234567890',retry:false},
     {width:1440,code:200,expected:'Referens: 1234567890abcdef12345678',retry:false},
     {width:390,code:422,expected:'Kontrollera uppgifterna i formuläret.',retry:true},
     {width:390,code:503,expected:'Mottagningen är inte tillgänglig.',retry:true},
@@ -124,6 +124,11 @@ try{
       if(outcome)break;await pause(110);
     }
     assert.ok(outcome,'Contact form result/retry state incorrect for '+JSON.stringify(scenario));
+    if (scenario.code === 200 && !scenario.mode) {
+      assert.equal(await evaluate('document.querySelector(".hp-contact-form__status-reference")?.textContent'), 'HP-1234567890');
+      assert.equal(await evaluate('getComputedStyle(document.querySelector("#hp-form-status")).backgroundColor'), 'rgb(241, 246, 240)');
+      assert.equal(await evaluate('getComputedStyle(document.querySelector("#hp-form-status")).color'), 'rgb(23, 61, 40)');
+    }
     assert.equal(requests.length,1,'Exactly one synthetic POST');
     const sent=requests[0];
     assert.equal(sent.method,'POST');
