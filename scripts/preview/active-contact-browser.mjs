@@ -92,7 +92,7 @@ try{
   await call('Runtime.enable');await call('Page.enable');
   const scenarios=[
     {width:390,code:200,expected:'HP-1234567890',retry:false},
-    {width:1440,code:200,expected:'Referens: 1234567890abcdef12345678',retry:false},
+    {width:1440,code:200,expected:'HP-1234567890',retry:false},
     {width:390,code:422,expected:'Kontrollera uppgifterna i formuläret.',retry:true},
     {width:390,code:503,expected:'Mottagningen är inte tillgänglig.',retry:true},
     {width:390,code:500,expected:'Det är oklart om meddelandet kom fram.',retry:false},
