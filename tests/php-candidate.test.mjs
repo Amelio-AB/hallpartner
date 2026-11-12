@@ -12,7 +12,9 @@ test('PHP candidate preserves raw Git bytes despite Windows checkout settings an
   const configBefore = execFileSync('git', ['config', '--local', '--list']);
   try {
     const manifest = buildCandidate(commit, directory);
-    assert.equal(manifest.files.length, 9);
+    assert.equal(manifest.files.length, 11);
+    assert.ok(manifest.files.some(file => file.path === 'server/lead/contact-email-template.php'));
+    assert.ok(manifest.files.some(file => file.path === 'tests/contact-email-template.test.php'));
     assert.ok(manifest.files.some(file => file.path === 'server/lead/quote-email-template.php'));
     assert.ok(manifest.files.some(file => file.path === 'tests/quote-email-template.test.php'));
     assert.match(manifest.archiveSha256, /^[0-9a-f]{64}$/);
