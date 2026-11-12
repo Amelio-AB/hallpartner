@@ -9,3 +9,28 @@
     padding-inline: 1.15rem;
   }
 }
+
+
+
+
+/* HP-049 – Hallpartners footerlogotyp */
+.hp-site .af--compact .af__logo {
+  display: block;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.hp-site .af--compact .af__brand-link {
+  width: 100%;
+  max-width: 340px;
+}
+
+@media (max-width: 767px) {
+  .hp-site .af--compact .af__logo,
+  .hp-site .af--compact .af__brand-link {
+    max-width: 280px;
+  }
+}

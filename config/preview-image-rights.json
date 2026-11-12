@@ -816,6 +816,18 @@
       "origin": "user-created-hallpartner-symbol",
       "approvalBasis": "User states authorship and requests this exact favicon for the existing preview in a separate verified PR; merge/publication remains separate",
       "externalLicenseEvidence": null
+    },
+    {
+      "source": "public/images/logo_white.png",
+      "sourceSha256": "0a579d3b1a328a165492e03c190b9787f4d7f4d36473761ddc384d734a2aadc0",
+      "outputSha256": "0a579d3b1a328a165492e03c190b9787f4d7f4d36473761ddc384d734a2aadc0",
+      "scope": "https://hallpartner-se.preview2.inleed.com",
+      "approvedBy": "Andreas",
+      "evidence": "https://github.com/Amelio-AB/hallpartner/pull/63",
+      "approvedOn": "2026-11-12",
+      "origin": "user-supplied-hallpartner-logo",
+      "approvalBasis": "Visuellt godkand for Hallpartners Inleed-preview",
+      "externalLicenseEvidence": null
     }
   ]
 }

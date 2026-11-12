@@ -11,7 +11,7 @@ export const hallpartnerFooterConfig = {
   brand: {
     name: 'Hallpartner',
     homeHref: '/',
-    logoSrc: '/images/logo_text_white.png',
+    logoSrc: '/images/logo_white.png',
     tagline: 'Hallar för verksamheter som behöver mer utrymme.',
   },
   // AMP-003 desktop grid has three columns: two navigation groups + Contact.
