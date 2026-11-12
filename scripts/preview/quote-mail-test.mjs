@@ -54,7 +54,7 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
       assert.match(internal,/text\/html/i);
       assert.match(internal,/HP-1234567890/);
       assert.match(internal,/KUNDUPPGIFTER|MEDDELANDE/);
-      assert.match(internal,/Syntetisk kontaktfråga/);
+      assert.match(internal,/Syntetisk kontakt/);
       assert.doesNotMatch(internal,/private-host|private-user|private-password/);
     }
     if (!mode.startsWith('contact') && mode !== 'primary-rejected') {
@@ -84,7 +84,7 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
         assert.doesNotMatch(mail,/Tekniskt referens-ID|1234567890abcdef12345678/,
           'Customer copy must not expose full technical reference');
         if (!mode.startsWith('contact')) assert.match(mail,/Lager eller f/);
-        else assert.match(mail,/Syntetisk kontaktfråga/);
+        else assert.match(mail,/Syntetisk kontakt/);
         assert.doesNotMatch(mail,/private-host|private-user|private-password|X-Mailer:|storage|need_help/);
         assert.match(mail,/Reply-To: Amelio <internal@example.invalid>/);
         if (!mode.startsWith('contact')) assert.match(mail,/Teststad/);
