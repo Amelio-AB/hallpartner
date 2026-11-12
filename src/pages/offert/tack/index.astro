@@ -4,27 +4,60 @@ import '../../../styles/hallpartner-info.css';
 ---
 
 <HallpartnerSiteLayout title="Din offertförfrågan" description="Bekräftelse för offertguiden i Amelios utvecklingspreview.">
-  <div class="hp-info">
+  <div class="hp-info hp-receipt-page">
     <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
       <a href="/">Start</a><span aria-hidden="true">/</span><a href="/offert/">Offert</a><span aria-hidden="true">/</span><span aria-current="page">Bekräftelse</span>
     </nav>
-    <section class="hp-info__section hp-info__section--light" aria-labelledby="receipt-title">
-      <div class="hp-draft-rail" style="max-width: 860px">
-        <p class="hp-info__eyebrow">Amelios utvecklingspreview</p>
-        <h1 id="receipt-title">Din offertförfrågan</h1>
-        <div id="receipt-neutral">
-          <p>Här visas bekräftelsen efter ett inskick via offertguiden. Det finns ingen aktuell bekräftelse att visa i den här fliken.</p>
-          <p>Har du redan skickat en förfrågan men är osäker på om den kom fram? Kontakta Amelio på <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> innan du skickar igen.</p>
+
+    <section class="hp-receipt-page__section" aria-labelledby="receipt-title">
+      <div class="hp-receipt-page__rail">
+        <div class="hp-receipt-card">
+          <div class="hp-receipt-card__brand">
+            <span>Hallpartner</span>
+            <span>Offertförfrågan</span>
+          </div>
+
+          <div class="hp-receipt-card__heading">
+            <span class="hp-receipt-card__check" id="receipt-success-icon" aria-hidden="true" hidden>✓</span>
+            <h1 id="receipt-title">Din offertförfrågan</h1>
+          </div>
+
+          <div id="receipt-neutral">
+            <p>Här visas bekräftelsen efter ett inskick via offertguiden. Det finns ingen aktuell bekräftelse att visa i den här fliken.</p>
+            <p>Har du redan skickat en förfrågan men är osäker på om den kom fram? Kontakta Amelio på <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> innan du skickar igen.</p>
+          </div>
+
+          <div id="receipt-confirmed" hidden>
+            <p class="hp-receipt-card__intro">Vi har tagit emot din förfrågan i Amelios utvecklingspreview. Vi går igenom uppgifterna och återkommer så snart vi kan.</p>
+
+            <div class="hp-receipt-case" aria-label="Ärendenummer">
+              <p class="hp-receipt-case__label">Ditt ärendenummer</p>
+              <strong id="receipt-reference"></strong>
+              <p class="hp-receipt-case__help">Ange numret om du kontaktar oss om förfrågan.</p>
+            </div>
+
+            <section class="hp-receipt-card__summary" id="receipt-summary" aria-labelledby="receipt-summary-title" hidden>
+              <h2 id="receipt-summary-title">Sammanfattning</h2>
+              <dl id="receipt-summary-rows"></dl>
+            </section>
+
+            <section class="hp-receipt-card__next" aria-labelledby="receipt-next-title">
+              <h2 id="receipt-next-title">Vad händer nu?</h2>
+              <p>Vi går igenom din förfrågan och kontaktar dig om nästa steg. Du behöver inte skicka in uppgifterna igen.</p>
+              <p id="receipt-copy"></p>
+            </section>
+
+            <p class="hp-receipt-card__legal">Detta är en mottagningsbekräftelse, inte en prisuppgift, bindande offert eller beställning.</p>
+          </div>
+
+          <div class="hp-receipt-card__footer">
+            <p>För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
+            <div class="hp-receipt-card__links">
+              <a href="/">Till startsidan</a>
+              <a href="/integritet/">Så hanteras dina uppgifter</a>
+            </div>
+          </div>
         </div>
-        <div id="receipt-confirmed" hidden>
-          <p>Din förfrågan har tagits emot av Amelio i denna testmiljö. Vi återkommer så snart vi kan.</p>
-          <p>Referens: <strong id="receipt-reference"></strong></p>
-          <p id="receipt-copy"></p>
-          <p>Du behöver inte skicka förfrågan igen. Vid frågor, kontakta <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> och ange referensen.</p>
-          <p>Detta är en bekräftelse på din förfrågan, inte en prisuppgift, bindande offert eller beställning.</p>
-        </div>
-        <p>För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
-        <p><a href="/">Till startsidan</a> · <a href="/integritet/">Så hanteras dina uppgifter</a></p>
       </div>
     </section>
   </div>
@@ -32,13 +65,33 @@ import '../../../styles/hallpartner-info.css';
 
 <script>
   import { RECEIPT_KEY, parseReceipt } from '../../../lib/quote-confirmation';
+  import { formatLeadReference } from '../../../lib/lead-reference';
+  import { displayQuoteReceiptSummary } from '../../../lib/quote-receipt-summary';
+
   try {
     const raw = sessionStorage.getItem(RECEIPT_KEY);
     sessionStorage.removeItem(RECEIPT_KEY);
     const receipt = parseReceipt(raw ? JSON.parse(raw) : null);
     if (receipt) {
-      document.querySelector('#receipt-title')!.textContent = 'Tack för din förfrågan!';
-      document.querySelector('#receipt-reference')!.textContent = receipt.requestId;
+      document.querySelector('#receipt-title')!.textContent = 'Tack för din offertförfrågan!';
+      document.querySelector<HTMLElement>('#receipt-success-icon')!.hidden = false;
+      document.querySelector('#receipt-reference')!.textContent =
+        formatLeadReference(receipt.requestId) ?? receipt.requestId;
+      const rows = displayQuoteReceiptSummary(receipt.summary ?? []);
+      if (rows.length) {
+        const list = document.querySelector<HTMLElement>('#receipt-summary-rows')!;
+        for (const { label, value } of rows) {
+          const item = document.createElement('div');
+          item.className = 'hp-receipt-card__summary-row';
+          const term = document.createElement('dt');
+          term.textContent = label;
+          const definition = document.createElement('dd');
+          definition.textContent = value;
+          item.append(term, definition);
+          list.append(item);
+        }
+        document.querySelector<HTMLElement>('#receipt-summary')!.hidden = false;
+      }
       document.querySelector('#receipt-copy')!.textContent = receipt.customerCopy === 'accepted'
         ? 'En kopia har lämnats till e-posttjänsten för leverans till den adress du angav. Kontrollera även skräpposten om den inte dyker upp.'
         : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Amelio om du vill få en kopia. Skicka inte förfrågan igen.';
@@ -47,3 +100,210 @@ import '../../../styles/hallpartner-info.css';
     }
   } catch { /* Direct visits, expired receipts and blocked storage stay neutral. */ }
 </script>
+
+<style>
+  .hp-receipt-page {
+    background: #F0F1ED;
+  }
+  .hp-receipt-page__section {
+    padding: clamp(2.5rem, 6vw, 6rem) 1rem clamp(4rem, 8vw, 7rem);
+  }
+  .hp-receipt-page__rail {
+    width: 100%;
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+  .hp-receipt-card {
+    padding: clamp(1.4rem, 4vw, 2.6rem);
+    border: 1px solid #365846;
+    border-radius: 15px;
+    background: #193B2E;
+    color: #F4F8F4;
+    box-shadow: 0 20px 55px rgba(12, 35, 25, .18);
+  }
+  .hp-receipt-card__brand {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: .6rem 1rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid #476B56;
+    text-transform: uppercase;
+    letter-spacing: .075em;
+    font-size: .78rem;
+  }
+  .hp-receipt-card__brand span:first-child {
+    color: #FFFFFF;
+    font-weight: 800;
+    letter-spacing: .035em;
+  }
+  .hp-receipt-card__brand span:last-child {
+    color: #C1D4C5;
+  }
+  .hp-receipt-card__heading {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding-top: clamp(1.5rem, 3vw, 2rem);
+  }
+  .hp-receipt-card__heading h1 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: clamp(1.5rem, 3vw, 2.15rem);
+    line-height: 1.2;
+    letter-spacing: -.035em;
+    overflow-wrap: anywhere;
+  }
+  .hp-receipt-card__check {
+    display: inline-grid;
+    flex: 0 0 2rem;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 2px solid #A8D5AC;
+    border-radius: 50%;
+    color: #A8D5AC;
+    font-size: 1.1rem;
+    font-weight: 750;
+  }
+  .hp-receipt-card__check[hidden],
+  #receipt-neutral[hidden],
+  #receipt-confirmed[hidden] {
+    display: none;
+  }
+  #receipt-neutral,
+  #receipt-confirmed {
+    line-height: 1.65;
+  }
+  #receipt-neutral p,
+  #receipt-confirmed p {
+    color: #E0EAE1;
+  }
+  .hp-receipt-card__intro {
+    margin: 1.2rem 0 0;
+  }
+  .hp-receipt-case {
+    margin-block: 1.6rem;
+    padding: clamp(1.1rem, 3vw, 1.5rem);
+    border: 1px solid #50725A;
+    border-radius: 8px;
+    background: #28523D;
+  }
+  .hp-receipt-case__label {
+    margin: 0 0 .35rem;
+    color: #D3E1D4 !important;
+    font-size: .9rem;
+  }
+  #receipt-reference {
+    display: block;
+    color: #FFFFFF;
+    font-size: clamp(1.55rem, 3.2vw, 2rem);
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .02em;
+    overflow-wrap: anywhere;
+  }
+  .hp-receipt-case__help {
+    margin: .5rem 0 0;
+    color: #D3E1D4 !important;
+    font-size: .86rem;
+  }
+  .hp-receipt-card__summary {
+    margin: 1.6rem 0;
+  }
+  .hp-receipt-card__summary[hidden] {
+    display: none;
+  }
+  .hp-receipt-card__summary h2 {
+    color: #FFFFFF;
+    margin: 0 0 .85rem;
+    font-size: clamp(1.2rem, 2.3vw, 1.4rem);
+  }
+  .hp-receipt-card__summary dl {
+    margin: 0;
+  }
+  .hp-receipt-card__summary :global(.hp-receipt-card__summary-row) {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: .5rem 1.3rem;
+    border-bottom: 1px solid #476B56;
+    padding: .75rem 0;
+  }
+  .hp-receipt-card__summary :global(.hp-receipt-card__summary-row dt) {
+    color: #C5D7CA;
+    font-size: .92rem;
+  }
+  .hp-receipt-card__summary :global(.hp-receipt-card__summary-row dd) {
+    color: #FFFFFF;
+    font-weight: 650;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .hp-receipt-card__next {
+    padding-top: .5rem;
+  }
+  .hp-receipt-card__next h2 {
+    margin: 0 0 .6rem;
+    color: #FFFFFF;
+    font-size: clamp(1.2rem, 2.3vw, 1.4rem);
+    line-height: 1.3;
+  }
+  .hp-receipt-card__next p {
+    margin-block: .6rem;
+  }
+  .hp-receipt-card__legal {
+    margin: 1.6rem 0 0;
+    padding-top: 1.2rem;
+    border-top: 1px solid #476B56;
+    color: #BDD0C2 !important;
+    font-size: .86rem;
+  }
+  .hp-receipt-card__footer {
+    margin-top: 1.6rem;
+    padding-top: 1.2rem;
+    border-top: 1px solid #476B56;
+    color: #D8E6DA;
+    font-size: .87rem;
+    line-height: 1.6;
+  }
+  .hp-receipt-card__footer p {
+    margin: 0 0 .65rem;
+  }
+  .hp-receipt-card__links {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.5rem;
+    row-gap: .5rem;
+  }
+  .hp-receipt-card :is(a, a:visited) {
+    color: #FFFFFF;
+    text-decoration: underline;
+    text-underline-offset: .2em;
+    overflow-wrap: anywhere;
+  }
+  .hp-receipt-card a:focus-visible {
+    outline: 3px solid #A8D5AC;
+    outline-offset: 4px;
+  }
+  @media (max-width: 520px) {
+    .hp-receipt-card__summary :global(.hp-receipt-card__summary-row) {
+      grid-template-columns: 1fr;
+      gap: .15rem;
+    }
+    .hp-receipt-card {
+      border-radius: 12px;
+    }
+    .hp-receipt-card__heading {
+      align-items: flex-start;
+    }
+    .hp-receipt-card__check {
+      margin-top: .15rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hp-receipt-card {
+      scroll-behavior: auto;
+    }
+  }
+</style>

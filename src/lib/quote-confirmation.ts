@@ -1,9 +1,18 @@
 import { createJsonAdapter } from '@amelio/web-platform/quote-flow';
 import type { Adapter } from '@amelio/web-platform/quote-flow';
+import {
+  buildQuoteReceiptSummary, parseQuoteReceiptSummary
+} from './quote-receipt-summary.ts';
+import type { QuoteSummaryValue } from './quote-receipt-summary.ts';
 
 export const RECEIPT_KEY = 'hp-quote-receipt';
 const MAX_AGE_MS = 30 * 60 * 1000;
-export type Receipt = { requestId: string; customerCopy: 'accepted' | 'unconfirmed'; createdAt: number };
+export type Receipt = {
+  requestId: string;
+  customerCopy: 'accepted' | 'unconfirmed';
+  createdAt: number;
+  summary?: QuoteSummaryValue[];
+};
 
 export function parseReceipt(value: unknown, now = Date.now()): Receipt | null {
   if (!value || typeof value !== 'object') return null;
@@ -11,11 +20,14 @@ export function parseReceipt(value: unknown, now = Date.now()): Receipt | null {
   if (typeof r.requestId !== 'string' || !/^[a-f0-9]{24}$/.test(r.requestId) ||
       typeof r.createdAt !== 'number' || !Number.isFinite(r.createdAt) ||
       r.createdAt > now || now - r.createdAt > MAX_AGE_MS) return null;
-  return { requestId: r.requestId, createdAt: r.createdAt,
+  const result: Receipt = { requestId: r.requestId, createdAt: r.createdAt,
     customerCopy: r.customerCopy === 'accepted' ? 'accepted' : 'unconfirmed' };
+  const summary = parseQuoteReceiptSummary(r.summary);
+  if (summary.length) result.summary = summary;
+  return result;
 }
 
-/** Keep AMP's HTTP/error handling, and only carry a non-PII receipt across navigation. */
+/** Keep AMP's HTTP/error handling. Only allowlisted project facts cross navigation. */
 export function createQuoteConfirmationAdapter(
   onSuccess: (receipt: Receipt | null) => void,
   fetcher: typeof fetch = globalThis.fetch,
@@ -35,7 +47,11 @@ export function createQuoteConfirmationAdapter(
     const result = await adapter(submission, context);
     if (result.status === 'success' && !context.signal.aborted) {
       // Storage/navigation failures must never turn an accepted enquiry into a retry.
-      try { onSuccess(receipt); } catch { /* AMP still shows its confirmed success. */ }
+      const summary = buildQuoteReceiptSummary(submission.answers);
+      const accepted = receipt as Receipt | null;
+      const confirmed: Receipt | null = accepted && summary.length
+        ? Object.assign({}, accepted, { summary }) : accepted;
+      try { onSuccess(confirmed); } catch { /* AMP still shows its confirmed success. */ }
     }
     return result;
   };

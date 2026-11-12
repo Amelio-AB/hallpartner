@@ -181,8 +181,15 @@ try {
         button.click();const details=dialog.querySelector('details');details.querySelector('summary').click();
         return {initial,hitTarget:rect.width>=44&&rect.height>=44,icon:button.classList.contains('hm__mobile-toggle--icon')&&button.querySelectorAll('.hm__toggle-line').length===3&&button.textContent.trim()==='',opened:dialog.open&&button.getAttribute('aria-expanded')==='true',scrollLock:document.body.style.overflow==='hidden',halls:details.open&&!!details.querySelector('a[href="/stalhallar/lagerhall/"]'),closeIcon:!!dialog.querySelector('.hm__mobile-close--icon[aria-label="Stäng meny"]')};
       });
-      await sleep(300);
-      metrics.menu.rightEdge=await evaluate('Math.abs(document.querySelector("dialog.hm__mobile-dialog").getBoundingClientRect().right-innerWidth)<=2');
+      // The AMP mobile menu slides in. Headless Chrome can briefly report an
+      // intermediate position after 300 ms under CI load. Keep the exact edge
+      // assertion, but let the transition settle instead of sampling one frame.
+      metrics.menu.rightEdge=false;
+      for (let attempt=0;attempt<18;attempt++) {
+        await sleep(100);
+        metrics.menu.rightEdge=await evaluate('Math.abs(document.querySelector("dialog.hm__mobile-dialog").getBoundingClientRect().right-innerWidth)<=2');
+        if(metrics.menu.rightEdge)break;
+      }
       allTrue(metrics.menu,width+': mobile opening');await capture(prefix+'-'+width+'-menu-open.png');
       await key('Escape');await sleep(350);
       allTrue(await run(function(){const button=document.querySelector('button.hm__mobile-toggle');return {closed:!document.querySelector('dialog.hm__mobile-dialog').open,aria:button.getAttribute('aria-expanded')==='false',focus:document.activeElement===button,scroll:document.body.style.overflow!=='hidden'};}),width+': Escape');
