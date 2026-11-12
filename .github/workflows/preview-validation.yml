@@ -98,6 +98,9 @@ jobs:
           php -l server/lead/delivery.php
           php -l tests/quote-email-template.test.php
           php tests/quote-email-template.test.php
+          php -l server/lead/contact-email-template.php
+          php -l tests/contact-email-template.test.php
+          php tests/contact-email-template.test.php
       - name: Controlled customer-copy SMTP regression (loopback only)
         run: |
           composer install --working-dir=server/lead --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction
