@@ -34,17 +34,22 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
     try {
         if ($kind === 'hallpartner-offert-v2-review') {
             require_once __DIR__ . '/quote-email-template.php';
+        } elseif ($kind === 'hallpartner-contact-v1') {
+            require_once __DIR__ . '/contact-email-template.php';
         }
         $primary = $factory();
         $primary->addAddress($config['recipient']);
         $primary->addReplyTo($answers['contact.email'], $answers['contact.name']);
-        $primary->Subject = $subject . ' [' . ($kind === 'hallpartner-offert-v2-review' ? hp_quote_case_label($reference) : $reference) . ']';
+        $primary->Subject = $subject . ' [' . (in_array($kind, ['hallpartner-offert-v2-review', 'hallpartner-contact-v1'], true) ? hp_quote_case_label($reference) : $reference) . ']';
         if ($kind === 'hallpartner-offert-v2-review') {
             $primary->isHTML(true);
             $primary->Body = hp_quote_mail_html(true, $answers, $reference);
             $primary->AltBody = 'Ärendenummer: ' . hp_quote_case_label($reference) . "\n" . $body;
+        } elseif ($kind === 'hallpartner-contact-v1') {
+            $primary->isHTML(true);
+            $primary->Body = hp_contact_mail_html(true, $answers, $reference);
+            $primary->AltBody = 'Ärendenummer: ' . hp_quote_case_label($reference) . "\n" . $body;
         } else {
-            // Contact/V1 stays plain text, with exactly its existing message body.
             $primary->Body = $body;
         }
         if ($primary->send() !== true) throw new RuntimeException('SMTP not confirmed');
@@ -54,8 +59,8 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
     }
 
     $result = ['status' => 'success', 'requestId' => $reference];
-    // Do not change contact/V1 behaviour.
-    if ($kind !== 'hallpartner-offert-v2-review') return $result;
+    // Only approved V2 quote and contact/V1 get a single customer copy.
+    if (!in_array($kind, ['hallpartner-offert-v2-review', 'hallpartner-contact-v1'], true)) return $result;
     $result['customerCopy'] = 'unconfirmed';
     try {
         $copy = $factory();
@@ -67,15 +72,25 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
         $copy->addAddress($answers['contact.email']);
         $copy->addReplyTo($config['recipient'], 'Amelio');
         $short = hp_quote_case_label($reference);
-        $copy->Subject = 'Vi har tagit emot din offertförfrågan [' . $short . ']';
         $copy->isHTML(true);
-        $copy->Body = hp_quote_mail_html(false, $answers, $reference);
-        $copy->AltBody = "Vi har tagit emot din offertförfrågan\n\n" .
-            "Amelio har tagit emot din förfrågan i Hallpartners utvecklingspreview. " .
-            "Vi återkommer så snart vi kan.\n\nÄrendenummer: " . $short . "\n\n" .
-            "Här är en kopia av dina svar:\n\n" . $summary .
-            "Detta är ingen prisuppgift, bindande offert eller beställning.\n" .
-            "Du kan svara på detta mejl för att kontakta Amelio.\n";
+        if ($kind === 'hallpartner-contact-v1') {
+            $copy->Subject = 'Vi har tagit emot ditt meddelande [' . $short . ']';
+            $copy->Body = hp_contact_mail_html(false, $answers, $reference);
+            $copy->AltBody = "Vi har tagit emot ditt meddelande\n\n" .
+                "Amelio tar emot meddelandet under Hallpartners utvecklingspreview. " .
+                "Du behöver inte skicka igen.\n\nÄrendenummer: " . $short . "\n\n" .
+                "Din kopia:\n" . $summary .
+                "Svara på detta mejl om du vill komplettera ditt meddelande.\n";
+        } else {
+            $copy->Subject = 'Vi har tagit emot din offertförfrågan [' . $short . ']';
+            $copy->Body = hp_quote_mail_html(false, $answers, $reference);
+            $copy->AltBody = "Vi har tagit emot din offertförfrågan\n\n" .
+                "Amelio har tagit emot din förfrågan i Hallpartners utvecklingspreview. " .
+                "Vi återkommer så snart vi kan.\n\nÄrendenummer: " . $short . "\n\n" .
+                "Här är en kopia av dina svar:\n\n" . $summary .
+                "Detta är ingen prisuppgift, bindande offert eller beställning.\n" .
+                "Du kan svara på detta mejl för att kontakta Amelio.\n";
+        }
         if ($copy->send() === true) $result['customerCopy'] = 'accepted';
     } catch (Throwable) {
         // May have been accepted before timeout; do not retry or expose diagnostics.
