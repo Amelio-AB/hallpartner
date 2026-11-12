@@ -8,8 +8,9 @@ import { pathToFileURL } from 'node:url';
 
 export const FILES = Object.freeze([
   'server/lead/receiver.php', 'server/lead/messages.php', 'server/lead/delivery.php',
-  'server/lead/quote-fields.json', 'server/lead/validator.php', 'server/lead/rate-cleanup.php',
-  'tests/lead-receiver.test.php',
+  'server/lead/quote-email-template.php', 'server/lead/quote-fields.json',
+  'server/lead/validator.php', 'server/lead/rate-cleanup.php',
+  'tests/lead-receiver.test.php', 'tests/quote-email-template.test.php',
 ]);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 function run(command, args, cwd) {

@@ -48,6 +48,22 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
     assert.equal(result.status,mode==='primary-rejected'?'unknown':'success',mode+': '+err);
     assert.equal(connections,['primary-rejected','contact'].includes(mode)?1:2,'no automatic retry');
     assert.deepEqual(messages[0].to,['RCPT TO:<internal@example.invalid>']);
+    if (mode === 'contact') {
+      assert.doesNotMatch(messages[0].data,/multipart\/alternative|text\/html/i,
+        'Contact/V1 must remain a single plain-text email');
+    }
+    if (mode !== 'contact' && mode !== 'primary-rejected') {
+      const internal = decode(messages[0].data);
+      assert.match(internal,/multipart\/alternative/i,'Internal quote has text and HTML alternatives');
+      assert.match(internal,/text\/html/i);
+      assert.match(internal,/HP-1234567890/);
+      assert.match(internal,/Tekniskt referens-ID/);
+      assert.match(internal,/1234567890abcdef12345678/);
+      assert.match(internal,/KUNDUPPGIFTER/);
+      assert.match(internal,/PROJEKTUPPGIFTER/);
+      assert.match(internal,/internal@example.invalid|visitor@example.invalid/);
+      assert.doesNotMatch(internal,/private-host|private-user|private-password/);
+    }
     if(connections===2){
       assert.equal(result.customerCopy,mode==='accepted'?'accepted':'unconfirmed');
       assert.equal(result.requestId,'1234567890abcdef12345678');
@@ -55,10 +71,16 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
       assert.equal(messages[1].from,'MAIL FROM:<sender@example.invalid>');
       if(messages[1].data){
         const mail=decode(messages[1].data);
+        assert.match(mail,/multipart\/alternative/i,'Customer copy has plain and HTML alternatives');
+        assert.match(mail,/text\/html/i);
+        assert.match(mail,/HP-1234567890/);
+        assert.match(mail,/#EEF4EC/);
+        assert.match(mail,/SAMMANFATTNING/);
+        assert.doesNotMatch(mail,/Tekniskt referens-ID|1234567890abcdef12345678/,
+          'Customer copy must not expose full technical reference');
         assert.match(mail,/Lager eller f/);
         assert.doesNotMatch(mail,/private-host|private-user|private-password|X-Mailer:|storage|need_help/);
         assert.match(mail,/Reply-To: Amelio <internal@example.invalid>/);
-        assert.match(mail,/1234567890abcdef12345678/);
         assert.match(mail,/Teststad/);
         assert.doesNotMatch(mail,/Adress eller fastighetsbeteckning|Sidoh/,'inactive/unanswered fields excluded');
         assert.match(mail,/ingen prisuppgift, bindande offert/);
