@@ -157,6 +157,7 @@ Lägg till en rad nedan utan att behöva välja prioritet. Klassificera sedan ti
 | Datum | Inskickat av | Idé/fråga | Flyttad till |
 |---|---|---|---|
 | – | – | _Skriv nästa idé här_ | – |
+| 2026-11-12 | Hallpartner (kundönskemål via Andreas, telefonsamtal) | **Utveckla kundens bekräftelsemejl från offertguiden:** pröva om den korrekta Hallpartner-logotypen kan visas direkt i mejlet med en lösning som fungerar i vanliga mejlklienter (t.ex. inbäddad bild, utan extern spårning). Byt den formella huvudrubriken mot något mer engagerande, exempelvis **”Ett steg närmare din nya hall”**; ta fram rubrikförslag och låt kunden godkänna sluttexten. Lägg längst ned en kontaktsektion, exempelvis **”Har du frågor? Kontakta oss gärna direkt.”**, med två tydliga CTA-knappar: **Ring oss** (`tel:`) och **Mejla oss** (`mailto:`), med verifierade kontaktuppgifter och fungerande text-/länkreserv. Behåll kort ärendenummer, sammanfattning och befintligt fungerande SMTP-flöde. Granska mobil och desktop i Gmail/Outlook; använd kundens egna avsändar- och kontaktuppgifter vid produktion, inte Amelios previewuppgifter. **Designönskemål – ännu inte implementerat eller godkänt.** | – |
 
 ## Snabbreferens till källor
 
