@@ -14,6 +14,7 @@ test('AMP-003 remains compact with only the verified privacy policy legal link',
   assert.equal(config.variant, 'compact');
   assert.equal(config.brand.name, 'Hallpartner');
   assert.equal(config.groups.length, 2);
+  assert.deepEqual(config.groups[1].links.filter(link => link.href === '/offert/bestallningsformular/'), [{ label:'Beställningsformulär', href:'/offert/bestallningsformular/' }]);
   assert.ok(config.groups.every(group => group.links.length > 0));
   assert.equal(config.contact.primary.href, '/kontakt/');
   assert.equal(new Set(allLinks.map(link => link.href)).size, allLinks.length);
