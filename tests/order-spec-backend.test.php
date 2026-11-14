@@ -57,6 +57,25 @@ check(mkdir($tmp,0700), 'Created private test state');
 $config = ['state_dir'=>$tmp, 'rate_secret'=>str_repeat('Z',48),'enabled'=>true,
     'smtp_port'=>587,'smtp_from'=>'offert@hallpartner.se'];
 try {
+    foreach (['', '/', sys_get_temp_dir()] as $unsafePath) {
+        try {
+            hp_os_state_dir(['state_dir' => $unsafePath]);
+            check(false, 'Unsafe state path must reject');
+        } catch (RuntimeException) {
+            check(true, 'Unsafe state path rejected');
+        }
+    }
+    chmod($tmp, 0770);
+    clearstatcache(true, $tmp);
+    try {
+        hp_os_state_dir($config);
+        check(false, 'Group-accessible state directory must reject');
+    } catch (RuntimeException) {
+        check(true, 'Group-accessible state directory rejected');
+    }
+    chmod($tmp, 0700);
+    clearstatcache(true, $tmp);
+    check(hp_os_state_dir($config) === realpath($tmp), 'Owner-only private state directory accepted');
     hp_os_limit($config,'test','synthetic',2,3600);
     hp_os_limit($config,'test','synthetic',2,3600);
     try { hp_os_limit($config,'test','synthetic',2,3600); check(false,'Limiter blocks'); }
