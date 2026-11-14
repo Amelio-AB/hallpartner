@@ -29,6 +29,18 @@ foreach ($required as $key) {
         hp_reply(503, ['status' => 'failed']);
     }
 }
+// Production mail must never be sent from the temporary customer preview.
+$environment = $config['mail_environment'] ?? null;
+if (!in_array($environment, ['preview', 'production'], true)) {
+    hp_reply(503, ['status' => 'failed']);
+}
+$expectedOrigin = $environment === 'production'
+    ? 'https://hallpartner.se'
+    : 'https://hallpartner-se-new.preview2.inleed.com';
+if ($config['allowed_origin'] !== $expectedOrigin) {
+    hp_reply(503, ['status' => 'failed']);
+}
+
 if (!filter_var($config['smtp_from'], FILTER_VALIDATE_EMAIL) ||
     !filter_var($config['recipient'], FILTER_VALIDATE_EMAIL) ||
     !filter_var($config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
