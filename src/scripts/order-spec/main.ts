@@ -86,6 +86,10 @@ const finishFields: ItemField[] = [
   {key: 'notes',label:'Kommentar',maxLength:500}
 ];
 
+// PHP's schema validator reports paths such as "$.items.0.quantity".
+export function normalizeServerFieldPath(path: string): string {
+  return path.replace(/^\$\.?/, '').replace(/\[(\d+)\]/g, '.$1');
+}
 function inputNodes(container: ParentNode): InputElement[] {
   return Array.from(container.querySelectorAll<InputElement>('input, select, textarea'));
 }
@@ -425,6 +429,37 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       issues
     };
   }
+  function serverInputFor(path: string): InputElement | null {
+    const normalized = normalizeServerFieldPath(path);
+    const staticField = inputNodes(form).find(input => input.dataset.path === normalized);
+    if (staticField) return staticField;
+
+    const [root, indexText, ...rest] = normalized.split('.');
+    const rowSelectors: Record<string, string> = {
+      items: '[data-item-row]',
+      finishAssignments: '[data-finish-row]',
+      documentReferences: '[data-document-row]'
+    };
+    if (root in rowSelectors && /^\d+$/.test(indexText ?? '')) {
+      const row = form.querySelectorAll<HTMLElement>(rowSelectors[root])[Number(indexText)];
+      if (!row) return null;
+      const controls = inputNodes(row);
+      return controls.find(input => input.dataset.itemField === rest.join('.')) ?? controls[0] ?? null;
+    }
+    if (root === 'sections') {
+      return Array.from(form.querySelectorAll<HTMLSelectElement>('[data-section]'))
+        .find(input => input.dataset.section === indexText) ?? null;
+    }
+    if (root === 'unresolvedQuestions') return form.querySelector<HTMLTextAreaElement>('[data-unresolved]');
+    if (root === 'finalReview') return form.querySelector<HTMLInputElement>('[data-details-reviewed]');
+    if (root === 'documentation' && indexText === 'requested') {
+      return form.querySelector<HTMLInputElement>('[data-multi="documentation"]');
+    }
+    if (root === 'delivery' && indexText === 'packingRequirements') {
+      return form.querySelector<HTMLInputElement>('[data-multi="packingRequirements"]');
+    }
+    return null;
+  }
   function clearErrors(): void {
     form.querySelectorAll<HTMLElement>('[aria-invalid="true"]').forEach(x => x.removeAttribute('aria-invalid'));
     form.querySelectorAll<HTMLElement>('.hp-order__error').forEach(x => {x.textContent='';});
@@ -433,7 +468,17 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
     clearErrors();
     for (const issue of issues) {
       issue.input.setAttribute('aria-invalid','true');
-      const error = issue.input.closest('.hp-order__field')?.querySelector<HTMLElement>('.hp-order__error');
+      const field = issue.input.closest<HTMLElement>('.hp-order__field');
+      let error = field?.querySelector<HTMLElement>('.hp-order__error');
+      if (!error && field && issue.input.id) {
+        error = document.createElement('span');
+        error.className = 'hp-order__error';
+        error.id = issue.input.id + '-error';
+        error.setAttribute('aria-live', 'polite');
+        field.append(error);
+        const describedBy = issue.input.getAttribute('aria-describedby') ?? '';
+        issue.input.setAttribute('aria-describedby', [describedBy, error.id].filter(Boolean).join(' '));
+      }
       if (error) error.textContent = issue.message;
     }
     if (issues.length) {
@@ -475,7 +520,8 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
   }
 
   form.querySelector<HTMLButtonElement>('[data-preview]')?.addEventListener('click', () => {
-    const {payload} = collect();
+    const {payload,issues} = collect();
+    if (!showIssues(issues)) return;
     showSummary(payload);
     message('Sammanfattningen är skapad lokalt. Inget har skickats.','info');
   });
@@ -575,7 +621,7 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
         const fields = data.fields as Record<string,unknown>;
         const serverIssues: FieldIssue[] = [];
         Object.entries(fields).forEach(([path,detail]) => {
-          const input = inputNodes(form).find(x => x.dataset.path === path);
+          const input = serverInputFor(path);
           if (input && typeof detail === 'string') serverIssues.push({input,message:detail.slice(0,200)});
         });
         if (!serverIssues.length) message('Servern avvisade uppgifterna. Kontrollera formuläret. Inget utskick är bekräftat.','error');

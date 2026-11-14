@@ -4,10 +4,26 @@ declare(strict_types=1);
 /** Private filesystem locks; no state files or generated PDFs in public_html. */
 function hp_os_state_dir(array $config): string
 {
-    $dir = realpath((string)($config['state_dir'] ?? ''));
-    if (!$dir || !is_dir($dir) || !is_writable($dir) ||
+    // The configured directory must be an absolute, already-existing PRIVATE
+    // path. PHP realpath('') resolves to '/' on some builds; never accept it.
+    $configured = $config['state_dir'] ?? null;
+    if (!is_string($configured) || trim($configured) === '' ||
+        !str_starts_with($configured, DIRECTORY_SEPARATOR) ||
+        str_contains($configured, "\0")) {
+        throw new RuntimeException('Private order state directory unavailable');
+    }
+    $dir = realpath($configured);
+    if ($dir === false || $dir === DIRECTORY_SEPARATOR ||
+        !is_dir($dir) || !is_writable($dir) ||
         str_contains($dir, '/public_html') || str_contains($dir, '\\public_html')) {
         throw new RuntimeException('Private order state directory unavailable');
+    }
+    // A world/group-accessible parent state directory allows state deletion,
+    // interference with idempotency and possibly exposure of personal data.
+    // Require owner-only permissions, not merely is_writable().
+    $mode = fileperms($dir);
+    if ($mode === false || ($mode & 0077) !== 0) {
+        throw new RuntimeException('Private order state directory permissions unsafe');
     }
     return rtrim($dir, DIRECTORY_SEPARATOR);
 }

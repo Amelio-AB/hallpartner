@@ -48,3 +48,26 @@ test('one-page navigation exposes every source section and keeps supplier scope 
   assert.ok(form.includes('hp-order__workspace'));
   assert.ok(form.includes('Montage, markarbete och grundarbete ingår inte'));
 });
+
+test('PHP schema error paths normalize to input namespaces', async () => {
+  const { normalizeServerFieldPath } = await import('../src/scripts/order-spec/main.ts');
+  assert.equal(normalizeServerFieldPath('$.recipient.email'), 'recipient.email');
+  assert.equal(normalizeServerFieldPath('$.items.0.dimensions.widthMm'), 'items.0.dimensions.widthMm');
+  assert.equal(normalizeServerFieldPath('$.items[5].quantity'), 'items.5.quantity');
+  assert.equal(normalizeServerFieldPath('$.documentReferences.1.number'), 'documentReferences.1.number');
+  assert.equal(normalizeServerFieldPath('$.sections.steelStructure'), 'sections.steelStructure');
+  assert.ok(client.includes('serverInputFor(path)'));
+  for (const group of ['data-item-row','data-finish-row','data-document-row']) {
+    assert.ok(client.includes(group), group);
+  }
+});
+
+test('static inputs use the frozen schema max lengths', () => {
+  const limits = {"submitter.name":120,"orderingParty.contactName":120,"supplier.manufacturingCountry":120,"supplier.contactName":120,"project.externalOrderNumber":100,"project.drawingReference":160,"project.building.steelGrade":100,"project.building.surfaceTreatment":160,"project.building.otherFramePart":160,"pvcSpecification.fireClass":80,"pvcSpecification.uvResistance":120,"pvcSpecification.materialQuality":160,"pvcSpecification.fixingSystem":160,"delivery.transportResponsibility":160};
+  const tags = [...form.matchAll(/<FormField path="([^"]+)"([^>]*?)\/>/g)];
+  for (const [path, length] of Object.entries(limits)) {
+    const tag = tags.find(([,name]) => name === path);
+    assert.ok(tag, path);
+    assert.ok(tag[2].includes('maxLength={' + length + '}'), path);
+  }
+});
