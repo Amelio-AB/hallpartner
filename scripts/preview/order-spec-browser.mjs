@@ -11,10 +11,36 @@ mkdirSync(output,{recursive:true});
 const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'application/javascript',
   '.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp',
   '.woff2':'font/woff2','.woff':'font/woff'};
-const apiRequests=[];
+const apiRequests=[],mockRequests=[];
+let mockEnabled=false,delayChallenge=false;
 const server=createServer((req,res)=>{
   try{
-    const path=new URL(req.url,'http://localhost').pathname;
+    const url=new URL(req.url,'http://localhost'),path=url.pathname;
+    // Dedicated localhost-only fake API: no SMTP, no customer services, no success.
+    if(mockEnabled && path==='/api/order-spec.php' && req.method==='POST'){
+      let raw='';
+      req.on('data',part=>{raw+=part;});
+      req.on('end',()=>{
+        if(raw.length>100000){res.writeHead(413);res.end();return;}
+        let body={};try{body=JSON.parse(raw);}catch{res.writeHead(400);res.end();return;}
+        mockRequests.push({action:body.action,recipient:body.payload?.recipient?.email??null,
+          submitter:body.payload?.submitter?.email??null});
+        const reply=(code,data)=>{res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
+        if(body.action==='challenge-request'){
+          const respond=()=>reply(200,{status:'pending',challengeId:'synthetic-challenge'});
+          if(delayChallenge){delayChallenge=false;setTimeout(respond,350);}else respond();
+        }else if(body.action==='challenge-confirm'){
+          reply(200,{status:'verified',verificationToken:'synthetic-token'});
+        }else if(body.action==='submit'){
+          reply(422,{status:'invalid',fields:{
+            '$.documentation.requested':'Ange önskad dokumentation.',
+            '$.finalReview.detailsReviewed':'Bekräfta granskningen.',
+            '$.recipient.email':'Kontrollera mottagaren.',
+            '$.items.0.dimensions.widthMm':'Kontrollera artikelmåttet.'
+          }});
+        }else reply(400,{status:'invalid'});
+      });return;
+    }
     if(path.startsWith('/api/')||req.method!=='GET'){
       apiRequests.push({method:req.method,path});res.writeHead(503,{'Cache-Control':'no-store'});res.end();return;
     }
@@ -23,6 +49,13 @@ const server=createServer((req,res)=>{
     const file='dist/'+(relative.endsWith('/')?relative+'index.html':relative);
     if(!existsSync(file)){res.writeHead(404);res.end();return;}
     res.writeHead(200,{'Content-Type':mime[extname(file)]??'application/octet-stream','Cache-Control':'no-store'});
+    if(mockEnabled && url.searchParams.has('local-test-only') && path==='/offert/bestallningsformular/'){
+      const raw=readFileSync(file,'utf8');
+      const patched=raw.replace('data-enabled="false"','data-enabled="true"')
+        .replace(/(<(?:input|button)[^>]*data-(?:request-code|confirm-code|verification-code|submit)\b[^>]*?)\sdisabled(?:="")?/g,'$1');
+      assert.ok(patched!==raw && patched.includes('data-enabled="true"'),'Local mock HTML transform');
+      res.end(patched);return;
+    }
     res.end(readFileSync(file));
   }catch{res.writeHead(404);res.end();}
 });
@@ -180,8 +213,112 @@ try{
     }
   }
   assert.equal(apiRequests.length,0,'Offline review must never call a PHP API');
+  // Second local pass only: emulate activated HTML *in-memory*, never in dist.
+  // No real mail: synthetic responses solely exercise UI binding and 422 display.
+  mockEnabled=true;delayChallenge=true;
+  await call('Emulation.setDeviceMetricsOverride',{width:390,height:900,deviceScaleFactor:1,mobile:false});
+  await call('Page.navigate',{url:origin+'/offert/bestallningsformular/?local-test-only=1'});
+  let ready=false;
+  for(let n=0;n<120;n++){
+    try{ready=await evaluate('document.readyState==="complete" && document.querySelector("#hp-order-spec-form")?.dataset.enabled==="true" && !document.querySelector("[data-request-code]")?.disabled');}catch{}
+    if(ready)break;await pause(100);
+  }
+  assert.equal(ready,true,'Local synthetic adapter ready');
+  await run(()=>{
+    const form=document.querySelector('#hp-order-spec-form');
+    const fill=(path,value)=>{
+      const input=form.querySelector('[data-path="'+path+'"]');
+      if(!input)throw Error('Missing '+path);
+      input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));
+      input.dispatchEvent(new Event('change',{bubbles:true}));
+    };
+    for(const [path,value] of Object.entries({
+      'submitter.name':'Syntetisk testperson','submitter.email':'stale@example.invalid',
+      'submitter.role':'customer','orderingParty.companyName':'Syntetisk kund',
+      'supplier.companyName':'Syntetisk leverantör','project.name':'Syntetiskt projekt',
+      'recipient.email':'recipient@example.invalid'
+    }))fill(path,value);
+    form.querySelector('[data-request-code]').click();
+    fill('submitter.email','new@example.invalid');
+  });
+  await pause(650);
+  assert.equal(await evaluate('document.querySelector("[data-verification-status]").innerText.includes("ändrades under kodbegäran")'),true,'Old challenge response must be discarded');
+  await run(()=>document.querySelector('[data-confirm-code]').click());
+  assert.equal(mockRequests.filter(x=>x.action==='challenge-confirm').length,0,'Stale challenge cannot confirm');
+  await run(()=>document.querySelector('[data-request-code]').click());
+  let challenged=false;
+  for(let n=0;n<50;n++){
+    challenged=await evaluate('document.querySelector("[data-verification-status]").innerText.includes("Kod begärd")');
+    if(challenged)break;await pause(100);
+  }
+  assert.equal(challenged,true,'New challenge for current sender email');
+  await run(()=>{
+    document.querySelector('[data-verification-code]').value='123456';
+    document.querySelector('[data-confirm-code]').click();
+  });
+  let verified=false;
+  for(let n=0;n<50;n++){
+    verified=await evaluate('document.querySelector("[data-verification-status]").innerText.includes("E-postadress verifierad")');
+    if(verified)break;await pause(100);
+  }
+  assert.equal(verified,true,'Synthetic code confirmation');
+  const prompt=await run(()=>{
+    const form=document.querySelector('#hp-order-spec-form');
+    form.querySelector('[data-add-line="roofPanel"]').click();
+    const row=form.querySelector('[data-item-row="roofPanel"]');
+    for(const [key,value] of Object.entries({itemType:'SYNTH-422',quantity:'2',unit:'pcs'})){
+      const input=row.querySelector('[data-item-field="'+key+'"]');
+      input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));
+    }
+    form.querySelector('[data-details-reviewed]').checked=true;
+    window.__mockConfirm='';
+    window.confirm=text=>{window.__mockConfirm=text;return true;};
+    form.dispatchEvent(new Event('submit',{cancelable:true,bubbles:true}));
+    return window.__mockConfirm;
+  });
+  assert.ok(prompt.includes('recipient@example.invalid'),'Recipient must appear in send confirmation');
+  let invalid=false;
+  for(let n=0;n<50;n++){
+    invalid=await evaluate('document.querySelector("[data-multi=documentation]")?.getAttribute("aria-invalid")==="true"');
+    if(invalid)break;await pause(100);
+  }
+  assert.equal(invalid,true,'Server 422 must reach checkbox control');
+  const evidence=await run(()=>{
+    const form=document.querySelector('#hp-order-spec-form');
+    const tested=['[data-multi="documentation"]','[data-details-reviewed]',
+      '[data-path="recipient.email"]','[data-item-row] [data-item-field="dimensions.widthMm"]'];
+    const fields=tested.map(selector=>{
+      const input=form.querySelector(selector);
+      if(!input)throw Error('Missing '+selector);
+      const ids=(input.getAttribute('aria-describedby')??'').split(/\s+/).filter(Boolean);
+      return {selector,invalid:input.getAttribute('aria-invalid')==='true',
+        errorIds:ids.filter(id=>document.getElementById(id)?.classList.contains('hp-order__error')),
+        visible:ids.some(id=>document.getElementById(id)?.textContent.trim())};
+    });
+    const recipient=form.querySelector('[data-path="recipient.email"]');
+    return {fields,firstFocused:document.activeElement===form.querySelector('[data-multi="documentation"]'),
+      hintPreserved:(recipient.getAttribute('aria-describedby')??'').split(/\s+/).some(id=>document.getElementById(id)?.classList.contains('hp-order__hint')),
+      recipientPreserved:recipient.value==='recipient@example.invalid',
+      submitterPreserved:form.querySelector('[data-path="submitter.email"]').value==='new@example.invalid',
+      noSuccess:!document.querySelector('[data-message]').innerText.includes('Servern har accepterat'),
+      noDownload:document.querySelector('[data-download]').hidden};
+  });
+  for(const field of evidence.fields){
+    assert.equal(field.invalid,true,'422 invalid '+field.selector);
+    assert.equal(field.visible,true,'422 visible described error '+field.selector);
+    assert.equal(field.errorIds.length,1,'422 unique linked error '+field.selector);
+  }
+  for(const check of ['firstFocused','hintPreserved','recipientPreserved','submitterPreserved','noSuccess','noDownload'])
+    assert.equal(evidence[check],true,'422 '+check);
+  assert.deepEqual(mockRequests.map(x=>x.action),['challenge-request','challenge-request','challenge-confirm','submit']);
+  assert.equal(mockRequests.at(-1).recipient,'recipient@example.invalid');
+  assert.equal(mockRequests.at(-1).submitter,'new@example.invalid');
+  const shot=await call('Page.captureScreenshot',{format:'png',fromSurface:true});
+  writeFileSync(output+'/synthetic-422.png',Buffer.from(shot.data,'base64'));
+  writeFileSync(output+'/synthetic-422.json',JSON.stringify({mode:'localhost mock, no SMTP',evidence,mockRequests},null,2)+'\n');
+  results.push({mode:'localhost synthetic challenge/422',evidence,status:'passed'});
   writeFileSync(output+'/result.json',JSON.stringify({commit:process.env.GITHUB_SHA??null,mode:'disabled/offline',apiRequests,results},null,2)+'\n');
-  console.log('PASS: actual Chrome 390/1440, 15 open sections, keyboard article row, dynamic-row focus/restore, field focus, distinct recipient summary, no API or SMTP.');
+  console.log('PASS: Chrome 390/1440 layout/keyboard, stale email challenge and server-shaped 422 in localhost-only mock; no SMTP or customer API.');
 }finally{
   socket?.close();
   await session.close(output+'/chrome-environment.json');
