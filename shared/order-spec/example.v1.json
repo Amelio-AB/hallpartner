@@ -134,5 +134,12 @@
   "unresolvedQuestions": [
     "Väggmaterial återstår att fastställa.",
     "Öppningar ska specificeras."
+  ],
+  "documentReferences": [
+    {
+      "number": "SYNTH-01",
+      "revision": "A",
+      "description": "Syntetisk översiktsritning – fil bifogas separat"
+    }
   ]
 }

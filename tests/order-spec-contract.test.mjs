@@ -25,6 +25,7 @@ test('contract: no client price, approval, role authority or signature',()=>{
  assert.equal(schema.properties.items.items.additionalProperties,false);
  assert.equal(schema.properties.sections.additionalProperties,false);
  assert.equal(example.finalReview.detailsReviewed,false);
+ assert.equal(example.documentReferences[0].number,'SYNTH-01');
 });
 test('contract: sample item identities and safe material categories',()=>{
  assert.equal(new Set(example.items.map(i=>i.lineId)).size, example.items.length);

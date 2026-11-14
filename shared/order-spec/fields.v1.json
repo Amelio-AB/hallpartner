@@ -330,7 +330,8 @@
       ],
       "paths": [
         "documentation.requested",
-        "documentation.otherDetails"
+        "documentation.otherDetails",
+        "documentReferences[]"
       ]
     },
     {

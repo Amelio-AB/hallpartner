@@ -23,7 +23,7 @@ Dedicated `/api/order-spec.php`, Content-Type `application/json`, POST only exce
 - `finishAssignments` may record category-level finish where no item data applies (e.g. structure). Item RAL/finish wins on conflict and a conflict must be flagged, never silently overwritten. For some raw steel/galvanized materials no RAL is applicable.
 - `delivery.agreedDate` denotes an expressly agreed date, never silently auto-filled from requested date.
 - `finalReview.detailsReviewed` acknowledges data checked by submitter only, NEVER approves manufacturing; no client approval field accepted.
-- No attachments in v1; use `drawingReference` and arrange sketch separately. No local persistence of confidential entries by default.
+- No attachments in v1; `drawingReference` and optional `documentReferences[]` are identifiers only. A sketch or drawing is delivered separately with controlled approval. No local persistence of confidential entries by default.
 - `example.v1.json` is **synthetic**; `example.invalid` domains and fake order references; never send this fixture to real mailboxes.
 
 ### PDF source mapping
