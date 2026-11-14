@@ -1,0 +1,811 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hallpartner.se/schemas/order-spec-v1.json",
+  "title": "Hallpartner order specification, public unsigned payload v1",
+  "description": "Transport and document data only. Prices, authority, signatures and manufacturing approval are server-owned and forbidden from this client schema.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "formType",
+    "idempotencyKey",
+    "submitter",
+    "orderingParty",
+    "supplier",
+    "project",
+    "recipient",
+    "delivery",
+    "sections",
+    "items",
+    "finishAssignments",
+    "documentation",
+    "finalReview",
+    "unresolvedQuestions"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "formType": {
+      "const": "hallpartner-order-spec-v1"
+    },
+    "idempotencyKey": {
+      "type": "string",
+      "format": "uuid",
+      "maxLength": 36
+    },
+    "submitter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "customer",
+            "seller",
+            "other"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "role"
+      ]
+    },
+    "orderingParty": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "organizationNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 30
+        },
+        "contactName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "address": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        }
+      },
+      "required": [
+        "companyName"
+      ]
+    },
+    "supplier": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "manufacturingCountry": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "contactName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "contactEmail": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "format": "email"
+        }
+      },
+      "required": [
+        "companyName"
+      ]
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 180
+        },
+        "externalOrderNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 50
+        },
+        "drawingReference": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "location": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "building": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "lengthMm": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1000000
+            },
+            "widthMm": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1000000
+            },
+            "heightMm": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 100000
+            },
+            "heightReference": {
+              "type": "string",
+              "enum": [
+                "clearInside",
+                "eaves",
+                "ridge",
+                "other",
+                "unresolved"
+              ]
+            },
+            "roofPitchDegrees": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 89.9
+            },
+            "steelGrade": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "surfaceTreatment": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "frameParts": {
+              "type": "array",
+              "maxItems": 11,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "enum": [
+                  "mainFrames",
+                  "columns",
+                  "roofBeams",
+                  "roofPurlins",
+                  "wallGirts",
+                  "bracing",
+                  "basePlates",
+                  "connectionPlates",
+                  "reinforcements",
+                  "other"
+                ]
+              }
+            },
+            "otherFramePart": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "name",
+        "building"
+      ]
+    },
+    "recipient": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "email": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 254,
+          "format": "email"
+        }
+      },
+      "required": [
+        "email"
+      ]
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requestedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "agreedDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "address": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "incoterms": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "transportResponsibility": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "packingRequirements": {
+          "type": "array",
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "allComponentsLabelled",
+              "weatherProtected",
+              "numberedPackages",
+              "fixingsPackedSeparately",
+              "packingListIncluded",
+              "loadingPhotos"
+            ]
+          }
+        },
+        "notes": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1200
+        }
+      },
+      "required": [
+        "packingRequirements"
+      ]
+    },
+    "sections": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "steelStructure": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "roofSandwichPanels": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "wallSandwichPanels": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "roofSheets": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "wallSheets": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "flashings": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "pvcMembrane": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "finishes": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "fixings": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "openings": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "documentation": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        },
+        "transport": {
+          "type": "string",
+          "enum": [
+            "included",
+            "excluded",
+            "unresolved"
+          ]
+        }
+      },
+      "required": [
+        "steelStructure",
+        "roofSandwichPanels",
+        "wallSandwichPanels",
+        "roofSheets",
+        "wallSheets",
+        "flashings",
+        "pvcMembrane",
+        "finishes",
+        "fixings",
+        "openings",
+        "documentation",
+        "transport"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 120,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "lineId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{4,64}$"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "roofPanel",
+              "wallPanel",
+              "roofSheet",
+              "wallSheet",
+              "flashing",
+              "pvc",
+              "fixing",
+              "opening"
+            ]
+          },
+          "itemType": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 400
+          },
+          "supplierArticleNumber": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000000
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "pcs",
+              "m",
+              "m2",
+              "kg",
+              "set",
+              "roll"
+            ]
+          },
+          "dimensions": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "thicknessMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 5000
+              },
+              "widthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "lengthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "heightMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "profileHeightMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 2000
+              },
+              "developedWidthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "finishedWidthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "clearWidthMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              },
+              "clearHeightMm": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100000
+              }
+            },
+            "required": []
+          },
+          "widthBasis": {
+            "type": "string",
+            "enum": [
+              "effectiveCover",
+              "overall",
+              "notApplicable"
+            ]
+          },
+          "core": {
+            "type": "string",
+            "enum": [
+              "PIR",
+              "PUR",
+              "MW",
+              "other"
+            ]
+          },
+          "profile": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "materialGrade": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "finish": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "ral": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "insideRal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "outsideRal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "gloss": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 50
+          },
+          "corrosionProtection": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "foldingProfile": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "openingPosition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "weightGm2": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 100000
+          },
+          "fireClass": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "uvResistance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "materialQuality": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "fixingSystem": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "drawingReference": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          }
+        },
+        "required": [
+          "lineId",
+          "category",
+          "itemType",
+          "quantity",
+          "unit"
+        ]
+      }
+    },
+    "finishAssignments": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "materialClass": {
+            "type": "string",
+            "enum": [
+              "roofPanel",
+              "wallPanel",
+              "roofSheet",
+              "wallSheet",
+              "flashing",
+              "steelStructure",
+              "pvc",
+              "door"
+            ]
+          },
+          "ral": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 32
+          },
+          "finish": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "notes": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "materialClass"
+        ]
+      }
+    },
+    "pvcSpecification": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "weightGm2": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "maximum": 100000
+        },
+        "fireClass": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "uvResistance": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "materialQuality": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "fixingSystem": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        }
+      },
+      "required": []
+    },
+    "documentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "requested": {
+          "type": "array",
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "productionDrawings",
+              "assemblyDrawings",
+              "structuralCalculations",
+              "ceDocumentationIfApplicable",
+              "declarationsOfPerformance",
+              "materialCertificates",
+              "productSpecifications",
+              "qualityInspection",
+              "packingList",
+              "assemblyInstructions",
+              "certificateOfOriginIfRequired",
+              "other"
+            ]
+          }
+        },
+        "otherDetails": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "requested"
+      ]
+    },
+    "finalReview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "confirmed": {
+          "type": "array",
+          "maxItems": 12,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "allDimensionsChecked",
+              "drawingsApproved",
+              "steelStructureSpecified",
+              "roofWallMaterialsSpecified",
+              "sandwichPanelsSpecified",
+              "pvcMembraneSpecified",
+              "ralAndFinishesVerified",
+              "sheetFlashingDimensionsVerified",
+              "fixingsIncluded",
+              "quantitiesChecked",
+              "documentationAgreed",
+              "deliveryTermsDateApproved"
+            ]
+          }
+        },
+        "comments": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "detailsReviewed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "confirmed",
+        "detailsReviewed"
+      ]
+    },
+    "unresolvedQuestions": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 500
+      }
+    }
+  }
+}
