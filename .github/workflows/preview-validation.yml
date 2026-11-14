@@ -78,6 +78,15 @@ jobs:
           npm run check
           npm run lint
           node --test tests/*.test.mjs
+      - name: Order specification PHP syntax and offline synthetic regression
+        run: |
+          set -euo pipefail
+          php -r 'if (!extension_loaded("mbstring")) { fwrite(STDERR, "mbstring required for order-spec tests\\n"); exit(1); }'
+          for source in public/api/order-spec.php server/order-spec/*.php; do php -l "$source"; done
+          cmp shared/order-spec/order-spec-v1.schema.json server/order-spec/schema.v1.json
+          cmp shared/order-spec/example.v1.json server/order-spec/tests/example.v1.json
+          php tests/order-spec-backend.test.php
+          # Dompdf rendering is NOT proven until a reviewed composer.lock exists.
       - name: PHP intake syntax and independent receiver validation
         run: |
           php -v

@@ -1,0 +1,37 @@
+---
+export interface Props {
+  path: string;
+  label: string;
+  kind?: 'text' | 'email' | 'tel' | 'date' | 'number';
+  required?: boolean;
+  options?: { value: string; label: string }[];
+  placeholder?: string;
+  hint?: string;
+  maxLength?: number;
+}
+const { path, label, kind = 'text', required = false, options = [], placeholder, hint, maxLength = 180 } = Astro.props;
+const id = 'hp-order-' + path.replaceAll('.', '-');
+const description = id + '-error';
+---
+
+<div class="hp-order__field">
+  <label for={id}>{label}{required && <span class="hp-order__required" aria-label="obligatoriskt"> *</span>}</label>
+  {options.length > 0 ? (
+    <select id={id} name={path} data-path={path} required={required} aria-describedby={description}>
+      <option value="">Välj alternativ</option>
+      {options.map(option => <option value={option.value}>{option.label}</option>)}
+    </select>
+  ) : (
+    <input
+      id={id} name={path} data-path={path}
+      type={kind === 'number' ? 'text' : kind}
+      inputmode={kind === 'number' ? 'decimal' : undefined}
+      data-number={kind === 'number' ? 'true' : undefined}
+      maxlength={kind === 'date' ? undefined : maxLength}
+      required={required} placeholder={placeholder} aria-describedby={description}
+      autocomplete="off"
+    />
+  )}
+  {hint && <p class="hp-order__hint">{hint}</p>}
+  <span class="hp-order__error" id={description} data-error-for={path} aria-live="polite"></span>
+</div>

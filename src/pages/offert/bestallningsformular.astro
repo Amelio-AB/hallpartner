@@ -1,0 +1,36 @@
+---
+import HallpartnerSiteLayout from '../../layouts/HallpartnerSiteLayout.astro';
+import OrderSpecificationForm from '../../components/order-spec/OrderSpecificationForm.astro';
+import '../../styles/order-spec.css';
+
+const ready =
+  import.meta.env.PUBLIC_HP_ORDER_SPEC_ENABLED === 'true' &&
+  import.meta.env.PUBLIC_HP_ORDER_BACKEND_VERIFIED === 'true' &&
+  import.meta.env.PUBLIC_HP_ORDER_PRIVACY_APPROVED === 'true';
+---
+
+<HallpartnerSiteLayout
+  title="Beställningsformulär för stålhallar"
+  description="Sammanställ ett detaljerat, ännu inte godkänt beställningsunderlag för en stålhall. Alla material och mått granskas före tillverkning."
+>
+  <nav class="hp-draft-rail hp-order__breadcrumbs" aria-label="Brödsmulor">
+    <a href="/">Start</a><span aria-hidden="true">/</span>
+    <a href="/offert/">Offert</a><span aria-hidden="true">/</span>
+    <span aria-current="page">Beställningsformulär</span>
+  </nav>
+  <div class="hp-order__hero">
+    <div class="hp-draft-rail">
+      <p class="hp-order__eyebrow">Tekniskt beställningsunderlag</p>
+      <h1>Beställningsformulär för stålhallar</h1>
+      <p class="hp-order__intro">Ange projektets mått, material och önskade leveransuppgifter. Du kan lämna delar öppna för senare komplettering. Underlaget är inte ett tillverkningsgodkännande.</p>
+      <p class="hp-order__tag">Ej signerat · Ej godkänt för tillverkning</p>
+    </div>
+  </div>
+  <OrderSpecificationForm ready={ready} />
+</HallpartnerSiteLayout>
+
+<script>
+  import { mountOrderSpecification } from '../../scripts/order-spec/main';
+  const form = document.querySelector<HTMLFormElement>('#hp-order-spec-form');
+  if (form) mountOrderSpecification(form);
+</script>

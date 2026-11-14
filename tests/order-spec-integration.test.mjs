@@ -1,0 +1,42 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+const read = p => readFileSync(new URL('../'+p,import.meta.url),'utf8');
+const json = p => JSON.parse(read(p));
+test('order-spec shared schema and backend copy are byte-identical',()=>{
+ assert.equal(read('shared/order-spec/order-spec-v1.schema.json'),read('server/order-spec/schema.v1.json'));
+ assert.equal(read('shared/order-spec/example.v1.json'),read('server/order-spec/tests/example.v1.json'));
+ const schema=json('shared/order-spec/order-spec-v1.schema.json'), sample=json('shared/order-spec/example.v1.json');
+ assert.deepEqual(Object.keys(sample.sections).sort(),Object.keys(schema.properties.sections.properties).sort());
+ assert.equal(schema.additionalProperties,false);
+ assert.equal(sample.schemaVersion,1);
+ assert.equal(sample.formType,'hallpartner-order-spec-v1');
+ assert.ok(sample.recipient.email.endsWith('@example.invalid'));
+});
+test('order-spec route is separate and stays fail-closed by default',()=>{
+ const route=read('src/pages/offert/bestallningsformular.astro');
+ const form=read('src/components/order-spec/OrderSpecificationForm.astro');
+ const ui=read('src/scripts/order-spec/main.ts');
+ const api=read('public/api/order-spec.php');
+ assert.ok(route.includes('Beställningsformulär för stålhallar'));
+ assert.ok(form.includes('id="hp-order-spec-form"'));
+ assert.ok(form.includes('data-enabled={String(ready)}'));
+ assert.ok(ui.includes("const API = '/api/order-spec.php'"));
+ assert.ok(api.includes('HP_ORDER_SPEC_PRIVATE_DIR'));
+ assert.ok(!api.includes('lead.php'));
+ const config=read('server/order-spec/config.example.php');
+ assert.ok(config.includes("'enabled' => false"));
+ assert.ok(config.includes("'privacy_approved' => false"));
+});
+test('order-spec supplier PDF cannot be client-approved or priced',()=>{
+ const html=read('server/order-spec/pdf.php');
+ const receiver=read('server/order-spec/receiver.php');
+ const schema=json('shared/order-spec/order-spec-v1.schema.json');
+ assert.ok(html.includes('EJ SIGNERAT'));
+ assert.ok(html.includes('EJ GODKÄNT FÖR TILLVERKNING'));
+ assert.ok(html.includes('NOT APPROVED FOR PRODUCTION'));
+ assert.ok(receiver.includes('challenge-request')&&receiver.includes('challenge-confirm'));
+ assert.ok(receiver.includes('hp_os_reserve'));
+ assert.ok(!Object.hasOwn(schema.properties,'approvalStatus'));
+ assert.ok(!Object.hasOwn(schema.properties,'purchasePrice'));
+});
