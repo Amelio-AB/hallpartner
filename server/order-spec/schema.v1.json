@@ -806,6 +806,34 @@
         "minLength": 1,
         "maxLength": 500
       }
+    },
+    "documentReferences": {
+      "type": "array",
+      "maxItems": 40,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "number": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 40
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          }
+        },
+        "required": [
+          "number"
+        ]
+      }
     }
   }
 }

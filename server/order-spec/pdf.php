@@ -148,6 +148,14 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
             if (!empty($data['documentation']['otherDetails'])) $html .= '<p>'.nl2br(hp_os_e($data['documentation']['otherDetails'])).'</p>';
         }
     }
+    if (!empty($data['documentReferences'])) {
+        $html .= '<h2>Ritnings- och dokumentreferenser / Drawing and document references</h2>';
+        $html .= '<table><thead><tr><th>Nummer / Number</th><th>Revision</th><th>Beskrivning / Description</th></tr></thead><tbody>';
+        foreach ($data['documentReferences'] as $r) {
+            $html .= '<tr><td>'.hp_os_e($r['number']).'</td><td>'.hp_os_e($r['revision'] ?? '').'</td><td>'.hp_os_e($r['description'] ?? '').'</td></tr>';
+        }
+        $html .= '</tbody></table>';
+    }
     $html .= '<h2>11. Slutkontroll / Final review</h2><p class="note">Dessa uppgifter är angivna av inskickaren, inte verifierade av Hallpartner.</p>';
     $html .= '<p>Uppgivna kontroller / Self-declared checks: '.hp_os_e(implode(', ', $data['finalReview']['confirmed'])).'</p>';
     $html .= '<p>Detaljer granskade av inskickaren / Details reviewed by submitter: '.hp_os_e($data['finalReview']['detailsReviewed']).'</p>';
