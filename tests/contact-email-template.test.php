@@ -30,7 +30,8 @@ foreach ([$internal, $customer] as $html) {
     hp_contact_assert(!str_contains($html, '<img'), 'no image execution');
     hp_contact_assert(!str_contains($html, 'secret-not-for-rendering'), 'no private keys');
     hp_contact_assert(!str_contains($html, 'unauthorized@example.invalid'), 'no unknown fields');
-    hp_contact_assert(str_contains($html, 'Amelio'), 'preview privacy attribution');
+    hp_contact_assert(str_contains($html, 'testmiljö'), 'preview is clearly marked as test');
+    hp_contact_assert(!str_contains($html, 'Amelio'), 'no developer brand in customer mail');
 }
 hp_contact_assert(str_contains($internal, 'KUNDUPPGIFTER'), 'internal contact list');
 hp_contact_assert(str_contains($internal, 'MEDDELANDE'), 'internal message');
@@ -44,4 +45,19 @@ hp_contact_assert(!str_contains(hp_contact_mail_html(false, [
     'contact.message' => 'Hej'
 ], $id), 'Telefon'), 'optional phone omitted');
 
+foreach ([
+    hp_contact_mail_html(false, $answers, $id, 'production'),
+    hp_contact_mail_html(true, $answers, $id, 'production'),
+] as $html) {
+    hp_contact_assert(!str_contains($html, 'Amelio'), 'production no developer brand');
+    hp_contact_assert(!str_contains($html, 'testmiljö'), 'production not a test email');
+    hp_contact_assert(!str_contains($html, 'utvecklingspreview'), 'production not preview');
+    hp_contact_assert(str_contains($html, 'Hallpartner'), 'production sender identity');
+}
+try {
+    hp_contact_mail_html(false, $answers, $id, 'unknown');
+    throw new RuntimeException('Invalid contact mail environment accepted');
+} catch (InvalidArgumentException) {
+    // Expected.
+}
 echo "PHP contact email template PASS: escaping, reference, optional phone and scope\n";
