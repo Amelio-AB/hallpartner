@@ -131,7 +131,7 @@ test('read-only inventory records protected paths without permitting command inj
   }
 });
 test('public allowlist excludes internal pages and server code', () => {
-  assert.equal(PAGES.length,16);
+  assert.equal(PAGES.length,17);
   assert.ok(PAGES.includes('offert/tack/index.html'));
   assert.ok(PAGES.includes('integritet/index.html'));
   assert.ok(PAGES.includes('integritetspolicy/index.html'));
@@ -275,7 +275,8 @@ test('verified payload rejects changed bytes, forbidden additions and forged act
       const quote='<div id="hp-offert-guide" data-enabled="'+quoteReleasePolicy().enabled+'"></div><a href="/integritet/">Personuppgifter</a>';
       const contact='<form id="hp-contact-form" data-enabled="'+contactReleasePolicy().enabled+'"></form>' +
         (contactReleasePolicy().enabled?'<a href="/integritet/">Integritet</a>':'');
-      const body=html+'Nyckelfärdiga hallar.'+(page==='kontakt/index.html'?contact:'')+(page==='offert/index.html'?quote:'');
+      const orderSpec='<form id="hp-order-spec-form" data-enabled="false"></form>';
+      const body=html+'Nyckelfärdiga hallar.'+(page==='kontakt/index.html'?contact:'')+(page==='offert/index.html'?quote:'')+(page==='offert/bestallningsformular/index.html'?orderSpec:'');
       mkdirSync(dirname(root+'/'+page),{recursive:true});writeFileSync(root+'/'+page,body);manifest.files.push({path:page,sha256:sha256(body)});
     }
     const robots='User-agent: *\nDisallow: /\n';writeFileSync(root+'/robots.txt',robots);manifest.files.push({path:'robots.txt',sha256:sha256(robots)});

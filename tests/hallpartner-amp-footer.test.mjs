@@ -24,7 +24,10 @@ test('AMP-003 remains compact with only the verified privacy policy legal link',
 test('every AMP Footer link reaches a real visitor Astro page', async () => {
   for (const link of [{ href:config.brand.homeHref }, config.contact.primary, ...allLinks, ...config.legalLinks]) {
     assert.match(link.href, /^\/(?:[a-z0-9/-]*\/)?$/);
-    await access(join(root, 'src/pages', link.href === '/' ? 'index.astro' : link.href.slice(1) + 'index.astro'));
+    const relative = link.href === '/' ? 'index' : link.href.slice(1).replace(/\/$/, '');
+    // Astro supports both /route/index.astro and /route.astro for a static /route/ URL.
+    await access(join(root, 'src/pages', relative, 'index.astro'))
+      .catch(() => access(join(root, 'src/pages', relative + '.astro')));
   }
   await access(join(root, 'public', config.brand.logoSrc));
 });
