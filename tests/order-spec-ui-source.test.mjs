@@ -19,7 +19,7 @@ test('order spec keeps distinct recipient, sender and unsigned document',() => {
   assert.match(form,/Ej signerat/);
   assert.match(client,/UNCONFIRMED|unconfirmed/);
   assert.match(client,/idempotencyKey/);
-  assert.match(client,/\\/api\\/order-spec\\.php/);
+  assert.ok(client.includes("const API = '/api/order-spec.php'"));
 });
 test('order spec exposes all original sections, controlled technical rows and explicit statuses',() => {
   for(const part of ['steelStructure','roofSandwichPanels','wallSandwichPanels','roofSheets','wallSheets','flashings','pvcMembrane','finishes','fixings','openings','documentation','transport']) {
