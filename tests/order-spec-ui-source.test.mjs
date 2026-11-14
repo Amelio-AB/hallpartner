@@ -98,6 +98,6 @@ test('hall footprint accepts 1000-metre schema limit, distinct from product dime
 });
 test('email fields use schema maxLength 254 and article rows allow gloss', () => {
   const field = readFileSync(new URL('../src/components/order-spec/FormField.astro',import.meta.url),'utf8');
-  assert.match(field,/kind === 'email' \\? 254 : 180/);
+  assert.ok(field.includes("kind === 'email' ? 254 : 180"));
   assert.ok(client.includes("{key: 'gloss', label: 'Glansgrad', maxLength: 50}"));
 });
