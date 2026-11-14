@@ -203,7 +203,14 @@ function hp_os_handle(): never
             $key = $payload['idempotencyKey'];
             $canonical = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
             $hash = hash('sha256', $canonical);
-            // Pre-existing key must be inspected before rate-counting but never re-sent.
+            // Limit BEFORE reserving a new key to avoid unbounded state-file
+            // creation even when an attacker keeps changing UUID values.
+            // Replays consume rate budget but never trigger a second send.
+            try {
+                hp_os_rate_submit($config, $sender, $recipient);
+            } catch (RuntimeException) {
+                hp_os_reply(429,'rate-limited');
+            }
             $reserved = hp_os_reserve($config, $sender, $key, $hash);
             if (!$reserved['new']) {
                 $record = $reserved['record'];
@@ -212,12 +219,6 @@ function hp_os_handle(): never
                     hp_os_reply(200,'accepted',['documentRef'=>$record['reference'],'downloadUrl'=>$url]);
                 }
                 hp_os_reply(202,'unconfirmed');
-            }
-            try {
-                hp_os_rate_submit($config, $sender, $recipient);
-            } catch (Throwable) {
-                hp_os_complete($config,$sender,$key,$hash,['status'=>'rate-limited']);
-                hp_os_reply(429,'rate-limited');
             }
             $reference = 'HP-' . strtoupper(substr(bin2hex(random_bytes(8)),0,10));
             $now = gmdate('Y-m-d H:i') . ' UTC';
