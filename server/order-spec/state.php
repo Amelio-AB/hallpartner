@@ -83,3 +83,24 @@ function hp_os_complete(array $config, string $email, string $key, string $hash,
         return ['next'=>array_merge($previous, $values), 'value'=>null];
     });
 }
+
+
+/**
+ * A verified e-mail token may authorize exactly ONE distinct order payload.
+ * Network retry of the same key/payload remains allowed for idempotent lookup,
+ * but any new order needs a new e-mail challenge.
+ */
+function hp_os_claim_verification(array &$session, string $token, string $email,
+    string $key, string $payloadHash): bool
+{
+    $record = $session['verified'] ?? null;
+    if (!is_array($record) || time() > ($record['expires'] ?? 0) ||
+        !hash_equals((string) ($record['email'] ?? ''), strtolower($email)) ||
+        !hash_equals((string) ($record['hash'] ?? ''), hash('sha256', $token))) return false;
+    if (isset($record['usedKey'], $record['usedHash'])) {
+        return hash_equals($record['usedKey'], $key) && hash_equals($record['usedHash'], $payloadHash);
+    }
+    $session['verified']['usedKey'] = $key;
+    $session['verified']['usedHash'] = $payloadHash;
+    return true;
+}

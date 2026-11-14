@@ -190,19 +190,16 @@ function hp_os_handle(): never
                 $path = substr($e->getMessage(), 0, 120);
                 hp_os_reply(422,'invalid',['fields'=>[$path=>'Kontrollera uppgifterna']]);
             }
-            $verified = $_SESSION['verified'] ?? null;
             $verificationToken = $input['verificationToken'] ?? null;
-            if (!is_array($verified) || !is_string($verificationToken) ||
-                time() > (int)($verified['expires'] ?? 0) ||
-                !hash_equals((string)($verified['hash'] ?? ''), hash('sha256', $verificationToken)) ||
-                !hash_equals((string)($verified['email'] ?? ''), strtolower($payload['submitter']['email']))) {
-                hp_os_reply(403,'forbidden');
-            }
             $sender = strtolower($payload['submitter']['email']);
             $recipient = strtolower($payload['recipient']['email']);
             $key = $payload['idempotencyKey'];
             $canonical = json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
             $hash = hash('sha256', $canonical);
+            if (!is_string($verificationToken) ||
+                !hp_os_claim_verification($_SESSION, $verificationToken, $sender, $key, $hash)) {
+                hp_os_reply(403,'forbidden');
+            }
             // Limit BEFORE reserving a new key to avoid unbounded state-file
             // creation even when an attacker keeps changing UUID values.
             // Replays consume rate budget but never trigger a second send.

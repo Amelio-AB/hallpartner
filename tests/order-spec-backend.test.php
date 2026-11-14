@@ -60,6 +60,11 @@ try {
     check($a['new'] && !$b['new'], 'Idempotent reservation cannot duplicate');
     try { hp_os_reserve($config,'syntetisk@example.invalid',$fixture['idempotencyKey'],'HASH-B'); check(false,'Different payload rejected'); }
     catch (DomainException) { check(true,'Different payload rejected'); }
+    $session=['verified'=>['email'=>'syntetisk@example.invalid','hash'=>hash('sha256','test-token'),'expires'=>time()+120]];
+    check(hp_os_claim_verification($session,'test-token','syntetisk@example.invalid','KEY-1','HASH-A'), 'Verification token authorizes first payload');
+    check(hp_os_claim_verification($session,'test-token','syntetisk@example.invalid','KEY-1','HASH-A'), 'Same order replay remains authorized');
+    check(!hp_os_claim_verification($session,'test-token','syntetisk@example.invalid','KEY-2','HASH-A'), 'No second order per verification token');
+    check(!hp_os_claim_verification($session,'test-token','syntetisk@example.invalid','KEY-1','HASH-B'), 'No changed payload per verification token');
     hp_os_complete($config,'syntetisk@example.invalid',$fixture['idempotencyKey'],'HASH-A',['status'=>'accepted']);
     check(hp_os_reserve($config,'syntetisk@example.invalid',$fixture['idempotencyKey'],'HASH-A')['record']['status'] === 'accepted',
         'Stored accepted state can be replayed without resending');
