@@ -127,10 +127,11 @@ const checks = [
       <fieldset class="hp-order__checks"><legend>Stomdelar</legend><div class="hp-order__check-grid">{frameParts.map(([key,label]) => <label><input type="checkbox" data-multi="frameParts" value={key} />{label}</label>)}</div></fieldset>
     </section>
 
-    {groups.slice(0,5).map(group => (
+    {groups.slice(0,6).map(group => (
       <section class="hp-order__section" id={'hp-order-' + group.key} aria-labelledby={'hp-order-title-' + group.key}>
         <div class="hp-order__section-head"><span class="hp-order__number">{group.code}</span><div><h2 id={'hp-order-title-' + group.key}>{group.heading}</h2><p>{group.info}</p></div></div>
         <div class="hp-order__field hp-order__status-field"><label for={'hp-status-' + group.key}>Ska materialet ingå?</label><select id={'hp-status-' + group.key} data-section={group.key}><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+        {group.category === 'pvc' && <div class="hp-order__grid"><FormField path="pvcSpecification.weightGm2" label="Dukvikt (g/m²)" kind="number" /><FormField path="pvcSpecification.fireClass" label="Brandklass" maxLength={80} /><FormField path="pvcSpecification.uvResistance" label="UV-beständighet" maxLength={120} /><FormField path="pvcSpecification.materialQuality" label="Material / kvalitet" maxLength={160} /><FormField path="pvcSpecification.fixingSystem" label="Infästningssystem" maxLength={160} /></div>}
         <div data-item-group={group.category} class="hp-order__lines" aria-live="polite"></div>
         <button type="button" class="hp-order__add" data-add-line={group.category}>+ Lägg till artikel</button>
       </section>
@@ -143,11 +144,10 @@ const checks = [
       <button type="button" class="hp-order__add" data-add-finish>+ Lägg till ytbehandling</button>
     </section>
 
-    {groups.slice(5).map(group => (
+    {groups.slice(6).map(group => (
       <section class="hp-order__section" id={'hp-order-' + group.key} aria-labelledby={'hp-order-title-' + group.key}>
         <div class="hp-order__section-head"><span class="hp-order__number">{group.code}</span><div><h2 id={'hp-order-title-' + group.key}>{group.heading}</h2><p>{group.info}</p></div></div>
         <div class="hp-order__field hp-order__status-field"><label for={'hp-status-' + group.key}>Ska materialet ingå?</label><select id={'hp-status-' + group.key} data-section={group.key}><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
-        {group.category === 'pvc' && <div class="hp-order__grid"><FormField path="pvcSpecification.weightGm2" label="Dukvikt (g/m²)" kind="number" /><FormField path="pvcSpecification.fireClass" label="Brandklass" maxLength={80} /><FormField path="pvcSpecification.uvResistance" label="UV-beständighet" maxLength={120} /><FormField path="pvcSpecification.materialQuality" label="Material / kvalitet" maxLength={160} /><FormField path="pvcSpecification.fixingSystem" label="Infästningssystem" maxLength={160} /></div>}
         <div data-item-group={group.category} class="hp-order__lines" aria-live="polite"></div>
         <button type="button" class="hp-order__add" data-add-line={group.category}>+ Lägg till artikel</button>
       </section>
