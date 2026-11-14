@@ -71,3 +71,18 @@ test('static inputs use the frozen schema max lengths', () => {
     assert.ok(tag[2].includes('maxLength={' + length + '}'), path);
   }
 });
+
+test('PVC section 5 precedes colours section 6 and retains aggregate fields', () => {
+  // The left-hand navigation and printed source PDF use 1–12 order;
+  // section 5 must not accidentally be rendered after section 6.
+  const categoryOrder = [...form.matchAll(/\\{ code: '(2A|2B|3A|3B|4|5|7|8)', key:/g)].map(match => match[1]);
+  assert.deepEqual(categoryOrder, ['2A','2B','3A','3B','4','5','7','8']);
+  const beforeFinishes = form.indexOf('groups.slice(0,6).map');
+  const finishes = form.indexOf('id="hp-order-finishes"');
+  const afterFinishes = form.indexOf('groups.slice(6).map');
+  assert.ok(beforeFinishes !== -1 && beforeFinishes < finishes && finishes < afterFinishes);
+  assert.equal((form.match(/\\{group\\.category === 'pvc' && <div class="hp-order__grid">/g) ?? []).length,1);
+  for (const path of ['pvcSpecification.weightGm2','pvcSpecification.fireClass','pvcSpecification.uvResistance','pvcSpecification.materialQuality','pvcSpecification.fixingSystem']) {
+    assert.ok(form.includes(path), path);
+  }
+});
