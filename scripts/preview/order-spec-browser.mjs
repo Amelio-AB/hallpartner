@@ -112,6 +112,35 @@ try{
       await call('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13,nativeVirtualKeyCode:13});
       const rowCount=await evaluate('document.querySelectorAll("[data-item-row=roofPanel]").length');
       assert.equal(rowCount,1,'Keyboard Enter must add an article row');
+      // Real DOM focus checks for A's dynamic-row keyboard fix; no transport enabled.
+      const focusChecks=await run(()=>{
+        const form=document.querySelector('#hp-order-spec-form');
+        const addArticle=form.querySelector('[data-add-line="roofPanel"]');
+        const article=form.querySelector('[data-item-row="roofPanel"]');
+        const articleFocused=document.activeElement===article.querySelector('[data-item-field="itemType"]');
+        const glossPresent=!!article.querySelector('[data-item-field="gloss"]');
+        article.querySelector('.hp-order__remove').click();
+        const articleRestored=document.activeElement===addArticle;
+        addArticle.click();
+        const articleFocusedAgain=document.activeElement===form.querySelector('[data-item-row="roofPanel"] [data-item-field="itemType"]');
+        const addFinish=form.querySelector('[data-add-finish]');
+        addFinish.click();
+        const finish=form.querySelector('[data-finish-row]');
+        const finishFocused=document.activeElement===finish.querySelector('[data-item-field="materialClass"]');
+        finish.querySelector('.hp-order__remove').click();
+        const finishRestored=document.activeElement===addFinish;
+        const addDocument=form.querySelector('[data-add-document]');
+        addDocument.click();
+        const doc=form.querySelector('[data-document-row]');
+        const documentFocused=document.activeElement===doc.querySelector('[data-item-field="number"]');
+        doc.querySelector('.hp-order__remove').click();
+        const documentRestored=document.activeElement===addDocument;
+        return {articleFocused,glossPresent,articleRestored,articleFocusedAgain,
+          finishFocused,finishRestored,documentFocused,documentRestored,
+          noOverflow:document.documentElement.scrollWidth<=innerWidth+1};
+      });
+      for(const [name,passed] of Object.entries(focusChecks))assert.equal(passed,true,'Dynamic keyboard '+name);
+      results.push({width,focusChecks,status:'passed'});
       const summary=await run(()=>{
         const values={
           'submitter.name':'Syntetisk Testperson',
@@ -152,7 +181,7 @@ try{
   }
   assert.equal(apiRequests.length,0,'Offline review must never call a PHP API');
   writeFileSync(output+'/result.json',JSON.stringify({commit:process.env.GITHUB_SHA??null,mode:'disabled/offline',apiRequests,results},null,2)+'\n');
-  console.log('PASS: actual Chrome 390/1440, 15 open sections, keyboard article row, field focus, distinct recipient summary, no API or SMTP.');
+  console.log('PASS: actual Chrome 390/1440, 15 open sections, keyboard article row, dynamic-row focus/restore, field focus, distinct recipient summary, no API or SMTP.');
 }finally{
   socket?.close();
   await session.close(output+'/chrome-environment.json');

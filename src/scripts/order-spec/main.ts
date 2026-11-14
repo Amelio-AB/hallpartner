@@ -91,6 +91,10 @@ const finishFields: ItemField[] = [
 export function normalizeServerFieldPath(path: string): string {
   return path.replace(/^\$\.?/, '').replace(/\[(\d+)\]/g, '.$1');
 }
+// Bind asynchronous code requests to the address and edit revision at dispatch.
+export function isCurrentVerificationRequest(requestedEmail: string, revision: number, currentEmail: string, currentRevision: number): boolean {
+  return requestedEmail === currentEmail && revision === currentRevision;
+}
 function inputNodes(container: ParentNode): InputElement[] {
   return Array.from(container.querySelectorAll<InputElement>('input, select, textarea'));
 }
@@ -187,7 +191,10 @@ function appendRow(group: HTMLElement, category: string, index: number, onChange
   remove.type = 'button';
   remove.textContent = 'Ta bort';
   remove.className = 'hp-order__remove';
-  remove.addEventListener('click', () => { article.remove(); onChange(); renumber(group); });
+  remove.addEventListener('click', () => {
+    article.remove(); onChange(); renumber(group);
+    group.parentElement?.querySelector<HTMLButtonElement>('[data-add-line]')?.focus();
+  });
   head.append(title,remove);
   const grid = document.createElement('div');
   grid.className = 'hp-order__grid';
@@ -206,6 +213,7 @@ function appendRow(group: HTMLElement, category: string, index: number, onChange
   article.append(details);
   group.append(article);
   onChange();
+  article.querySelector<HTMLInputElement>('[data-item-field="itemType"]')?.focus();
 }
 function renumber(group: HTMLElement): void {
   group.querySelectorAll<HTMLElement>('[data-item-row]').forEach((item, index) => {
@@ -226,7 +234,10 @@ function createFinishRow(host: HTMLElement, onChange: () => void): void {
   remove.type = 'button';
   remove.className = 'hp-order__remove';
   remove.textContent = 'Ta bort';
-  remove.addEventListener('click', () => { row.remove(); onChange(); });
+  remove.addEventListener('click', () => {
+    row.remove(); onChange();
+    host.parentElement?.querySelector<HTMLButtonElement>('[data-add-finish]')?.focus();
+  });
   top.append(heading,remove);
   const grid = document.createElement('div');
   grid.className = 'hp-order__grid';
@@ -234,6 +245,7 @@ function createFinishRow(host: HTMLElement, onChange: () => void): void {
   row.append(top,grid);
   host.append(row);
   onChange();
+  row.querySelector<HTMLSelectElement>('[data-item-field="materialClass"]')?.focus();
 }
 
 function createDocumentRow(host: HTMLElement, onChange: () => void): void {
@@ -256,6 +268,7 @@ function createDocumentRow(host: HTMLElement, onChange: () => void): void {
       if (heading) heading.textContent = 'Dokumentreferens ' + (index + 1);
     });
     onChange();
+    host.parentElement?.querySelector<HTMLButtonElement>('[data-add-document]')?.focus();
   });
   header.append(title,remove);
   const grid = document.createElement('div');
@@ -264,6 +277,7 @@ function createDocumentRow(host: HTMLElement, onChange: () => void): void {
   row.append(header,grid);
   host.append(row);
   onChange();
+  row.querySelector<HTMLInputElement>('[data-item-field="number"]')?.focus();
 }
 
 export function mountOrderSpecification(form: HTMLFormElement): void {
@@ -279,6 +293,8 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
   let pending = false;
   let uncertain = false;
   let everSubmitted = false;
+  let emailRevision = 0;
+  let lastObservedEmail = form.querySelector<HTMLInputElement>('[data-path="submitter.email"]')?.value.trim() ?? '';
 
   function message(text: string, kind: 'success' | 'error' | 'info' = 'info'): void {
     if (!status) return;
@@ -291,6 +307,17 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
     if (download) download.hidden = true;
     if (summary) summary.hidden = true;
   }
+  function invalidateChangedEmail(target: EventTarget | null): void {
+    if (!(target instanceof HTMLInputElement) || target.dataset.path !== 'submitter.email') return;
+    const current = target.value.trim();
+    if (current === lastObservedEmail) return;
+    lastObservedEmail = current;
+    emailRevision++;
+    challengeId = null;
+    verificationToken = null;
+    verifiedEmail = '';
+    if (verification) verification.textContent = 'E-postadressen måste verifieras.';
+  }
   form.addEventListener('input', event => {
     changed();
     if (event.target instanceof HTMLElement) {
@@ -299,14 +326,12 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       const error = wrap?.querySelector<HTMLElement>('.hp-order__error');
       if (error) error.textContent = '';
     }
-    if (event.target instanceof HTMLInputElement && event.target.dataset.path === 'submitter.email') {
-      challengeId = null;
-      verificationToken = null;
-      verifiedEmail = '';
-      if (verification) verification.textContent = 'E-postadressen måste verifieras.';
-    }
+    invalidateChangedEmail(event.target);
   });
-  form.addEventListener('change',changed);
+  form.addEventListener('change',event => {
+    changed();
+    invalidateChangedEmail(event.target);
+  });
   form.querySelectorAll<HTMLButtonElement>('[data-add-line]').forEach(button => {
     button.addEventListener('click', () => {
       const category = button.dataset.addLine ?? '';
@@ -550,13 +575,21 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       if (input) showIssues([{input,message:'Ange en giltig e-postadress innan du begär kod.'}]);
       return;
     }
+    const requestedEmail = input.value.trim();
+    const requestRevision = emailRevision;
     pending = true;
+    challengeId = null;
     verificationToken = null;
+    verifiedEmail = '';
     try {
-      const {ok,data} = await sendRequest({action:'challenge-request',email:input.value.trim()});
+      const {ok,data} = await sendRequest({action:'challenge-request',email:requestedEmail});
+      if (!isCurrentVerificationRequest(requestedEmail, requestRevision, input.value.trim(), emailRevision)) {
+        if (verification) verification.textContent = 'E-postadressen ändrades under kodbegäran. Begär en ny kod.';
+        return;
+      }
       if (!ok || data.status !== 'pending' || typeof data.challengeId !== 'string') throw Error('Challenge rejected');
       challengeId = data.challengeId;
-      verifiedEmail = input.value.trim();
+      verifiedEmail = requestedEmail;
       if (verification) verification.textContent = 'Kod begärd. Kontrollera din inkorg.';
     } catch {
       if (verification) verification.textContent = 'Kunde inte begära kod. Ingen verifiering har genomförts.';
