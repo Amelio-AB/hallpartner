@@ -2,7 +2,9 @@
 declare(strict_types=1);
 
 /**
- * Copy to config.local.php OUTSIDE public_html; never commit real credentials.
+ * Store a customer-unique config at hallpartner-leads/shared/config.local.php,
+ * then link it to the release runtime's config.local.php. Keep outside public_html.
+ * Never commit real credentials.
  * These false/empty settings deliberately disable all customer submissions.
  * Confirm both the inbox and the sender with the Hallpartner customer.
  */
@@ -10,9 +12,10 @@ return [
     'enabled' => false,
     'privacy_approved' => false,
     // Explicitly opt into contact only after separate privacy and recipient approval.
-    'allowed_configurations' => ['hallpartner-offert-v2-review'],
-    'allowed_origin' => 'https://hallpartner-se.preview2.inleed.com',
-    'smtp_host' => 'mail.inleed.com',
+    'allowed_configurations' => [], // enable kinds only after separate approval
+    'allowed_origin' => 'https://hallpartner-se-new.preview2.inleed.com',
+    'mail_environment' => 'preview', // use production only for launch-approved customer mail
+    'smtp_host' => '',
     'smtp_port' => 587,
     'smtp_username' => '',   // e.g. confirmed sending mailbox
     'smtp_password' => '',   // Inleed email account password

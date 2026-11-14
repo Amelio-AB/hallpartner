@@ -32,10 +32,18 @@ function hp_prune_rates(string $directory, int $now): int
 
 if (realpath($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__) {
     if (PHP_SAPI !== 'cli') exit(1);
-    $config = require __DIR__ . '/config.local.php';
-    $root = realpath($config['rate_dir'] ?? '');
-    // The maintenance command is specific to this approved private preview receiver.
-    if (($config['allowed_origin'] ?? '') !== 'https://hallpartner-se.preview2.inleed.com' ||
-        !$root || !str_starts_with($root . '/', '/home/s164937/hallpartner-leads/')) exit(1);
+    $configPath = __DIR__ . '/config.local.php';
+    if (!is_file($configPath)) exit(1);
+    $config = require $configPath;
+    if (!is_array($config) ||
+        !in_array($config['mail_environment'] ?? null, ['preview', 'production'], true)) exit(1);
+    $rateDir = $config['rate_dir'] ?? null;
+    if (!is_string($rateDir) || $rateDir === '' || is_link($rateDir)) exit(1);
+    $root = realpath($rateDir);
+    // Resolve the account-private root from releases/<revision>/server/lead.
+    // Cleanup must never be redirected to arbitrary paths via configuration.
+    $privateBase = realpath(dirname(__DIR__, 4));
+    if (!$privateBase || !$root || $root !== $privateBase . '/state' ||
+        !is_dir($root)) exit(1);
     hp_prune_rates($root, time());
 }
