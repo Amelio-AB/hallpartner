@@ -99,7 +99,7 @@ test('all breadcrumb variants use Hallpartners shared dark green background', ()
   for (const name of ['hp-detail__crumbs', 'hp-info__crumbs', 'hp-stal__crumbs']) {
     assert.ok(css.includes('.' + name), name);
   }
-  assert.ok(css.includes('background: #153129'));
+  assert.ok(css.includes('background: #10251C'));
   assert.ok(css.includes('width: 100vw'));
   assert.ok(css.includes('isolation: isolate'));
   assert.ok(css.includes('outline-color: #F4F4F0'));

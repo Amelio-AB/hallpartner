@@ -199,12 +199,12 @@
 .hp-detail .hp-detail__hero--illustrated .hp-detail__lead { color: #E6EFE7; }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__text-link { color: #F4F4F0 !important; }
 .hp-detail .hp-detail__hero--illustrated .hp-detail__button {
-  background: #F4F4F0;
-  color: #193C28 !important;
+  background: var(--hp-button-on-dark, #F7F7F2);
+  color: var(--hp-button-on-dark-text, #10251C) !important;
 }
-.hp-detail .hp-detail__hero--illustrated .hp-detail__button:hover { background: #DDE9DD; }
+.hp-detail .hp-detail__hero--illustrated .hp-detail__button:hover { background: var(--hp-button-on-dark-hover, #E7EBE4); }
 /* Four reusable tonal variations, assigned to the existing page types. */
-.hp-detail.hp-detail--storage .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #305847; --hp-hero-end: #15372D; --hp-hero-glow: rgba(105,157,120,.20); }
+.hp-detail.hp-detail--storage .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #29483D; --hp-hero-end: #10251C; --hp-hero-glow: rgba(105,157,120,.12); }
 .hp-detail.hp-detail--machine .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #223F35; --hp-hero-end: #10271F; --hp-hero-glow: rgba(72,122,91,.24); }
 .hp-detail.hp-detail--ridhus .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #3C6252; --hp-hero-end: #234337; --hp-hero-glow: rgba(140,180,146,.18); }
 .hp-detail.hp-detail--plathall .hp-detail__hero.hp-detail__hero--illustrated { --hp-hero-start: #2A5145; --hp-hero-end: #19352E; --hp-hero-glow: rgba(113,149,129,.16); }
@@ -214,7 +214,7 @@
 /* Faktarutans innehåll finns kvar, men under heron så fotot inte täcks. */
 .hp-detail__summary-strip {
   padding-block: clamp(1.25rem, 2.7vw, 2.25rem);
-  background: #E8EEE8;
+  background: var(--hp-offwhite, #F5F5F0);
   border-bottom: 1px solid #C6D3C9;
 }
 .hp-detail .hp-detail__summary-strip .hp-detail__hero-aside {
