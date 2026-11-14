@@ -36,6 +36,7 @@ const commonExtra: ItemField[] = [
   {key: 'profile', label: 'Profil', maxLength: 100},
   {key: 'materialGrade', label: 'Materialkvalitet', maxLength: 100},
   {key: 'finish', label: 'Ytbehandling', maxLength: 100},
+  {key: 'gloss', label: 'Glansgrad', maxLength: 50},
   {key: 'ral', label: 'RAL-kod', maxLength: 32},
   {key: 'insideRal', label: 'RAL insida', maxLength: 32},
   {key: 'outsideRal', label: 'RAL utsida', maxLength: 32},
@@ -111,8 +112,11 @@ function numericValue(value: string): number | null {
   const n = Number(value.replace(',', '.'));
   return Number.isFinite(n) ? n : null;
 }
-function validPositive(value: number, key: string): boolean {
+export function validPositive(value: number, key: string): boolean {
   if (key === 'project.building.roofPitchDegrees') return value >= 0 && value <= 89.9;
+  // The frozen contract allows 1,000,000 mm for hall footprint dimensions,
+  // but individual product lengths and widths remain limited to 100,000 mm.
+  if (key === 'project.building.lengthMm' || key === 'project.building.widthMm') return value > 0 && value <= 1000000;
   if (key.endsWith('quantity')) return value > 0 && value <= 100000000;
   if (key.endsWith('weightGm2')) return value > 0 && value <= 100000;
   if (key.endsWith('thicknessMm')) return value > 0 && value <= 5000;

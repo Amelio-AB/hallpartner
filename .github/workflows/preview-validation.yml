@@ -183,6 +183,17 @@ jobs:
         env:
           COMMIT: ${{ steps.revision.outputs.commit }}
         run: node scripts/preview/php-candidate.mjs build "$COMMIT" reports/preview/php-candidate
+      - name: Build and verify order-spec private source candidate (validation only)
+        env:
+          COMMIT: ${{ steps.revision.outputs.commit }}
+        run: node scripts/preview/order-spec-candidate.mjs build "$COMMIT" reports/preview/order-spec-candidate
+      - name: Archive immutable order-spec private source candidate (no credentials)
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-spec-private-candidate-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/order-spec-candidate/
+          if-no-files-found: error
+          retention-days: 7
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
       - name: Order specification browser review at 390px and desktop (no PHP/mail)
