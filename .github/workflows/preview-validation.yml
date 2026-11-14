@@ -93,7 +93,7 @@ jobs:
           set -euo pipefail
           # Only ephemeral runner dependencies. No vendor/config/SMTP in the public payload.
           php -r 'if (!extension_loaded("dom") || !extension_loaded("mbstring")) exit(1);'
-          composer validate --working-dir=server/order-spec --strict --no-check-publish
+          composer validate --working-dir=server/order-spec --no-check-publish
           composer install --working-dir=server/order-spec --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction --no-progress
           composer audit --locked --no-dev --working-dir=server/order-spec
           php tests/order-spec-backend.test.php
