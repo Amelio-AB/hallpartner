@@ -497,18 +497,22 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
     clearErrors();
     for (const issue of issues) {
       issue.input.setAttribute('aria-invalid','true');
-      const field = issue.input.closest<HTMLElement>('.hp-order__field');
+      // Server errors can target status selectors, checkbox groups or the review checkbox.
+      // Always attach a visible, screen-reader-linked message next to the control.
+      const field = issue.input.closest<HTMLElement>('.hp-order__field, .hp-order__ack, .hp-order__checks');
       let error = field?.querySelector<HTMLElement>('.hp-order__error');
-      if (!error && field && issue.input.id) {
+      if (!error && field) {
         error = document.createElement('span');
         error.className = 'hp-order__error';
-        error.id = issue.input.id + '-error';
+        error.id = 'hp-order-error-' + crypto.randomUUID();
         error.setAttribute('aria-live', 'polite');
         field.append(error);
-        const describedBy = issue.input.getAttribute('aria-describedby') ?? '';
-        issue.input.setAttribute('aria-describedby', [describedBy, error.id].filter(Boolean).join(' '));
       }
-      if (error) error.textContent = issue.message;
+      if (error) {
+        const describedBy = (issue.input.getAttribute('aria-describedby') ?? '').split(/\s+/).filter(Boolean);
+        if (!describedBy.includes(error.id)) issue.input.setAttribute('aria-describedby', [...describedBy,error.id].join(' '));
+        error.textContent = issue.message;
+      }
     }
     if (issues.length) {
       issues[0].input.focus();
