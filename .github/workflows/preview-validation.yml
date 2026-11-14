@@ -185,6 +185,16 @@ jobs:
         run: node scripts/preview/php-candidate.mjs build "$COMMIT" reports/preview/php-candidate
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
+      - name: Order specification browser review at 390px and desktop (no PHP/mail)
+        run: node scripts/preview/order-spec-browser.mjs
+      - name: Archive isolated order specification browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-spec-browser-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/order-spec-browser/
+          if-no-files-found: warn
+          retention-days: 7
       - name: Archive quote browser review before remote FTPS checks
         if: always()
         uses: actions/upload-artifact@v4
