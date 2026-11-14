@@ -7,8 +7,13 @@ declare(strict_types=1);
  */
 require_once __DIR__ . '/quote-email-template.php';
 
-function hp_contact_mail_html(bool $internal, array $answers, string $reference): string
+function hp_contact_mail_html(bool $internal, array $answers, string $reference, string $mailEnvironment = 'preview'): string
 {
+    if (!in_array($mailEnvironment, ['preview', 'production'], true)) {
+        throw new InvalidArgumentException('Invalid mail environment');
+    }
+    $production = $mailEnvironment === 'production';
+    $signature = $production ? 'Hallpartner' : 'Hallpartner – testmiljö';
     $short = hp_quote_case_label($reference);
     $name = (string) ($answers['contact.name'] ?? '');
     $email = (string) ($answers['contact.email'] ?? '');
@@ -25,11 +30,19 @@ function hp_contact_mail_html(bool $internal, array $answers, string $reference)
     $title = $internal ? 'Nytt kontaktmeddelande' : 'Vi har tagit emot ditt meddelande';
     $tag = $internal ? 'NYTT MEDDELANDE' : 'BEKRÄFTELSE';
     $intro = $internal
-        ? 'Ett nytt meddelande har kommit in via Hallpartners kontaktformulär på Amelios utvecklingspreview.'
-        : 'Tack för att du kontaktade Hallpartner. Amelio har tagit emot meddelandet i utvecklingspreviewn och ansvarar för återkopplingen under testperioden.';
+        ? ($production
+            ? 'Ett nytt meddelande har kommit in via Hallpartners kontaktformulär.'
+            : 'Ett testmeddelande har skickats via Hallpartners kontaktformulär i testmiljön.')
+        : ($production
+            ? 'Tack för att du kontaktade Hallpartner. Vi återkommer så snart vi kan.'
+            : 'Hallpartners testmiljö har tagit emot ditt meddelande. Detta är ett test och hanteras inte som ett riktigt kundärende.');
     $footer = $internal
-        ? 'Detta är en tillfällig utvecklingspreview. Meddelandet hanteras av Amelio, inte Hallpartners ordinarie kundmottagning.'
-        : 'Du behöver inte skicka meddelandet igen. Om du vill komplettera kan du svara på det här mejlet och ange ditt ärendenummer.';
+        ? ($production
+            ? 'Meddelandet skickades via Hallpartners webbplats.'
+            : 'Detta är ett testmeddelande från Hallpartners testmiljö, inte ordinarie kundmottagning.')
+        : ($production
+            ? 'Du behöver inte skicka meddelandet igen. Om du vill komplettera kan du svara på det här mejlet och ange ditt ärendenummer.'
+            : 'Detta är en testbekräftelse. Du behöver inte skicka samma testmeddelande igen.');
 
     $html = '<!doctype html><html lang="sv"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
         . '<body style="margin:0;padding:0;background:#F1F1EE;color:#26362C;font-family:Arial,Helvetica,sans-serif;">'
@@ -65,12 +78,14 @@ function hp_contact_mail_html(bool $internal, array $answers, string $reference)
         . nl2br($escape($message), false) . '</p></td></tr>'
         . '<tr><td style="padding:25px 32px 0;"><p style="margin:0;color:#313D34;font:14px/1.7 Arial,sans-serif;">' . $escape($footer) . '</p></td></tr>'
         . '<tr><td style="padding:24px 32px 32px;"><p style="margin:0 0 18px;color:#193B2E;font:700 14px/1.5 Arial,sans-serif;">'
-        . ($internal ? 'Amelios utvecklingspreview' : 'Vänliga hälsningar') . '</p>';
+        . ($internal ? $signature : 'Vänliga hälsningar') . '</p>';
     if (!$internal) {
-        $html .= '<p style="margin:-14px 0 18px;color:#193B2E;font:700 15px/1.5 Arial,sans-serif;">Hallpartner / Amelios utvecklingspreview</p>';
+        $html .= '<p style="margin:-14px 0 18px;color:#193B2E;font:700 15px/1.5 Arial,sans-serif;">' . $escape($signature) . '</p>';
     }
     $html .= '<div style="border-top:1px solid #DEE5DD;padding-top:13px;color:#667569;font:12px/1.65 Arial,sans-serif;">'
-        . 'Tillfällig utvecklingspreview för Hallpartner. Meddelandet hanteras av Amelio.';
+        . ($production
+            ? 'Automatiskt meddelande från Hallpartners webbplats.'
+            : 'TESTMILJÖ: Detta är inte Hallpartners ordinarie kundmottagning.');
     if ($internal) $html .= '<br>Tekniskt referens-ID: ' . $escape($reference);
     return $html . '</div></td></tr></table></td></tr></table></body></html>';
 }
