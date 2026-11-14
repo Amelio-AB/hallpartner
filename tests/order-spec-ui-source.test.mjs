@@ -31,3 +31,12 @@ test('order spec exposes all original sections, controlled technical rows and ex
   assert.match(client,/numericValue/);
   assert.match(client,/showIssues/);
 });
+test('all item details are open and separate drawing references supported',() => {
+  assert.ok(form.includes('data-add-document'));
+  assert.ok(form.includes('data-document-lines'));
+  assert.ok(client.includes('data-document-row'));
+  assert.ok(client.includes('documentReferences'));
+  assert.ok(client.includes('createDocumentRow'));
+  assert.ok(client.includes("const details = document.createElement('div');"));
+  assert.ok(!client.includes("document.createElement('details')"));
+});

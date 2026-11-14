@@ -48,7 +48,7 @@
 .hp-order__line-head {display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 0 .75rem}
 .hp-order__line-head h3 {margin:0;font-size:.95rem}
 .hp-order__extra {margin-top:1rem;border-top:1px solid #d6e0d8;padding-top:.8rem}
-.hp-order__extra summary {cursor:pointer;font-weight:680;color:#1c6530;padding:.3rem}
+.hp-order__extra-title {font-size:.9rem;font-weight:700;color:#1c6530;margin:0 0 .55rem;padding:.3rem 0}
 .hp-order__extra .hp-order__grid {margin-top:1rem}
 .hp-order__add,.hp-order__minor,.hp-order__review-button {
   cursor:pointer;min-height:2.7rem;padding:.6rem 1rem;border:1px solid #266c3a;border-radius:4px;
@@ -89,3 +89,6 @@
 @media (prefers-reduced-motion:reduce) {
   .hp-order__section {scroll-margin-top:1rem}
 }
+
+.hp-order__documents {margin-top:1.4rem;padding:1rem;border:1px solid #d4ded5;border-radius:5px}
+.hp-order__documents h3 {margin:0 0 .5rem}

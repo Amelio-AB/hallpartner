@@ -89,6 +89,12 @@ const checks = [
         <FormField path="project.location" label="Byggplats" maxLength={200} />
         <FormField path="delivery.requestedDate" label="Önskat leveransdatum" kind="date" />
       </div>
+      <div class="hp-order__documents">
+        <h3>Ritnings- och dokumentreferenser</h3>
+        <p class="hp-order__hint">Ange dokumentnummer och revisioner vid behov. Ritningar lämnas separat; inga filer laddas upp här.</p>
+        <div data-document-lines class="hp-order__lines" aria-live="polite"></div>
+        <button type="button" class="hp-order__add" data-add-document>+ Lägg till dokumentreferens</button>
+      </div>
     </section>
 
     <section class="hp-order__section" id="hp-order-steel" aria-labelledby="hp-order-steel-title">
