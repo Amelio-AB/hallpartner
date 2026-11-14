@@ -30,6 +30,12 @@ function hp_mailer(array $config, int $port): \PHPMailer\PHPMailer\PHPMailer
 function hp_deliver_enquiry(array $config, int $port, string $kind, array $answers,
     string $reference, string $subject, string $body, string $summary, ?callable $factory = null): array
 {
+    // Never send using an unrecognized deployment environment.
+    $mailEnvironment = $config['mail_environment'] ?? null;
+    if (!in_array($mailEnvironment, ['preview', 'production'], true)) {
+        error_log('[Hallpartner intake] Mail environment not configured');
+        return ['status' => 'unknown'];
+    }
     $factory ??= static fn() => hp_mailer($config, $port);
     try {
         if ($kind === 'hallpartner-offert-v2-review') {
@@ -43,11 +49,11 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
         $primary->Subject = $subject . ' [' . (in_array($kind, ['hallpartner-offert-v2-review', 'hallpartner-contact-v1'], true) ? hp_quote_case_label($reference) : $reference) . ']';
         if ($kind === 'hallpartner-offert-v2-review') {
             $primary->isHTML(true);
-            $primary->Body = hp_quote_mail_html(true, $answers, $reference);
+            $primary->Body = hp_quote_mail_html(true, $answers, $reference, $mailEnvironment);
             $primary->AltBody = 'Ärendenummer: ' . hp_quote_case_label($reference) . "\n" . $body;
         } elseif ($kind === 'hallpartner-contact-v1') {
             $primary->isHTML(true);
-            $primary->Body = hp_contact_mail_html(true, $answers, $reference);
+            $primary->Body = hp_contact_mail_html(true, $answers, $reference, $mailEnvironment);
             $primary->AltBody = 'Ärendenummer: ' . hp_quote_case_label($reference) . "\n" . $body;
         } else {
             $primary->Body = $body;
@@ -66,30 +72,34 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
         $copy = $factory();
         $copy->Timeout = 5;
         $copy->getSMTPInstance()->Timelimit = 5;
-        $copy->setFrom($config['smtp_from'], 'Amelio');
+        $copy->setFrom($config['smtp_from'], $mailEnvironment === 'production' ? 'Hallpartner' : 'Hallpartner testmiljö');
         $copy->Hostname = substr(strrchr($config['smtp_from'], '@'), 1);
         $copy->XMailer = ' ';
         $copy->addAddress($answers['contact.email']);
-        $copy->addReplyTo($config['recipient'], 'Amelio');
+        $copy->addReplyTo($config['recipient'], 'Hallpartner');
         $short = hp_quote_case_label($reference);
         $copy->isHTML(true);
         if ($kind === 'hallpartner-contact-v1') {
             $copy->Subject = 'Vi har tagit emot ditt meddelande [' . $short . ']';
-            $copy->Body = hp_contact_mail_html(false, $answers, $reference);
+            $copy->Body = hp_contact_mail_html(false, $answers, $reference, $mailEnvironment);
             $copy->AltBody = "Vi har tagit emot ditt meddelande\n\n" .
-                "Amelio tar emot meddelandet under Hallpartners utvecklingspreview. " .
+                ($mailEnvironment === 'production'
+                    ? "Tack för ditt meddelande till Hallpartner. Vi återkommer så snart vi kan. "
+                    : "Hallpartners testmiljö har tagit emot ditt testmeddelande. Det hanteras inte som ett riktigt kundärende. ") .
                 "Du behöver inte skicka igen.\n\nÄrendenummer: " . $short . "\n\n" .
                 "Din kopia:\n" . $summary .
                 "Svara på detta mejl om du vill komplettera ditt meddelande.\n";
         } else {
             $copy->Subject = 'Vi har tagit emot din offertförfrågan [' . $short . ']';
-            $copy->Body = hp_quote_mail_html(false, $answers, $reference);
+            $copy->Body = hp_quote_mail_html(false, $answers, $reference, $mailEnvironment);
             $copy->AltBody = "Vi har tagit emot din offertförfrågan\n\n" .
-                "Amelio har tagit emot din förfrågan i Hallpartners utvecklingspreview. " .
+                ($mailEnvironment === 'production'
+                    ? "Tack för din förfrågan till Hallpartner. Vi återkommer så snart vi kan. "
+                    : "Hallpartners testmiljö har tagit emot din testförfrågan. Det är ingen skarp offertförfrågan. ") .
                 "Vi återkommer så snart vi kan.\n\nÄrendenummer: " . $short . "\n\n" .
                 "Här är en kopia av dina svar:\n\n" . $summary .
                 "Detta är ingen prisuppgift, bindande offert eller beställning.\n" .
-                "Du kan svara på detta mejl för att kontakta Amelio.\n";
+                "Du kan svara på detta mejl för att kontakta Hallpartner.\n";
         }
         if ($copy->send() === true) $result['customerCopy'] = 'accepted';
     } catch (Throwable) {
