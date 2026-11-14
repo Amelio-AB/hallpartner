@@ -59,8 +59,13 @@ function hp_quote_mail_rows_html(array $rows): string
     return $html . '</table>';
 }
 
-function hp_quote_mail_html(bool $internal, array $answers, string $reference): string
+function hp_quote_mail_html(bool $internal, array $answers, string $reference, string $mailEnvironment = 'preview'): string
 {
+    if (!in_array($mailEnvironment, ['preview', 'production'], true)) {
+        throw new InvalidArgumentException('Invalid mail environment');
+    }
+    $production = $mailEnvironment === 'production';
+    $signature = $production ? 'Hallpartner' : 'Hallpartner – testmiljö';
     $short = hp_quote_case_label($reference);
     $rows = hp_quote_mail_rows($answers);
     $project = array_values(array_filter($rows, static fn($item) => !$item['contact']));
@@ -68,8 +73,12 @@ function hp_quote_mail_html(bool $internal, array $answers, string $reference): 
     $title = $internal ? 'Ny offertförfrågan' : 'Vi har tagit emot din offertförfrågan';
     $label = $internal ? 'NY FÖRFRÅGAN' : 'BEKRÄFTELSE';
     $introduction = $internal
-        ? 'En ny förfrågan har kommit in via Hallpartners offertguide på Amelios utvecklingspreview.'
-        : 'Tack för din förfrågan till Hallpartner. Uppgifterna har tagits emot av Amelio i utvecklingspreviewn. Vi återkommer när vi har gått igenom ditt projekt.';
+        ? ($production
+            ? 'En ny förfrågan har kommit in via Hallpartners offertguide.'
+            : 'En testförfrågan har skickats via Hallpartners offertguide i testmiljön.')
+        : ($production
+            ? 'Tack för din förfrågan till Hallpartner. Vi återkommer när vi har gått igenom ditt projekt.'
+            : 'Hallpartners testmiljö har tagit emot dina uppgifter. Detta är ett test och inte en skarp offertförfrågan.');
 
     $html = '<!doctype html><html lang="sv"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>'
         . '<body style="margin:0;padding:0;background:#F1F1EE;color:#26362C;font-family:Arial,Helvetica,sans-serif;">'
@@ -108,19 +117,25 @@ function hp_quote_mail_html(bool $internal, array $answers, string $reference): 
     }
 
     $footer = $internal
-        ? 'Den här förfrågan har tagits emot av Amelio under utvecklingen, inte av Hallpartners ordinarie kundmottagning.'
-        : 'Har du en komplettering kan du svara på det här mejlet och ange ärendenumret. Detta är en mottagningsbekräftelse, inte en bindande offert eller beställning.';
+        ? ($production
+            ? 'Förfrågan skickad via Hallpartners webbplats.'
+            : 'Detta är en testförfrågan från Hallpartners testmiljö och hanteras inte som ett riktigt kundärende.')
+        : ($production
+            ? 'Har du en komplettering kan du svara på det här mejlet och ange ärendenumret. Detta är en mottagningsbekräftelse, inte en bindande offert eller beställning.'
+            : 'Detta är en testbekräftelse. Ingen bindande offert eller beställning har skapats.');
     $html .= '<tr><td style="padding:24px 32px 0;">'
         . '<p style="margin:0;color:#313D34;font:14px/1.7 Arial,sans-serif;">' . hp_quote_mail_escape($footer) . '</p>'
         . '</td></tr>'
         . '<tr><td style="padding:24px 32px 32px;">'
-        . '<p style="margin:0 0 18px;color:#193B2E;font:700 14px/1.5 Arial,sans-serif;">' . ($internal ? 'Amelios utvecklingspreview' : 'Vänliga hälsningar') . '</p>';
+        . '<p style="margin:0 0 18px;color:#193B2E;font:700 14px/1.5 Arial,sans-serif;">' . ($internal ? $signature : 'Vänliga hälsningar') . '</p>';
 
     if (!$internal) {
-        $html .= '<p style="margin:-14px 0 18px;color:#193B2E;font:700 15px/1.5 Arial,sans-serif;">Hallpartner / Amelios utvecklingspreview</p>';
+        $html .= '<p style="margin:-14px 0 18px;color:#193B2E;font:700 15px/1.5 Arial,sans-serif;">' . hp_quote_mail_escape($signature) . '</p>';
     }
     $html .= '<div style="border-top:1px solid #DEE5DD;padding-top:13px;color:#667569;font:12px/1.65 Arial,sans-serif;">'
-        . 'Tillfällig utvecklingspreview för Hallpartner. Meddelandet hanteras av Amelio.';
+        . ($production
+            ? 'Automatiskt meddelande från Hallpartners webbplats.'
+            : 'TESTMILJÖ: Detta är inte Hallpartners ordinarie kundmottagning.');
     if ($internal) {
         $html .= '<br>Tekniskt referens-ID: ' . hp_quote_mail_escape($reference);
     }
