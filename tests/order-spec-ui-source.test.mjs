@@ -40,3 +40,11 @@ test('all item details are open and separate drawing references supported',() =>
   assert.ok(client.includes("const details = document.createElement('div');"));
   assert.ok(!client.includes("document.createElement('details')"));
 });
+
+test('one-page navigation exposes every source section and keeps supplier scope explicit', () => {
+  for(const anchor of ['project','steel','roofSandwichPanels','wallSandwichPanels','roofSheets','wallSheets','flashings','pvcMembrane','finishes','fixings','openings','documentation','transport','review','send']) {
+    assert.ok(form.includes('href="#hp-order-' + anchor + '"'),anchor);
+  }
+  assert.ok(form.includes('hp-order__workspace'));
+  assert.ok(form.includes('Montage, markarbete och grundarbete ingår inte'));
+});

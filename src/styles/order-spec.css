@@ -14,8 +14,19 @@
 .hp-order__tag {display:inline-block;margin:1.5rem 0 0;padding:.5rem .85rem;border:1px solid #99b5a4;border-radius:3px;font-weight:650;font-size:.88rem}
 .hp-order__content {padding-block:2rem 5rem}
 .hp-order__notice {margin:0 0 1.6rem;padding:1.05rem 1.2rem;border-left:4px solid #327b43;background:#e1e9e0;color:#193c25;line-height:1.6}
-.hp-order__jump {display:flex;gap:.6rem 1rem;flex-wrap:wrap;margin:0 0 2rem;padding:.9rem;border-block:1px solid #b5c4b8}
-.hp-order__jump a {font-size:.88rem;font-weight:680;color:#1e6534;text-decoration:underline;text-underline-offset:.2rem}
+.hp-order__scope {max-width:72rem;margin:-.7rem 0 1.8rem;color:#3d5245;line-height:1.6}
+.hp-order__workspace {display:grid;grid-template-columns:minmax(180px,215px) minmax(0,1fr);align-items:start;gap:clamp(1rem,2vw,2rem)}
+.hp-order__workspace form {min-width:0}
+.hp-order__jump {position:sticky;top:6.5rem;display:flex;flex-direction:column;gap:.2rem;max-height:calc(100vh - 8rem);overflow-y:auto;margin:0;padding:.8rem;border:1px solid #cad7cc;border-radius:5px;background:#f7faf7}
+.hp-order__jump-title {font-size:.77rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#44604b;margin:.2rem .6rem .6rem}
+.hp-order__jump a {display:block;padding:.45rem .6rem;border-radius:3px;font-size:.85rem;font-weight:620;color:#1f5831;text-decoration:none;line-height:1.35}
+.hp-order__jump a:hover,.hp-order__jump a:focus-visible {background:#e5efe6;text-decoration:underline;text-underline-offset:.2rem}
+@media (max-width:1000px) {
+  .hp-order__workspace {grid-template-columns:minmax(0,1fr)}
+  .hp-order__jump {position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:.2rem;margin-bottom:.5rem}
+  .hp-order__jump-title {flex-basis:100%}
+  .hp-order__jump a {padding:.55rem .65rem}
+}
 .hp-order__section {scroll-margin-top:7rem;margin:0 0 1.25rem;padding:clamp(1.15rem,3vw,2rem);border:1px solid #c6d0c9;border-radius:8px;background:#fff;box-shadow:0 2px 12px rgb(13 39 23 / 4%)}
 .hp-order__section-head {display:flex;align-items:flex-start;gap:1rem;margin:0 0 1.4rem;padding:0 0 1.35rem;border-bottom:1px solid #dce4dd}
 .hp-order__number {min-width:2.45rem;height:2.45rem;display:grid;place-items:center;background:#153d29;color:white;border-radius:4px;font-size:.78rem;font-weight:780}
