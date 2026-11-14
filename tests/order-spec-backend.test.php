@@ -24,6 +24,10 @@ $alter = $fixture; $alter['purchasePrice'] = 1;
 reject(static fn()=>hp_order_validate($alter), 'No cost or price field');
 $alter = $fixture; $alter['project']['building']['heightMm'] = -1;
 reject(static fn()=>hp_order_validate($alter), 'Negative dimension');
+$alter = $fixture; $alter['project']['name'] = "\xFF";
+reject(static fn()=>hp_order_validate($alter), 'Reject malformed UTF-8 input');
+$alter = $fixture; $alter['project']['name'] = "Projekt\x01data";
+reject(static fn()=>hp_order_validate($alter), 'Reject control-byte injection');
 $alter = $fixture; $alter['items'][0]['dimensions']['thicknessMm'] = '10,5';
 reject(static fn()=>hp_order_validate($alter), 'Comma decimal must be parsed to numeric before submit');
 $alter = $fixture; $alter['items'][1]['lineId'] = $alter['items'][0]['lineId'];
@@ -45,6 +49,8 @@ check(!str_contains($html,'<script>') && str_contains($html,'&lt;script&gt;'), '
 check(str_contains($html,'ÄÖ Å') && str_contains($html,'Öppet mått'), 'UTF-8 content retained');
 check(str_contains($html,'table-header-group') && str_contains($html,'Godkännande före tillverkning'), 'Pageable tables and blank signature blocks');
 check(str_contains($html,'SYNTH-F01') && str_contains($html,'RAL 7016'), 'Item reference and finish present');
+check(str_contains($html,'Huvudramar / Main frames') && str_contains($html,'Monteringsritningar / Assembly drawings'), 'Enum values translated for supplier');
+check(str_contains($html,'materialleverantörens åtagande') && str_contains($html,'foundations are not part'), 'Dealer construction services excluded from supplier PDF');
 
 $tmp = sys_get_temp_dir() . '/hp-order-spec-unit-' . bin2hex(random_bytes(8));
 check(mkdir($tmp,0700), 'Created private test state');

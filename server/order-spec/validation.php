@@ -34,6 +34,9 @@ function hp_os_node(mixed $value, array $schema, string $path = '$'): void
         if (!$validType) hp_os_invalid($path);
     }
     if (is_string($value)) {
+        // Supplier PDF must not silently replace invalid Unicode or controls.
+        if (!mb_check_encoding($value, 'UTF-8') ||
+            preg_match('/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]/u', $value)) hp_os_invalid($path);
         $length = mb_strlen($value, 'UTF-8');
         if (($schema['maxLength'] ?? PHP_INT_MAX) < $length ||
             ($schema['minLength'] ?? 0) > $length || str_contains($value, "\0")) hp_os_invalid($path);

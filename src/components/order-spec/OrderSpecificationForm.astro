@@ -47,15 +47,26 @@ const checks = [
       ? 'Utskicket kräver att du verifierar din e-postadress. PDF:en skickas till adressen du väljer, från Hallpartners godkända avsändare.'
       : 'Granskningsversion: du kan fylla i och granska underlaget här, men e-postverifiering och utskick är avstängda. Inga uppgifter skickas.'}
   </p>
-  <nav class="hp-order__jump" aria-label="Hoppa till formuläravsnitt">
-    <a href="#hp-order-project">Projekt</a>
-    <a href="#hp-order-steel">Stålstomme</a>
-    <a href="#hp-order-roofSandwichPanels">Material</a>
-    <a href="#hp-order-finishes">Färger</a>
-    <a href="#hp-order-documentation">Dokument</a>
-    <a href="#hp-order-transport">Transport</a>
-    <a href="#hp-order-review">Granska och skicka</a>
-  </nav>
+  <p class="hp-order__scope"><strong>Endast materialleverantörens beställningsunderlag.</strong> Montage, markarbete och grundarbete ingår inte i leverantörens åtagande. Sådana uppgifter ska hanteras separat av Hallpartner.</p>
+  <div class="hp-order__workspace">
+    <nav class="hp-order__jump" aria-label="Hoppa till formuläravsnitt">
+      <p class="hp-order__jump-title">Materialunderlag</p>
+      <a href="#hp-order-project">Projekt och parter</a>
+      <a href="#hp-order-steel">1. Stålstomme</a>
+      <a href="#hp-order-roofSandwichPanels">2A. Takpaneler</a>
+      <a href="#hp-order-wallSandwichPanels">2B. Väggpaneler</a>
+      <a href="#hp-order-roofSheets">3A. Takplåt</a>
+      <a href="#hp-order-wallSheets">3B. Väggplåt</a>
+      <a href="#hp-order-flashings">4. Plåtbeslag</a>
+      <a href="#hp-order-pvcMembrane">5. PVC-duk</a>
+      <a href="#hp-order-finishes">6. Färger och ytor</a>
+      <a href="#hp-order-fixings">7. Infästningar</a>
+      <a href="#hp-order-openings">8. Dörrar och portar</a>
+      <a href="#hp-order-documentation">9. Dokumentation</a>
+      <a href="#hp-order-transport">10. Transport</a>
+      <a href="#hp-order-review">11. Slutkontroll</a>
+      <a href="#hp-order-send">12. PDF och mottagare</a>
+    </nav>
 
   <form id="hp-order-spec-form" data-enabled={String(ready)} novalidate aria-describedby="hp-order-notice" autocomplete="off">
     <section class="hp-order__section" id="hp-order-project" aria-labelledby="hp-order-project-title">
@@ -88,6 +99,12 @@ const checks = [
         <FormField path="project.drawingReference" label="Ritningsnummer / revision" />
         <FormField path="project.location" label="Byggplats" maxLength={200} />
         <FormField path="delivery.requestedDate" label="Önskat leveransdatum" kind="date" />
+      </div>
+      <div class="hp-order__documents">
+        <h3>Ritnings- och dokumentreferenser</h3>
+        <p class="hp-order__hint">Ange dokumentnummer och revisioner vid behov. Ritningar lämnas separat; inga filer laddas upp här.</p>
+        <div data-document-lines class="hp-order__lines" aria-live="polite"></div>
+        <button type="button" class="hp-order__add" data-add-document>+ Lägg till dokumentreferens</button>
       </div>
     </section>
 
@@ -183,5 +200,6 @@ const checks = [
       <a data-download class="hp-order__download" hidden rel="nofollow">Ladda ned PDF-underlaget</a>
     </section>
   </form>
+  </div>
   <noscript><p class="hp-order__notice">Formuläret behöver JavaScript. <a href="/kontakt/">Kontakta Hallpartner</a> för att lämna uppgifterna på annat sätt.</p></noscript>
 </div>

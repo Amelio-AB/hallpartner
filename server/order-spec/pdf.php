@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/labels.php';
+
 /** The PDF uses only validated, escaped text. Client-provided HTML is never rendered. */
 function hp_os_e(mixed $v): string
 {
@@ -91,6 +93,7 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
     $html .= '<h1>BESTÄLLNINGSUNDERLAG – STÅLHALLAR</h1>';
     $html .= '<p class="note">Steel building order specification · Svenska / English</p>';
     $html .= '<div class="warning">EJ SIGNERAT – EJ GODKÄNT FÖR TILLVERKNING<br>NOT SIGNED – NOT APPROVED FOR PRODUCTION</div>';
+    $html .= '<p class="note"><strong>Omfattning / Scope:</strong> Endast materialbeställning. Montage, mark- och grundarbete ingår inte i materialleverantörens åtagande enligt detta dokument. / Material specification only. Erection, site works and foundations are not part of the material supplier’s scope under this document.</p>';
     $html .= '<p>Dokumentreferens / Document reference: <strong>'.hp_os_e($reference).'</strong> · Dokumentversion / Version: 1 · Skapad / Created: '.hp_os_e($createdAt).'</p>';
     $html .= hp_os_table('Ifyllt av / Submitted by', $data['submitter'], $fieldLabels);
     $html .= hp_os_table('Kund / Ordering party', $data['orderingParty'], $fieldLabels);
@@ -99,8 +102,12 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
     $building = $project['building'];
     unset($project['building']);
     $html .= hp_os_table('Projekt / Project', $project, $fieldLabels);
+    if (isset($building['frameParts'])) $building['frameParts'] = hp_os_join_labels('frameParts', $building['frameParts']);
+    if (isset($building['heightReference'])) $building['heightReference'] = hp_os_label('heightReference', $building['heightReference']);
     $html .= hp_os_table('Hallmått och stålstomme / Building dimensions and steel structure', $building, $fieldLabels);
-    $html .= hp_os_table('Leverans / Delivery', $data['delivery'], $fieldLabels);
+    $delivery = $data['delivery'];
+    $delivery['packingRequirements'] = hp_os_join_labels('packingRequirements', $delivery['packingRequirements']);
+    $html .= hp_os_table('Leverans / Delivery', $delivery, $fieldLabels);
     $html .= '<p><strong>Mottagare / Recipient:</strong> '.hp_os_e($data['recipient']['email']).'</p>';
 
     $states = ['included'=>'Ingår / Included','excluded'=>'Ingår inte / Excluded','unresolved'=>'Behöver fastställas / Unresolved'];
@@ -119,13 +126,13 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
                 foreach ($row as $key => $v) {
                     if (in_array($key, ['lineId','category','itemType','quantity','unit','notes','description','dimensions'], true)) continue;
                     if ($v === null || $v === '') continue;
-                    $details .= '<strong>'.hp_os_e($fieldLabels[$key] ?? $key).':</strong> '.hp_os_e($v).'<br>';
+                    $details .= '<strong>'.hp_os_e($fieldLabels[$key] ?? $key).':</strong> '.hp_os_e(hp_os_label($key, (string)$v)).'<br>';
                 }
                 foreach ($row['dimensions'] ?? [] as $key => $v) {
-                    $details .= '<strong>'.hp_os_e($fieldLabels[$key] ?? $key).':</strong> '.hp_os_e($v).'<br>';
+                    $details .= '<strong>'.hp_os_e($fieldLabels[$key] ?? $key).':</strong> '.hp_os_e(hp_os_label($key, (string)$v)).'<br>';
                 }
                 $html .= '<tr><td>'.hp_os_e($row['itemType']).'<br><span class="minor small">'.hp_os_e($row['lineId']).'</span></td>';
-                $html .= '<td>'.hp_os_e($row['quantity']).' '.hp_os_e($row['unit']).'</td><td class="small">'.$details.'</td></tr>';
+                $html .= '<td>'.hp_os_e($row['quantity']).' '.hp_os_e(hp_os_label('unit', $row['unit'])).'</td><td class="small">'.$details.'</td></tr>';
             }
             $html .= '</tbody></table>';
             foreach ($rows as $row) {
@@ -138,13 +145,13 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
         if ($id === 'finishes' && $data['finishAssignments']) {
             $html .= '<table><thead><tr><th>Material / Material</th><th>RAL</th><th>Yta / Finish</th><th>Kommentar / Notes</th></tr></thead><tbody>';
             foreach ($data['finishAssignments'] as $r) {
-                $html .= '<tr><td>'.hp_os_e($r['materialClass']).'</td><td>'.hp_os_e($r['ral'] ?? '').'</td><td>'.hp_os_e($r['finish'] ?? '').'</td><td>'.hp_os_e($r['notes'] ?? '').'</td></tr>';
+                $html .= '<tr><td>'.hp_os_e(hp_os_label('materialClass', $r['materialClass'])).'</td><td>'.hp_os_e($r['ral'] ?? '').'</td><td>'.hp_os_e($r['finish'] ?? '').'</td><td>'.hp_os_e($r['notes'] ?? '').'</td></tr>';
             }
             $html .= '</tbody></table>';
         }
         if ($id === 'pvcMembrane' && !empty($data['pvcSpecification'])) $html .= hp_os_table('PVC-data / PVC details', $data['pvcSpecification'], $fieldLabels);
         if ($id === 'documentation') {
-            $html .= '<p>Efterfrågade dokument / Requested documents: '.hp_os_e(implode(', ', $data['documentation']['requested'])).'</p>';
+            $html .= '<p>Efterfrågade dokument / Requested documents: '.hp_os_e(hp_os_join_labels('documentation', $data['documentation']['requested'])).'</p>';
             if (!empty($data['documentation']['otherDetails'])) $html .= '<p>'.nl2br(hp_os_e($data['documentation']['otherDetails'])).'</p>';
         }
     }
@@ -157,7 +164,7 @@ function hp_order_pdf_html(array $data, string $reference, string $createdAt): s
         $html .= '</tbody></table>';
     }
     $html .= '<h2>11. Slutkontroll / Final review</h2><p class="note">Dessa uppgifter är angivna av inskickaren, inte verifierade av Hallpartner.</p>';
-    $html .= '<p>Uppgivna kontroller / Self-declared checks: '.hp_os_e(implode(', ', $data['finalReview']['confirmed'])).'</p>';
+    $html .= '<p>Uppgivna kontroller / Self-declared checks: '.hp_os_e(hp_os_join_labels('finalReview', $data['finalReview']['confirmed'])).'</p>';
     $html .= '<p>Detaljer granskade av inskickaren / Details reviewed by submitter: '.hp_os_e($data['finalReview']['detailsReviewed']).'</p>';
     if (!empty($data['finalReview']['comments'])) $html .= '<p>'.nl2br(hp_os_e($data['finalReview']['comments'])).'</p>';
     $html .= '<h2>Öppna frågor / Unresolved questions</h2>';

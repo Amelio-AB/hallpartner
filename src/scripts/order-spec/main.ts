@@ -74,6 +74,11 @@ const categoryExtra: Record<string, ItemField[]> = {
     {key: 'openingPosition', label: 'Placering', maxLength:120}
   ]
 };
+const documentFields: ItemField[] = [
+  {key:'number',label:'Ritnings-/dokumentnummer',maxLength:120},
+  {key:'revision',label:'Revision',maxLength:40},
+  {key:'description',label:'Beskrivning',maxLength:300}
+];
 const finishFields: ItemField[] = [
   {key: 'materialClass',label:'Materialgrupp',options:['roofPanel','wallPanel','roofSheet','wallSheet','flashing','steelStructure','pvc','door']},
   {key: 'ral',label:'RAL-kod',maxLength:32},
@@ -180,11 +185,12 @@ function appendRow(group: HTMLElement, category: string, index: number, onChange
   grid.className = 'hp-order__grid';
   appendFields(grid, generalFields, 'hp-line-' + article.dataset.lineId);
   article.append(head,grid);
-  const details = document.createElement('details');
+  const details = document.createElement('div');
   details.className = 'hp-order__extra';
-  const summary = document.createElement('summary');
-  summary.textContent = 'Mått och fler produktegenskaper';
-  details.append(summary);
+  const detailsTitle = document.createElement('h4');
+  detailsTitle.className = 'hp-order__extra-title';
+  detailsTitle.textContent = 'Mått och produktegenskaper';
+  details.append(detailsTitle);
   const extra = document.createElement('div');
   extra.className = 'hp-order__grid';
   appendFields(extra, [...dimensions,...(categoryExtra[category] ?? []),...commonExtra], 'hp-more-' + article.dataset.lineId);
@@ -218,6 +224,36 @@ function createFinishRow(host: HTMLElement, onChange: () => void): void {
   grid.className = 'hp-order__grid';
   appendFields(grid, finishFields, 'hp-finish-' + crypto.randomUUID().slice(0,8));
   row.append(top,grid);
+  host.append(row);
+  onChange();
+}
+
+function createDocumentRow(host: HTMLElement, onChange: () => void): void {
+  if (host.querySelectorAll('[data-document-row]').length >= 40) return;
+  const row = document.createElement('div');
+  row.className = 'hp-order__line hp-order__document-line';
+  row.dataset.documentRow = 'true';
+  const header = document.createElement('div');
+  header.className = 'hp-order__line-head';
+  const title = document.createElement('h3');
+  title.textContent = 'Dokumentreferens ' + (host.children.length + 1);
+  const remove = document.createElement('button');
+  remove.type = 'button';
+  remove.className = 'hp-order__remove';
+  remove.textContent = 'Ta bort';
+  remove.addEventListener('click', () => {
+    row.remove();
+    host.querySelectorAll<HTMLElement>('[data-document-row]').forEach((element,index) => {
+      const heading = element.querySelector('h3');
+      if (heading) heading.textContent = 'Dokumentreferens ' + (index + 1);
+    });
+    onChange();
+  });
+  header.append(title,remove);
+  const grid = document.createElement('div');
+  grid.className = 'hp-order__grid';
+  appendFields(grid,documentFields,'hp-document-' + crypto.randomUUID().slice(0,12));
+  row.append(header,grid);
   host.append(row);
   onChange();
 }
@@ -272,6 +308,10 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       if (total >= 120) { message('Högst 120 artikelrader kan anges.', 'error'); return; }
       appendRow(host, category, host.children.length + 1, changed);
     });
+  });
+  form.querySelector<HTMLButtonElement>('[data-add-document]')?.addEventListener('click', () => {
+    const host = form.querySelector<HTMLElement>('[data-document-lines]');
+    if (host) createDocumentRow(host,changed);
   });
   form.querySelector<HTMLButtonElement>('[data-add-finish]')?.addEventListener('click', () => {
     const host = form.querySelector<HTMLElement>('[data-finish-lines]');
@@ -350,6 +390,19 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       }
       finishAssignments.push(finish);
     });
+    const documentReferences: Json[] = [];
+    form.querySelectorAll<HTMLElement>('[data-document-row]').forEach(row => {
+      const reference: Json = {};
+      row.querySelectorAll<InputElement>('[data-item-field]').forEach(input => {
+        const value = fieldValue(input);
+        if (value) reference[input.dataset.itemField ?? ''] = value;
+      });
+      if (!reference.number) {
+        const input = row.querySelector<InputElement>('[data-item-field="number"]');
+        if (input) issues.push({input,message:'Ange dokumentnummer eller ta bort raden.'});
+      }
+      documentReferences.push(reference);
+    });
     const questionText = form.querySelector<HTMLTextAreaElement>('[data-unresolved]')?.value ?? '';
     const unresolvedQuestions = questionText.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
     const questionInput = form.querySelector<HTMLTextAreaElement>('[data-unresolved]');
@@ -367,7 +420,7 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
         submitter, orderingParty, supplier, project, recipient, delivery,
         sections:sectionStates, items, finishAssignments,
         ...(Object.keys(pvcSpecification).length ? {pvcSpecification} : {}),
-        documentation, finalReview, unresolvedQuestions
+        documentation, finalReview, unresolvedQuestions, documentReferences
       },
       issues
     };
@@ -382,7 +435,6 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       issue.input.setAttribute('aria-invalid','true');
       const error = issue.input.closest('.hp-order__field')?.querySelector<HTMLElement>('.hp-order__error');
       if (error) error.textContent = issue.message;
-      if (issue.input.closest('details')) issue.input.closest('details')?.setAttribute('open','');
     }
     if (issues.length) {
       issues[0].input.focus();
@@ -411,6 +463,7 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
     add('Inskickare: ' + String(submitter.name ?? 'Ej angivet') + ' · ' + String(submitter.email ?? 'Ej angivet'));
     add('PDF-mottagare: ' + String(recipient.email ?? 'Ej angivet'));
     add('Artikelrader: ' + items.length);
+    add('Separata dokumentreferenser: ' + (payload.documentReferences as Json[]).length);
     Object.entries(states).forEach(([key,value]) => add((sections[key] ?? key) + ': ' + (stateText[value] ?? value)));
     if (items.length) {
       add('Registrerade artiklar',true);
