@@ -73,7 +73,7 @@ const checks = [
       <div class="hp-order__section-head"><span class="hp-order__number">01</span><div><h2 id="hp-order-project-title">Projekt och kontaktuppgifter</h2><p>Den som fyller i formuläret behöver inte vara samma person som beställaren eller mottagaren.</p></div></div>
       <h3>Inskickare</h3>
       <div class="hp-order__grid">
-        <FormField path="submitter.name" label="Ditt namn" required />
+        <FormField path="submitter.name" label="Ditt namn" required maxLength={120} />
         <FormField path="submitter.email" label="Din e-postadress" kind="email" required />
         <FormField path="submitter.phone" label="Telefonnummer" kind="tel" maxLength={40} />
         <FormField path="submitter.role" label="Jag fyller i som" required options={[{value:'customer',label:'Kund'},{value:'seller',label:'Säljare'},{value:'other',label:'Annan'}]} hint="Valet ger ingen särskild behörighet." />
@@ -82,7 +82,7 @@ const checks = [
       <div class="hp-order__grid">
         <FormField path="orderingParty.companyName" label="Företag / beställare" required />
         <FormField path="orderingParty.organizationNumber" label="Organisationsnummer" maxLength={30} />
-        <FormField path="orderingParty.contactName" label="Kontaktperson hos beställaren" />
+        <FormField path="orderingParty.contactName" label="Kontaktperson hos beställaren" maxLength={120} />
         <FormField path="orderingParty.email" label="Beställarens e-post" kind="email" />
         <FormField path="orderingParty.phone" label="Telefon till beställaren" kind="tel" maxLength={40} />
         <FormField path="orderingParty.address" label="Faktura- eller kontaktadress" maxLength={500} />
@@ -90,13 +90,13 @@ const checks = [
       <h3>Leverantör och projekt</h3>
       <div class="hp-order__grid">
         <FormField path="supplier.companyName" label="Leverantör" required />
-        <FormField path="supplier.manufacturingCountry" label="Tillverkningsland" />
-        <FormField path="supplier.contactName" label="Leverantörens kontaktperson" />
+        <FormField path="supplier.manufacturingCountry" label="Tillverkningsland" maxLength={120} />
+        <FormField path="supplier.contactName" label="Leverantörens kontaktperson" maxLength={120} />
         <FormField path="supplier.contactEmail" label="Leverantörens e-post" kind="email" />
         <FormField path="project.name" label="Projektets namn" required />
-        <FormField path="project.externalOrderNumber" label="Externt ordernummer / referens" />
+        <FormField path="project.externalOrderNumber" label="Externt ordernummer / referens" maxLength={100} />
         <FormField path="project.revision" label="Revision" maxLength={50} />
-        <FormField path="project.drawingReference" label="Ritningsnummer / revision" />
+        <FormField path="project.drawingReference" label="Ritningsnummer / revision" maxLength={160} />
         <FormField path="project.location" label="Byggplats" maxLength={200} />
         <FormField path="delivery.requestedDate" label="Önskat leveransdatum" kind="date" />
       </div>
@@ -120,9 +120,9 @@ const checks = [
         <FormField path="project.building.heightMm" label="Hallens höjd (mm)" kind="number" />
         <FormField path="project.building.heightReference" label="Höjden avser" options={[{value:'clearInside',label:'Fri invändig höjd'},{value:'eaves',label:'Takfotshöjd'},{value:'ridge',label:'Nockhöjd'},{value:'other',label:'Annan'},{value:'unresolved',label:'Behöver fastställas'}]} />
         <FormField path="project.building.roofPitchDegrees" label="Taklutning (grader)" kind="number" />
-        <FormField path="project.building.steelGrade" label="Stålkvalitet" />
-        <FormField path="project.building.surfaceTreatment" label="Ytbehandling av stomme" />
-        <FormField path="project.building.otherFramePart" label="Övrig stomdel" />
+        <FormField path="project.building.steelGrade" label="Stålkvalitet" maxLength={100} />
+        <FormField path="project.building.surfaceTreatment" label="Ytbehandling av stomme" maxLength={160} />
+        <FormField path="project.building.otherFramePart" label="Övrig stomdel" maxLength={160} />
       </div>
       <fieldset class="hp-order__checks"><legend>Stomdelar</legend><div class="hp-order__check-grid">{frameParts.map(([key,label]) => <label><input type="checkbox" data-multi="frameParts" value={key} />{label}</label>)}</div></fieldset>
     </section>
@@ -147,7 +147,7 @@ const checks = [
       <section class="hp-order__section" id={'hp-order-' + group.key} aria-labelledby={'hp-order-title-' + group.key}>
         <div class="hp-order__section-head"><span class="hp-order__number">{group.code}</span><div><h2 id={'hp-order-title-' + group.key}>{group.heading}</h2><p>{group.info}</p></div></div>
         <div class="hp-order__field hp-order__status-field"><label for={'hp-status-' + group.key}>Ska materialet ingå?</label><select id={'hp-status-' + group.key} data-section={group.key}><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
-        {group.category === 'pvc' && <div class="hp-order__grid"><FormField path="pvcSpecification.weightGm2" label="Dukvikt (g/m²)" kind="number" /><FormField path="pvcSpecification.fireClass" label="Brandklass" /><FormField path="pvcSpecification.uvResistance" label="UV-beständighet" /><FormField path="pvcSpecification.materialQuality" label="Material / kvalitet" /><FormField path="pvcSpecification.fixingSystem" label="Infästningssystem" /></div>}
+        {group.category === 'pvc' && <div class="hp-order__grid"><FormField path="pvcSpecification.weightGm2" label="Dukvikt (g/m²)" kind="number" /><FormField path="pvcSpecification.fireClass" label="Brandklass" maxLength={80} /><FormField path="pvcSpecification.uvResistance" label="UV-beständighet" maxLength={120} /><FormField path="pvcSpecification.materialQuality" label="Material / kvalitet" maxLength={160} /><FormField path="pvcSpecification.fixingSystem" label="Infästningssystem" maxLength={160} /></div>}
         <div data-item-group={group.category} class="hp-order__lines" aria-live="polite"></div>
         <button type="button" class="hp-order__add" data-add-line={group.category}>+ Lägg till artikel</button>
       </section>
@@ -163,7 +163,7 @@ const checks = [
     <section class="hp-order__section" id="hp-order-transport" aria-labelledby="hp-order-transport-title">
       <div class="hp-order__section-head"><span class="hp-order__number">10</span><div><h2 id="hp-order-transport-title">Packning och transport</h2><p>Önskat datum och uttryckligen överenskommet datum hålls isär.</p></div></div>
       <div class="hp-order__field hp-order__status-field"><label for="hp-status-transport">Transportstatus</label><select id="hp-status-transport" data-section="transport"><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
-      <div class="hp-order__grid"><FormField path="delivery.address" label="Leveransadress" maxLength={500} /><FormField path="delivery.agreedDate" label="Överenskommet leveransdatum" kind="date" /><FormField path="delivery.incoterms" label="Leveransvillkor / Incoterms" maxLength={40} /><FormField path="delivery.transportResponsibility" label="Transportansvarig" /></div>
+      <div class="hp-order__grid"><FormField path="delivery.address" label="Leveransadress" maxLength={500} /><FormField path="delivery.agreedDate" label="Överenskommet leveransdatum" kind="date" /><FormField path="delivery.incoterms" label="Leveransvillkor / Incoterms" maxLength={40} /><FormField path="delivery.transportResponsibility" label="Transportansvarig" maxLength={160} /></div>
       <fieldset class="hp-order__checks"><legend>Packningskrav</legend><div class="hp-order__check-grid">{packing.map(([key,label]) => <label><input type="checkbox" data-multi="packingRequirements" value={key} />{label}</label>)}</div></fieldset>
       <div class="hp-order__field"><label for="hp-order-transport-notes">Övrigt om transport</label><textarea id="hp-order-transport-notes" data-path="delivery.notes" maxlength="1200" rows="2"></textarea></div>
     </section>
