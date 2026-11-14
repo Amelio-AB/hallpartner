@@ -86,3 +86,18 @@ test('PVC section 5 precedes colours section 6 and retains aggregate fields', ()
     assert.ok(form.includes(path), path);
   }
 });
+
+test('hall footprint accepts 1000-metre schema limit, distinct from product dimensions', async () => {
+  const {validPositive} = await import('../src/scripts/order-spec/main.ts');
+  assert.equal(validPositive(1000000,'project.building.lengthMm'),true);
+  assert.equal(validPositive(1000000,'project.building.widthMm'),true);
+  assert.equal(validPositive(1000000.01,'project.building.lengthMm'),false);
+  assert.equal(validPositive(100001,'dimensions.lengthMm'),false);
+  assert.equal(validPositive(100001,'dimensions.widthMm'),false);
+  assert.equal(validPositive(-1,'project.building.lengthMm'),false);
+});
+test('email fields use schema maxLength 254 and article rows allow gloss', () => {
+  const field = readFileSync(new URL('../src/components/order-spec/FormField.astro',import.meta.url),'utf8');
+  assert.match(field,/kind === 'email' \\? 254 : 180/);
+  assert.ok(client.includes("{key: 'gloss', label: 'Glansgrad', maxLength: 50}"));
+});

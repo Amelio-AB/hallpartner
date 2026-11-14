@@ -9,7 +9,8 @@ export interface Props {
   hint?: string;
   maxLength?: number;
 }
-const { path, label, kind = 'text', required = false, options = [], placeholder, hint, maxLength = 180 } = Astro.props;
+const { path, label, kind = 'text', required = false, options = [], placeholder, hint, maxLength } = Astro.props;
+const effectiveMaxLength = maxLength ?? (kind === 'email' ? 254 : 180);
 const id = 'hp-order-' + path.replaceAll('.', '-');
 const description = id + '-error';
 ---
@@ -27,7 +28,7 @@ const description = id + '-error';
       type={kind === 'number' ? 'text' : kind}
       inputmode={kind === 'number' ? 'decimal' : undefined}
       data-number={kind === 'number' ? 'true' : undefined}
-      maxlength={kind === 'date' ? undefined : maxLength}
+      maxlength={kind === 'date' ? undefined : effectiveMaxLength}
       required={required} placeholder={placeholder} aria-describedby={description}
       autocomplete="off"
     />
