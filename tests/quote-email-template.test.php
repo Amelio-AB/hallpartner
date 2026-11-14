@@ -56,4 +56,25 @@ require_true(str_contains($internal, 'KUNDUPPGIFTER'), 'Internal contact section
 require_true(str_contains($internal, 'PROJEKTUPPGIFTER'), 'Internal full project section');
 require_true(str_contains($internal, $reference), 'Internal technical ID');
 require_true(!str_contains($customer, 'info@hallpartner.se'), 'No invented routing');
+foreach (['production', 'preview'] as $environment) {
+    $customerInEnvironment = hp_quote_mail_html(false, $answers, $reference, $environment);
+    $internalInEnvironment = hp_quote_mail_html(true, $answers, $reference, $environment);
+    foreach ([$customerInEnvironment, $internalInEnvironment] as $html) {
+        require_true(!str_contains($html, 'Amelio'), 'Customer runtime must not attribute mail to Amelio');
+        if ($environment === 'production') {
+            require_true(!str_contains($html, 'testmiljö'), 'Production must not mention test environment');
+            require_true(!str_contains($html, 'utvecklingspreview'), 'Production must not mention preview');
+            require_true(str_contains($html, 'Hallpartner'), 'Production sender identity');
+        } else {
+            require_true(str_contains($html, 'testmiljö') || str_contains($html, 'testmiljön'),
+                'Preview mail must state test environment');
+        }
+    }
+}
+try {
+    hp_quote_mail_html(false, $answers, $reference, 'unknown');
+    throw new RuntimeException('Invalid mail environment accepted');
+} catch (InvalidArgumentException) {
+    // Correctly rejected before rendering.
+}
 echo "PHP HTML quote template PASS: sanitization, short ID, content and scope\n";
