@@ -76,9 +76,8 @@ try {
         throw new RuntimeException('PDF text extraction failed');
     }
     $text = (string) file_get_contents($textPath);
-    foreach (['ROOF-001', 'ROOF-120', 'Åtagande', 'EJ GODKÄNT FÖR TILLVERKNING',
+    foreach (['ROOF-001', 'ROOF-120', 'materialleverantörens', 'EJ GODKÄNT FÖR TILLVERKNING',
         'Godkännande före tillverkning', 'Sista raden'] as $expected) {
-        // "Åtagande" may be lowercase in the PDF's material-supplier statement.
         if (stripos($text, $expected) === false) {
             throw new RuntimeException('Rendered PDF missing expected content: ' . $expected);
         }
