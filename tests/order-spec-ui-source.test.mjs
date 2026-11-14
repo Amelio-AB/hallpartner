@@ -123,3 +123,16 @@ test('dynamic rows focus the first editable field and removals restore add contr
     assert.ok(client.includes("querySelector<HTMLButtonElement>('[" + button + "]')?.focus()"), button);
   }
 });
+
+test('error messages reach checkbox groups and all field hints are described for assistive tech', () => {
+  const field = readFileSync(new URL('../src/components/order-spec/FormField.astro',import.meta.url),'utf8');
+  const styles = readFileSync(new URL('../src/styles/order-spec.css',import.meta.url),'utf8');
+  assert.ok(field.includes("const hintId = hint ? id + '-hint' : undefined;"));
+  assert.ok(field.includes("const description = [hintId, errorId].filter(Boolean).join(' ');"));
+  assert.ok(field.includes('class="hp-order__hint" id={hintId}'));
+  assert.ok(field.includes('class="hp-order__error" id={errorId}'));
+  assert.ok(client.includes("closest<HTMLElement>('.hp-order__field, .hp-order__ack, .hp-order__checks')"));
+  assert.ok(client.includes("if (!describedBy.includes(error.id))"));
+  assert.ok(styles.includes('.hp-order__ack .hp-order__error'));
+  assert.ok(styles.includes('.hp-order__checks > .hp-order__error'));
+});

@@ -74,7 +74,9 @@
 .hp-order__code label {grid-column:1 / -1}
 .hp-order__code input {min-width:0}
 .hp-order__minor:disabled,.hp-order__submit:disabled {opacity:.55;cursor:not-allowed}
-.hp-order__ack {display:flex;align-items:flex-start;gap:.65rem;margin:1.4rem 0;padding:1rem;background:#f0f5ef;border-radius:4px;font-size:.9rem;font-weight:580}
+.hp-order__ack {display:flex;flex-wrap:wrap;align-items:flex-start;gap:.65rem;margin:1.4rem 0;padding:1rem;background:#f0f5ef;border-radius:4px;font-size:.9rem;font-weight:580}
+.hp-order__ack .hp-order__error {flex-basis:100%;margin-left:1.75rem}
+.hp-order__checks > .hp-order__error {margin-top:.75rem}
 .hp-order__last {border-top:4px solid #287b39}
 .hp-order__review-button {margin-top:1.35rem}
 .hp-order__summary {margin-top:1.2rem;padding:1rem;border:1px solid #afc7b3;background:#f3f7f2;overflow-wrap:anywhere}
