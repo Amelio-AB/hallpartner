@@ -101,3 +101,25 @@ test('email fields use schema maxLength 254 and article rows allow gloss', () =>
   assert.ok(field.includes("kind === 'email' ? 254 : 180"));
   assert.ok(client.includes("{key: 'gloss', label: 'Glansgrad', maxLength: 50}"));
 });
+
+
+test('async email challenge is bound to one unchanged submitter address', async () => {
+  const { isCurrentVerificationRequest } = await import('../src/scripts/order-spec/main.ts');
+  assert.equal(isCurrentVerificationRequest('synthetic@example.test', 2, 'synthetic@example.test', 2), true);
+  assert.equal(isCurrentVerificationRequest('synthetic@example.test', 2, 'other@example.test', 2), false);
+  assert.equal(isCurrentVerificationRequest('synthetic@example.test', 2, 'synthetic@example.test', 4), false);
+  assert.ok(client.includes('const requestedEmail = input.value.trim();'));
+  assert.ok(client.includes('const requestRevision = emailRevision;'));
+  assert.ok(client.includes('email:requestedEmail'));
+  assert.ok(client.includes('verifiedEmail = requestedEmail;'));
+  assert.ok(client.includes('invalidateChangedEmail(event.target)'));
+});
+
+test('dynamic rows focus the first editable field and removals restore add control', () => {
+  for (const key of ['itemType', 'materialClass', 'number']) {
+    assert.ok(client.includes('data-item-field="' + key + '"]') && client.includes('?.focus();'), key);
+  }
+  for (const button of ['data-add-line', 'data-add-finish', 'data-add-document']) {
+    assert.ok(client.includes("querySelector<HTMLButtonElement>('[" + button + "]')?.focus()"), button);
+  }
+});
