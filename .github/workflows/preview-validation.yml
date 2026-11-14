@@ -92,7 +92,7 @@ jobs:
         run: |
           set -euo pipefail
           # Only ephemeral runner dependencies. No vendor/config/SMTP in the public payload.
-          php -r 'foreach (["dom","mbstring"] as $ext) { if (!extension_loaded($ext)) { fwrite(STDERR, "missing $ext\\n"); exit(1); }}'
+          php -r 'if (!extension_loaded("dom") || !extension_loaded("mbstring")) exit(1);'
           composer update --working-dir=server/order-spec --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction --no-progress
           composer audit --locked --no-dev --working-dir=server/order-spec
           php tests/order-spec-backend.test.php
