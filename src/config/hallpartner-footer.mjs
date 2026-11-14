@@ -32,6 +32,7 @@ export const hallpartnerFooterConfig = {
       heading: 'Hallpartner',
       links: [
         { label: 'Inför ditt projekt', href: '/sa-gar-det-till/' },
+        { label: 'Beställningsformulär', href: '/offert/bestallningsformular/' },
         { label: 'Om Hallpartner', href: '/om-oss/' },
         { label: 'Kontakt', href: '/kontakt/' },
       ],

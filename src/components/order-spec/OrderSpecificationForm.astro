@@ -1,0 +1,205 @@
+---
+import FormField from './FormField.astro';
+export interface Props { ready: boolean; }
+const { ready } = Astro.props;
+const groups = [
+  { code: '2A', key: 'roofSandwichPanels', category: 'roofPanel', heading: 'Taksandwichpaneler', info: 'En rad per paneltyp. Ange kärna, profil och kapad panellängd.' },
+  { code: '2B', key: 'wallSandwichPanels', category: 'wallPanel', heading: 'Väggsandwichpaneler', info: 'Ange om panelbredden avser täckande eller total bredd.' },
+  { code: '3A', key: 'roofSheets', category: 'roofSheet', heading: 'Takplåt', info: 'Ange profil och plåtens faktiska dimensioner.' },
+  { code: '3B', key: 'wallSheets', category: 'wallSheet', heading: 'Väggplåt och fasadbeklädnad', info: 'Ange profiltyp och profilhöjd i artikelraden.' },
+  { code: '4', key: 'flashings', category: 'flashing', heading: 'Beslag och plåtdetaljer', info: 'Nock-, gavel-, takfots- och specialbeslag registreras bara här för att undvika dubbletter.' },
+  { code: '5', key: 'pvcMembrane', category: 'pvc', heading: 'PVC-duk', info: 'Takduk, väggduk eller kantförstärkningar kan specificeras per rad.' },
+  { code: '7', key: 'fixings', category: 'fixing', heading: 'Skruvar och infästningar', info: 'Ange varje typ, dimension och antal på egen rad.' },
+  { code: '8', key: 'openings', category: 'opening', heading: 'Dörrar, portar och öppningar', info: 'Ange mått och placering för varje öppning.' }
+] as const;
+const frameParts = [
+  ['mainFrames','Huvudramar'],['columns','Pelare'],['roofBeams','Takbalkar'],
+  ['roofPurlins','Takåsar'],['wallGirts','Väggreglar'],['bracing','Vindkryss'],
+  ['basePlates','Fotplattor'],['connectionPlates','Anslutningsplåtar'],['reinforcements','Förstärkningar'],['other','Övrigt']
+];
+const docOptions = [
+ ['productionDrawings','Tillverkningsritningar'],['assemblyDrawings','Monteringsritningar'],
+ ['structuralCalculations','Statiska beräkningar'],['ceDocumentationIfApplicable','CE-dokumentation där tillämpligt'],
+ ['declarationsOfPerformance','Prestandadeklarationer'],['materialCertificates','Materialcertifikat'],
+ ['productSpecifications','Produktspecifikationer'],['qualityInspection','Kvalitetskontroll'],
+ ['packingList','Packlista'],['assemblyInstructions','Monteringsanvisningar'],
+ ['certificateOfOriginIfRequired','Ursprungsintyg vid behov'],['other','Övrigt']
+];
+const packing = [
+ ['allComponentsLabelled','Alla komponenter märkta'],['weatherProtected','Material väderskyddat'],
+ ['numberedPackages','Kollin numrerade'],['fixingsPackedSeparately','Infästningar separat packade'],
+ ['packingListIncluded','Packlista medföljer'],['loadingPhotos','Fotodokumentation av lastning']
+];
+const checks = [
+ ['allDimensionsChecked','Alla mått kontrollerade'],['drawingsApproved','Alla ritningar godkända'],
+ ['steelStructureSpecified','Stålstomme specificerad'],['roofWallMaterialsSpecified','Tak- och väggmaterial specificerade'],
+ ['sandwichPanelsSpecified','Sandwichpaneler specificerade'],['pvcMembraneSpecified','PVC-duk specificerad'],
+ ['ralAndFinishesVerified','RAL-koder och ytbehandling kontrollerade'],
+ ['sheetFlashingDimensionsVerified','Bredd och längd för plåt och beslag kontrollerade'],
+ ['fixingsIncluded','Beslag och skruvar inkluderade'],['quantitiesChecked','Materialmängder kontrollerade'],
+ ['documentationAgreed','Dokumentation överenskommen'],['deliveryTermsDateApproved','Leveransvillkor och datum godkända']
+];
+---
+
+<div class="hp-draft-rail hp-order__content">
+  <p class="hp-order__notice" id="hp-order-notice" role="note">
+    {ready
+      ? 'Utskicket kräver att du verifierar din e-postadress. PDF:en skickas till adressen du väljer, från Hallpartners godkända avsändare.'
+      : 'Granskningsversion: du kan fylla i och granska underlaget här, men e-postverifiering och utskick är avstängda. Inga uppgifter skickas.'}
+  </p>
+  <p class="hp-order__scope"><strong>Endast materialleverantörens beställningsunderlag.</strong> Montage, markarbete och grundarbete ingår inte i leverantörens åtagande. Sådana uppgifter ska hanteras separat av Hallpartner.</p>
+  <div class="hp-order__workspace">
+    <nav class="hp-order__jump" aria-label="Hoppa till formuläravsnitt">
+      <p class="hp-order__jump-title">Materialunderlag</p>
+      <a href="#hp-order-project">Projekt och parter</a>
+      <a href="#hp-order-steel">1. Stålstomme</a>
+      <a href="#hp-order-roofSandwichPanels">2A. Takpaneler</a>
+      <a href="#hp-order-wallSandwichPanels">2B. Väggpaneler</a>
+      <a href="#hp-order-roofSheets">3A. Takplåt</a>
+      <a href="#hp-order-wallSheets">3B. Väggplåt</a>
+      <a href="#hp-order-flashings">4. Plåtbeslag</a>
+      <a href="#hp-order-pvcMembrane">5. PVC-duk</a>
+      <a href="#hp-order-finishes">6. Färger och ytor</a>
+      <a href="#hp-order-fixings">7. Infästningar</a>
+      <a href="#hp-order-openings">8. Dörrar och portar</a>
+      <a href="#hp-order-documentation">9. Dokumentation</a>
+      <a href="#hp-order-transport">10. Transport</a>
+      <a href="#hp-order-review">11. Slutkontroll</a>
+      <a href="#hp-order-send">12. PDF och mottagare</a>
+    </nav>
+
+  <form id="hp-order-spec-form" data-enabled={String(ready)} novalidate aria-describedby="hp-order-notice" autocomplete="off">
+    <section class="hp-order__section" id="hp-order-project" aria-labelledby="hp-order-project-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">01</span><div><h2 id="hp-order-project-title">Projekt och kontaktuppgifter</h2><p>Den som fyller i formuläret behöver inte vara samma person som beställaren eller mottagaren.</p></div></div>
+      <h3>Inskickare</h3>
+      <div class="hp-order__grid">
+        <FormField path="submitter.name" label="Ditt namn" required maxLength={120} />
+        <FormField path="submitter.email" label="Din e-postadress" kind="email" required />
+        <FormField path="submitter.phone" label="Telefonnummer" kind="tel" maxLength={40} />
+        <FormField path="submitter.role" label="Jag fyller i som" required options={[{value:'customer',label:'Kund'},{value:'seller',label:'Säljare'},{value:'other',label:'Annan'}]} hint="Valet ger ingen särskild behörighet." />
+      </div>
+      <h3>Beställande part</h3>
+      <div class="hp-order__grid">
+        <FormField path="orderingParty.companyName" label="Företag / beställare" required />
+        <FormField path="orderingParty.organizationNumber" label="Organisationsnummer" maxLength={30} />
+        <FormField path="orderingParty.contactName" label="Kontaktperson hos beställaren" maxLength={120} />
+        <FormField path="orderingParty.email" label="Beställarens e-post" kind="email" />
+        <FormField path="orderingParty.phone" label="Telefon till beställaren" kind="tel" maxLength={40} />
+        <FormField path="orderingParty.address" label="Faktura- eller kontaktadress" maxLength={500} />
+      </div>
+      <h3>Leverantör och projekt</h3>
+      <div class="hp-order__grid">
+        <FormField path="supplier.companyName" label="Leverantör" required />
+        <FormField path="supplier.manufacturingCountry" label="Tillverkningsland" maxLength={120} />
+        <FormField path="supplier.contactName" label="Leverantörens kontaktperson" maxLength={120} />
+        <FormField path="supplier.contactEmail" label="Leverantörens e-post" kind="email" />
+        <FormField path="project.name" label="Projektets namn" required />
+        <FormField path="project.externalOrderNumber" label="Externt ordernummer / referens" maxLength={100} />
+        <FormField path="project.revision" label="Revision" maxLength={50} />
+        <FormField path="project.drawingReference" label="Ritningsnummer / revision" maxLength={160} />
+        <FormField path="project.location" label="Byggplats" maxLength={200} />
+        <FormField path="delivery.requestedDate" label="Önskat leveransdatum" kind="date" />
+      </div>
+      <div class="hp-order__documents">
+        <h3>Ritnings- och dokumentreferenser</h3>
+        <p class="hp-order__hint">Ange dokumentnummer och revisioner vid behov. Ritningar lämnas separat; inga filer laddas upp här.</p>
+        <div data-document-lines class="hp-order__lines" aria-live="polite"></div>
+        <button type="button" class="hp-order__add" data-add-document>+ Lägg till dokumentreferens</button>
+      </div>
+    </section>
+
+    <section class="hp-order__section" id="hp-order-steel" aria-labelledby="hp-order-steel-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">1</span><div><h2 id="hp-order-steel-title">Stålstomme och hallmått</h2><p>Samtliga mått anges i millimeter. Ingen automatisk konstruktionskontroll görs.</p></div></div>
+      <div class="hp-order__field hp-order__status-field">
+        <label for="hp-status-steelStructure">Ingår stålstomme?</label>
+        <select id="hp-status-steelStructure" data-section="steelStructure"><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select>
+      </div>
+      <div class="hp-order__grid">
+        <FormField path="project.building.lengthMm" label="Hallens längd (mm)" kind="number" />
+        <FormField path="project.building.widthMm" label="Hallens bredd (mm)" kind="number" />
+        <FormField path="project.building.heightMm" label="Hallens höjd (mm)" kind="number" />
+        <FormField path="project.building.heightReference" label="Höjden avser" options={[{value:'clearInside',label:'Fri invändig höjd'},{value:'eaves',label:'Takfotshöjd'},{value:'ridge',label:'Nockhöjd'},{value:'other',label:'Annan'},{value:'unresolved',label:'Behöver fastställas'}]} />
+        <FormField path="project.building.roofPitchDegrees" label="Taklutning (grader)" kind="number" />
+        <FormField path="project.building.steelGrade" label="Stålkvalitet" maxLength={100} />
+        <FormField path="project.building.surfaceTreatment" label="Ytbehandling av stomme" maxLength={160} />
+        <FormField path="project.building.otherFramePart" label="Övrig stomdel" maxLength={160} />
+      </div>
+      <fieldset class="hp-order__checks"><legend>Stomdelar</legend><div class="hp-order__check-grid">{frameParts.map(([key,label]) => <label><input type="checkbox" data-multi="frameParts" value={key} />{label}</label>)}</div></fieldset>
+    </section>
+
+    {groups.slice(0,6).map(group => (
+      <section class="hp-order__section" id={'hp-order-' + group.key} aria-labelledby={'hp-order-title-' + group.key}>
+        <div class="hp-order__section-head"><span class="hp-order__number">{group.code}</span><div><h2 id={'hp-order-title-' + group.key}>{group.heading}</h2><p>{group.info}</p></div></div>
+        <div class="hp-order__field hp-order__status-field"><label for={'hp-status-' + group.key}>Ska materialet ingå?</label><select id={'hp-status-' + group.key} data-section={group.key}><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+        {group.category === 'pvc' && <div class="hp-order__grid"><FormField path="pvcSpecification.weightGm2" label="Dukvikt (g/m²)" kind="number" /><FormField path="pvcSpecification.fireClass" label="Brandklass" maxLength={80} /><FormField path="pvcSpecification.uvResistance" label="UV-beständighet" maxLength={120} /><FormField path="pvcSpecification.materialQuality" label="Material / kvalitet" maxLength={160} /><FormField path="pvcSpecification.fixingSystem" label="Infästningssystem" maxLength={160} /></div>}
+        <div data-item-group={group.category} class="hp-order__lines" aria-live="polite"></div>
+        <button type="button" class="hp-order__add" data-add-line={group.category}>+ Lägg till artikel</button>
+      </section>
+    ))}
+
+    <section class="hp-order__section" id="hp-order-finishes" aria-labelledby="hp-order-finishes-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">6</span><div><h2 id="hp-order-finishes-title">Färger och ytbehandlingar</h2><p>Färg anges på artikeln när det är möjligt. Övergripande ytbehandling kan läggas till här.</p></div></div>
+      <div class="hp-order__field hp-order__status-field"><label for="hp-status-finishes">Färgspecifikation</label><select id="hp-status-finishes" data-section="finishes"><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+      <div data-finish-lines class="hp-order__lines"></div>
+      <button type="button" class="hp-order__add" data-add-finish>+ Lägg till ytbehandling</button>
+    </section>
+
+    {groups.slice(6).map(group => (
+      <section class="hp-order__section" id={'hp-order-' + group.key} aria-labelledby={'hp-order-title-' + group.key}>
+        <div class="hp-order__section-head"><span class="hp-order__number">{group.code}</span><div><h2 id={'hp-order-title-' + group.key}>{group.heading}</h2><p>{group.info}</p></div></div>
+        <div class="hp-order__field hp-order__status-field"><label for={'hp-status-' + group.key}>Ska materialet ingå?</label><select id={'hp-status-' + group.key} data-section={group.key}><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+        <div data-item-group={group.category} class="hp-order__lines" aria-live="polite"></div>
+        <button type="button" class="hp-order__add" data-add-line={group.category}>+ Lägg till artikel</button>
+      </section>
+    ))}
+
+    <section class="hp-order__section" id="hp-order-documentation" aria-labelledby="hp-order-documentation-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">9</span><div><h2 id="hp-order-documentation-title">Dokumentation och kvalitet</h2><p>Markera det som efterfrågas; ett kryss är inte en garanti att dokumentet har levererats.</p></div></div>
+      <div class="hp-order__field hp-order__status-field"><label for="hp-status-documentation">Dokumentationsstatus</label><select id="hp-status-documentation" data-section="documentation"><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+      <fieldset class="hp-order__checks"><legend>Önskade handlingar</legend><div class="hp-order__check-grid">{docOptions.map(([key,label]) => <label><input type="checkbox" data-multi="documentation" value={key} />{label}</label>)}</div></fieldset>
+      <div class="hp-order__field"><label for="hp-order-doc-other">Övrig dokumentation</label><textarea id="hp-order-doc-other" data-path="documentation.otherDetails" maxlength="1000" rows="2"></textarea></div>
+    </section>
+
+    <section class="hp-order__section" id="hp-order-transport" aria-labelledby="hp-order-transport-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">10</span><div><h2 id="hp-order-transport-title">Packning och transport</h2><p>Önskat datum och uttryckligen överenskommet datum hålls isär.</p></div></div>
+      <div class="hp-order__field hp-order__status-field"><label for="hp-status-transport">Transportstatus</label><select id="hp-status-transport" data-section="transport"><option value="unresolved">Behöver fastställas</option><option value="included">Ingår</option><option value="excluded">Ingår inte</option></select></div>
+      <div class="hp-order__grid"><FormField path="delivery.address" label="Leveransadress" maxLength={500} /><FormField path="delivery.agreedDate" label="Överenskommet leveransdatum" kind="date" /><FormField path="delivery.incoterms" label="Leveransvillkor / Incoterms" maxLength={40} /><FormField path="delivery.transportResponsibility" label="Transportansvarig" maxLength={160} /></div>
+      <fieldset class="hp-order__checks"><legend>Packningskrav</legend><div class="hp-order__check-grid">{packing.map(([key,label]) => <label><input type="checkbox" data-multi="packingRequirements" value={key} />{label}</label>)}</div></fieldset>
+      <div class="hp-order__field"><label for="hp-order-transport-notes">Övrigt om transport</label><textarea id="hp-order-transport-notes" data-path="delivery.notes" maxlength="1200" rows="2"></textarea></div>
+    </section>
+
+    <section class="hp-order__section" id="hp-order-review" aria-labelledby="hp-order-review-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">11</span><div><h2 id="hp-order-review-title">Slutkontroll av uppgifterna</h2><p>Markera endast sådant du faktiskt har kontrollerat. Kryssen innebär inte tillverkningsgodkännande.</p></div></div>
+      <fieldset class="hp-order__checks"><legend>Kontrollerade uppgifter</legend><div class="hp-order__check-grid">{checks.map(([key,label]) => <label><input type="checkbox" data-multi="finalReview" value={key} />{label}</label>)}</div></fieldset>
+      <div class="hp-order__field"><label for="hp-order-review-comments">Kommentarer till slutkontrollen</label><textarea id="hp-order-review-comments" data-path="finalReview.comments" maxlength="2000" rows="3"></textarea></div>
+      <div class="hp-order__field"><label for="hp-order-unresolved">Frågor som återstår (en per rad)</label><textarea id="hp-order-unresolved" data-unresolved maxlength="5000" rows="3" placeholder="Exempel: RAL-kod för väggpanel behöver fastställas"></textarea></div>
+      <label class="hp-order__ack"><input type="checkbox" data-details-reviewed />Jag har granskat uppgifterna jag lämnar. Detta är inte en signering eller ett tillverkningsgodkännande.</label>
+    </section>
+
+    <section class="hp-order__section hp-order__last" id="hp-order-send" aria-labelledby="hp-order-send-title">
+      <div class="hp-order__section-head"><span class="hp-order__number">12</span><div><h2 id="hp-order-send-title">Mottagare och PDF-underlag</h2><p>Välj vart PDF:en ska skickas. Ingen tillverkning får påbörjas med detta osignerade underlag.</p></div></div>
+      <div class="hp-order__grid">
+        <FormField path="recipient.email" label="Mottagarens e-postadress" kind="email" required hint="En mottagare per utskick. Adressen visas igen vid granskningen." />
+      </div>
+      <div class="hp-order__verification">
+        <h3>Verifiera din e-post före utskick</h3>
+        <p>En engångskod skickas till inskickarens e-postadress när tjänsten är aktiverad. Det behövs inget konto.</p>
+        <button type="button" class="hp-order__minor" data-request-code disabled={!ready}>Skicka verifieringskod</button>
+        <div class="hp-order__code">
+          <label for="hp-order-code">Engångskod</label>
+          <input id="hp-order-code" data-verification-code inputmode="numeric" maxlength="12" autocomplete="one-time-code" disabled={!ready} />
+          <button type="button" class="hp-order__minor" data-confirm-code disabled={!ready}>Verifiera kod</button>
+        </div>
+        <p class="hp-order__hint" data-verification-status aria-live="polite">Inte verifierad.</p>
+      </div>
+      <button class="hp-order__review-button" type="button" data-preview>Granska uppgifterna</button>
+      <div class="hp-order__summary" data-summary hidden tabindex="-1" aria-label="Sammanfattning av beställningsunderlaget"></div>
+      <p class="hp-order__unsigned"><strong>Ej signerat – ej godkänt för tillverkning.</strong> Eventuella underskrifter hanteras separat av kund och leverantör.</p>
+      <button class="hp-order__submit" type="submit" data-submit disabled={!ready}>{ready ? 'Skapa PDF och skicka' : 'Utskick ännu inte aktiverat'}</button>
+      <p class="hp-order__message" data-message role="status" aria-live="polite"></p>
+      <a data-download class="hp-order__download" hidden rel="nofollow">Ladda ned PDF-underlaget</a>
+    </section>
+  </form>
+  </div>
+  <noscript><p class="hp-order__notice">Formuläret behöver JavaScript. <a href="/kontakt/">Kontakta Hallpartner</a> för att lämna uppgifterna på annat sätt.</p></noscript>
+</div>

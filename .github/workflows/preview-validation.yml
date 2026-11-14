@@ -78,6 +78,44 @@ jobs:
           npm run check
           npm run lint
           node --test tests/*.test.mjs
+      - name: Order specification PHP syntax and offline synthetic regression
+        run: |
+          set -euo pipefail
+          php -r 'if (!extension_loaded("mbstring")) { fwrite(STDERR, "mbstring required for order-spec tests\\n"); exit(1); }'
+          for source in public/api/order-spec.php server/order-spec/*.php server/order-spec/tests/*.php; do php -l "$source"; done
+          cmp shared/order-spec/order-spec-v1.schema.json server/order-spec/schema.v1.json
+          cmp shared/order-spec/example.v1.json server/order-spec/tests/example.v1.json
+          php tests/order-spec-backend.test.php
+          # Reproduce the reviewed Composer lock on every PR validation (no production install).
+      - name: Order specification actual Dompdf A4 and long PDF regression (synthetic only)
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Only ephemeral runner dependencies. No vendor/config/SMTP in the public payload.
+          php -r 'if (!extension_loaded("dom") || !extension_loaded("mbstring")) exit(1);'
+          composer validate --working-dir=server/order-spec --no-check-publish
+          composer install --working-dir=server/order-spec --no-dev --no-scripts --no-plugins --prefer-dist --no-interaction --no-progress
+          composer audit --locked --no-dev --working-dir=server/order-spec
+          php tests/order-spec-backend.test.php
+          php tests/order-spec-pdf-render.test.php "$RUNNER_TEMP/order-spec-long.pdf"
+          sudo apt-get install -y -qq poppler-utils >/dev/null
+          php server/order-spec/tests/long-pdf.test.php
+          pdfinfo "$RUNNER_TEMP/order-spec-long.pdf" | awk '/^Pages:/ { print "PDF page count:", $2; if ($2 < 4) exit 1; found=1 } END {if (!found) exit 1}'
+          pdftotext -layout -enc UTF-8 "$RUNNER_TEMP/order-spec-long.pdf" "$RUNNER_TEMP/order-spec-long.txt"
+          grep -Fq 'SYNTH-0120' "$RUNNER_TEMP/order-spec-long.txt"
+          grep -Fq 'EJ GODKÄNT' "$RUNNER_TEMP/order-spec-long.txt"
+          grep -Fq 'ÄÖÅ' "$RUNNER_TEMP/order-spec-long.txt"
+          echo "PASS: real long PDF includes final row, Swedish/English warning and diacritics"
+      - name: Archive synthetic order PDF and temporary Composer lock for private review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-spec-pdf-review-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/order-spec-long.pdf
+            server/order-spec/composer.lock
+          if-no-files-found: warn
+          retention-days: 7
       - name: PHP intake syntax and independent receiver validation
         run: |
           php -v
@@ -145,8 +183,29 @@ jobs:
         env:
           COMMIT: ${{ steps.revision.outputs.commit }}
         run: node scripts/preview/php-candidate.mjs build "$COMMIT" reports/preview/php-candidate
+      - name: Build and verify order-spec private source candidate (validation only)
+        env:
+          COMMIT: ${{ steps.revision.outputs.commit }}
+        run: node scripts/preview/order-spec-candidate.mjs build "$COMMIT" reports/preview/order-spec-candidate
+      - name: Archive immutable order-spec private source candidate (no credentials)
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-spec-private-candidate-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/order-spec-candidate/
+          if-no-files-found: error
+          retention-days: 7
       - name: Chrome regression on the actual upload payload
         run: node scripts/preview/browser.mjs
+      - name: Order specification browser review at 390px and desktop (no PHP/mail)
+        run: node scripts/preview/order-spec-browser.mjs
+      - name: Archive isolated order specification browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: order-spec-browser-${{ steps.revision.outputs.commit }}-${{ github.run_attempt }}
+          path: reports/preview/order-spec-browser/
+          if-no-files-found: warn
+          retention-days: 7
       - name: Archive quote browser review before remote FTPS checks
         if: always()
         uses: actions/upload-artifact@v4

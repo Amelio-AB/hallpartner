@@ -1,0 +1,408 @@
+{
+  "schemaVersion": 1,
+  "source": "Bestallningsformular_stalhallar_SV_EN_slutversion.pdf",
+  "sourcePages": 4,
+  "sectionCodes": {
+    "steelStructure": "1",
+    "roofSandwichPanels": "2A",
+    "wallSandwichPanels": "2B",
+    "roofSheets": "3A",
+    "wallSheets": "3B",
+    "flashings": "4",
+    "pvcMembrane": "5",
+    "finishes": "6",
+    "fixings": "7",
+    "openings": "8",
+    "documentation": "9",
+    "transport": "10"
+  },
+  "itemCategories": [
+    "roofPanel",
+    "wallPanel",
+    "roofSheet",
+    "wallSheet",
+    "flashing",
+    "pvc",
+    "fixing",
+    "opening"
+  ],
+  "documentCodes": [
+    "productionDrawings",
+    "assemblyDrawings",
+    "structuralCalculations",
+    "ceDocumentationIfApplicable",
+    "declarationsOfPerformance",
+    "materialCertificates",
+    "productSpecifications",
+    "qualityInspection",
+    "packingList",
+    "assemblyInstructions",
+    "certificateOfOriginIfRequired",
+    "other"
+  ],
+  "packagingCodes": [
+    "allComponentsLabelled",
+    "weatherProtected",
+    "numberedPackages",
+    "fixingsPackedSeparately",
+    "packingListIncluded",
+    "loadingPhotos"
+  ],
+  "reviewCodes": [
+    "allDimensionsChecked",
+    "drawingsApproved",
+    "steelStructureSpecified",
+    "roofWallMaterialsSpecified",
+    "sandwichPanelsSpecified",
+    "pvcMembraneSpecified",
+    "ralAndFinishesVerified",
+    "sheetFlashingDimensionsVerified",
+    "fixingsIncluded",
+    "quantitiesChecked",
+    "documentationAgreed",
+    "deliveryTermsDateApproved"
+  ],
+  "frameCodes": [
+    "mainFrames",
+    "columns",
+    "roofBeams",
+    "roofPurlins",
+    "wallGirts",
+    "bracing",
+    "basePlates",
+    "connectionPlates",
+    "reinforcements",
+    "other"
+  ],
+  "sourceMapping": [
+    {
+      "pdf": "Header",
+      "id": "header",
+      "labels": [
+        "Ordernummer / Order number",
+        "Projekt / Project",
+        "Kund / Customer",
+        "Leverantör / Supplier",
+        "Tillverkningsland / Country of manufacture",
+        "Datum / Date",
+        "Önskat leveransdatum / Requested delivery",
+        "Revision"
+      ],
+      "paths": [
+        "project.externalOrderNumber",
+        "project.name",
+        "orderingParty.companyName",
+        "supplier.companyName",
+        "supplier.manufacturingCountry",
+        "SERVER.documentDate",
+        "delivery.requestedDate",
+        "project.revision"
+      ]
+    },
+    {
+      "pdf": "1",
+      "id": "steelStructure",
+      "labels": [
+        "Huvudramar / Main frames",
+        "Pelare / Columns",
+        "Takbalkar / Roof beams",
+        "Takåsar / Roof purlins",
+        "Väggreglar / Wall girts",
+        "Vindkryss / Bracing",
+        "Fotplattor / Base plates",
+        "Anslutningsplåtar / Connection plates",
+        "Förstärkningar / Reinforcements",
+        "Övrigt / Other",
+        "Hallmått (längd, bredd, höjd) / Building dimensions",
+        "Stålkvalitet / Steel grade",
+        "Ytbehandling / Surface treatment"
+      ],
+      "paths": [
+        "project.building.frameParts",
+        "project.building.otherFramePart",
+        "project.building.lengthMm",
+        "project.building.widthMm",
+        "project.building.heightMm",
+        "project.building.steelGrade",
+        "project.building.surfaceTreatment"
+      ]
+    },
+    {
+      "pdf": "2A",
+      "id": "roofSandwichPanels",
+      "labels": [
+        "Paneltyp / Panel type",
+        "Kärna (PIR/PUR/MW) / Core",
+        "Profil / Profile",
+        "Tjocklek / Thickness (mm)",
+        "Bredd / Width (mm)",
+        "Längd / Cut length (mm)",
+        "Antal / Quantity",
+        "RAL / Finish",
+        "Täckande eller total bredd / Effective cover or overall width"
+      ],
+      "paths": [
+        "items[category=roofPanel].itemType",
+        "items[category=roofPanel].core",
+        "items[category=roofPanel].profile",
+        "items[category=roofPanel].dimensions",
+        "items[category=roofPanel].quantity",
+        "items[category=roofPanel].ral",
+        "items[category=roofPanel].widthBasis"
+      ]
+    },
+    {
+      "pdf": "2B",
+      "id": "wallSandwichPanels",
+      "labels": [
+        "Paneltyp / Panel type",
+        "Kärna / Core",
+        "Profil / Profile",
+        "Tjocklek / Thickness",
+        "Bredd / Width",
+        "Längd / Cut length",
+        "Antal / Quantity",
+        "RAL / Finish",
+        "Täckande eller total bredd / Width basis"
+      ],
+      "paths": [
+        "items[category=wallPanel]"
+      ]
+    },
+    {
+      "pdf": "3A",
+      "id": "roofSheets",
+      "labels": [
+        "Takplåt profil / Roof sheet profile",
+        "Nockplåt / Ridge flashing",
+        "Vindskiveplåt / Gable flashing",
+        "Takfotsplåt / Eaves flashing",
+        "Övrig takplåt / Other",
+        "Tjocklek, bredd, längd, antal, RAL / Dimensions, quantity and finish"
+      ],
+      "paths": [
+        "items[category=roofSheet]",
+        "items[category=flashing]"
+      ]
+    },
+    {
+      "pdf": "3B",
+      "id": "wallSheets",
+      "labels": [
+        "Väggplåt profil / Wall sheet profile",
+        "Hörnplåt / Corner flashing",
+        "Sockelplåt / Base flashing",
+        "Överbleck / Head flashing",
+        "Övrig beklädnad / Other",
+        "Profilhöjd / Profile height"
+      ],
+      "paths": [
+        "items[category=wallSheet]",
+        "items[category=flashing]"
+      ]
+    },
+    {
+      "pdf": "4",
+      "id": "flashings",
+      "labels": [
+        "Nock / Ridge",
+        "Gavel / Gable",
+        "Takfot / Eaves",
+        "Hörn / Corner",
+        "Fönsterbleck / Window sill",
+        "Anslutningsplåt / Connection",
+        "Specialbeslag / Custom flashing",
+        "Övrigt / Other",
+        "Ämnes-/utvecklad bredd, färdig bredd, längd, tjocklek, profil/bockning, antal, RAL / Developed/finished width, length, thickness, bending, quantity, RAL",
+        "Ritning / Drawing reference"
+      ],
+      "paths": [
+        "items[category=flashing].itemType",
+        "items[category=flashing].dimensions",
+        "items[category=flashing].foldingProfile",
+        "items[category=flashing].quantity",
+        "items[category=flashing].ral",
+        "items[category=flashing].drawingReference"
+      ]
+    },
+    {
+      "pdf": "5",
+      "id": "pvcMembrane",
+      "labels": [
+        "Takduk / Roof membrane",
+        "Väggduk / Wall membrane",
+        "Kantförstärkning / Edge reinforcement",
+        "Övrigt / Other",
+        "Vikt g/m² / Weight",
+        "Brandklass / Fire class",
+        "UV-beständighet / UV resistance",
+        "Material/kvalitet / Material quality",
+        "Infästningssystem / Fixing system"
+      ],
+      "paths": [
+        "items[category=pvc]",
+        "pvcSpecification.weightGm2",
+        "pvcSpecification.fireClass",
+        "pvcSpecification.uvResistance",
+        "pvcSpecification.materialQuality",
+        "pvcSpecification.fixingSystem"
+      ]
+    },
+    {
+      "pdf": "6",
+      "id": "finishes",
+      "labels": [
+        "Galvaniserad / Galvanized",
+        "Lackerad / Painted",
+        "Pulverlackerad / Powder coated",
+        "Polyesterbelagd / Polyester coated",
+        "Annan / Other",
+        "Glansgrad / Gloss",
+        "Material, RAL, Yta, Kommentar / Material, RAL, Finish, Notes",
+        "Takpanel, Väggpanel, Takplåt, Väggplåt, Beslag, Stålstomme, PVC-duk, Dörrar"
+      ],
+      "paths": [
+        "items[].finish",
+        "items[].ral",
+        "items[].insideRal",
+        "items[].outsideRal",
+        "items[].gloss",
+        "finishAssignments[]"
+      ]
+    },
+    {
+      "pdf": "7",
+      "id": "fixings",
+      "labels": [
+        "Takskruv / Roof screws",
+        "Väggskruv / Wall screws",
+        "Självborrande skruv / Self-drilling screws",
+        "Bultar och muttrar / Bolts and nuts",
+        "Brickor / Washers",
+        "Tätbrickor / Sealing washers",
+        "Ankarskruv / Anchor bolts",
+        "Tätningsband / Sealing tape",
+        "Fogmassa / Sealant",
+        "Panelinfästningar / Panel fixings",
+        "Övrigt / Other",
+        "Separat packning / Packed separately",
+        "Dimension, längd, antal, korrosionsskydd / Size, length, quantity, corrosion protection"
+      ],
+      "paths": [
+        "items[category=fixing]",
+        "delivery.packingRequirements"
+      ]
+    },
+    {
+      "pdf": "8",
+      "id": "openings",
+      "labels": [
+        "Ståldörrar / Steel doors",
+        "Industriportar / Industrial doors",
+        "Skjutportar / Sliding doors",
+        "Vikportar / Folding doors",
+        "Fönster / Windows",
+        "Ventilationsöppningar / Ventilation openings",
+        "Dörr-/portbeslag / Door/gate hardware",
+        "Övrigt / Other",
+        "Mått och antal / Dimensions and quantities"
+      ],
+      "paths": [
+        "items[category=opening]"
+      ]
+    },
+    {
+      "pdf": "9",
+      "id": "documentation",
+      "labels": [
+        "productionDrawings",
+        "assemblyDrawings",
+        "structuralCalculations",
+        "ceDocumentationIfApplicable",
+        "declarationsOfPerformance",
+        "materialCertificates",
+        "productSpecifications",
+        "qualityInspection",
+        "packingList",
+        "assemblyInstructions",
+        "certificateOfOriginIfRequired",
+        "other"
+      ],
+      "paths": [
+        "documentation.requested",
+        "documentation.otherDetails",
+        "documentReferences[]"
+      ]
+    },
+    {
+      "pdf": "10",
+      "id": "transport",
+      "labels": [
+        "Alla komponenter märkta / All components labelled",
+        "Material väderskyddat / Materials weather protected",
+        "Kollin numrerade / Packages numbered",
+        "Skruvar/beslag separat / Fixings separately",
+        "Packlista medföljer / Packing list included",
+        "Fotodokumentation lastning / Loading photo documentation",
+        "Incoterms",
+        "Leveransadress / Delivery address",
+        "Transportansvar / Transport responsibility",
+        "Leveransdatum / Delivery date"
+      ],
+      "paths": [
+        "delivery.packingRequirements",
+        "delivery.incoterms",
+        "delivery.address",
+        "delivery.transportResponsibility",
+        "delivery.agreedDate"
+      ]
+    },
+    {
+      "pdf": "11",
+      "id": "finalReview",
+      "labels": [
+        "allDimensionsChecked",
+        "drawingsApproved",
+        "steelStructureSpecified",
+        "roofWallMaterialsSpecified",
+        "sandwichPanelsSpecified",
+        "pvcMembraneSpecified",
+        "ralAndFinishesVerified",
+        "sheetFlashingDimensionsVerified",
+        "fixingsIncluded",
+        "quantitiesChecked",
+        "documentationAgreed",
+        "deliveryTermsDateApproved"
+      ],
+      "paths": [
+        "finalReview.confirmed",
+        "finalReview.comments",
+        "finalReview.detailsReviewed"
+      ]
+    },
+    {
+      "pdf": "12",
+      "id": "approval",
+      "labels": [
+        "Kund / Customer: Företag, Namn, Befattning, Datum, Underskrift",
+        "Leverantör / Supplier: Företag, Namn, Befattning, Datum, Underskrift",
+        "Ej godkänd / Not approved",
+        "Kund signerat / Customer signed",
+        "Leverantör signerat / Supplier signed",
+        "Klar för tillverkning / Released for production"
+      ],
+      "paths": [
+        "SERVER.approvalStatus=UNSIGNED_NOT_RELEASED",
+        "SERVER.blankSignatureBlocks",
+        "SERVER.documentRevision"
+      ]
+    }
+  ],
+  "notes": [
+    "Each actual item is one item[] element. Panel core/profile and dimensions belong to the same item, not separate rows.",
+    "3A/3B flashing duplicates and 4 refer to the SAME item (category=flashing); do not count twice. ItemType and PDF section label decide placement.",
+    "Color summary is rendered from items and only then non-conflicting finishAssignments. Empty or unresolved never means not supplied.",
+    "Section inclusion is independent from whether an item array is currently populated. Server rejects included empty sections or flags as unresolved as per validated business rules.",
+    "Client-supplied approval, price, discounts, purchase cost or user permissions are forbidden. PDF signatures blank."
+  ]
+}
