@@ -23,7 +23,9 @@ const hallDetails = [
 
 test('only explicitly allowed visitor pages can become Astro routes', () => {
   const actual = walk('src/pages').filter(path => path.endsWith('.astro')).sort();
-  assert.deepEqual(actual, PAGES.map(path => path.replace(/\.html$/, '.astro')).sort());
+  const expected = PAGES.map(path => path.replace(/\.html$/, '.astro')).map(path =>
+    existsSync(join(root, 'src/pages', path)) ? path : path.replace(/\/index\.astro$/, '.astro')).sort();
+  assert.deepEqual(actual, expected);
   for (const path of actual) {
     const page = read('src/pages/' + path);
     assert.match(page, /HallpartnerSiteLayout/);

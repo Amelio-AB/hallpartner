@@ -1,0 +1,17 @@
+{
+  "name": "hallpartner/order-spec-private",
+  "description": "Private PDF and mail runtime, never copy vendor or config into public_html",
+  "type": "project",
+  "license": "UNLICENSED",
+  "require": {
+    "php": ">=8.3",
+    "ext-dom": "*",
+    "ext-mbstring": "*",
+    "dompdf/dompdf": "3.1.6",
+    "phpmailer/phpmailer": "7.1.1"
+  },
+  "config": {
+    "sort-packages": true,
+    "platform-check": true
+  }
+}

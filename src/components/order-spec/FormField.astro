@@ -1,0 +1,40 @@
+---
+export interface Props {
+  path: string;
+  label: string;
+  kind?: 'text' | 'email' | 'tel' | 'date' | 'number';
+  required?: boolean;
+  options?: { value: string; label: string }[];
+  placeholder?: string;
+  hint?: string;
+  maxLength?: number;
+}
+const { path, label, kind = 'text', required = false, options = [], placeholder, hint, maxLength } = Astro.props;
+const effectiveMaxLength = maxLength ?? (kind === 'email' ? 254 : 180);
+const id = 'hp-order-' + path.replaceAll('.', '-');
+const errorId = id + '-error';
+const hintId = hint ? id + '-hint' : undefined;
+const description = [hintId, errorId].filter(Boolean).join(' ');
+---
+
+<div class="hp-order__field">
+  <label for={id}>{label}{required && <span class="hp-order__required" aria-label="obligatoriskt"> *</span>}</label>
+  {options.length > 0 ? (
+    <select id={id} name={path} data-path={path} required={required} aria-describedby={description}>
+      <option value="">Välj alternativ</option>
+      {options.map(option => <option value={option.value}>{option.label}</option>)}
+    </select>
+  ) : (
+    <input
+      id={id} name={path} data-path={path}
+      type={kind === 'number' ? 'text' : kind}
+      inputmode={kind === 'number' ? 'decimal' : undefined}
+      data-number={kind === 'number' ? 'true' : undefined}
+      maxlength={kind === 'date' ? undefined : effectiveMaxLength}
+      required={required} placeholder={placeholder} aria-describedby={description}
+      autocomplete="off"
+    />
+  )}
+  {hint && <p class="hp-order__hint" id={hintId}>{hint}</p>}
+  <span class="hp-order__error" id={errorId} data-error-for={path} aria-live="polite"></span>
+</div>

@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "formType": "hallpartner-order-spec-v1",
+  "idempotencyKey": "b721ed9c-c138-4437-852e-1ba3041c7c02",
+  "submitter": {
+    "name": "Testperson Exempel",
+    "email": "syntetisk@example.invalid",
+    "role": "customer",
+    "phone": "010-000 00 00"
+  },
+  "orderingParty": {
+    "companyName": "Exempelbygg AB",
+    "organizationNumber": "000000-0000",
+    "contactName": "Testperson Exempel",
+    "email": "syntetisk@example.invalid"
+  },
+  "supplier": {
+    "companyName": "Provleverantör AB",
+    "manufacturingCountry": "Sverige"
+  },
+  "project": {
+    "name": "Projekthall 01",
+    "revision": "A",
+    "drawingReference": "SYNTH-01",
+    "building": {
+      "lengthMm": 24000,
+      "widthMm": 12000,
+      "heightMm": 5000,
+      "heightReference": "eaves",
+      "steelGrade": "S355",
+      "surfaceTreatment": "Varmförzinkning",
+      "frameParts": [
+        "mainFrames",
+        "columns",
+        "roofBeams",
+        "roofPurlins",
+        "bracing"
+      ]
+    }
+  },
+  "recipient": {
+    "email": "testmottagare@example.invalid"
+  },
+  "delivery": {
+    "requestedDate": "2027-02-12",
+    "address": "Testvägen 1, 000 00 Exempelstad",
+    "incoterms": "DAP (endast exempel – inte avtalat)",
+    "transportResponsibility": "Ej fastställt",
+    "packingRequirements": [
+      "allComponentsLabelled",
+      "weatherProtected",
+      "packingListIncluded"
+    ]
+  },
+  "sections": {
+    "steelStructure": "included",
+    "roofSandwichPanels": "included",
+    "wallSandwichPanels": "unresolved",
+    "roofSheets": "excluded",
+    "wallSheets": "excluded",
+    "flashings": "included",
+    "pvcMembrane": "excluded",
+    "finishes": "included",
+    "fixings": "included",
+    "openings": "unresolved",
+    "documentation": "included",
+    "transport": "included"
+  },
+  "items": [
+    {
+      "lineId": "ROOF-001",
+      "category": "roofPanel",
+      "itemType": "Takpanel",
+      "quantity": 40,
+      "unit": "pcs",
+      "dimensions": {
+        "thicknessMm": 100,
+        "widthMm": 1000,
+        "lengthMm": 6000
+      },
+      "widthBasis": "effectiveCover",
+      "core": "PIR",
+      "profile": "Takpanel standard",
+      "ral": "RAL 7016",
+      "finish": "Lackerad"
+    },
+    {
+      "lineId": "FLA-001",
+      "category": "flashing",
+      "itemType": "Nockplåt",
+      "quantity": 12,
+      "unit": "pcs",
+      "dimensions": {
+        "thicknessMm": 0.6,
+        "lengthMm": 3000,
+        "developedWidthMm": 400,
+        "finishedWidthMm": 300
+      },
+      "foldingProfile": "Enligt referensritning",
+      "ral": "RAL 7016",
+      "drawingReference": "SYNTH-F01"
+    },
+    {
+      "lineId": "FIX-001",
+      "category": "fixing",
+      "itemType": "Självborrande skruv",
+      "quantity": 320,
+      "unit": "pcs",
+      "dimensions": {
+        "lengthMm": 120
+      },
+      "corrosionProtection": "Korrosivitetsklass ej fastställd"
+    }
+  ],
+  "finishAssignments": [
+    {
+      "materialClass": "steelStructure",
+      "finish": "Varmförzinkning",
+      "notes": "Enbart exempel"
+    }
+  ],
+  "documentation": {
+    "requested": [
+      "assemblyDrawings",
+      "materialCertificates",
+      "packingList"
+    ]
+  },
+  "finalReview": {
+    "confirmed": [],
+    "detailsReviewed": false,
+    "comments": "Inget tillverkningsgodkännande har lämnats."
+  },
+  "unresolvedQuestions": [
+    "Väggmaterial återstår att fastställa.",
+    "Öppningar ska specificeras."
+  ],
+  "documentReferences": [
+    {
+      "number": "SYNTH-01",
+      "revision": "A",
+      "description": "Syntetisk översiktsritning – fil bifogas separat"
+    }
+  ]
+}

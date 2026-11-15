@@ -9,7 +9,7 @@ import { contactReleasePolicy } from './contact-release.mjs';
 
 const ROBOTS = 'User-agent: *\nDisallow: /\n';
 export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enabled, contactEnabled = contactReleasePolicy().enabled) {
-  const assets = []; const links = []; const scripts = []; let noindex = false; let contact = false; let quote = false;
+  const assets = []; const links = []; const scripts = []; let noindex = false; let contact = false; let quote = false; let orderSpec = false;
   walkSync(parse(html), node => {
     if (!node.name) return;
     const a = node.attributes;
@@ -21,12 +21,22 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
     if (a['data-enabled'] !== undefined) {
       const permitted = (page === 'offert/index.html' && a.id === 'hp-offert-guide' && quoteEnabled) ||
         (page === 'kontakt/index.html' && a.id === 'hp-contact-form' && contactEnabled);
+      // Public order specification is an isolated, fail-closed review form.
+      // A transport rollout requires a separately approved, versioned release gate.
+      const orderSpecForm = page === 'offert/bestallningsformular/index.html' && a.id === 'hp-order-spec-form';
+      assert(!orderSpecForm || a['data-enabled'] === 'false', 'Order specification must remain disabled in preview');
       assert(a['data-enabled'] === (permitted ? 'true' : 'false'),
         'Unapproved form activation or mismatched form release: ' + page);
     }
-    if (node.name === 'form') assert(page === 'kontakt/index.html' && a.id === 'hp-contact-form' &&
-      a['data-enabled'] === (contactEnabled ? 'true' : 'false') && !a.action,
-      'Unexpected form transport or unapproved activation in ' + page);
+    if (node.name === 'form') {
+      const permittedContact = page === 'kontakt/index.html' && a.id === 'hp-contact-form' &&
+        a['data-enabled'] === (contactEnabled ? 'true' : 'false') && !a.action;
+      const permittedOrderSpec = page === 'offert/bestallningsformular/index.html' &&
+        a.id === 'hp-order-spec-form' && a['data-enabled'] === 'false' && !a.action;
+      assert(permittedContact || permittedOrderSpec,
+        'Unexpected form transport or unapproved activation in ' + page);
+      if (permittedOrderSpec) orderSpec = true;
+    }
     if (a.id === 'hp-contact-form') contact = a['data-enabled'] === (contactEnabled ? 'true' : 'false');
     if (a.id === 'hp-offert-guide') quote = a['data-enabled'] === (quoteEnabled ? 'true' : 'false');
     if (a.src) assets.push(a.src);
@@ -44,6 +54,7 @@ export function inspectHtml(html, page, quoteEnabled = quoteReleasePolicy().enab
     if (contactEnabled) assert(links.includes('/integritet/'), 'Active contact form needs privacy notice');
   }
   if (page === 'offert/index.html') assert(quote, 'Quote mode does not match approved preview release');
+  if (page === 'offert/bestallningsformular/index.html') assert(orderSpec, 'Public order specification must be an explicitly disabled HTML form');
   if (page === 'offert/index.html' && quoteEnabled) {
     assert(links.includes('/integritet/'), 'Active quote must link to the approved privacy notice');
   }
