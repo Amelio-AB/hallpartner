@@ -21,7 +21,9 @@ $valid = hp_validate_lead(['contractVersion' => 1, 'technicalId' => 'quote-flow'
 if (!$valid['valid']) throw new RuntimeException('Invalid fixture');
 $config = ['smtp_host' => 'private-host-must-not-leak.invalid', 'smtp_username' => 'private-user',
     'smtp_password' => 'private-password', 'smtp_from' => 'sender@example.invalid',
-    'recipient' => 'internal@example.invalid', 'mail_environment' => $environment];
+    'recipient' => 'internal@example.invalid',
+    'contact_recipient' => 'contact-internal@example.invalid',
+    'mail_environment' => $environment];
 $factory = static function () use ($config, $port) {
     $mail = hp_mailer($config, 587);
     $mail->Host = '127.0.0.1';
