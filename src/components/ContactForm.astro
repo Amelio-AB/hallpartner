@@ -3,7 +3,11 @@ import '../styles/hallpartner-leads.css';
 
 // Review is interactive but cannot submit real personal data until a verified
 // server, approved recipient and published privacy notice are configured.
-const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
+// No public contact form without all three release approvals.
+const enabled =
+  import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true' &&
+  import.meta.env.PUBLIC_HP_RECEIVER_VERIFIED === 'true' &&
+  import.meta.env.PUBLIC_HP_PRIVACY_APPROVED === 'true';
 const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
 ---
 
@@ -16,7 +20,9 @@ const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
     {publicLaunch && !enabled
       ? <>Vi tar emot meddelanden via <a href="mailto:info@hallpartner.se">info@hallpartner.se</a> eller telefon. Det digitala formuläret öppnar inom kort.</>
       : enabled
-        ? <>Kontakta Hallpartner om ditt projekt. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur dina uppgifter hanteras</a>.</>
+        ? <>Kontakta Hallpartner om ditt projekt. Skicka inte känsliga personuppgifter. Läs {publicLaunch
+          ? <a href="/integritetspolicy/">hur dina uppgifter hanteras</a>
+          : <a href="/integritet/">hur dina uppgifter hanteras</a>}.</>
         : 'Förhandsvisning – kontaktformuläret är ännu inte aktivt. Ring eller mejla Hallpartner om du vill få svar.'}
   </p>
   {(!publicLaunch || enabled) && <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
@@ -98,7 +104,7 @@ const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
           headline.className = 'hp-contact-form__status-title';
           headline.textContent = 'Tack! Vi har tagit emot ditt meddelande.';
           const explanation = document.createElement('span');
-          explanation.textContent = 'Mottagarsystemet har tagit emot meddelandet för Amelios utvecklingspreview.';
+          explanation.textContent = 'Hallpartner har tagit emot ditt meddelande och återkommer så snart vi kan.';
           const referenceLabel = document.createElement('span');
           referenceLabel.className = 'hp-contact-form__status-label';
           referenceLabel.textContent = 'Ditt ärendenummer';
