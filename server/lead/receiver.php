@@ -79,6 +79,13 @@ if (!$validation['valid']) hp_reply(422, ['status' => 'validation-error', 'field
 if (!hp_configuration_allowed($validation['kind'], $config)) {
     hp_reply(403, ['status' => 'failed']);
 }
+// Require a dedicated approved destination for contact. Never route contact to
+// the quote mailbox by accident if the contact route is missing or malformed.
+if ($validation['kind'] === 'hallpartner-contact-v1' &&
+    (!is_string($config['contact_recipient'] ?? null) ||
+     !filter_var($config['contact_recipient'], FILTER_VALIDATE_EMAIL))) {
+    hp_reply(503, ['status' => 'failed']);
+}
 
 $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');
 if ($ip === '' || !hp_allow_rate($rateRoot, $config['rate_secret'], $ip, time())) {
