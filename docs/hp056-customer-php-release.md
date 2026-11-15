@@ -39,6 +39,36 @@ avstängda. DNS, Beebyte-mail, Loopia och Amelios preview lämnas orörda.
 - PHP-malltester och den isolerade SMTP-loopbackregressionen kontrollerar
   både preview och produktion, inklusive hantering av misslyckad kundkopia.
 
+## Mottagarrouting, kodändring efter SMTP-provet 2026-11-15
+
+Det separata e-postkontot `offert@hallpartner.se` hos Beebyte är verifierat
+i båda riktningar via webbmail. Ett manuellt, syntetiskt PHP/SMTP-prov från
+Inleed `s188354` skickades till `offert@hallpartner.se`; webbmailen
+bekräftar mottagning av exakt samma referens `1BBCDD44ECC7`.
+Detta är **inte** ett aktivt formulärtest.
+
+Vid framtida godkänd aktivering gäller följande **serverstyrda** routing:
+
+- `recipient`: `offert@hallpartner.se` – offertguide V2 och äldre offert V1.
+- `contact_recipient`: `info@hallpartner.se` – kontaktformulär V1.
+- `smtp_username` och `smtp_from`: `offert@hallpartner.se` i båda fallen.
+- Internmejl får besökarens e-postadress som Reply-To.
+  Kundkopiornas Reply-To styrs till samma interna mottagare som formulärtypen.
+- Om kontaktmottagare saknas/är ogiltig får den **inte** falla tillbaka
+  till offertinkorgen; mottagaren svarar med fel innan någon SMTP-sändning.
+
+Dessa routingändringar är **ännu inte installerade** på kundens Inleed-server.
+Den nuvarande privata releasekatalogen är fortfarande den låsta revisionen
+`9cf0cb2753ff33ae669b356250d4db88bb03575c`, medan PR #66 får
+en ny HEAD efter routingändringarna. Publicera endast den nya revisionen
+via en separat verifierad källrelease efter gröna tester och driftgodkännande.
+
+Konfigurationsfältet `contact_recipient` måste sättas i kundens
+`shared/config.local.php` (0600). Visa aldrig SMTP-lösenord eller
+`rate_secret` i chatt, CI eller loggar. Formulären förblir avstängda
+(`enabled=false`, `privacy_approved=false`, tom allowlist) tills
+både inskick, kundkopior och mottagarpolicy testats separat.
+
 ## Säker driftsättning, ännu ej utförd
 
 1. Granska Draft-PR och verifiera **exakt låst commit**, lint, PHP-tester,
