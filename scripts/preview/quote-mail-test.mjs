@@ -49,7 +49,8 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
     const result=JSON.parse(out);
     assert.equal(result.status,['primary-rejected','contact-primary-rejected'].includes(mode)?'unknown':'success',mode+': '+err);
     assert.equal(connections,['primary-rejected','contact-primary-rejected'].includes(mode)?1:2,'no automatic retry');
-    assert.deepEqual(messages[0].to,['RCPT TO:<internal@example.invalid>']);
+    assert.deepEqual(messages[0].to,[contact?'RCPT TO:<contact-internal@example.invalid>':'RCPT TO:<internal@example.invalid>'],
+      'primary request routed to the correct internal mailbox');
     if (contact && mode !== 'contact-primary-rejected') {
       const internal = decode(messages[0].data);
       assert.match(internal,/multipart\/alternative/i,'Contact internal has text and HTML');
@@ -88,7 +89,10 @@ for (const mode of ['accepted','copy-rejected','copy-disconnected','copy-timeout
         if (!contact) assert.match(mail,/Lager eller f/);
         else assert.match(mail,/Syntetisk kontakt/);
         assert.doesNotMatch(mail,/private-host|private-user|private-password|X-Mailer:|storage|need_help/);
-        assert.match(mail,/Reply-To: Hallpartner <internal@example.invalid>/);
+        assert.match(mail,contact
+          ? /Reply-To: Hallpartner <contact-internal@example.invalid>/
+          : /Reply-To: Hallpartner <internal@example.invalid>/,
+          'customer reply routes to the corresponding internal mailbox');
         assert.doesNotMatch(mail,/Amelio/i);
         if (production) assert.doesNotMatch(mail,/testmilj|utvecklingspreview/i);
         else assert.match(mail,/testmilj/i);
