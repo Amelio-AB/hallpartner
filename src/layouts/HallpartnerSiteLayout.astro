@@ -50,7 +50,7 @@ const ampFooterHtml = useAmpFooter
     {useAmpFooter && <link rel="stylesheet" href="/generated/amp-003-footer.css" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Saira:wght@600&display=swap" />
   </head>
   <body class="hp-draft hp-site hp-amp-site-header" data-header-mode={isHome ? 'hero' : 'solid'}>
     <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
@@ -79,3 +79,19 @@ const ampFooterHtml = useAmpFooter
     )}
   </body>
 </html>
+
+
+<!-- Customer typography preview: headings only. No change to AMP forms, navigation or mail. -->
+<style is:global>
+  .hp-site {
+    --hp-heading-font: 'Saira', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  /* Existing Inter body copy, buttons and menu remain unchanged. */
+  .hp-site .hp-draft-main :is(h1, h2, h3),
+  .hp-site .hp-draft-main .hp-quote-shell .qf :is(h1, h2, h3) {
+    font-family: var(--hp-heading-font);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+</style>
