@@ -1,6 +1,21 @@
 <?php
 declare(strict_types=1);
 
+/** Select the internal mailbox from server-only configuration, never from request answers. */
+function hp_delivery_recipient(array $config, string $kind): string
+{
+    $key = match ($kind) {
+        'hallpartner-contact-v1' => 'contact_recipient',
+        'hallpartner-offert-v1', 'hallpartner-offert-v2-review' => 'recipient',
+        default => null,
+    };
+    $address = $key === null ? null : ($config[$key] ?? null);
+    if (!is_string($address) || filter_var($address, FILTER_VALIDATE_EMAIL) === false) {
+        throw new InvalidArgumentException('No approved delivery recipient for form kind');
+    }
+    return $address;
+}
+
 /** A fresh mailer per envelope prevents visitor/internal recipients leaking across messages. */
 function hp_mailer(array $config, int $port): \PHPMailer\PHPMailer\PHPMailer
 {
@@ -36,6 +51,12 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
         error_log('[Hallpartner intake] Mail environment not configured');
         return ['status' => 'unknown'];
     }
+    try {
+        $internalRecipient = hp_delivery_recipient($config, $kind);
+    } catch (InvalidArgumentException) {
+        // Missing contact route must not silently fall back to the quote inbox.
+        return ['status' => 'unknown'];
+    }
     $factory ??= static fn() => hp_mailer($config, $port);
     try {
         if ($kind === 'hallpartner-offert-v2-review') {
@@ -44,7 +65,7 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
             require_once __DIR__ . '/contact-email-template.php';
         }
         $primary = $factory();
-        $primary->addAddress($config['recipient']);
+        $primary->addAddress($internalRecipient);
         $primary->addReplyTo($answers['contact.email'], $answers['contact.name']);
         $primary->Subject = $subject . ' [' . (in_array($kind, ['hallpartner-offert-v2-review', 'hallpartner-contact-v1'], true) ? hp_quote_case_label($reference) : $reference) . ']';
         if ($kind === 'hallpartner-offert-v2-review') {
@@ -76,7 +97,7 @@ function hp_deliver_enquiry(array $config, int $port, string $kind, array $answe
         $copy->Hostname = substr(strrchr($config['smtp_from'], '@'), 1);
         $copy->XMailer = ' ';
         $copy->addAddress($answers['contact.email']);
-        $copy->addReplyTo($config['recipient'], 'Hallpartner');
+        $copy->addReplyTo($internalRecipient, 'Hallpartner');
         $short = hp_quote_case_label($reference);
         $copy->isHTML(true);
         if ($kind === 'hallpartner-contact-v1') {
