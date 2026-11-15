@@ -159,8 +159,8 @@ try {
         assert.match(family, /Saira/, label + ' must use Saira: ' + route);
         assert.equal(weight, '500', label + ' must use Saira Medium 500: ' + route);
       }
-      if (m.ampDescription) assert.match(m.ampDescription, /Inter/, 'Mega menu supporting copy not Inter: ' + route);
-      if (m.ampIntroDescription) assert.match(m.ampIntroDescription, /Inter/, 'Mega intro description not Inter: ' + route);
+      if (m.ampDescription) assert.match(m.ampDescription, /Manrope/, 'Mega menu supporting copy not Manrope: ' + route);
+      if (m.ampIntroDescription) assert.match(m.ampIntroDescription, /Manrope/, 'Mega intro description not Manrope: ' + route);
       if (m.ampCta) {
         assert.match(m.ampCta, /Saira/, 'AMP CTA should remain Saira: ' + route);
         assert.equal(m.ampCtaWeight, '600', 'AMP CTA should remain SemiBold 600: ' + route);
