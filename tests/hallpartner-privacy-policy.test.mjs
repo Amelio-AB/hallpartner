@@ -21,8 +21,9 @@ test('Hallpartner and temporary Amelio preview have separate privacy routes', ()
   assert.match(policy, /Google Analytics/);
   assert.match(policy, /samtycke/);
   assert.match(policy, /info@hallpartner\.se|hallpartnerContact\.email/);
-  assert.match(preview, /Amelio AB är personuppgiftsansvarig/);
-  assert.match(preview, /kontakt@amelio\.se/);
+  assert.match(preview, /Hallpartners integritetspolicy/);
+  assert.match(preview, /mailto:info@hallpartner\.se/);
+  assert.doesNotMatch(preview, /Amelio AB är personuppgiftsansvarig|kontakt@amelio\.se/);
 });
 
 test('AMP-003 and legacy Footer link to the Hallpartner policy route', () => {
