@@ -33,8 +33,17 @@ test('Saira Medium 500 covers all menu links and headings without affecting UI s
   assert.match(section, /\.hm :is\(\.hm__description, \.hm__menu-intro p\)\s*\{\s*font-family: var\(--hp-body-font\)/,
     'Mega-menu description copy must use the shared Manrope body font');
   assert.match(section, /\.hp-draft-nav a:not\(\.hp-draft-nav__cta\)/);
-  assert.doesNotMatch(section, /(?:font-size|padding|margin|width|height|gap|border|display|transform|transition)\s*:/,
-    'Menu-only typography cannot alter layout or interactions');
+  // Inspect CSS declarations only: @media (min-width: ...) is a responsive
+  // condition, not a forbidden layout change. Still reject real layout rules.
+  const declarationBlocks = section.replace(/\/\*[\s\S]*?\*\//g, '').match(/\{[^{}]*\}/g) ?? [];
+  assert.ok(declarationBlocks.length >= 3, 'Missing expected navigation CSS rules');
+  const layoutDeclarations = /(?:^|[;{])\s*(?:font-size|padding|margin|width|height|min-width|max-width|min-height|max-height|gap|row-gap|column-gap|border|display|transform|transition)\s*:/m;
+  for (const block of declarationBlocks) {
+    assert.doesNotMatch(block, layoutDeclarations,
+      'Menu-only typography cannot alter layout or interactions');
+  }
+  assert.match('{ padding: 1rem; }', layoutDeclarations,
+    'Layout regression guard must still detect forbidden properties');
   assert.doesNotMatch(section, /\.hm__cta\s*[,{]/, 'Do not change the approved Saira 600 CTA');
 
   assert.match(header, /\.hp-amp-site-header \.hm \{ --hm-font: Inter,/);
