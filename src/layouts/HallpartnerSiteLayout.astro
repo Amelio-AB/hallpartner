@@ -87,11 +87,30 @@ const ampFooterHtml = useAmpFooter
     --hp-heading-font: 'Saira', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  /* Existing Inter body copy, buttons and menu remain unchanged. */
+  /* Body copy, ordinary navigation links and form field labels remain Inter. */
   .hp-site .hp-draft-main :is(h1, h2, h3),
   .hp-site .hp-draft-main .hp-quote-shell .qf :is(h1, h2, h3) {
     font-family: var(--hp-heading-font);
     font-weight: 600;
     letter-spacing: -0.02em;
+  }
+
+  /*
+   * CTAs and action buttons use the same Saira SemiBold as headings.
+   * Scope to actual actions; do not change regular links, menu labels,
+   * inputs, labels, select cards or the AMP header menu-toggle icon.
+   */
+  .hp-site :is(#hp-amp-header-target .hm__cta, .hp-draft-nav__cta),
+  .hp-site .hp-draft-main :is(
+    button,
+    .hp-home-button,
+    .hp-home-textlink,
+    .hp-info__button,
+    .hp-draft-cta,
+    .hp-contact-hero__action
+  ) {
+    font-family: var(--hp-heading-font);
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 </style>
