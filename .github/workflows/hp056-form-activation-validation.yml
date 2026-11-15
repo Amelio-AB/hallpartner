@@ -68,6 +68,7 @@ jobs:
           node scripts/preview/chrome-preflight.mjs
           node scripts/preview/active-contact-browser.mjs
           node scripts/preview/active-quote-browser.mjs
+          node scripts/preview/typography-browser.mjs
 
       - name: Confirm no public deployment
         run: |
