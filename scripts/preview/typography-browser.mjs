@@ -90,6 +90,7 @@ try {
   const metricsExpression = [
     '(() => {',
     '  const font = el => el ? getComputedStyle(el).fontFamily : null;',
+    '  const weight = el => el ? getComputedStyle(el).fontWeight : null;',
     '  const q = selector => document.querySelector(selector);',
     '  return {',
     '    heading: font(q(".hp-draft-main h1")),',
@@ -97,6 +98,22 @@ try {
     '    footerHeading: font(q(".af__group-heading")),',
     '    footerCTA: font(q(".af__quick-link")),',
     '    nav: font(q(".hp-draft-header .hp-draft-nav a:not(.hp-draft-nav__cta)")),',
+    '    ampNav: font(q(".hm__desktop-nav .hm__nav-link, .hm__desktop-nav .hm__disclosure")),',
+    '    ampNavWeight: weight(q(".hm__desktop-nav .hm__nav-link, .hm__desktop-nav .hm__disclosure")),',
+    '    ampSub: font(q(".hm__sublink")),',
+    '    ampSubWeight: weight(q(".hm__sublink")),',
+    '    ampGroupHeading: font(q(".hm__group-heading")),',
+    '    ampGroupHeadingWeight: weight(q(".hm__group-heading")),',
+    '    ampIntro: font(q(".hm__menu-intro strong")),',
+    '    ampIntroWeight: weight(q(".hm__menu-intro strong")),',
+    '    ampIntroDescription: font(q(".hm__menu-intro p")),',
+    '    ampFeatured: font(q(".hm__featured")),',
+    '    ampFeaturedWeight: weight(q(".hm__featured")),',
+    '    ampDescription: font(q(".hm__description")),',
+    '    ampCta: font(q(".hm__cta")),',
+    '    ampCtaWeight: weight(q(".hm__cta")),',
+    '    mobileNav: font(q(".hm__mobile-link, .hm__mobile-overview, .hm__mobile-details summary")),',
+    '    mobileNavWeight: weight(q(".hm__mobile-link, .hm__mobile-overview, .hm__mobile-details summary")),',
     '    headerCTA: font(q(".hp-draft-header .hp-draft-nav__cta")),',
     '    pageCTA: font(q(".hp-draft-main .hp-home-button, .hp-draft-main .hp-detail__button, .hp-draft-main .hp-stal__button, .hp-draft-main .hp-info__button, .hp-draft-main .hp-contact-hero__action, .hp-draft-main button[type=submit]")),',
     '    scrollWidth: document.documentElement.scrollWidth,',
@@ -124,7 +141,30 @@ try {
       assert.match(m.body ?? '', /Manrope/, 'Body font wrong: ' + route);
       assert.match(m.footerHeading ?? '', /Saira/, 'Footer heading wrong: ' + route);
       assert.match(m.footerCTA ?? '', /Saira/, 'Footer CTA wrong: ' + route);
-      if (m.nav) assert.match(m.nav, /Inter/, 'Navigation font changed: ' + route);
+      if (m.nav) assert.match(m.nav, /Saira/, 'Fallback nav not Saira: ' + route);
+      if (width === 1440) {
+        assert.ok(m.ampIntro, 'The mega-menu intro heading must exist: ' + route);
+        assert.ok(m.ampFeatured, 'The mega-menu featured link must exist: ' + route);
+        assert.ok(m.ampGroupHeading, 'The mega-menu group headings must exist: ' + route);
+      }
+      for (const [label, family, weight] of [
+        ['AMP desktop navigation', m.ampNav, m.ampNavWeight],
+        ['AMP submenu link', m.ampSub, m.ampSubWeight],
+        ['AMP group heading', m.ampGroupHeading, m.ampGroupHeadingWeight],
+        ['AMP intro heading', m.ampIntro, m.ampIntroWeight],
+        ['AMP featured link', m.ampFeatured, m.ampFeaturedWeight],
+        ['AMP mobile navigation', m.mobileNav, m.mobileNavWeight]
+      ]) {
+        if (!family) continue;
+        assert.match(family, /Saira/, label + ' must use Saira: ' + route);
+        assert.equal(weight, '500', label + ' must use Saira Medium 500: ' + route);
+      }
+      if (m.ampDescription) assert.match(m.ampDescription, /Manrope/, 'Mega menu supporting copy not Manrope: ' + route);
+      if (m.ampIntroDescription) assert.match(m.ampIntroDescription, /Manrope/, 'Mega intro description not Manrope: ' + route);
+      if (m.ampCta) {
+        assert.match(m.ampCta, /Saira/, 'AMP CTA should remain Saira: ' + route);
+        assert.equal(m.ampCtaWeight, '600', 'AMP CTA should remain SemiBold 600: ' + route);
+      }
       if (m.headerCTA) assert.match(m.headerCTA, /Saira/, 'Header CTA wrong: ' + route);
       if (m.pageCTA) assert.match(m.pageCTA, /Saira/, 'Page CTA wrong: ' + route);
       assert.ok(m.scrollWidth <= width + 1, 'Horizontal overflow: ' + route + ' at ' + width + 'px; scroll=' + m.scrollWidth);
@@ -136,7 +176,7 @@ try {
   writeFileSync('reports/preview/typography/result.json',
     JSON.stringify({ pages: PAGES.length, widths: [390, 1440], results }, null, 2) + '\n');
   console.log('HALLPARTNER TYPOGRAPHY CHROME PASS: ' + results.length +
-    ' page/viewport combinations; heading, body, CTA, footer, menu, overflow');
+    ' page/viewport combinations; Saira heading/CTA, Manrope body, Saira Medium menu, overflow');
 } finally {
   for (const task of waiting.values()) task.reject(Error('Chrome shutting down'));
   if (socket) socket.close();

@@ -116,3 +116,48 @@
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/plathall/"]::before { background-image: url('/icons/halls/plathall.svg'); }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/isolerad-hall/"]::before { background-image: url('/icons/halls/isolerad-hall.svg'); }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/talthall/"]::before { background-image: url('/icons/halls/talthall.svg'); }
+
+
+/*
+ * HP-072 — Saira Medium 500 for all navigation labels and menu headings.
+ * Includes the mega-menu introduction, group headings, link labels, featured
+ * link, mobile navigation and the no-JS fallback. Descriptions use Manrope.
+ * The existing Saira 600 CTA, sizing, spacing and behavior are untouched.
+ */
+.hp-amp-site-header {
+  --hp-nav-font: 'Saira', Inter, system-ui, sans-serif;
+}
+
+.hp-amp-site-header .hm :is(
+  .hm__nav-link,
+  .hm__disclosure,
+  .hm__sublink,
+  .hm__group-heading,
+  .hm__menu-intro strong,
+  .hm__featured,
+  .hm__mobile-link,
+  .hm__mobile-overview,
+  .hm__mobile-details > summary
+) {
+  font-family: var(--hp-nav-font);
+  font-weight: 500;
+}
+
+/* AMP spacious-navigation currently sets desktop font-weight: 600 with a
+   more specific selector. Override only weight, not sizing or alignment. */
+@media (min-width: 64.001rem) {
+  .hp-amp-site-header .hm:is(.hm--classic-dropdown, .hm--classic-mega-menu)[data-navigation-appearance="spacious"]
+    .hm__desktop-nav .hm__nav-item > :is(.hm__nav-link, .hm__disclosure) {
+    font-weight: 500;
+  }
+}
+
+.hp-amp-site-header .hm :is(.hm__description, .hm__menu-intro p) {
+  font-family: var(--hp-body-font);
+}
+
+/* Preserve navigation typography without JavaScript, but not its Saira 600 CTA. */
+.hp-site .hp-draft-header .hp-draft-nav a:not(.hp-draft-nav__cta) {
+  font-family: var(--hp-nav-font);
+  font-weight: 500;
+}
