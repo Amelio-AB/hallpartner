@@ -97,6 +97,11 @@ try {
     '    footerHeading: font(q(".af__group-heading")),',
     '    footerCTA: font(q(".af__quick-link")),',
     '    nav: font(q(".hp-draft-header .hp-draft-nav a:not(.hp-draft-nav__cta)")),',
+    '    ampNav: font(q(".hm__desktop-nav .hm__nav-link, .hm__desktop-nav .hm__disclosure")),',
+    '    ampSub: font(q(".hm__sublink")),',
+    '    ampDescription: font(q(".hm__description")),',
+    '    ampCta: font(q(".hm__cta")),',
+    '    mobileNav: font(q(".hm__mobile-link, .hm__mobile-overview, .hm__mobile-details summary")),',
     '    headerCTA: font(q(".hp-draft-header .hp-draft-nav__cta")),',
     '    pageCTA: font(q(".hp-draft-main .hp-home-button, .hp-draft-main .hp-detail__button, .hp-draft-main .hp-stal__button, .hp-draft-main .hp-info__button, .hp-draft-main .hp-contact-hero__action, .hp-draft-main button[type=submit]")),',
     '    scrollWidth: document.documentElement.scrollWidth,',
@@ -124,7 +129,12 @@ try {
       assert.match(m.body ?? '', /Manrope/, 'Body font wrong: ' + route);
       assert.match(m.footerHeading ?? '', /Saira/, 'Footer heading wrong: ' + route);
       assert.match(m.footerCTA ?? '', /Saira/, 'Footer CTA wrong: ' + route);
-      if (m.nav) assert.match(m.nav, /Inter/, 'Navigation font changed: ' + route);
+      if (m.nav) assert.match(m.nav, /Rajdhani/, 'Fallback nav not Rajdhani: ' + route);
+      if (m.ampNav) assert.match(m.ampNav, /Rajdhani/, 'AMP desktop nav not Rajdhani: ' + route);
+      if (m.ampSub) assert.match(m.ampSub, /Rajdhani/, 'AMP submenu not Rajdhani: ' + route);
+      if (m.mobileNav) assert.match(m.mobileNav, /Rajdhani/, 'AMP mobile nav not Rajdhani: ' + route);
+      if (m.ampDescription) assert.match(m.ampDescription, /Inter/, 'Mega menu supporting copy not Inter: ' + route);
+      if (m.ampCta) assert.match(m.ampCta, /Saira/, 'AMP CTA should remain Saira: ' + route);
       if (m.headerCTA) assert.match(m.headerCTA, /Saira/, 'Header CTA wrong: ' + route);
       if (m.pageCTA) assert.match(m.pageCTA, /Saira/, 'Page CTA wrong: ' + route);
       assert.ok(m.scrollWidth <= width + 1, 'Horizontal overflow: ' + route + ' at ' + width + 'px; scroll=' + m.scrollWidth);
@@ -136,7 +146,7 @@ try {
   writeFileSync('reports/preview/typography/result.json',
     JSON.stringify({ pages: PAGES.length, widths: [390, 1440], results }, null, 2) + '\n');
   console.log('HALLPARTNER TYPOGRAPHY CHROME PASS: ' + results.length +
-    ' page/viewport combinations; heading, body, CTA, footer, menu, overflow');
+    ' page/viewport combinations; Saira heading/CTA, Manrope body, Rajdhani menu, overflow');
 } finally {
   for (const task of waiting.values()) task.reject(Error('Chrome shutting down'));
   if (socket) socket.close();
