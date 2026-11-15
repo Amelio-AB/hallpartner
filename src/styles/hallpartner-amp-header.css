@@ -119,13 +119,13 @@
 
 
 /*
- * HP-072 — menu typography experiment only.
- * Rajdhani SemiBold for menu labels (desktop, mega menu and mobile).
- * Preserve Saira on CTA buttons; keep supporting descriptions in Inter.
- * No changes to spacing, size, breakpoints, icons, hover or AMP behavior.
+ * HP-072 — Saira Medium 500 for all navigation labels and menu headings.
+ * Includes the mega-menu introduction, group headings, link labels, featured
+ * link, mobile navigation and the no-JS fallback. Descriptions remain Inter.
+ * The existing Saira 600 CTA, sizing, spacing and behavior are untouched.
  */
 .hp-amp-site-header {
-  --hp-nav-font: 'Rajdhani', Inter, system-ui, sans-serif;
+  --hp-nav-font: 'Saira', Inter, system-ui, sans-serif;
 }
 
 .hp-amp-site-header .hm :is(
@@ -133,20 +133,31 @@
   .hm__disclosure,
   .hm__sublink,
   .hm__group-heading,
+  .hm__menu-intro strong,
+  .hm__featured,
   .hm__mobile-link,
   .hm__mobile-overview,
   .hm__mobile-details > summary
 ) {
   font-family: var(--hp-nav-font);
-  font-weight: 600;
+  font-weight: 500;
 }
 
-.hp-amp-site-header .hm .hm__description {
+/* AMP spacious-navigation currently sets desktop font-weight: 600 with a
+   more specific selector. Override only weight, not sizing or alignment. */
+@media (min-width: 64.001rem) {
+  .hp-amp-site-header .hm:is(.hm--classic-dropdown, .hm--classic-mega-menu)[data-navigation-appearance="spacious"]
+    .hm__desktop-nav .hm__nav-item > :is(.hm__nav-link, .hm__disclosure) {
+    font-weight: 500;
+  }
+}
+
+.hp-amp-site-header .hm :is(.hm__description, .hm__menu-intro p) {
   font-family: Inter, system-ui, sans-serif;
 }
 
-/* Retain the no-JavaScript navigation fallback, not its CTA. */
+/* Preserve navigation typography without JavaScript, but not its Saira 600 CTA. */
 .hp-site .hp-draft-header .hp-draft-nav a:not(.hp-draft-nav__cta) {
   font-family: var(--hp-nav-font);
-  font-weight: 600;
+  font-weight: 500;
 }
