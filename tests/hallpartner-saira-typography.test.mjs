@@ -15,6 +15,10 @@ test('Manrope is the default body; AMP quote text uses the same font, but menu s
   assert.match(layout, /\.hp-site\.hp-draft\s*\{\s*font-family:\s*var\(--hp-body-font\)/);
   assert.match(layout, /\.hp-site \.hp-quote-shell \.qf\s*\{\s*--quote-font-body:\s*var\(--hp-body-font\)/);
   assert.match(layout, /\.hp-site \.hp-draft-header\s*\{\s*font-family:\s*Inter/);
+  const ampHeader = readFileSync('src/styles/hallpartner-amp-header.css', 'utf8');
+  assert.match(ampHeader, /\.hp-amp-site-header \.hm \{ --hm-font: Inter,/);
+  assert.equal((layout.match(/fonts\.googleapis\.com\/css2/g) ?? []).length, 1,
+    'Keep Saira, Inter and Manrope on one Google Fonts stylesheet');
 });
 
 test('Saira 600 is scoped to H1-H3 and real site action buttons', () => {
