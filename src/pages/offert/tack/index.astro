@@ -3,7 +3,7 @@ import HallpartnerSiteLayout from '../../../layouts/HallpartnerSiteLayout.astro'
 import '../../../styles/hallpartner-info.css';
 ---
 
-<HallpartnerSiteLayout title="Din offertförfrågan" description="Bekräftelse för offertguiden i Amelios utvecklingspreview.">
+<HallpartnerSiteLayout title="Din offertförfrågan" description="Bekräftelse från Hallpartners offertguide.">
   <div class="hp-info hp-receipt-page">
     <nav class="hp-info__crumbs hp-draft-rail" aria-label="Brödsmulor">
       <a href="/">Start</a><span aria-hidden="true">/</span><a href="/offert/">Offert</a><span aria-hidden="true">/</span><span aria-current="page">Bekräftelse</span>
@@ -24,11 +24,11 @@ import '../../../styles/hallpartner-info.css';
 
           <div id="receipt-neutral">
             <p>Här visas bekräftelsen efter ett inskick via offertguiden. Det finns ingen aktuell bekräftelse att visa i den här fliken.</p>
-            <p>Har du redan skickat en förfrågan men är osäker på om den kom fram? Kontakta Amelio på <a href="mailto:kontakt@amelio.se">kontakt@amelio.se</a> innan du skickar igen.</p>
+            <p>Har du redan skickat en förfrågan men är osäker på om den kom fram? Kontakta Hallpartner på <a href="mailto:offert@hallpartner.se">offert@hallpartner.se</a> innan du skickar igen.</p>
           </div>
 
           <div id="receipt-confirmed" hidden>
-            <p class="hp-receipt-card__intro">Vi har tagit emot din förfrågan i Amelios utvecklingspreview. Vi går igenom uppgifterna och återkommer så snart vi kan.</p>
+            <p class="hp-receipt-card__intro">Vi har tagit emot din förfrågan hos Hallpartner och återkommer när vi har gått igenom uppgifterna.</p>
 
             <div class="hp-receipt-case" aria-label="Ärendenummer">
               <p class="hp-receipt-case__label">Ditt ärendenummer</p>
@@ -51,10 +51,10 @@ import '../../../styles/hallpartner-info.css';
           </div>
 
           <div class="hp-receipt-card__footer">
-            <p>För en ordinarie offert från Hallpartner, använd <a href="/kontakt/">Hallpartners kontaktuppgifter</a>.</p>
+            <p>Vill du komplettera förfrågan? <a href="mailto:offert@hallpartner.se">Mejla Hallpartner</a>.</p>
             <div class="hp-receipt-card__links">
               <a href="/">Till startsidan</a>
-              <a href="/integritet/">Så hanteras dina uppgifter</a>
+              <a href="/integritetspolicy/">Så hanteras dina uppgifter</a>
             </div>
           </div>
         </div>
@@ -94,7 +94,7 @@ import '../../../styles/hallpartner-info.css';
       }
       document.querySelector('#receipt-copy')!.textContent = receipt.customerCopy === 'accepted'
         ? 'En kopia har lämnats till e-posttjänsten för leverans till den adress du angav. Kontrollera även skräpposten om den inte dyker upp.'
-        : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Amelio om du vill få en kopia. Skicka inte förfrågan igen.';
+        : 'Din förfrågan är mottagen, men vi kan inte bekräfta att e-postkopian skickades. Kontakta Hallpartner om du vill få en kopia. Skicka inte förfrågan igen.';
       document.querySelector<HTMLElement>('#receipt-neutral')!.hidden = true;
       document.querySelector<HTMLElement>('#receipt-confirmed')!.hidden = false;
     }
