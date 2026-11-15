@@ -38,8 +38,8 @@ jobs:
           php -l server/lead/receiver.php
           php -l server/lead/delivery.php
           php tests/lead-receiver.test.php
-          php tests/quote-email-template.test.php
-          php tests/contact-email-template.test.php
+          # Quote/contact HTML templates belong to stacked private PHP PR #66.
+          # Its SHA is tested independently; this PR changes only Astro frontend.
 
       - name: Build both active production forms with explicit gates
         env:
