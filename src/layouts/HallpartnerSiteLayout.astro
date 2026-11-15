@@ -106,7 +106,8 @@ const ampFooterHtml = useAmpFooter
 
   /* Saira remains exclusive to the larger headings. */
   .hp-site .hp-draft-main :is(h1, h2, h3),
-  .hp-site .hp-draft-main .hp-quote-shell .qf :is(h1, h2, h3) {
+  .hp-site .hp-draft-main .hp-quote-shell .qf :is(h1, h2, h3),
+  .hp-site .af--compact .af__group-heading {
     font-family: var(--hp-heading-font);
     font-weight: 600;
     letter-spacing: -0.02em;
@@ -117,14 +118,24 @@ const ampFooterHtml = useAmpFooter
    * Scope to actual actions; do not change regular links, menu labels,
    * inputs, labels, select cards or the AMP header menu-toggle icon.
    */
-  .hp-site :is(#hp-amp-header-target .hm__cta, .hp-draft-nav__cta),
+  .hp-site :is(#hp-amp-header-target .hm__cta, .hp-draft-nav__cta, .af__quick-link),
   .hp-site .hp-draft-main :is(
     button,
     .hp-home-button,
     .hp-home-textlink,
     .hp-info__button,
+    .hp-info__textlink,
+    .hp-info__person-more,
     .hp-draft-cta,
-    .hp-contact-hero__action
+    .hp-contact-hero__action,
+    .hp-stal__button,
+    .hp-stal__text-link,
+    .hp-stal__inline-link,
+    .hp-detail__button,
+    .hp-detail__text-link,
+    .hp-halls-button,
+    .hp-detail__related a,
+    .hp-detail__related-inline a
   ) {
     font-family: var(--hp-heading-font);
     font-weight: 600;
