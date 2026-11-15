@@ -50,7 +50,7 @@ const ampFooterHtml = useAmpFooter
     {useAmpFooter && <link rel="stylesheet" href="/generated/amp-003-footer.css" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400..700&family=Saira:wght@600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400..700&family=Rajdhani:wght@600&family=Saira:wght@600&display=swap" />
   </head>
   <body class="hp-draft hp-site hp-amp-site-header" data-header-mode={isHome ? 'hero' : 'solid'}>
     <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
@@ -90,7 +90,8 @@ const ampFooterHtml = useAmpFooter
 
   /*
    * Apply Manrope to reading text, including the quote-flow field copy.
-   * Keep ordinary header links as Inter; primary CTA still uses Saira below.
+   * Menu typeface is scoped separately in hallpartner-amp-header.css;
+   * primary CTA still uses Saira below.
    */
   .hp-site.hp-draft {
     font-family: var(--hp-body-font);
