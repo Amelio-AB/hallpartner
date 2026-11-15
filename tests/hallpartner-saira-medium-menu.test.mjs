@@ -15,6 +15,8 @@ test('Saira Medium 500 and SemiBold 600 load without Rajdhani', () => {
 
 test('Saira Medium 500 covers all menu links and headings without affecting UI size', () => {
   assert.match(header, /--hp-nav-font: 'Saira', Inter/);
+  assert.doesNotMatch(header, /--hp-nav-font: 'Rajdhani'/,
+    'Rajdhani must be removed from the actual AMP menu styles');
   const marker = 'HP-072 — Saira Medium 500';
   const section = header.slice(header.indexOf(marker));
   assert.ok(section.length > 100, 'Missing menu-only font rules');
