@@ -4,9 +4,17 @@ import { readFileSync } from 'node:fs';
 
 const layout = readFileSync('src/layouts/HallpartnerSiteLayout.astro', 'utf8');
 
-test('Hallpartner loads only the approved Saira 600 weight alongside Inter', () => {
+test('Hallpartner loads Saira 600 for headings and Manrope 400-700 for body', () => {
   assert.match(layout, /family=Saira:wght@600&display=swap/);
+  assert.match(layout, /family=Manrope:wght@400\.\.700/);
   assert.match(layout, /family=Inter:wght@400;500;600;700;800/);
+});
+
+test('Manrope is the default body; AMP quote text uses the same font, but menu stays Inter', () => {
+  assert.match(layout, /--hp-body-font:\s*'Manrope',\s*Inter/);
+  assert.match(layout, /\.hp-site\.hp-draft\s*\{\s*font-family:\s*var\(--hp-body-font\)/);
+  assert.match(layout, /\.hp-site \.hp-quote-shell \.qf\s*\{\s*--quote-font-body:\s*var\(--hp-body-font\)/);
+  assert.match(layout, /\.hp-site \.hp-draft-header\s*\{\s*font-family:\s*Inter/);
 });
 
 test('Saira 600 is scoped to H1-H3 and real site action buttons', () => {
