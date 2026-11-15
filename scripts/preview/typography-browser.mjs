@@ -142,6 +142,11 @@ try {
       assert.match(m.footerHeading ?? '', /Saira/, 'Footer heading wrong: ' + route);
       assert.match(m.footerCTA ?? '', /Saira/, 'Footer CTA wrong: ' + route);
       if (m.nav) assert.match(m.nav, /Saira/, 'Fallback nav not Saira: ' + route);
+      if (width === 1440) {
+        assert.ok(m.ampIntro, 'The mega-menu intro heading must exist: ' + route);
+        assert.ok(m.ampFeatured, 'The mega-menu featured link must exist: ' + route);
+        assert.ok(m.ampGroupHeading, 'The mega-menu group headings must exist: ' + route);
+      }
       for (const [label, family, weight] of [
         ['AMP desktop navigation', m.ampNav, m.ampNavWeight],
         ['AMP submenu link', m.ampSub, m.ampSubWeight],
