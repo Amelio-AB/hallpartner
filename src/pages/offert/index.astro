@@ -32,7 +32,9 @@ const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
       {publicLaunch && !ready
         ? <>Vi tar emot offertförfrågningar via <a href="mailto:offert@hallpartner.se">offert@hallpartner.se</a> tills den digitala guiden öppnar. Beskriv vad hallen ska användas till och ungefärliga mått om du har dem.</>
         : ready
-          ? <>Din offertförfrågan skickas till Hallpartner när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur dina uppgifter hanteras</a>.</>
+          ? <>Din offertförfrågan skickas till Hallpartner när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter. Läs {publicLaunch
+              ? <a href="/integritetspolicy/">hur dina uppgifter hanteras</a>
+              : <a href="/integritet/">hur dina uppgifter hanteras</a>}.</>
           : filesReview
             ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
             : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
