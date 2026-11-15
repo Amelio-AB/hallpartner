@@ -32,5 +32,15 @@ for (const html of [receipt,notFound]) {
 }
 assert.ok(existsSync(join(root,'sitemap-index.xml')),'Missing sitemap');
 assert.doesNotMatch(page('robots.txt'),/(^|\n)Disallow:\s*\/(?:\r?\n|$)/);
-assert.ok(!existsSync(join(root,'api','lead.php')),'Never include private API in static release');
+// Astro includes public/api/lead.php in dist. Verify it is only the safe
+// adapter; publishing strips /api to preserve the already installed receiver.
+if (existsSync(join(root,'api','lead.php'))) {
+  const adapter = page('api/lead.php');
+  assert.match(adapter,/HP_LEAD_PRIVATE_DIR/,'The public API must fail closed without a private runtime');
+  assert.doesNotMatch(adapter,/smtp_password|rate_secret|contact_recipient/,
+    'No private configuration may be embedded in the public adapter');
+}
+if (process.argv.includes('--static-payload')) {
+  assert.ok(!existsSync(join(root,'api')),'The static upload must never overwrite /api');
+}
 console.log('HP056 ACTIVE CUSTOMER BUILD PASS: contact, quote, privacy, SEO, no PHP payload');
