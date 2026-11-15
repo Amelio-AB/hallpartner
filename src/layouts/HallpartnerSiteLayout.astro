@@ -50,7 +50,7 @@ const ampFooterHtml = useAmpFooter
     {useAmpFooter && <link rel="stylesheet" href="/generated/amp-003-footer.css" />}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Saira:wght@600&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400..700&family=Saira:wght@600&display=swap" />
   </head>
   <body class="hp-draft hp-site hp-amp-site-header" data-header-mode={isHome ? 'hero' : 'solid'}>
     <a class="hp-draft-skip" href="#main-content">Hoppa till innehållet</a>
@@ -85,9 +85,26 @@ const ampFooterHtml = useAmpFooter
 <style is:global>
   .hp-site {
     --hp-heading-font: 'Saira', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --hp-body-font: 'Manrope', Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
-  /* Body copy, ordinary navigation links and form field labels remain Inter. */
+  /*
+   * Apply Manrope to reading text, including the quote-flow field copy.
+   * Keep ordinary header links as Inter; primary CTA still uses Saira below.
+   */
+  .hp-site.hp-draft {
+    font-family: var(--hp-body-font);
+  }
+
+  .hp-site .hp-draft-header {
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  .hp-site .hp-quote-shell .qf {
+    --quote-font-body: var(--hp-body-font);
+  }
+
+  /* Saira remains exclusive to the larger headings. */
   .hp-site .hp-draft-main :is(h1, h2, h3),
   .hp-site .hp-draft-main .hp-quote-shell .qf :is(h1, h2, h3) {
     font-family: var(--hp-heading-font);
