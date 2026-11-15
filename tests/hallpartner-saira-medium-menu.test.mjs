@@ -30,7 +30,8 @@ test('Saira Medium 500 covers all menu links and headings without affecting UI s
   assert.match(section, /font-family: var\(--hp-nav-font\);\s*font-weight: 500;/);
   assert.match(section, /data-navigation-appearance="spacious"[\s\S]*?font-weight: 500;/,
     'Override the more specific AMP Spacious font-weight rule');
-  assert.match(section, /\.hm :is\(\.hm__description, \.hm__menu-intro p\)\s*\{\s*font-family: Inter/);
+  assert.match(section, /\.hm :is\(\.hm__description, \.hm__menu-intro p\)\s*\{\s*font-family: var\(--hp-body-font\)/,
+    'Mega-menu description copy must use the shared Manrope body font');
   assert.match(section, /\.hp-draft-nav a:not\(\.hp-draft-nav__cta\)/);
   assert.doesNotMatch(section, /(?:font-size|padding|margin|width|height|gap|border|display|transform|transition)\s*:/,
     'Menu-only typography cannot alter layout or interactions');
