@@ -4,19 +4,20 @@ import { readFileSync, readdirSync } from 'node:fs';
 
 const layout = readFileSync('src/layouts/HallpartnerSiteLayout.astro', 'utf8');
 
-test('Hallpartner loads Saira 600 for headings and Manrope 400-700 for body', () => {
-  assert.match(layout, /family=Saira:wght@600&display=swap/);
+test('Hallpartner loads Saira 500 for menu, Saira 600 for headings and Manrope 400-700 for body', () => {
+  assert.match(layout, /family=Saira:wght@500;600&display=swap/);
   assert.match(layout, /family=Manrope:wght@400\.\.700/);
   assert.match(layout, /family=Inter:wght@400;500;600;700;800/);
 });
 
-test('Manrope is the default body; AMP quote text uses the same font, but menu stays Inter', () => {
+test('Manrope is the default body; AMP quote text matches and scoped menu overrides AMP base Inter', () => {
   assert.match(layout, /--hp-body-font:\s*'Manrope',\s*Inter/);
   assert.match(layout, /\.hp-site\.hp-draft\s*\{\s*font-family:\s*var\(--hp-body-font\)/);
   assert.match(layout, /\.hp-site \.hp-quote-shell \.qf\s*\{\s*--quote-font-body:\s*var\(--hp-body-font\)/);
   assert.match(layout, /\.hp-site \.hp-draft-header\s*\{\s*font-family:\s*Inter/);
   const ampHeader = readFileSync('src/styles/hallpartner-amp-header.css', 'utf8');
   assert.match(ampHeader, /\.hp-amp-site-header \.hm \{ --hm-font: Inter,/);
+  assert.match(ampHeader, /--hp-nav-font: 'Saira', Inter/);
   assert.equal((layout.match(/fonts\.googleapis\.com\/css2/g) ?? []).length, 1,
     'Keep Saira, Inter and Manrope on one Google Fonts stylesheet');
 });
