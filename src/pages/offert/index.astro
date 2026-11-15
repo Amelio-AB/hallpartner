@@ -12,6 +12,7 @@ const ready =
   import.meta.env.PUBLIC_HP_RECEIVER_VERIFIED === 'true' &&
   import.meta.env.PUBLIC_HP_PRIVACY_APPROVED === 'true';
 const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === 'true';
+const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
 ---
 
 <HallpartnerSiteLayout
@@ -28,14 +29,25 @@ const filesReview = !ready && import.meta.env.PUBLIC_HP_QUOTE_FILES_REVIEW === '
       <p>Beskriv vad hallen ska användas till och ungefär hur stor den behöver vara. Du behöver inte kunna alla tekniska detaljer – vi börjar med ditt behov.</p>
     </div>
     <p class:list={['hp-leads-note', 'hp-quote-shell__notice', { 'hp-leads-note--review': !ready }]} id="hp-offert-notice">
-      {ready
-        ? <>I denna testmiljö skickas din förfrågan till Amelio på kontakt@amelio.se när du väljer Skicka förfrågan. För en ordinarie offert, använd Hallpartners kontaktuppgifter nedan. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur dina uppgifter hanteras</a>.</>
-        : filesReview
-          ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
-          : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
+      {publicLaunch && !ready
+        ? <>Vi tar emot offertförfrågningar via <a href="mailto:offert@hallpartner.se">offert@hallpartner.se</a> tills den digitala guiden öppnar. Beskriv vad hallen ska användas till och ungefärliga mått om du har dem.</>
+        : ready
+          ? <>Din offertförfrågan skickas till Hallpartner när du väljer Skicka förfrågan. Skicka inte känsliga personuppgifter. Läs {publicLaunch
+              ? <a href="/integritetspolicy/">hur dina uppgifter hanteras</a>
+              : <a href="/integritet/">hur dina uppgifter hanteras</a>}.</>
+          : filesReview
+            ? 'Arbetsversion: du kan prova alla sex steg och välja bilder eller dokument. Inga uppgifter eller filer skickas till Hallpartner.'
+            : 'Arbetsversion: prova guiden med sex steg. Inskickning är avstängd. Kontakta Hallpartner via telefon eller mejl om du vill göra en riktig förfrågan.'}
     </p>
-    <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)} data-files-review={String(filesReview)}
-      aria-describedby="hp-offert-notice"></div>
+    {publicLaunch && !ready && (
+      <p class="hp-draft-rail">
+        <a href="mailto:offert@hallpartner.se?subject=Offertf%C3%B6rfr%C3%A5gan%20Hallpartner">Skicka din offertförfrågan via mejl →</a>
+      </p>
+    )}
+    {(!publicLaunch || ready) && (
+      <div class="hp-draft-rail" id="hp-offert-guide" data-enabled={String(ready)} data-files-review={String(filesReview)}
+        aria-describedby="hp-offert-notice"></div>
+    )}
     <noscript><p class="hp-draft-rail">Guiden behöver JavaScript. <a href="/kontakt/">Kontakta Hallpartner här.</a></p></noscript>
     <p class="hp-draft-rail hp-quote-shell__fallback">Vill du börja med ett samtal? <a href="/kontakt/">Se kontaktuppgifter</a>.</p>
   </div>

@@ -1,0 +1,74 @@
+name: HP056 customer form activation - validation only
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  active-form-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Fetch exact candidate, no credentials persisted
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+
+      - name: Node 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install pinned private AMP, read only
+        env:
+          AMP_GITHUB_READ_TOKEN: ${{ secrets.AMELIO_PLATFORM_READ_TOKEN }}
+        run: bash scripts/preview/install-private-amp.sh
+
+      - name: Quality and PHP syntax
+        run: |
+          npm run check
+          npm run lint
+          php -l public/api/lead.php
+          php -l server/lead/receiver.php
+          php -l server/lead/delivery.php
+          php tests/lead-receiver.test.php
+          # Quote/contact HTML templates belong to stacked private PHP PR #66.
+          # Its SHA is tested independently; this PR changes only Astro frontend.
+
+      - name: Build both active production forms with explicit gates
+        env:
+          NODE_ENV: production
+          PUBLIC_HP_PUBLIC_LAUNCH: 'true'
+          PUBLIC_HP_LEADS_ENABLED: 'true'
+          PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED: 'true'
+          PUBLIC_HP_RECEIVER_VERIFIED: 'true'
+          PUBLIC_HP_PRIVACY_APPROVED: 'true'
+          PUBLIC_HP_QUOTE_FILES_REVIEW: 'false'
+        run: |
+          npm run build
+          node scripts/launch/verify-active-build.mjs
+
+      - name: Build isolated preview-mode mock for browser regressions
+        env:
+          NODE_ENV: production
+          PUBLIC_HP_PUBLIC_LAUNCH: 'false'
+          PUBLIC_HP_LEADS_ENABLED: 'true'
+          PUBLIC_HP_QUOTE_SUBMISSIONS_ENABLED: 'true'
+          PUBLIC_HP_RECEIVER_VERIFIED: 'true'
+          PUBLIC_HP_PRIVACY_APPROVED: 'true'
+          PUBLIC_HP_QUOTE_FILES_REVIEW: 'false'
+        run: |
+          npm run build
+          node scripts/preview/chrome-preflight.mjs
+          node scripts/preview/active-contact-browser.mjs
+          node scripts/preview/active-quote-browser.mjs
+
+      - name: Confirm no public deployment
+        run: |
+          echo "VALIDATION ONLY: no DNS changes, no FTP/SSH upload, no external SMTP"

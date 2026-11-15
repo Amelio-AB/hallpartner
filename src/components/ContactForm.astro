@@ -3,7 +3,12 @@ import '../styles/hallpartner-leads.css';
 
 // Review is interactive but cannot submit real personal data until a verified
 // server, approved recipient and published privacy notice are configured.
-const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
+// No public contact form without all three release approvals.
+const enabled =
+  import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true' &&
+  import.meta.env.PUBLIC_HP_RECEIVER_VERIFIED === 'true' &&
+  import.meta.env.PUBLIC_HP_PRIVACY_APPROVED === 'true';
+const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
 ---
 
 <aside class="hp-info__contact-panel hp-contact-hero__panel" id="kontaktformular"
@@ -12,11 +17,15 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
   <p class="hp-contact-hero__intro">Har du en fråga? Beskriv kort vad du undrar över så hjälper vi dig vidare.</p>
   <p class:list={['hp-contact-hero__notice', { 'hp-contact-hero__notice--review': !enabled }]}
     id="hp-form-notice">
-    {enabled
-      ? <>I Amelios utvecklingspreview tas meddelandet emot av Amelio för återkoppling, inte direkt av Hallpartner. Skicka inte känsliga personuppgifter. Läs <a href="/integritet/">hur dina uppgifter hanteras</a>.</>
-      : 'Förhandsvisning – kontaktformuläret är ännu inte aktivt. Ring eller mejla Hallpartner om du vill få svar.'}
+    {publicLaunch && !enabled
+      ? <>Vi tar emot meddelanden via <a href="mailto:info@hallpartner.se">info@hallpartner.se</a> eller telefon. Det digitala formuläret öppnar inom kort.</>
+      : enabled
+        ? <>Kontakta Hallpartner om ditt projekt. Skicka inte känsliga personuppgifter. Läs {publicLaunch
+          ? <a href="/integritetspolicy/">hur dina uppgifter hanteras</a>
+          : <a href="/integritet/">hur dina uppgifter hanteras</a>}.</>
+        : 'Förhandsvisning – kontaktformuläret är ännu inte aktivt. Ring eller mejla Hallpartner om du vill få svar.'}
   </p>
-  <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
+  {(!publicLaunch || enabled) && <form id="hp-contact-form" class="hp-contact-form" data-enabled={String(enabled)}
     aria-describedby="hp-form-notice">
     <fieldset class="hp-contact-hero__fieldset" disabled={!enabled}>
       <div class="hp-contact-form__field">
@@ -44,7 +53,8 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
       </div>
     </fieldset>
     <div class="hp-contact-form__status" id="hp-form-status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
-  </form>
+  </form>}
+  {publicLaunch && !enabled && <p><a class="hp-contact-hero__action" href="mailto:info@hallpartner.se?subject=Fr%C3%A5ga%20till%20Hallpartner">Mejla Hallpartner <span aria-hidden="true">→</span></a></p>}
   <p class="hp-contact-hero__quote">
     Gäller det en ny hall? <a href="/offert/">Använd vår offertguide</a>.
   </p>
@@ -94,7 +104,7 @@ const enabled = import.meta.env.PUBLIC_HP_LEADS_ENABLED === 'true';
           headline.className = 'hp-contact-form__status-title';
           headline.textContent = 'Tack! Vi har tagit emot ditt meddelande.';
           const explanation = document.createElement('span');
-          explanation.textContent = 'Mottagarsystemet har tagit emot meddelandet för Amelios utvecklingspreview.';
+          explanation.textContent = 'Hallpartner har tagit emot ditt meddelande och återkommer så snart vi kan.';
           const referenceLabel = document.createElement('span');
           referenceLabel.className = 'hp-contact-form__status-label';
           referenceLabel.textContent = 'Ditt ärendenummer';

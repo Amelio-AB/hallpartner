@@ -13,6 +13,10 @@ export interface Props {
 const { title, description, omitCanonical = false } = Astro.props;
 const isHome = Astro.url.pathname === '/';
 const canonical = !omitCanonical && Astro.site ? new URL(Astro.url.pathname, Astro.site).toString() : undefined;
+// Launch flag is set only for a separately verified production build.
+// Preview remains noindex unless the exact release opts in.
+const publicLaunch = import.meta.env.PUBLIC_HP_PUBLIC_LAUNCH === 'true';
+const shouldIndex = publicLaunch && !['/404/', '/404.html', '/offert/tack/', '/integritet/'].includes(Astro.url.pathname);
 const useAmpFooter = process.env.HALLPARTNER_FOOTER_MODE !== 'legacy';
 const ampFooterHtml = useAmpFooter
   ? readFileSync(join(process.cwd(), '.generated', 'amp-003-footer.html'), 'utf8')
@@ -25,7 +29,11 @@ const ampFooterHtml = useAmpFooter
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="robots" content="noindex,nofollow" />
+    {shouldIndex ? (
+      <meta name="robots" content="index,follow" />
+    ) : (
+      <meta name="robots" content="noindex,nofollow" />
+    )}
     <title>{title} | Hallpartner</title>
     <meta name="description" content={description} />
     {canonical && (
