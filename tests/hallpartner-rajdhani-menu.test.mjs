@@ -14,6 +14,10 @@ test('Rajdhani SemiBold 600 loads in the existing Google Fonts link', () => {
 
 test('Only menu typography changes, with CTA, sizing and interactions preserved', () => {
   assert.match(header, /--hp-nav-font: 'Rajdhani', Inter/);
+  assert.match(header, /\.hp-amp-site-header \.hm \{ --hm-font: Inter,/,
+    'Preserve AMP default for secondary descriptions and controls');
+  assert.match(layout, /#hp-amp-header-target \.hm__cta/,
+    'Header CTA must keep the separately approved Saira rule');
   const section = header.slice(header.indexOf('HP-072 — menu typography experiment'));
   assert.ok(section.length > 100);
   for (const selector of [
