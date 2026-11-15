@@ -20,7 +20,8 @@ return [
     'smtp_username' => '',   // e.g. confirmed sending mailbox
     'smtp_password' => '',   // Inleed email account password
     'smtp_from' => '',       // verified sending address (not visitor's address)
-    'recipient' => '',       // customer-approved receiving mailbox
+    'recipient' => '',       // quote receiver, e.g. offert@hallpartner.se
+    'contact_recipient' => '', // separate contact receiver, e.g. info@hallpartner.se
     'rate_dir' => '',        // private writable directory OUTSIDE public_html
     'rate_secret' => '',     // random secret, minimum 32 characters
 ];
