@@ -29,6 +29,18 @@ foreach ($required as $key) {
         hp_reply(503, ['status' => 'failed']);
     }
 }
+// Production mail must never be sent from the temporary customer preview.
+$environment = $config['mail_environment'] ?? null;
+if (!in_array($environment, ['preview', 'production'], true)) {
+    hp_reply(503, ['status' => 'failed']);
+}
+$expectedOrigin = $environment === 'production'
+    ? 'https://hallpartner.se'
+    : 'https://hallpartner-se-new.preview2.inleed.com';
+if ($config['allowed_origin'] !== $expectedOrigin) {
+    hp_reply(503, ['status' => 'failed']);
+}
+
 if (!filter_var($config['smtp_from'], FILTER_VALIDATE_EMAIL) ||
     !filter_var($config['recipient'], FILTER_VALIDATE_EMAIL) ||
     !filter_var($config['smtp_username'], FILTER_VALIDATE_EMAIL)) {
@@ -66,6 +78,13 @@ $validation = hp_validate_lead($input);
 if (!$validation['valid']) hp_reply(422, ['status' => 'validation-error', 'fields' => $validation['errors']]);
 if (!hp_configuration_allowed($validation['kind'], $config)) {
     hp_reply(403, ['status' => 'failed']);
+}
+// Require a dedicated approved destination for contact. Never route contact to
+// the quote mailbox by accident if the contact route is missing or malformed.
+if ($validation['kind'] === 'hallpartner-contact-v1' &&
+    (!is_string($config['contact_recipient'] ?? null) ||
+     !filter_var($config['contact_recipient'], FILTER_VALIDATE_EMAIL))) {
+    hp_reply(503, ['status' => 'failed']);
 }
 
 $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '');

@@ -1,10 +1,33 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/../server/lead/validator.php';
+require_once __DIR__ . '/../server/lead/delivery.php';
 
 function must(bool $value, string $message): void {
     if (!$value) throw new RuntimeException('Failed: ' . $message);
 }
+// Server-side delivery routing cannot be supplied or overridden by the visitor.
+$routes = ['recipient' => 'quote@example.invalid', 'contact_recipient' => 'contact@example.invalid'];
+must(hp_delivery_recipient($routes, 'hallpartner-contact-v1') === 'contact@example.invalid',
+    'contact uses only its approved recipient');
+must(hp_delivery_recipient($routes, 'hallpartner-offert-v2-review') === 'quote@example.invalid',
+    'quote V2 uses the quote recipient');
+must(hp_delivery_recipient($routes, 'hallpartner-offert-v1') === 'quote@example.invalid',
+    'quote V1 stays on the quote recipient');
+foreach ([
+    [['recipient' => 'quote@example.invalid'], 'hallpartner-contact-v1'],
+    [['recipient' => 'quote@example.invalid', 'contact_recipient' => 'invalid'], 'hallpartner-contact-v1'],
+    [['recipient' => 'invalid', 'contact_recipient' => 'contact@example.invalid'], 'hallpartner-offert-v2-review'],
+    [$routes, 'unknown-form'],
+] as [$invalidRoutes, $invalidKind]) {
+    try {
+        hp_delivery_recipient($invalidRoutes, $invalidKind);
+        throw new RuntimeException('Unapproved recipient route accepted');
+    } catch (InvalidArgumentException) {
+        // Missing, invalid and unknown routes fail closed.
+    }
+}
+
 $contact = [
     'contractVersion' => 1,
     'technicalId' => 'quote-flow',
