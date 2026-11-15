@@ -116,3 +116,37 @@
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/plathall/"]::before { background-image: url('/icons/halls/plathall.svg'); }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/isolerad-hall/"]::before { background-image: url('/icons/halls/isolerad-hall.svg'); }
 .hp-amp-site-header .hm--classic-mega-menu .hm__groups--mega .hm__sublink[href="/stalhallar/talthall/"]::before { background-image: url('/icons/halls/talthall.svg'); }
+
+
+/*
+ * HP-072 — menu typography experiment only.
+ * Rajdhani SemiBold for menu labels (desktop, mega menu and mobile).
+ * Preserve Saira on CTA buttons; keep supporting descriptions in Inter.
+ * No changes to spacing, size, breakpoints, icons, hover or AMP behavior.
+ */
+.hp-amp-site-header {
+  --hp-nav-font: 'Rajdhani', Inter, system-ui, sans-serif;
+}
+
+.hp-amp-site-header .hm :is(
+  .hm__nav-link,
+  .hm__disclosure,
+  .hm__sublink,
+  .hm__group-heading,
+  .hm__mobile-link,
+  .hm__mobile-overview,
+  .hm__mobile-details > summary
+) {
+  font-family: var(--hp-nav-font);
+  font-weight: 600;
+}
+
+.hp-amp-site-header .hm .hm__description {
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Retain the no-JavaScript navigation fallback, not its CTA. */
+.hp-site .hp-draft-header .hp-draft-nav a:not(.hp-draft-nav__cta) {
+  font-family: var(--hp-nav-font);
+  font-weight: 600;
+}
