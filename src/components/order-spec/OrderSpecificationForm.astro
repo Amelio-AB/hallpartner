@@ -169,15 +169,15 @@ const checks = [
     </section>
 
     <section class="hp-order__section" id="hp-order-review" aria-labelledby="hp-order-review-title">
-      <div class="hp-order__section-head"><span class="hp-order__number">11</span><div><h2 id="hp-order-review-title">Slutkontroll av uppgifterna</h2><p>Markera endast sådant du faktiskt har kontrollerat. Kryssen innebär inte tillverkningsgodkännande.</p></div></div>
+      <div class="hp-order__section-head"><span class="hp-order__number">11</span><div><h2 id="hp-order-review-title">Slutkontroll av uppgifterna</h2><p>Markera endast sådant du faktiskt har kontrollerat.</p></div></div>
       <fieldset class="hp-order__checks"><legend>Kontrollerade uppgifter</legend><div class="hp-order__check-grid">{checks.map(([key,label]) => <label><input type="checkbox" data-multi="finalReview" value={key} />{label}</label>)}</div></fieldset>
       <div class="hp-order__field"><label for="hp-order-review-comments">Kommentarer till slutkontrollen</label><textarea id="hp-order-review-comments" data-path="finalReview.comments" maxlength="2000" rows="3"></textarea></div>
       <div class="hp-order__field"><label for="hp-order-unresolved">Frågor som återstår (en per rad)</label><textarea id="hp-order-unresolved" data-unresolved maxlength="5000" rows="3" placeholder="Exempel: RAL-kod för väggpanel behöver fastställas"></textarea></div>
-      <label class="hp-order__ack"><input type="checkbox" data-details-reviewed />Jag har granskat uppgifterna jag lämnar. Detta är inte en signering eller ett tillverkningsgodkännande.</label>
+      <label class="hp-order__ack"><input type="checkbox" data-details-reviewed />Jag har granskat uppgifterna jag lämnar.</label>
     </section>
 
     <section class="hp-order__section hp-order__last" id="hp-order-send" aria-labelledby="hp-order-send-title">
-      <div class="hp-order__section-head"><span class="hp-order__number">12</span><div><h2 id="hp-order-send-title">Mottagare och PDF-underlag</h2><p>Välj vart PDF:en ska skickas. Ingen tillverkning får påbörjas med detta osignerade underlag.</p></div></div>
+      <div class="hp-order__section-head"><span class="hp-order__number">12</span><div><h2 id="hp-order-send-title">Mottagare och PDF-underlag</h2><p>Ange mottagarens e-postadress. PDF-utskick aktiveras efter att mejlfunktionen har testats.</p></div></div>
       <div class="hp-order__grid">
         <FormField path="recipient.email" label="Mottagarens e-postadress" kind="email" required hint="En mottagare per utskick. Adressen visas igen vid granskningen." />
       </div>
@@ -194,7 +194,7 @@ const checks = [
       </div>
       <button class="hp-order__review-button" type="button" data-preview>Granska uppgifterna</button>
       <div class="hp-order__summary" data-summary hidden tabindex="-1" aria-label="Sammanfattning av beställningsunderlaget"></div>
-      <p class="hp-order__unsigned"><strong>Ej signerat – ej godkänt för tillverkning.</strong> Eventuella underskrifter hanteras separat av kund och leverantör.</p>
+      <p class="hp-order__unsigned">Ej signerat. Underskrifter hanteras separat av kund och leverantör.</p>
       <button class="hp-order__submit" type="submit" data-submit disabled={!ready}>{ready ? 'Skapa PDF och skicka' : 'Utskick ännu inte aktiverat'}</button>
       <p class="hp-order__message" data-message role="status" aria-live="polite"></p>
       <a data-download class="hp-order__download" hidden rel="nofollow">Ladda ned PDF-underlaget</a>

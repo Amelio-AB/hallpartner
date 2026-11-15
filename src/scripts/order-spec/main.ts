@@ -547,7 +547,7 @@ export function mountOrderSpecification(form: HTMLFormElement): void {
       add('Registrerade artiklar',true);
       items.forEach((item,index) => add((index+1) + '. ' + String(item.itemType ?? 'Ej angiven artikel') + ' · ' + String(item.quantity ?? '?') + ' ' + String(item.unit ?? '')));
     }
-    add('Dokumentstatus: Ej signerat, ej godkänt för tillverkning.');
+    add('Dokumentstatus: signering hanteras separat av kund och leverantör.');
     summary.hidden = false;
     summary.focus();
   }

@@ -1,17 +1,20 @@
 /* Order specification is intentionally scoped to its own route. */
 .hp-order__breadcrumbs {
+  position:relative;isolation:isolate;
   display:flex;align-items:center;flex-wrap:wrap;gap:.65rem;
-  padding-block:.95rem;color:#eef4ef;background:#173b29;font-size:.85rem;
+  padding-block:.95rem;color:#eef4ef;font-size:.85rem;
 }
 .hp-order__breadcrumbs::before {
-  content:'';position:absolute;z-index:-1;left:0;right:0;
+  content:'';
+  position:absolute;z-index:-1;inset-block:0;
+  left:50%;width:100vw;transform:translateX(-50%);
+  background:#153129;
 }
 .hp-order__breadcrumbs a {color:inherit;text-underline-offset:.25em}
 .hp-order__hero {background:#132822;color:#f6f7f4;padding:clamp(2.6rem,6vw,5rem) 0 3.2rem}
 .hp-order__eyebrow {font-size:.79rem;font-weight:750;text-transform:uppercase;letter-spacing:.12em;color:#b5d4bb;margin:0 0 1.1rem}
 .hp-order__hero h1 {max-width:20ch;font-size:clamp(2rem,4.6vw,4rem);line-height:1.12;letter-spacing:-.038em}
 .hp-order__intro {max-width:52rem;margin:1.15rem 0 0;font-size:clamp(1rem,1.5vw,1.18rem);line-height:1.65}
-.hp-order__tag {display:inline-block;margin:1.5rem 0 0;padding:.5rem .85rem;border:1px solid #99b5a4;border-radius:3px;font-weight:650;font-size:.88rem}
 .hp-order__content {padding-block:2rem 5rem}
 .hp-order__notice {margin:0 0 1.6rem;padding:1.05rem 1.2rem;border-left:4px solid #327b43;background:#e1e9e0;color:#193c25;line-height:1.6}
 .hp-order__scope {max-width:72rem;margin:-.7rem 0 1.8rem;color:#3d5245;line-height:1.6}
