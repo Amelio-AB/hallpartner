@@ -1,0 +1,582 @@
+{
+  "checkedAt": "2026-11-06T22:16:21.381Z",
+  "status": "passed",
+  "commit": "53afac8c3d1d7d990605db65c51f59ee838ca640",
+  "runId": "42300087820",
+  "marker": {
+    "schemaVersion": 1,
+    "inventorySha256": "1f7013f02b0accff4f672dd40715e917c878bf7204c185365a6675f97a562dcc",
+    "commit": "53afac8c3d1d7d990605db65c51f59ee838ca640",
+    "runId": "42300087820",
+    "manifestSha256": "f0a0ff008e883020dc01293eb9dc2e1d7c054fa5bf22ffddc84c93643b0aaead",
+    "verifiedAt": "2026-11-06T22:10:02.662Z"
+  },
+  "files": 94,
+  "pages": 15,
+  "checks": [
+    {
+      "path": "404.html",
+      "ftpsSha256": "33a751e622ca5c7a9e25c651c5113fddaaf28d41a2c2aa751ffd7fe394d23086",
+      "httpSha256": "33a751e622ca5c7a9e25c651c5113fddaaf28d41a2c2aa751ffd7fe394d23086",
+      "matches": true
+    },
+    {
+      "path": "_astro/ExpandableImageCards.astro_astro_type_script_index_0_lang.DKK8_PpM.js",
+      "ftpsSha256": "75f79c8222d1153ee5c4d210589f51df941a42550f5b824845ac9dcb1cda1fce",
+      "httpSha256": "75f79c8222d1153ee5c4d210589f51df941a42550f5b824845ac9dcb1cda1fce",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_1LAKTh.webp",
+      "ftpsSha256": "46adb3b6c44b2ee991f03a49f06e3b2f678501aab6c0035c166377cc29b79b66",
+      "httpSha256": "46adb3b6c44b2ee991f03a49f06e3b2f678501aab6c0035c166377cc29b79b66",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_1vj5kt.webp",
+      "ftpsSha256": "838c3449338ee97cabb50e0f0398db475c080d1d64afdb084173d3eb60b6047a",
+      "httpSha256": "838c3449338ee97cabb50e0f0398db475c080d1d64afdb084173d3eb60b6047a",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_2t59EA.webp",
+      "ftpsSha256": "86c3179e1e24855be69cd3de0c8b8f49a6573f6df19057c14792371028171c25",
+      "httpSha256": "86c3179e1e24855be69cd3de0c8b8f49a6573f6df19057c14792371028171c25",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_Z1WLSGT.webp",
+      "ftpsSha256": "d5954b564574e6eafc18bd8fd0268ccb1a127dee59a0c7edfcedeaeda80cd7b7",
+      "httpSha256": "d5954b564574e6eafc18bd8fd0268ccb1a127dee59a0c7edfcedeaeda80cd7b7",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_Z1hMNsY.webp",
+      "ftpsSha256": "77c862944f8174ff67e472567488202e377dea4a4e3fd11d1b3b51c240baf335",
+      "httpSha256": "77c862944f8174ff67e472567488202e377dea4a4e3fd11d1b3b51c240baf335",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_ZTyOjx.webp",
+      "ftpsSha256": "560eef8b0cde2cc9095a5cd855300e40bbb014ce1bbb533500219aac61b70617",
+      "httpSha256": "560eef8b0cde2cc9095a5cd855300e40bbb014ce1bbb533500219aac61b70617",
+      "matches": true
+    },
+    {
+      "path": "_astro/H191567f7ad934fb6aa6520bd8eeeac08N-e1773849628844.DK2Fd06G_ZYubIl.webp",
+      "ftpsSha256": "b6921275fc392bb19cd3faba5e8916aacd274930c0e6176cb8c05ecd4e9efe75",
+      "httpSha256": "b6921275fc392bb19cd3faba5e8916aacd274930c0e6176cb8c05ecd4e9efe75",
+      "matches": true
+    },
+    {
+      "path": "_astro/HallpartnerSiteLayout.CkNPL10u.css",
+      "ftpsSha256": "0cb134b234ca9d365c8a5f9d8aa59115db289dd10899c0b565782666f2f75a72",
+      "httpSha256": "0cb134b234ca9d365c8a5f9d8aa59115db289dd10899c0b565782666f2f75a72",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_1PsvHz.webp",
+      "ftpsSha256": "6c01d5598115a67e11963a1a5ea665f3110ab5b835c557c4a2a33e128a3fe8d2",
+      "httpSha256": "6c01d5598115a67e11963a1a5ea665f3110ab5b835c557c4a2a33e128a3fe8d2",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_Z2EE7c.webp",
+      "ftpsSha256": "3137068e769c9f5325e1ca0fe167f050c252f26eef3053001a467c92639bfcd4",
+      "httpSha256": "3137068e769c9f5325e1ca0fe167f050c252f26eef3053001a467c92639bfcd4",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_a4Pt9.webp",
+      "ftpsSha256": "f7c203ca4aba74d7b8a381528418f4f73d3395eaab95ed94e14a6ed8b6b21275",
+      "httpSha256": "f7c203ca4aba74d7b8a381528418f4f73d3395eaab95ed94e14a6ed8b6b21275",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagerbyggbad-med-Sandwixh-1536x1055.K5JYf6eZ_jOXC2.webp",
+      "ftpsSha256": "b6c4ea64ea9e88da1789132af6166892a7ced4ac4acd31b1ce05644856f58abd",
+      "httpSha256": "b6c4ea64ea9e88da1789132af6166892a7ced4ac4acd31b1ce05644856f58abd",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_16S04z.webp",
+      "ftpsSha256": "93591d87a662ae44824c7705c44e0e54d2bd6992a1ffa6e783885a0b39b06e98",
+      "httpSha256": "93591d87a662ae44824c7705c44e0e54d2bd6992a1ffa6e783885a0b39b06e98",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_1Heqhh.webp",
+      "ftpsSha256": "bc03f83ee24854010b2b2ed75f1791707bef7e7be4d8f7c218368b5578ef58cb",
+      "httpSha256": "bc03f83ee24854010b2b2ed75f1791707bef7e7be4d8f7c218368b5578ef58cb",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_Z1OOkpa.webp",
+      "ftpsSha256": "b28f86d9fe9fbba05e964f67a57a48a457fe93b019c3a5581a0b0288c77b2511",
+      "httpSha256": "b28f86d9fe9fbba05e964f67a57a48a457fe93b019c3a5581a0b0288c77b2511",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_Z218NqG.webp",
+      "ftpsSha256": "9f3110a40d6d933de83ba2b84825a75f4f23fcf8d4516a1c4466899b45232328",
+      "httpSha256": "9f3110a40d6d933de83ba2b84825a75f4f23fcf8d4516a1c4466899b45232328",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_ZYApLX.webp",
+      "ftpsSha256": "2e160b7703acdd3cb2cec92a7d07d92b4b319902b3e85652371072c51e280ff5",
+      "httpSha256": "2e160b7703acdd3cb2cec92a7d07d92b4b319902b3e85652371072c51e280ff5",
+      "matches": true
+    },
+    {
+      "path": "_astro/Lagertalt-1536x1023.CkreVAor_ZjWJHV.webp",
+      "ftpsSha256": "f7c67efaa8010f88a9403ffcfcca3767f427c4e540c6002f128df986684644de",
+      "httpSha256": "f7c67efaa8010f88a9403ffcfcca3767f427c4e540c6002f128df986684644de",
+      "matches": true
+    },
+    {
+      "path": "_astro/SiteHeader.astro_astro_type_script_index_0_lang.C3hV3cz3.js",
+      "ftpsSha256": "fc646cd4ff2022e5816f2c47c16da6ac5cb2f6823196efba19d3fe9e3351b311",
+      "httpSha256": "fc646cd4ff2022e5816f2c47c16da6ac5cb2f6823196efba19d3fe9e3351b311",
+      "matches": true
+    },
+    {
+      "path": "_astro/Stalstomme-1-1536x1152.DhCAjshP_29bnkP.webp",
+      "ftpsSha256": "89ee0d09e755949ebe43d0422dfc2ea3dc305d391cbe67371f503fab4d98599d",
+      "httpSha256": "89ee0d09e755949ebe43d0422dfc2ea3dc305d391cbe67371f503fab4d98599d",
+      "matches": true
+    },
+    {
+      "path": "_astro/Stalstomme-1-1536x1152.DhCAjshP_OyWBW.webp",
+      "ftpsSha256": "88b46ad5d0e670138fe938b6137ea3434e5e7e99ec046a711d7ed65aa3808d8a",
+      "httpSha256": "88b46ad5d0e670138fe938b6137ea3434e5e7e99ec046a711d7ed65aa3808d8a",
+      "matches": true
+    },
+    {
+      "path": "_astro/Stalstomme-1-1536x1152.DhCAjshP_Z1oUKMG.webp",
+      "ftpsSha256": "a79af2e6db44dddb84313f7b7d7e874ef5eee46d93dbda5c14fcd807e16fc3cc",
+      "httpSha256": "a79af2e6db44dddb84313f7b7d7e874ef5eee46d93dbda5c14fcd807e16fc3cc",
+      "matches": true
+    },
+    {
+      "path": "_astro/Stalstomme-1-1536x1152.DhCAjshP_ZLPJaV.webp",
+      "ftpsSha256": "5f2d544ab24b23095d6ad5153b0659c4ca423c9945268e42f474aac9e2398ba0",
+      "httpSha256": "5f2d544ab24b23095d6ad5153b0659c4ca423c9945268e42f474aac9e2398ba0",
+      "matches": true
+    },
+    {
+      "path": "_astro/Stalstomme-1-1536x1152.DhCAjshP_Zk3gu1.webp",
+      "ftpsSha256": "42d8681c722112a125322071b657d10836aa786cfbd47688348ed95ab725e1c7",
+      "httpSha256": "42d8681c722112a125322071b657d10836aa786cfbd47688348ed95ab725e1c7",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_18xSRr.webp",
+      "ftpsSha256": "4e5269e378877d715003506676b14193f241ea45d3967ea2ab2142411611583f",
+      "httpSha256": "4e5269e378877d715003506676b14193f241ea45d3967ea2ab2142411611583f",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_1ep8rj.webp",
+      "ftpsSha256": "0ed99c50b437bb147257b71413ae9147337b2578dd267943c5d0a06a05bed32e",
+      "httpSha256": "0ed99c50b437bb147257b71413ae9147337b2578dd267943c5d0a06a05bed32e",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_2c01JF.webp",
+      "ftpsSha256": "67971d6516eed01442b1b9b93bbc979fb713666be0f32d3fceac3b793c616633",
+      "httpSha256": "67971d6516eed01442b1b9b93bbc979fb713666be0f32d3fceac3b793c616633",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_AcBr1.webp",
+      "ftpsSha256": "db3929dfafe823722d9e43fbf067d7eb4e67522b89d23e9c9d02c784b8ec5c9f",
+      "httpSha256": "db3929dfafe823722d9e43fbf067d7eb4e67522b89d23e9c9d02c784b8ec5c9f",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_EpOaW.webp",
+      "ftpsSha256": "ebf923d496a819701a1b5a78426a297b36ae1a59a10a9e6b22a160f91719adaa",
+      "httpSha256": "ebf923d496a819701a1b5a78426a297b36ae1a59a10a9e6b22a160f91719adaa",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_ZNxzNw.webp",
+      "ftpsSha256": "bafce886b46bfcba48aa300fe62f201babb304c30528501c79b38abb452c74ad",
+      "httpSha256": "bafce886b46bfcba48aa300fe62f201babb304c30528501c79b38abb452c74ad",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_ZRKMxs.webp",
+      "ftpsSha256": "08cdc4290e7c523daf3d6be280c067a5295202e975229618d867e5126e777f93",
+      "httpSha256": "08cdc4290e7c523daf3d6be280c067a5295202e975229618d867e5126e777f93",
+      "matches": true
+    },
+    {
+      "path": "_astro/bygga-maskinhall.C13Fx3b3_zNfQL.webp",
+      "ftpsSha256": "63a6c827aa2637bfab865ad7fd7c0a79c5d68986f00b8f9b812d75108a4f44a8",
+      "httpSha256": "63a6c827aa2637bfab865ad7fd7c0a79c5d68986f00b8f9b812d75108a4f44a8",
+      "matches": true
+    },
+    {
+      "path": "_astro/hallpartner-hall-detail.BPWmncu7.css",
+      "ftpsSha256": "0da0d6bba6c6396a44123b8168ac4131be72fc52d77006d9449b683db862e220",
+      "httpSha256": "0da0d6bba6c6396a44123b8168ac4131be72fc52d77006d9449b683db862e220",
+      "matches": true
+    },
+    {
+      "path": "_astro/hallpartner-info.D4IUqVjk.css",
+      "ftpsSha256": "33fa35fe6b56c3b45d53d6e0aedd0a508237018186f5ac87b8cb5a873894e9d6",
+      "httpSha256": "33fa35fe6b56c3b45d53d6e0aedd0a508237018186f5ac87b8cb5a873894e9d6",
+      "matches": true
+    },
+    {
+      "path": "_astro/hallpartner-leads.ClTAQ--q.css",
+      "ftpsSha256": "1d8477a01e30602a953795e2713d1e5b60069b8a8d6d687b2aa54ae53280e746",
+      "httpSha256": "1d8477a01e30602a953795e2713d1e5b60069b8a8d6d687b2aa54ae53280e746",
+      "matches": true
+    },
+    {
+      "path": "_astro/index.BK4C3-YC.css",
+      "ftpsSha256": "5c17ee3950cffa8e15093de97bb5b606d4ce3c3e0e969f619a0ef10deccc047d",
+      "httpSha256": "5c17ee3950cffa8e15093de97bb5b606d4ce3c3e0e969f619a0ef10deccc047d",
+      "matches": true
+    },
+    {
+      "path": "_astro/index.BXLpAYsh.css",
+      "ftpsSha256": "894fe0837e55621b216fdaa2690780f994d1a1021a07f5a32e31004fd353b0a2",
+      "httpSha256": "894fe0837e55621b216fdaa2690780f994d1a1021a07f5a32e31004fd353b0a2",
+      "matches": true
+    },
+    {
+      "path": "_astro/index.DYvcZ_3o.css",
+      "ftpsSha256": "8dab96a85685badf8df0d4915569bda0e8ce26fba7f4bcd6fd792c5d7d52a16e",
+      "httpSha256": "8dab96a85685badf8df0d4915569bda0e8ce26fba7f4bcd6fd792c5d7d52a16e",
+      "matches": true
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.BbJOA2NP.js",
+      "ftpsSha256": "5228e1cef036a268d17f728b62a58faa670432a45e75e1c39cb33aecec2d1fb9",
+      "httpSha256": "5228e1cef036a268d17f728b62a58faa670432a45e75e1c39cb33aecec2d1fb9",
+      "matches": true
+    },
+    {
+      "path": "_astro/index.astro_astro_type_script_index_0_lang.D99HR8Kd.js",
+      "ftpsSha256": "37070b8911dbeea5e1f0184615a5d9b705d25e36559add45e1cede553e2eacd1",
+      "httpSha256": "37070b8911dbeea5e1f0184615a5d9b705d25e36559add45e1cede553e2eacd1",
+      "matches": true
+    },
+    {
+      "path": "_astro/lagerhall-med-enkelplat.CezV5BfM_2dSwWc.webp",
+      "ftpsSha256": "58e35682aa830ea468b795f786bf3796e32de0279fb2ab533f931a9042b07b1a",
+      "httpSha256": "58e35682aa830ea468b795f786bf3796e32de0279fb2ab533f931a9042b07b1a",
+      "matches": true
+    },
+    {
+      "path": "_astro/lagerhall-med-enkelplat.CezV5BfM_2eRVNy.webp",
+      "ftpsSha256": "bfb4edff22359745409dcbfbded4fd62eec2a0a381f873ad96a4fc9076a349c2",
+      "httpSha256": "bfb4edff22359745409dcbfbded4fd62eec2a0a381f873ad96a4fc9076a349c2",
+      "matches": true
+    },
+    {
+      "path": "_astro/lagerhall-med-enkelplat.CezV5BfM_x0vWB.webp",
+      "ftpsSha256": "91629e346958636a401f54dec5fd83977857b06ff61c0daa65f1644049adbeb4",
+      "httpSha256": "91629e346958636a401f54dec5fd83977857b06ff61c0daa65f1644049adbeb4",
+      "matches": true
+    },
+    {
+      "path": "_astro/lagerhall.GPeeZOoY_Z1MjiPC.webp",
+      "ftpsSha256": "b1d23510cb847a172f62f7ee41c38edaef09ebb56527d98c1b4f30ec49f87bed",
+      "httpSha256": "b1d23510cb847a172f62f7ee41c38edaef09ebb56527d98c1b4f30ec49f87bed",
+      "matches": true
+    },
+    {
+      "path": "_astro/maskinhall.CY7PyZ0H_2pyQtm.webp",
+      "ftpsSha256": "1d6afc21c7ae7dd4cc57e75e30c2cfa7e8c6af75668974cfeb90cdca6bede1b7",
+      "httpSha256": "1d6afc21c7ae7dd4cc57e75e30c2cfa7e8c6af75668974cfeb90cdca6bede1b7",
+      "matches": true
+    },
+    {
+      "path": "_astro/plathall-1536x1152.d5qGBwTn_Z1VLOnj.webp",
+      "ftpsSha256": "3e9d0763a4e99ba5dff2450d5e899c377d7f5bb9e6ebda42fc9c5026a00dfb63",
+      "httpSha256": "3e9d0763a4e99ba5dff2450d5e899c377d7f5bb9e6ebda42fc9c5026a00dfb63",
+      "matches": true
+    },
+    {
+      "path": "_astro/plathall-1536x1152.d5qGBwTn_Z1iGiFD.webp",
+      "ftpsSha256": "b386026694deebcb96986b1e5351c90310086e16ce5e7426e2ea09b218cd2efa",
+      "httpSha256": "b386026694deebcb96986b1e5351c90310086e16ce5e7426e2ea09b218cd2efa",
+      "matches": true
+    },
+    {
+      "path": "_astro/plathall-1536x1152.d5qGBwTn_Z1ldA1O.webp",
+      "ftpsSha256": "121aff61f46c97bf728f524ce7c94738b5033e0f3c4bb8e1bc33bf82b83fa52d",
+      "httpSha256": "121aff61f46c97bf728f524ce7c94738b5033e0f3c4bb8e1bc33bf82b83fa52d",
+      "matches": true
+    },
+    {
+      "path": "_astro/plathall-1536x1152.d5qGBwTn_Z2hlX9d.webp",
+      "ftpsSha256": "a0714903fe9556dbc045f9e9c31c2154a300fe2b92c3d743ab95ac3ace7283d9",
+      "httpSha256": "a0714903fe9556dbc045f9e9c31c2154a300fe2b92c3d743ab95ac3ace7283d9",
+      "matches": true
+    },
+    {
+      "path": "_astro/plathall-1536x1152.d5qGBwTn_ZFk8CL.webp",
+      "ftpsSha256": "eabc3567cbc302cfded37e40a560edf7cd011cc4a981e955be71b9f43f1e6b46",
+      "httpSha256": "eabc3567cbc302cfded37e40a560edf7cd011cc4a981e955be71b9f43f1e6b46",
+      "matches": true
+    },
+    {
+      "path": "_astro/quote-confirmation.sRInF6yQ.js",
+      "ftpsSha256": "b9c2cfd2a2da4ce3a0c1cd3b279c2cf69153b9ae7faf7fad383d8d07e36e4b53",
+      "httpSha256": "b9c2cfd2a2da4ce3a0c1cd3b279c2cf69153b9ae7faf7fad383d8d07e36e4b53",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_1abmOP.webp",
+      "ftpsSha256": "6416dd5947baa57ab1d491a823bf997630ce0ac66f6d48c26e3e6be36c8ba989",
+      "httpSha256": "6416dd5947baa57ab1d491a823bf997630ce0ac66f6d48c26e3e6be36c8ba989",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_Z144GwM.webp",
+      "ftpsSha256": "6f0c18ea0aa3fcf00dd5a1be6150097dc0fbd3fb93e6d98c67f92fcd8b44c09e",
+      "httpSha256": "6f0c18ea0aa3fcf00dd5a1be6150097dc0fbd3fb93e6d98c67f92fcd8b44c09e",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_Z1gDoPf.webp",
+      "ftpsSha256": "269e2ac8f1d0c5e69609851bec5fc4dece2a7b401cc75047ab92a4cdbaa64d4e",
+      "httpSha256": "269e2ac8f1d0c5e69609851bec5fc4dece2a7b401cc75047ab92a4cdbaa64d4e",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_ZDm1O3.webp",
+      "ftpsSha256": "2c8086857d487bd1bac6b9d7c69c8e0674d68a1ba2b73514a9ad84ddf019f705",
+      "httpSha256": "2c8086857d487bd1bac6b9d7c69c8e0674d68a1ba2b73514a9ad84ddf019f705",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_ZoVnmO.webp",
+      "ftpsSha256": "12217202e2ed50658b098231e7a2178fcc5a481f5d2a822f3b529796b949b505",
+      "httpSha256": "12217202e2ed50658b098231e7a2178fcc5a481f5d2a822f3b529796b949b505",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-1536x1152.BKASKmQo_zF7dz.webp",
+      "ftpsSha256": "f349c4947bf9d98c5eb34e3545bbee1aae229eebdfdda187946fe1da9e748d3f",
+      "httpSha256": "f349c4947bf9d98c5eb34e3545bbee1aae229eebdfdda187946fe1da9e748d3f",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-LED.BPdMfHZ7_14g1Rr.webp",
+      "ftpsSha256": "26e928990e7fd91321b0d9343ac964954947d41936114d26f3d0e4ad95853353",
+      "httpSha256": "26e928990e7fd91321b0d9343ac964954947d41936114d26f3d0e4ad95853353",
+      "matches": true
+    },
+    {
+      "path": "_astro/talthall-LED.BPdMfHZ7_My6OL.webp",
+      "ftpsSha256": "76496b5fffd087eb51eacd0d7bca6231f0a7a849fb9f24835822410fcede05fb",
+      "httpSha256": "76496b5fffd087eb51eacd0d7bca6231f0a7a849fb9f24835822410fcede05fb",
+      "matches": true
+    },
+    {
+      "path": "favicon.svg",
+      "ftpsSha256": "a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13",
+      "httpSha256": "a93cfae97a15bc8add4a877b793c7e9e5ae9187a7de76eaca2dee9a72099da13",
+      "matches": true
+    },
+    {
+      "path": "generated/amp-003-footer.css",
+      "ftpsSha256": "3a3f9169ef684da9a8b7f7beddf232c5e5746485cf7af9bbcf68e59f46c410fc",
+      "httpSha256": "3a3f9169ef684da9a8b7f7beddf232c5e5746485cf7af9bbcf68e59f46c410fc",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/isolerad-hall.svg",
+      "ftpsSha256": "2347f591627207cd94114418906b8e8d5194823f3d7937845c1624bc8f2c0d7f",
+      "httpSha256": "2347f591627207cd94114418906b8e8d5194823f3d7937845c1624bc8f2c0d7f",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/lagerhall.svg",
+      "ftpsSha256": "94d214198344fd7a825f195af4db0b5051728ef0735bfd44186c7343251c0d3d",
+      "httpSha256": "94d214198344fd7a825f195af4db0b5051728ef0735bfd44186c7343251c0d3d",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/maskinhall.svg",
+      "ftpsSha256": "3500bac823d7b2aebf0b02dc16e8175c319f9f2fbd1b7c31a81c76ed3fe3e1b6",
+      "httpSha256": "3500bac823d7b2aebf0b02dc16e8175c319f9f2fbd1b7c31a81c76ed3fe3e1b6",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/plathall.svg",
+      "ftpsSha256": "5ec4c1f3d6ba20577ff7ebbca5829885112d76984746ce7c7cda8f776baebbfb",
+      "httpSha256": "5ec4c1f3d6ba20577ff7ebbca5829885112d76984746ce7c7cda8f776baebbfb",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/ridhus.svg",
+      "ftpsSha256": "59b2b0eff4e85f18b2d06c60a9f44f1b0dc77255300d1b619222401e232056f6",
+      "httpSha256": "59b2b0eff4e85f18b2d06c60a9f44f1b0dc77255300d1b619222401e232056f6",
+      "matches": true
+    },
+    {
+      "path": "icons/halls/talthall.svg",
+      "ftpsSha256": "d30f91b5f350c74570c1f477b51d282f8b53ca21cd8debc696f38fda2348c623",
+      "httpSha256": "d30f91b5f350c74570c1f477b51d282f8b53ca21cd8debc696f38fda2348c623",
+      "matches": true
+    },
+    {
+      "path": "images/hallpartner-hero-temporary.webp",
+      "ftpsSha256": "ab48603ac5bca0c19b1e6baa2db1cf547e5961b9f0f40b618c001f3e2c532537",
+      "httpSha256": "ab48603ac5bca0c19b1e6baa2db1cf547e5961b9f0f40b618c001f3e2c532537",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-isolerad-hall-ai-koncept-v01.webp",
+      "ftpsSha256": "6492fbde1bbc4ee3c00cf570f5aaf2ef772f0a351e4cbb0b98a7aaada3638df2",
+      "httpSha256": "6492fbde1bbc4ee3c00cf570f5aaf2ef772f0a351e4cbb0b98a7aaada3638df2",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-lagerhall-ai-koncept-v01.webp",
+      "ftpsSha256": "2b062b6e543fc56f393f4b5a4f568fab28397d1fc2e573ea9dc5cc866719e45f",
+      "httpSha256": "2b062b6e543fc56f393f4b5a4f568fab28397d1fc2e573ea9dc5cc866719e45f",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-maskinhall-ai-koncept-v01.webp",
+      "ftpsSha256": "4fcbf2f5f89ad30db1ccadc8b790a1dd5b0fcaa8e9b6db652c523abe0a2c2860",
+      "httpSha256": "4fcbf2f5f89ad30db1ccadc8b790a1dd5b0fcaa8e9b6db652c523abe0a2c2860",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-plathall-ai-koncept-v01.webp",
+      "ftpsSha256": "1e115cee2f27e92a6a4712541feb6821b481f7561a75d39c1cea59673fb58799",
+      "httpSha256": "1e115cee2f27e92a6a4712541feb6821b481f7561a75d39c1cea59673fb58799",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-ridhus-ai-koncept-v01.webp",
+      "ftpsSha256": "8ee72e876338ab0d6076bb9044e5293ca5a05e80a1cb1b30f9161531294ab522",
+      "httpSha256": "8ee72e876338ab0d6076bb9044e5293ca5a05e80a1cb1b30f9161531294ab522",
+      "matches": true
+    },
+    {
+      "path": "images/halls/hallpartner-talthall-ai-koncept-v01.webp",
+      "ftpsSha256": "b9a4be757e673784023c1825d970b92d089216e189ddcc599c5d3aa8893c1fa3",
+      "httpSha256": "b9a4be757e673784023c1825d970b92d089216e189ddcc599c5d3aa8893c1fa3",
+      "matches": true
+    },
+    {
+      "path": "images/logo_text_white.png",
+      "ftpsSha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "httpSha256": "67b84bc55e079d7f847a80a2c0b7f922969464dccb2f40bacd42903d5fc2763e",
+      "matches": true
+    },
+    {
+      "path": "images/people/jimmy-gustafsson.png",
+      "ftpsSha256": "2de5de9678802bd4aef5953b6320d0b91dc0ea30cc2bbdeb2aec501e6ebd521d",
+      "httpSha256": "2de5de9678802bd4aef5953b6320d0b91dc0ea30cc2bbdeb2aec501e6ebd521d",
+      "matches": true
+    },
+    {
+      "path": "images/people/peter-fridland.png",
+      "ftpsSha256": "002e8cb87521b70bc4d24f9d2fc8f6d9be50b2f8b853b2f22f9b41dc1ef4d1c8",
+      "httpSha256": "002e8cb87521b70bc4d24f9d2fc8f6d9be50b2f8b853b2f22f9b41dc1ef4d1c8",
+      "matches": true
+    },
+    {
+      "path": "index.html",
+      "ftpsSha256": "b16edac5cddd8157730e95845edfe8dc58d0168296103d0db01dfdc512be9c0c",
+      "httpSha256": "a0b02cf9cd06b3506329b3d6003be16f528466470bac0812d173da0f1d0b3645",
+      "matches": true
+    },
+    {
+      "path": "integritet/index.html",
+      "ftpsSha256": "8aa5b3bbbdcb083dcb62b9337b66b2c5d0a7a280dbfe185ac60d4ba648178555",
+      "httpSha256": "3321a8faf6c8acd1a0967dc2664a45ca84fe49b11890245b69645c5581f5a7c7",
+      "matches": true
+    },
+    {
+      "path": "kontakt/index.html",
+      "ftpsSha256": "88fc2c4245cddaeb0136ce2ee12318de5716a1acf74fc2a52f7baf34039c8335",
+      "httpSha256": "009c636e2e2f29b7914e96aadd6eaf5003b0844fddbb7ad813b63df8d93b4364",
+      "matches": true
+    },
+    {
+      "path": "offert/index.html",
+      "ftpsSha256": "f148b67cc9d9fdc95252ac31db985c2e1c6e2ce1bd406c296a20166aee019145",
+      "httpSha256": "359799830cdd9ca575fb09d5c7dab24a9f4931630068cc2855dff30d8ad8dd1e",
+      "matches": true
+    },
+    {
+      "path": "offert/tack/index.html",
+      "ftpsSha256": "90d2996f036400ddb88c3d83a37cebd2d20c60010522ad50451e91163d168fa0",
+      "httpSha256": "b6f35623ecc0faee8fdb22e6a5b10b0a2e61d49ac501ed358a9ab63a528e4283",
+      "matches": true
+    },
+    {
+      "path": "om-oss/index.html",
+      "ftpsSha256": "31311cd5a472e4805949a7d3e94ad2d05f314eebbf48cebdcad18b06829be033",
+      "httpSha256": "812ce44823fdd14ffc46eb117eb79d08716182e482e5778bdcfecbd591bca180",
+      "matches": true
+    },
+    {
+      "path": "robots.txt",
+      "ftpsSha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+      "httpSha256": "331ea9090db0c9f6f597bd9840fd5b171830f6e0b3ba1cb24dfa91f0c95aedc1",
+      "matches": true
+    },
+    {
+      "path": "sa-gar-det-till/index.html",
+      "ftpsSha256": "faf331eb14b0f15db9068cdee9e8521ffe3f767638f2affda61c1fe4827a4aef",
+      "httpSha256": "5092ae25e4fe2ce96a26c4b5bef68791f4c3d1d52089851ae4075be2b088bc98",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/index.html",
+      "ftpsSha256": "9130b987993ef81bacd6be7b7b668f527297def561d274168e6d6d8646fd8c53",
+      "httpSha256": "e6f5db9677b912e5165413c36744d969de605f9adcc4ad3a4506b5949302bac1",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/isolerad-hall/index.html",
+      "ftpsSha256": "cb90345f0b4d048b37f4a49eac7f80f91c1184e1fa3ae04e25aad19b3dca1981",
+      "httpSha256": "f4708f630e3d04f9793f0613cb2b424a29b751ada2e7b5fc393c0e8e249d888e",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/lagerhall/index.html",
+      "ftpsSha256": "cbee3e6fb8911b30aab9b1c22af7ade606e2e97f2d8ace418614c412e4aaf629",
+      "httpSha256": "3dc78b937e57afe08e371838fe7e63acf3f2fd74411b4ea211588ee111775808",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/maskinhall/index.html",
+      "ftpsSha256": "dbd591b52d4420fc49553f71272bcabc2898f148b19fe2afc96810a91d2a08d9",
+      "httpSha256": "56595e7735b062360048672546834776cc7d2e6bbec2e1c9a10d911ef9e9aad0",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/plathall/index.html",
+      "ftpsSha256": "9615d0c5c79bcbe158e4758e65c2734ae80667e88f75f33de897173d177de29c",
+      "httpSha256": "af0018f953b5ef82132e6f56881b5a73fc5b88d04b6073aaf0881f7360eb7b0f",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/ridhus/index.html",
+      "ftpsSha256": "44215bfba32c681527b41abe7e490f86f0b108c6e855c712620f91b64ebaaaae",
+      "httpSha256": "bca349f4894d94ca3729aa4cf1a5cf1766b831c9e32bd9f460c509386fcb9d8c",
+      "matches": true
+    },
+    {
+      "path": "stalhallar/talthall/index.html",
+      "ftpsSha256": "42264079dbfb8d61da65985ebad591a1847becbb896e01cf642a475556c8b456",
+      "httpSha256": "58086b6470841983b5afc76c05f366fa12aacd17c601a530cbc2f86101cdc535",
+      "matches": true
+    }
+  ]
+}

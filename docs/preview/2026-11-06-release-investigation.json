@@ -1,0 +1,63 @@
+{
+  "candidate": "4fcd587f818dfd0f0fc94dd309d7f1bfd23664f3",
+  "failedRun": "42290034192",
+  "failedAttempt": 1,
+  "concurrentPublication": "42289244985",
+  "candidateTargetRead": {
+    "start": "2026-11-06T20:47:12.226Z",
+    "end": "2026-11-06T20:54:03.774Z",
+    "writes": 0
+  },
+  "comparedFiles": 144,
+  "matchedFiles": 143,
+  "mismatch": {
+    "path": "hp-preview-deploy-15a607f24f088c75f69dab71a765c576a3e4ed88.json",
+    "status": 200,
+    "ftpsSha256": "052ac529713a65d8cee634a562897c38a02fb1fe9dc030c4362f883fbf9a5878",
+    "expectedHttpSha256": "052ac529713a65d8cee634a562897c38a02fb1fe9dc030c4362f883fbf9a5878",
+    "httpSha256": "9145c2e1ae9fd03e109d39192d2f0f136ac3be5c094154ebf23fb4be261eef40",
+    "correctOrigin": true,
+    "matches": false
+  },
+  "previousFingerprint": {
+    "path": "hp-preview-deploy-15a607f24f088c75f69dab71a765c576a3e4ed88.json",
+    "sha256": "052ac529713a65d8cee634a562897c38a02fb1fe9dc030c4362f883fbf9a5878",
+    "bytes": 328,
+    "expectedHttpSha256": "052ac529713a65d8cee634a562897c38a02fb1fe9dc030c4362f883fbf9a5878"
+  },
+  "replacementMarker": {
+    "schemaVersion": 1,
+    "inventorySha256": "7be6dbe0b2a3cb4a918f91b3c12c9cf9d20f3277e70252f8f7d6c9c792898397",
+    "commit": "15a607f24f088c75f69dab71a765c576a3e4ed88",
+    "runId": "42289244985",
+    "manifestSha256": "4dfefa0514a24c0107e36f55af8cf43a368cf021a17fccc26466e20a967728f9",
+    "verifiedAt": "2026-11-06T20:51:35.195Z"
+  },
+  "replacementMarkerSha256": "9145c2e1ae9fd03e109d39192d2f0f136ac3be5c094154ebf23fb4be261eef40",
+  "conclusion": "FTPS read the preceding marker bytes; HTTPS read the replacement marker written by a simultaneous republication of the same commit. No visitor payload mismatch in this failed comparison.",
+  "limits": "Per-file FTPS/HTTP timestamps are not recorded. verifiedAt is marker creation time, preceding its upload, not an exact write timestamp.",
+  "rerun": {
+    "attempt": 2,
+    "status": "success",
+    "checkedAt": "2026-11-06T21:47:43.512Z",
+    "comparedFiles": 144,
+    "mismatchCount": 0,
+    "writes": 0,
+    "retainedStatus": "verified",
+    "marker": {
+      "path": "hp-preview-deploy-15a607f24f088c75f69dab71a765c576a3e4ed88.json",
+      "status": 200,
+      "ftpsSha256": "9145c2e1ae9fd03e109d39192d2f0f136ac3be5c094154ebf23fb4be261eef40",
+      "expectedHttpSha256": "9145c2e1ae9fd03e109d39192d2f0f136ac3be5c094154ebf23fb4be261eef40",
+      "httpSha256": "9145c2e1ae9fd03e109d39192d2f0f136ac3be5c094154ebf23fb4be261eef40",
+      "correctOrigin": true,
+      "matches": true
+    }
+  },
+  "concurrency": {
+    "publisher": "Workflow-level hallpartner-inleed-preview-20261103; cancel-in-progress false",
+    "maintenance": "Same group at job level",
+    "pullRequestValidation": "No shared lock",
+    "change": "None. A naive identical lock on the called reusable validation could make the parent publisher wait on its own lock. PR queue/replacement behavior must also be analyzed before a separate improvement."
+  }
+}
