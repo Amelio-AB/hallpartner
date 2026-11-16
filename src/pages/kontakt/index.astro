@@ -10,6 +10,7 @@ import { hallpartnerContact, hallpartnerPeople } from '../../config/hallpartner-
 // Customer verification of ownership, recipient and current phone is still
 // required before launch (HP-015 and HP-007). No backend or form is implied.
 const contactEmail = hallpartnerContact.email;
+const directionsUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(hallpartnerContact.visitAddress);
 
 const preparations = [
   { title: 'Vad hallen ska användas till', description: 'Beskriv gärna verksamheten och vad som behöver få plats – exempelvis varor, maskiner eller annan utrustning.' },
@@ -95,16 +96,11 @@ const preparations = [
           <div class="hp-contact-directory__visit" aria-labelledby="hallpartner-visit-heading">
             <p class="hp-info__eyebrow">Besök och vägbeskrivning</p>
             <h3 id="hallpartner-visit-heading">Hitta till oss.</h3>
-            {hallpartnerContact.visitAddress ? (
-              <p>{hallpartnerContact.visitAddress}</p>
-            ) : (
-              <>
-                <p>Vill du komma förbi? Kontakta oss för att boka ett besök.</p>
-                <p class="hp-contact-directory__pending">
-                  Vi visar karta och vägbeskrivning här när Hallpartners besöksadress är bekräftad.
-                </p>
-              </>
-            )}
+            <address class="hp-contact-directory__address">{hallpartnerContact.visitAddress}</address>
+            <p>Vill du komma förbi? Ring gärna först för att boka ett besök.</p>
+            <a class="hp-contact-directory__directions" href={directionsUrl} target="_blank" rel="noopener noreferrer">
+              Visa vägbeskrivning i Google Maps <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </div>
       </div>

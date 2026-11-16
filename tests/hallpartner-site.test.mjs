@@ -111,7 +111,13 @@ test('contact guard stays in its component and cannot report false success', () 
   assert.match(contact,/\{hallpartnerContact.email\}<\/a>/);
   assert.match(contact,/via växeln/);
   assert.doesNotMatch(contact,/Kontakta \{person.firstName\} via växeln/);
+  assert.match(contact,/hp-contact-directory__address/);
+  assert.match(contact,/directionsUrl/);
+  assert.match(contact,/rel="noopener noreferrer"/);
   assert.doesNotMatch(contact,/<iframe/);
+  const config=read('src/config/hallpartner-people.ts');
+  assert.match(config,/visitAddress: 'Zakrisdalsvägen 26 A, 653 36 Karlstad'/);
+  assert.match(config,/phone: '054-820 04 90'/);
   assert.match(component,/PUBLIC_HP_LEADS_ENABLED === 'true'/);
   assert.match(component,/<aside class="hp-info__contact-panel hp-contact-hero__panel"/);
   assert.match(component,/fieldset class="hp-contact-hero__fieldset" disabled=\{!enabled\}/);
