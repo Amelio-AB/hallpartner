@@ -1,5 +1,17 @@
 # Issue #29 – tekniska releasegrindar och återstart
 
+**Slutförd release 2026-11-06 svensk tid:** `931e214` är publicerad med grön
+körning `42121351331`. Efter separat godkännande och verifiering av enbart
+CRLF/LF-skillnader är även Git-exakt validator och ny privat receiver
+installerade, med ny byteverifierad backup och återställningsväg för båda.
+Ett liveinskick gav referens `bd890a1c2bd661b183b91dd2` och rätt tacksida.
+Två separata mejl med samma referens och svenska svar verifierades i Gmail;
+Andreas bekräftade mottagningen. SSH-nyckeln är borttagen och återanslutning
+nekad. Ingen ny statisk publicering gjordes. Inga fler testinskick behövs. Se
+[aktuell checkpoint](../checkpoints/2026-11-05-issue-29-offert-confirmation.md).
+
+Nedan följer den tidigare återstartsplanen och dess tekniska bakgrund.
+
 Utgångspunkt 2026-11-05: `main` = `4e9d1f7c6c71e5b1e439292710ded649f2d2ead6`.
 [Draft PR #31](https://github.com/Amelio-AB/hallpartner/pull/31) behålls
 oförändrad som checkpoint för den stoppade releasen. Denna tekniska PR får
